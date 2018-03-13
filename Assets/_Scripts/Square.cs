@@ -15,14 +15,17 @@ public class Square : MonoBehaviour {
     public int Score
     { get {return score;} set {score = value;} }
 
-   
+    public Transform Column
+    {get{return column;}set{column = value;}}
 
+    private Transform column;
 
 
 
     // Use this for initialization
     void Start () {
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+      
     }
 	
 	// Update is called once per frame
@@ -39,6 +42,7 @@ public class Square : MonoBehaviour {
 
             gameObject.transform.position = other.gameObject.transform.position;
             gameObject.transform.SetParent(other.gameObject.transform);
+            this.column = other.gameObject.transform;
             bottom = true;
 
         }
@@ -61,7 +65,7 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                gameObject.transform.SetParent(GameManager.Instance.wheelSquares.transform);
+                gameObject.transform.SetParent(GameManager.Instance.wheel.transform.GetChild(1));
                 gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
                 gameObject.isStatic = true;
 
