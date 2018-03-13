@@ -8,6 +8,7 @@ TagManager:
   - base
   - square
   - center
+  - spot
   layers:
   - Default
   - TransparentFX

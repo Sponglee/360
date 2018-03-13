@@ -32,59 +32,63 @@ public class Square : MonoBehaviour {
       
 	}
 
-    //public void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    if (other.gameObject.CompareTag("wheel")&& !bottom) 
-    //    {
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("spot") && !bottom)
+        {
 
-    //        gameObject.GetComponent<Collider2D>().isTrigger = true;
+            gameObject.transform.position = other.gameObject.transform.position;
+            gameObject.transform.SetParent(other.gameObject.transform);
+            bottom = true;
 
-    //    }
+        }
 
-    //    if (other.gameObject.CompareTag("square"))
-    //    {
+        if (other.gameObject.CompareTag("square"))
+        {
+            if (this.score == other.gameObject.GetComponent<Square>().Score && !bottom)
+            {
+                Debug.Log("BOOP");
+                if (other.gameObject.GetComponent<Square>().Score == 64)
+                {
+                    GameManager.Instance.Merge(gameObject);
+                    Destroy(gameObject);
+                }
+                else
+                    GameManager.Instance.Merge(gameObject);
 
-    //        if (this.score == other.gameObject.GetComponent<Square>().Score && !bottom)
-    //        {
-    //            Debug.Log("BOOP");
-    //            if (other.gameObject.GetComponent<Square>().Score == 64)
-    //            {
-    //                GameManager.Instance.Merge(gameObject);
-    //                Destroy(gameObject);
+                gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+                Destroy(other.gameObject);
+            }
+            else if (this.score != other.gameObject.GetComponent<Square>().Score)
+            {
+                gameObject.transform.SetParent(GameManager.Instance.wheelSquares.transform);
+                gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+                gameObject.isStatic = true;
 
-    //            }
-    //            else
-    //                GameManager.Instance.Merge(gameObject);
-    //            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-    //            Destroy(other.gameObject);
-    //        }
-    //        else if (this.score != other.gameObject.GetComponent<Square>().Score)
-    //        {
-    //            gameObject.transform.SetParent(GameManager.Instance.wheelSquares.transform);
-    //            gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-    //            gameObject.isStatic = true;
-               
-    //        }
-           
-    //    }
+            }
+            }
+        }
 
-       
-        
-    //}
 
-    //public void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if(collision.CompareTag("center") && gameObject.CompareTag("square") && !bottom)
-    //    {
-    //        // SHRINKS THE WHEEl
-    //        float r = GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
-    //        int n = 18;
-    //        float angle = 360 / n;
-    //        float r_n = r * (2 - angle / 180) / 2;
-    //        n--;
-    //        GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius = r_n;
-    //        Destroy(gameObject);
-    //    }
-     
-    //}
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("center") && gameObject.CompareTag("square") && !bottom)
+        {
+            // SHRINKS THE WHEEl
+            float r = GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
+            int n = 18;
+            float angle = 360 / n;
+            float r_n = r * (2 - angle / 180) / 2;
+            n--;
+            GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius = r_n;
+            Destroy(gameObject);
+        }
+
+    }
 }
+
+
+
+
+
