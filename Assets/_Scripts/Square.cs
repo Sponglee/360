@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Square : MonoBehaviour {
 
     [SerializeField]
-    private bool bottom=false;
+    public bool bottom=false;
     private int row;
     public int Row
     { get { return row; } set { row = value; } }
@@ -22,22 +22,7 @@ public class Square : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-
-        GameManager.Instance.nextScore.text = GameManager.next_score.ToString();
-        if (!bottom)
-        {
-         
-            GameManager.next_score = Random.Range(1, 20);
-            score = GameManager.next_score;
-           
-
-        }
-
-
-       
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-
     }
 	
 	// Update is called once per frame
@@ -47,31 +32,59 @@ public class Square : MonoBehaviour {
       
 	}
 
-    public void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("wheel") || other.gameObject.GetComponent<Square>().row == 0) 
-        {
-            if (transform != null)
-                transform.SetParent(GameManager.Instance.wheelSquares.transform);
-            gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-            gameObject.isStatic = true;
-            this.row = 0;
-        }
+    //public void OnCollisionEnter2D(Collision2D other)
+    //{
+    //    if (other.gameObject.CompareTag("wheel")&& !bottom) 
+    //    {
 
-        if (other.gameObject.CompareTag("square"))
-        {
+    //        gameObject.GetComponent<Collider2D>().isTrigger = true;
+
+    //    }
+
+    //    if (other.gameObject.CompareTag("square"))
+    //    {
+
+    //        if (this.score == other.gameObject.GetComponent<Square>().Score && !bottom)
+    //        {
+    //            Debug.Log("BOOP");
+    //            if (other.gameObject.GetComponent<Square>().Score == 64)
+    //            {
+    //                GameManager.Instance.Merge(gameObject);
+    //                Destroy(gameObject);
+
+    //            }
+    //            else
+    //                GameManager.Instance.Merge(gameObject);
+    //            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+    //            Destroy(other.gameObject);
+    //        }
+    //        else if (this.score != other.gameObject.GetComponent<Square>().Score)
+    //        {
+    //            gameObject.transform.SetParent(GameManager.Instance.wheelSquares.transform);
+    //            gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+    //            gameObject.isStatic = true;
+               
+    //        }
            
-                if (this.score == other.gameObject.GetComponent<Square>().Score)
-                {
-                Debug.Log("BOOP");
-                GameManager.Instance.Merge(gameObject);
-                gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-                Destroy(other.gameObject);
-                }
-           
-        }
+    //    }
 
        
         
-    }
+    //}
+
+    //public void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if(collision.CompareTag("center") && gameObject.CompareTag("square") && !bottom)
+    //    {
+    //        // SHRINKS THE WHEEl
+    //        float r = GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
+    //        int n = 18;
+    //        float angle = 360 / n;
+    //        float r_n = r * (2 - angle / 180) / 2;
+    //        n--;
+    //        GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius = r_n;
+    //        Destroy(gameObject);
+    //    }
+     
+    //}
 }
