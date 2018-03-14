@@ -13,26 +13,35 @@ public class GameManager : Singleton<GameManager>
     public GameObject spotPrefab;
     public Transform wheelSquares;
 
+    //prefab for controlling movement while falling
+    GameObject squareSpawn=null;
+    //Vertical transform of top spot
     public GameObject currentSpot;
 
+    //All the spots around the wheel
     public List<GameObject> spots;
     public Dictionary<GameObject, GameObject[]> squares;
+
     // number of objects
     public int nBottom = 20;
-
+    //Next square's score
     public Text nextScore;
     public static int next_score;
-    // Use this for initialization
+
+
     void Start()
     {
         spots = new List<GameObject>();
 
-
+        //Random next score to appear
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
 
+        //Initialize level (spots)
         GetSpots(nBottom);
-        Debug.Log(spots.Count + "BEFORE");
+        
+
+
         //foreach(GameObject spot in spots)
         //{
 
@@ -44,39 +53,50 @@ public class GameManager : Singleton<GameManager>
 
 
     }
+    
 
-    // Update is called once per frame
     void Update()
     {
-
-
-        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) ||  Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
-        }
-        else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
-        }
-
-
-
+        //if inside outer ring
         if (currentSpot.transform.childCount <= 5)
         {
+            //turn left or right
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(1))
             {
-
-
-                GameObject squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
+                //spawn a square
+                squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 squareSpawn.GetComponent<Square>().Score = next_score;
-
+                //get score for next turn
                 next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
                 nextScore.text = next_score.ToString();
+
             }
         }
         else
         {
             Debug.Log("TOO MANY, SORLEY");
+        }
+
+        //Swipe manager
+        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            //If square is falling - can't move
+            if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+            {
+                Debug.Log("NO");
+            }
+            else
+                wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+        }
+        else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+
+            {
+                Debug.Log("NO");
+            }
+            else
+                wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
         }
 
     }

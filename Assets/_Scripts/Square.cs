@@ -26,6 +26,7 @@ public class Square : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+     
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
         IsColliding = false;
     }
@@ -33,12 +34,15 @@ public class Square : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-     
-      
-	}
+        
+
+
+
+    }
 
     public void OnCollisionEnter2D(Collision2D other)
     {
+       
         if (other.gameObject.CompareTag("spot") && !bottom)
         {
 
@@ -46,6 +50,7 @@ public class Square : MonoBehaviour {
             gameObject.transform.SetParent(other.gameObject.transform);
             this.column = other.gameObject.transform;
             bottom = true;
+            
 
         }
 
@@ -68,6 +73,7 @@ public class Square : MonoBehaviour {
 
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
                 Destroy(other.gameObject);
+               
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
@@ -93,7 +99,7 @@ public class Square : MonoBehaviour {
         }
 
     }
-
+    
 }
 
 

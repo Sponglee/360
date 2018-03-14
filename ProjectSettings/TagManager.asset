@@ -10,6 +10,7 @@ TagManager:
   - center
   - spot
   - line
+  - outer
   layers:
   - Default
   - TransparentFX
