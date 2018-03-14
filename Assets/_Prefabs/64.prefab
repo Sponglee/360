@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 114245831885718896}
   - component: {fileID: 114706228793362738}
   m_Layer: 0
-  m_Name: Square
+  m_Name: 64
   m_TagString: square
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 5
 --- !u!61 &61812630713143364
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bottom: 0
-  score: 0
+  score: 64
 --- !u!114 &114498820951125008
 MonoBehaviour:
   m_ObjectHideFlags: 1

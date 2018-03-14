@@ -9,6 +9,7 @@ TagManager:
   - square
   - center
   - spot
+  - line
   layers:
   - Default
   - TransparentFX

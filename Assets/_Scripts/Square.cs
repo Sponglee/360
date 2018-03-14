@@ -18,6 +18,8 @@ public class Square : MonoBehaviour {
     public Transform Column
     {get{return column;}set{column = value;}}
 
+    public bool IsColliding { get; set; }
+
     private Transform column;
 
 
@@ -25,7 +27,7 @@ public class Square : MonoBehaviour {
     // Use this for initialization
     void Start () {
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-      
+        IsColliding = false;
     }
 	
 	// Update is called once per frame
@@ -49,13 +51,17 @@ public class Square : MonoBehaviour {
 
         if (other.gameObject.CompareTag("square"))
         {
-            if (this.score == other.gameObject.GetComponent<Square>().Score && !bottom)
+            if (this.score == other.gameObject.GetComponent<Square>().Score /* && !bottom*/)
             {
+                IsColliding = true;
                 Debug.Log("BOOP");
                 if (other.gameObject.GetComponent<Square>().Score == 64)
                 {
+                    Debug.Log("DESTOYEEERRRRR");
                     GameManager.Instance.Merge(gameObject);
-                    Destroy(gameObject);
+                    //Destroy(gameObject);
+                    gameObject.GetComponent<Collider2D>().isTrigger = true;
+                    bottom = false;
                 }
                 else
                     GameManager.Instance.Merge(gameObject);
@@ -65,9 +71,9 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                gameObject.transform.SetParent(GameManager.Instance.wheel.transform.GetChild(1));
+                gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
                 gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-                gameObject.isStatic = true;
+                //gameObject.isStatic = true;
 
             }
             }
@@ -77,22 +83,62 @@ public class Square : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("center") && gameObject.CompareTag("square") && !bottom)
+        if (collision.CompareTag("center") && gameObject.CompareTag("square"))
         {
-            // SHRINKS THE WHEEl
-            float r = GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
-            int n = 18;
-            float angle = 360 / n;
-            float r_n = r * (2 - angle / 180) / 2;
-            n--;
-            GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius = r_n;
+            Debug.Log("destroy this");
+            int thisBottom = GameManager.Instance.nBottom;
+            Debug.Log(thisBottom);
+            //GameManager.Instance.Shrink(GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius, thisBottom);
             Destroy(gameObject);
         }
 
     }
+
 }
 
 
 
 
 
+
+
+/***
+ * 
+ * 
+ * 
+ * 
+ * 
+ * public class TouchInput : MonoBehaviour {
+private Vector3 screenPoint;
+private Vector3 initialPosition;
+private Vector3 offset;
+public float speed = 20.0f;
+
+Rigidbody2D rb;
+
+void Start(){
+    rb = gameObject.GetComponent<Rigidbody2D>();
+}
+
+void OnMouseDown(){
+    Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y,     screenPoint.z);
+    Vector3 initialPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
+}
+
+void OnMouseDrag(){
+   Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y,     screenPoint.z);
+   Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
+   Vector3 heading = cursorPosition - initialPosition;
+   Vector3 direction = heading / heading.magnitude;     // heading magnitude = distance 
+   rb.velocity = new Vector3(150 * Time.deltaTime, 0, 0); 
+   //Do what you want.
+   //if you want to drag object on only swipe gesture comment below. Otherwise:
+   initialPosition = cursorPosition;
+}
+
+void OnMouseUp()
+{
+   rb.velocity = new Vector3(0, 0, 0);
+}
+}
+*///
