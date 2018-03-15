@@ -15,20 +15,26 @@ public class Square : MonoBehaviour {
     public int Score
     { get {return score;} set {score = value;} }
 
+    //for storing data
     public Transform Column
     {get{return column;}set{column = value;}}
 
     public bool IsColliding { get; set; }
 
     private Transform column;
-
-
+    //parent index iterator
+    int i = 0;
 
     // Use this for initialization
     void Start () {
-     
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-        IsColliding = false;
+
+        /******* METHOD PART***/
+
+        gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
+        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+
     }
 	
 	// Update is called once per frame
@@ -47,19 +53,25 @@ public class Square : MonoBehaviour {
         {
 
             gameObject.transform.position = other.gameObject.transform.position;
-            gameObject.transform.SetParent(other.gameObject.transform);
+
+            //name of square's position
+            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+
+            Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
+            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+
             this.column = other.gameObject.transform;
             bottom = true;
             
 
         }
 
-        if (other.gameObject.CompareTag("square"))
+        if (other.gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex()>other.gameObject.transform.GetSiblingIndex())
         {
             if (this.score == other.gameObject.GetComponent<Square>().Score /* && !bottom*/)
             {
                 IsColliding = true;
-                Debug.Log("BOOP");
+               
                 if (other.gameObject.GetComponent<Square>().Score == 64)
                 {
                     Debug.Log("DESTOYEEERRRRR");
@@ -77,13 +89,21 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
+                //gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
+
+               
+
+
                 gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
                 //gameObject.isStatic = true;
 
             }
-            }
+            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+            Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
+            //Check for boops
+            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
         }
+    }
 
 
 
@@ -94,6 +114,7 @@ public class Square : MonoBehaviour {
             Debug.Log("destroy this");
             int thisBottom = GameManager.Instance.nBottom;
             Debug.Log(thisBottom);
+
             //GameManager.Instance.Shrink(GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius, thisBottom);
             Destroy(gameObject);
         }

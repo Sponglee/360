@@ -14,13 +14,13 @@ public class GameManager : Singleton<GameManager>
     public Transform wheelSquares;
 
     //prefab for controlling movement while falling
-    GameObject squareSpawn=null;
+    GameObject squareSpawn = null;
     //Vertical transform of top spot
     public GameObject currentSpot;
 
     //All the spots around the wheel
     public List<GameObject> spots;
-    public Dictionary<GameObject, GameObject[]> squares;
+
 
     // number of objects
     public int nBottom = 20;
@@ -33,13 +33,15 @@ public class GameManager : Singleton<GameManager>
     {
         spots = new List<GameObject>();
 
+
+
         //Random next score to appear
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
 
         //Initialize level (spots)
         GetSpots(nBottom);
-        
+
 
 
         //foreach(GameObject spot in spots)
@@ -53,7 +55,7 @@ public class GameManager : Singleton<GameManager>
 
 
     }
-    
+
 
     void Update()
     {
@@ -162,7 +164,7 @@ public class GameManager : Singleton<GameManager>
             // make the object face the center
             var rot = Quaternion.FromToRotation(Vector3.forward, center - pos);
             GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
-            Debug.Log("OINK");
+            tmp.name = i.ToString();
             tmp.transform.SetParent(wheel.transform.GetChild(0));
             tmp.transform.LookAt(center, Vector3.right);
             tmp.transform.Rotate(0, 90, 0);
@@ -172,8 +174,57 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-}
-public class Dictionary<T1, T2>
-{
+    public void CheckRow(int spotIndex, int squareIndex, int checkScore)
+    {
+        //Circle around indexes(like CAESAR CS50)
+        int nextSpotIndex;
+        int prevSpotIndex;
+        int left=0;
+        int right=0;
+
+        if (spotIndex-1 < 0)
+        {
+            prevSpotIndex = spots.Count;
+            nextSpotIndex = spotIndex + 1;
+        }
+        else if (spotIndex+1>spots.Count)
+        {
+            prevSpotIndex = spotIndex - 1;
+            nextSpotIndex = 0;
+        }
+        else
+        {
+            nextSpotIndex = spotIndex + 1;
+            prevSpotIndex = spotIndex - 1;
+        }
+
+
+        ////Check for nearest same squares
+        //if (spots[prevSpotIndex].transform.Find(squareIndex.ToString()) != null)
+        //{
+        //    left = spots[prevSpotIndex].transform.Find(squareIndex.ToString()).GetComponent<Square>().Score;
+        //    Debug.Log(" ><>L<<>><> " + left + "<><><><><>  " + spots[prevSpotIndex].transform.Find(squareIndex.ToString()));
+        //}
+
+        //if (spots[nextSpotIndex].transform.Find(squareIndex.ToString()) != null)
+        //{
+        //    right = spots[nextSpotIndex].transform.Find(squareIndex.ToString()).GetComponent<Square>().Score;
+        //    Debug.Log(" ><>R<<>><> " + right + "<><><><><>  " + spots[nextSpotIndex].transform.Find(squareIndex.ToString()));
+        //}
+        //if (right != 0 && left != 0)
+        //{
+        //    if (left == checkScore && checkScore == right)
+        //    {
+        //        Debug.Log("BAM!!!!!");
+        //    }
+        //}
+
+    }
+
+
+
+
+
+
 
 }
