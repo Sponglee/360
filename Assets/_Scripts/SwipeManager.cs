@@ -47,19 +47,36 @@ public class SwipeManager : Singleton<SwipeManager> {
             {
                 Vector2 deltaSwipe = touchPosition - Input.mousePosition;
 
-                if(Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
+            if (Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
                 {
                     Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Right : SwipeDirection.Left;
                 }
+            else
+                {
+                 Debug.Log("NONE");
+                 Direction |= SwipeDirection.None;
+                }
+                  
+                
                 if (Mathf.Abs(deltaSwipe.y) > swipeResistanceY)
                 {
                     // SWIPE Y AXIS
                     Direction |= (deltaSwipe.y < 0) ? SwipeDirection.Up : SwipeDirection.Down;
                 }
-            }
-	}
+                else
+                    {
+                        Debug.Log("NONE");
+                        Direction |= SwipeDirection.None;
+                    }
+                   
+        }
+       
+    }
     public bool IsSwiping (SwipeDirection dir)
     {
+      
         return (Direction & dir) == dir;
     }
+
+    
 }

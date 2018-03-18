@@ -63,8 +63,9 @@ public class GameManager : Singleton<GameManager>
         if (currentSpot.transform.childCount <= 5)
         {
             //turn left or right
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None)
             {
+                Debug.Log(">>>>>" + SwipeManager.Instance.Direction);
                 //spawn a square
                 squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 squareSpawn.GetComponent<Square>().Score = next_score;
@@ -106,7 +107,8 @@ public class GameManager : Singleton<GameManager>
 
     public void Merge(GameObject first)
     {
-        //first.transform.SetParent(GameManager.Instance.wheelSquares.transform);
+        //first.transform.SetParent(GameManager.Instance.currentSpot.transform);              //comment this for II var
+        
         first.GetComponent<Square>().Score *= 2;
 
         first.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
@@ -116,28 +118,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public void Shrink(float rad, int numberObjects)
-    {
-
-        float new_rad = rad * Mathf.Sin(360 / numberObjects) / Mathf.Sin(360 / numberObjects - 1);
-        Debug.Log(new_rad + " <> " + rad + "|| " + numberObjects);
-        var center = wheel.transform.position;
-        for (int i = 0; i < numberObjects; i++)
-        {
-            int a = 360 / numberObjects * i;
-            var pos = RandomCircle(center, new_rad, a);
-            // make the object face the center
-            var rot = Quaternion.FromToRotation(Vector3.forward, center - pos);
-            spots[i].transform.position = pos;
-            spots[i].transform.rotation = Quaternion.LookRotation(Vector3.back);
-            //transform.position += transform.TransformDirection(Vector3.fwd);
-            //GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
-
-            //spots.Remove(spots[spots.Count]);
-            Debug.Log(spots.Count);
-        }
-    }
-
+   
 
 
     public Vector3 RandomCircle(Vector3 center, float radius, int a)

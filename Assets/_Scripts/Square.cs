@@ -51,6 +51,8 @@ public class Square : MonoBehaviour {
        
         if (other.gameObject.CompareTag("spot") && !bottom)
         {
+            gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
+
 
             gameObject.transform.position = other.gameObject.transform.position;
 
@@ -74,14 +76,18 @@ public class Square : MonoBehaviour {
                
                 if (other.gameObject.GetComponent<Square>().Score == 64)
                 {
-                    Debug.Log("DESTOYEEERRRRR");
+                    Debug.Log("DESTOYEEERRRRR");                                                //falling down
                     GameManager.Instance.Merge(gameObject);
                     //Destroy(gameObject);
                     gameObject.GetComponent<Collider2D>().isTrigger = true;
                     bottom = false;
                 }
                 else
-                    GameManager.Instance.Merge(gameObject);
+                {
+                     GameManager.Instance.Merge(gameObject);
+
+                }
+                   
 
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
                 Destroy(other.gameObject);
