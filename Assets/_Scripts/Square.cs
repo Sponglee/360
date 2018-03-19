@@ -125,7 +125,7 @@ public class Square : MonoBehaviour {
         {
             Debug.Log("destroy this");
             int thisBottom = GameManager.Instance.nBottom;
-            Debug.Log(thisBottom);
+
 
          
             Destroy(gameObject);

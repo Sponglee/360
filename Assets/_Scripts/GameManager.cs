@@ -187,34 +187,24 @@ public class GameManager : Singleton<GameManager>
         //Iterate through the circle
         do
         {
-            //if there're 3 in a row - BAM
-            if (row >= 3)
-            {
-                foreach(GameObject rowObj in rowObjs)
-                {
-                    rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                    rowObj.transform.parent = null;
-                    rowObj.GetComponent<Collider2D>().isTrigger = true;
-                    
-                }
-                break;
-            }
+            
                
             if (index == nBottom)
             {
-                Debug.Log("2nd lap");
+               
                 index = 0;
                 lapTwo = true;
             }
-
+           
             if (spots[index].transform.childCount > squareIndex)
             {
 
                 if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
                 {
+                    
                     rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                     row++;
-                    
+
                     {
                         if (lapTwo)
                             maxTurns++;
@@ -222,21 +212,63 @@ public class GameManager : Singleton<GameManager>
                 }
                 else
                 {
-                    rowObjs.Clear();
-                    row = 0;
+                    
+                    
+                    if (row < 3)
+                    {
+                        rowObjs.Clear();
+                        row = 0;
+                    }
+                       
+                   
                 }
 
             }
-            else row = 0;
+            else
+            {
+              
+            
+                if(row<3)
+                {
+                    row = 0;
+                    rowObjs.Clear();
+                }
+                    
+
+            }
             index++;
             count++;
+
+            if (count == maxTurns)
+            {
+             
+                Pop(rowObjs, row);
+            }
+              
            
         }
       
         while (count <= maxTurns);
-        
+      
     }
 
+    //Kill all adjacent squares
+    public void Pop(List<GameObject> rowObjs, int row)
+    {
+        //if there're 3 in a row - BAM
+        if (row >= 3)
+        {
+            foreach (GameObject rowObj in rowObjs)
+            {
+                if (rowObj.transform.parent != null)
+                    rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                rowObj.transform.parent = null;
+                rowObj.GetComponent<Collider2D>().isTrigger = true;
+
+            }
+
+        }
+    }
     // Add more columns to the field
     public void Expand()
     {
