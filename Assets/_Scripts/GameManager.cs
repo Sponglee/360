@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
 
+    
+
     [SerializeField]
     public GameObject wheel;
     public GameObject squarePrefab;
@@ -17,10 +19,14 @@ public class GameManager : Singleton<GameManager>
     GameObject squareSpawn = null;
     //Vertical transform of top spot
     public GameObject currentSpot;
+    //next spot to turn green
+    public int LastSpot { get; set; }
 
     //All the spots around the wheel
     public List<GameObject> spots;
 
+    //spawn cooldown
+    private float coolDown;
 
     // number of objects
     public int nBottom = 20;
@@ -60,12 +66,14 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         //if inside outer ring
-        if (currentSpot.transform.childCount <= 5)
+        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255,0,0,255))
         {
             //turn left or right
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None)
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
             {
-                Debug.Log(">>>>>" + SwipeManager.Instance.Direction);
+                //Cooldown for spawn 0.5sec
+                coolDown = Time.time + 0.5f;
+               
                 //spawn a square
                 squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 squareSpawn.GetComponent<Square>().Score = next_score;
@@ -75,10 +83,8 @@ public class GameManager : Singleton<GameManager>
 
             }
         }
-        else
-        {
-            Debug.Log("TOO MANY, SORLEY");
-        }
+       
+        
 
         //Swipe manager
         if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
@@ -89,7 +95,11 @@ public class GameManager : Singleton<GameManager>
                 Debug.Log("NO");
             }
             else
+            {
                 wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+            
+            }
+                
         }
         else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -140,11 +150,18 @@ public class GameManager : Singleton<GameManager>
         var center = wheel.transform.position;
         for (int i = 0; i < numberObjects; i++)
         {
+
             int a = 360 / numberObjects * i;
             var pos = RandomCircle(center, rad, a);
             // make the object face the center
-            var rot = Quaternion.FromToRotation(Vector3.forward, center - pos);
+            //var rot = Quaternion.FromToRotation(Vector3.forward, center - pos);
             GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
+            if (i == numberObjects - 1 || i == 0 || i == 1)
+            {
+                tmp.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                LastSpot = 1;
+            }
+
             tmp.name = i.ToString();
             tmp.transform.SetParent(wheel.transform.GetChild(0));
             tmp.transform.LookAt(center, Vector3.right);
@@ -178,6 +195,33 @@ public class GameManager : Singleton<GameManager>
             nextSpotIndex = spotIndex + 1;
             prevSpotIndex = spotIndex - 1;
         }
+
+      
+        }
+
+    public void GameOver()
+    {
+        if (currentSpot.transform.childCount == 6)
+        {
+            currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            Debug.Log("YAYAYAYAYAY");
+        }
+        int reds = 0;
+        foreach (GameObject spot in spots)
+        {
+            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255))
+            {
+                reds++;
+            }
+        }
+        if (reds == spots.Count)
+        {
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+
+
+
 
 
         ////Check for nearest same squares
