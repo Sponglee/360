@@ -191,7 +191,6 @@ public class GameManager : Singleton<GameManager>
                
             if (index == nBottom)
             {
-               
                 index = 0;
                 lapTwo = true;
             }
@@ -212,42 +211,30 @@ public class GameManager : Singleton<GameManager>
                 }
                 else
                 {
-                    
-                    
                     if (row < 3)
                     {
                         rowObjs.Clear();
                         row = 0;
                     }
-                       
-                   
                 }
 
             }
             else
             {
-              
-            
                 if(row<3)
                 {
                     row = 0;
                     rowObjs.Clear();
                 }
-                    
-
             }
             index++;
             count++;
 
             if (count == maxTurns)
             {
-             
                 Pop(rowObjs, row);
             }
-              
-           
         }
-      
         while (count <= maxTurns);
       
     }
@@ -260,13 +247,19 @@ public class GameManager : Singleton<GameManager>
         {
             foreach (GameObject rowObj in rowObjs)
             {
+                Debug.Log(rowObj.transform.GetChild(0).GetComponentInChildren<Text>().text);
+                
                 if (rowObj.transform.parent != null)
+                {
+                    rowObj.transform.position += new Vector3(0, 0, 10);
                     rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                }
+                   
                 rowObj.transform.parent = null;
                 rowObj.GetComponent<Collider2D>().isTrigger = true;
 
             }
-
+            rowObjs.Clear();
         }
     }
     // Add more columns to the field

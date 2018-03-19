@@ -22,8 +22,7 @@ public class Square : MonoBehaviour {
     public bool IsColliding { get; set; }
 
     private Transform column;
-    //parent index iterator
-    int i = 0;
+
 
     // Use this for initialization
     void Start () {
@@ -124,10 +123,6 @@ public class Square : MonoBehaviour {
         if (collision.CompareTag("center") && gameObject.CompareTag("square"))
         {
             Debug.Log("destroy this");
-            int thisBottom = GameManager.Instance.nBottom;
-
-
-         
             Destroy(gameObject);
         }
 
