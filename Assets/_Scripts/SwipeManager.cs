@@ -53,7 +53,7 @@ public class SwipeManager : Singleton<SwipeManager> {
                 }
             else
                 {
-                 Debug.Log("NONE");
+         
                  Direction |= SwipeDirection.None;
                 }
                   
@@ -65,7 +65,7 @@ public class SwipeManager : Singleton<SwipeManager> {
                 }
                 else
                     {
-                        Debug.Log("NONE");
+
                         Direction |= SwipeDirection.None;
                     }
                    

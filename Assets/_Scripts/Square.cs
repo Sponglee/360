@@ -54,7 +54,7 @@ public class Square : MonoBehaviour {
        
         if (other.gameObject.CompareTag("spot") && !bottom)
         {
-            gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
+            gameObject.transform.SetParent(other.transform);
 
 
             gameObject.transform.position = other.gameObject.transform.position;
@@ -63,6 +63,7 @@ public class Square : MonoBehaviour {
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
 
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
+           
             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
 
             this.column = other.gameObject.transform;
@@ -77,19 +78,12 @@ public class Square : MonoBehaviour {
             {
                 IsColliding = true;
                
-                if (other.gameObject.GetComponent<Square>().Score == 64)
+                if (other.gameObject.GetComponent<Square>().Score == 32)                            // add this to progression (with every added column)
                 {
                     Debug.Log("DESTOYEEERRRRR");                                                //falling down
                     GameManager.Instance.Merge(gameObject);
 
-                    //Check if next spot is green and circle isnt full
-                    if (GameManager.Instance.LastSpot != 0 && GameManager.Instance.spots[GameManager.Instance.LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(0, 255, 0, 255))
-                    {
-                        GameManager.Instance.spots[GameManager.Instance.LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                        GameManager.Instance.LastSpot += 1;
-                    }
-                    else
-                        GameManager.Instance.LastSpot = 0;
+                    GameManager.Instance.Expand();
                    
                     gameObject.GetComponent<Collider2D>().isTrigger = true;
                     bottom = false;
@@ -106,8 +100,12 @@ public class Square : MonoBehaviour {
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
                 //gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
-               
                 gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+
+                //Check Row
+               
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+                //Check GameOver
                 GameManager.Instance.GameOver();
                 //gameObject.isStatic = true;
 
@@ -115,7 +113,7 @@ public class Square : MonoBehaviour {
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
             //Check for boops
-            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+            
         }
     }
 
@@ -129,7 +127,7 @@ public class Square : MonoBehaviour {
             int thisBottom = GameManager.Instance.nBottom;
             Debug.Log(thisBottom);
 
-            //GameManager.Instance.Shrink(GameManager.Instance.wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius, thisBottom);
+         
             Destroy(gameObject);
         }
 

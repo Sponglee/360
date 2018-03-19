@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
         first.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
         //first.isStatic = true;
 
-        Debug.Log("MERGE");
+  
 
     }
 
@@ -171,33 +171,94 @@ public class GameManager : Singleton<GameManager>
         }
 
     }
-
+    //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
-        //Circle around indexes(like CAESAR CS50)
-        int nextSpotIndex;
-        int prevSpotIndex;
-        int left=0;
-        int right=0;
+        //iterator for spots(more than 1 full circle)
+        int count = 0;
+        //iterator for list
+        int index = 0;
+        int row = 0;
+        int maxTurns = nBottom+1;
+        bool lapTwo = false;
+        List<GameObject> rowObjs = new List<GameObject>();
+        
 
-        if (spotIndex-1 < 0)
+        //Iterate through the circle
+        do
         {
-            prevSpotIndex = spots.Count;
-            nextSpotIndex = spotIndex + 1;
+            //if there're 3 in a row - BAM
+            if (row >= 3)
+            {
+                foreach(GameObject rowObj in rowObjs)
+                {
+                    rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    rowObj.transform.parent = null;
+                    rowObj.GetComponent<Collider2D>().isTrigger = true;
+                    
+                }
+                break;
+            }
+               
+            if (index == nBottom)
+            {
+                Debug.Log("2nd lap");
+                index = 0;
+                lapTwo = true;
+            }
+
+            if (spots[index].transform.childCount > squareIndex)
+            {
+
+                if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+                {
+                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                    row++;
+                    
+                    {
+                        if (lapTwo)
+                            maxTurns++;
+                    }
+                }
+                else
+                {
+                    rowObjs.Clear();
+                    row = 0;
+                }
+
+            }
+            else row = 0;
+            index++;
+            count++;
+           
         }
-        else if (spotIndex+1>spots.Count)
+      
+        while (count <= maxTurns);
+        
+    }
+
+    // Add more columns to the field
+    public void Expand()
+    {
+        //Check if next spot is green and circle isnt full
+        if (LastSpot != 0 && spots[LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(0, 255, 0, 255))
         {
-            prevSpotIndex = spotIndex - 1;
-            nextSpotIndex = 0;
+            spots[GameManager.Instance.LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+           LastSpot += 1;
         }
         else
-        {
-            nextSpotIndex = spotIndex + 1;
-            prevSpotIndex = spotIndex - 1;
-        }
+           LastSpot = 0;
+    }
 
-      
+    private bool SameScore(int spotIndex, int squareIndex, int checkScore)
+    {
+        if (spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+        {
+            return true;
         }
+        return false;
+       
+    }
 
     public void GameOver()
     {
