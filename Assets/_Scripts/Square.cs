@@ -55,7 +55,7 @@ public class Square : MonoBehaviour {
         {
             gameObject.transform.SetParent(other.transform);
 
-
+            gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
             gameObject.transform.position = other.gameObject.transform.position;
 
             //name of square's position
@@ -76,25 +76,10 @@ public class Square : MonoBehaviour {
             if (this.score == other.gameObject.GetComponent<Square>().Score /* && !bottom*/)
             {
                 IsColliding = true;
-               
-                if (other.gameObject.GetComponent<Square>().Score == 32)                            // add this to progression (with every added column)
-                {
-                    Debug.Log("DESTOYEEERRRRR");                                                //falling down
-                    GameManager.Instance.Merge(gameObject);
-
-                    GameManager.Instance.Expand();
-                   
-                    gameObject.GetComponent<Collider2D>().isTrigger = true;
-                    bottom = false;
-                }
-                else
-                {
-                     GameManager.Instance.Merge(gameObject);
-
-                }
+                //Merge squares
+                GameManager.Instance.Merge(gameObject);
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
                 Destroy(other.gameObject);
-               
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
@@ -106,7 +91,16 @@ public class Square : MonoBehaviour {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
                 //Check GameOver
                 GameManager.Instance.GameOver();
-                //gameObject.isStatic = true;
+
+                //Make it green again
+                if (gameObject.transform.parent !=null)
+                {
+                    if (gameObject.transform.parent.childCount < 6)
+                    {
+                        gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    }
+                }
+               
 
             }
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
@@ -135,44 +129,3 @@ public class Square : MonoBehaviour {
 
 
 
-
-/***
- * 
- * 
- * 
- * 
- * 
- * public class TouchInput : MonoBehaviour {
-private Vector3 screenPoint;
-private Vector3 initialPosition;
-private Vector3 offset;
-public float speed = 20.0f;
-
-Rigidbody2D rb;
-
-void Start(){
-    rb = gameObject.GetComponent<Rigidbody2D>();
-}
-
-void OnMouseDown(){
-    Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y,     screenPoint.z);
-    Vector3 initialPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
-}
-
-void OnMouseDrag(){
-   Vector3 cursorPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y,     screenPoint.z);
-   Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(cursorPoint) + offset;
-   Vector3 heading = cursorPosition - initialPosition;
-   Vector3 direction = heading / heading.magnitude;     // heading magnitude = distance 
-   rb.velocity = new Vector3(150 * Time.deltaTime, 0, 0); 
-   //Do what you want.
-   //if you want to drag object on only swipe gesture comment below. Otherwise:
-   initialPosition = cursorPosition;
-}
-
-void OnMouseUp()
-{
-   rb.velocity = new Vector3(0, 0, 0);
-}
-}
-*///

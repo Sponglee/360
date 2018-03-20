@@ -17,6 +17,9 @@ public class GameManager : Singleton<GameManager>
 
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
+    public int maxScore;
+    public int expandScore;
+
     //Vertical transform of top spot
     public GameObject currentSpot;
     //next spot to turn green
@@ -34,12 +37,21 @@ public class GameManager : Singleton<GameManager>
     public Text nextScore;
     public static int next_score;
 
+    //scores
+    public int scores;
+    public Text ScoreText;
+
+
 
     void Start()
     {
+        //Maximum spawn is 8
+        maxScore = 4;
+        expandScore = 100;
+
         spots = new List<GameObject>();
-
-
+        scores = 0;
+        ScoreText.text = scores.ToString();
 
         //Random next score to appear
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
@@ -47,47 +59,39 @@ public class GameManager : Singleton<GameManager>
 
         //Initialize level (spots)
         GetSpots(nBottom);
-
-
-
-        //foreach(GameObject spot in spots)
-        //{
-
-        //    GameObject tmp = Instantiate(squarePrefab, spot.transform.position, spot.transform.rotation);
-        //    tmp.GetComponent<Square>().bottom = true;
-        // //   tmp.transform.SetParent(spot.transform);
-        //    tmp.transform.Rotate(180, 90, -90);
-        //}
-
-
     }
 
 
     void Update()
     {
         //if inside outer ring
-        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255,0,0,255))
+        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)|| (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
         {
             //turn left or right
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
             {
                 //Cooldown for spawn 0.5sec
                 coolDown = Time.time + 0.5f;
-               
+
                 //spawn a square
                 squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 squareSpawn.GetComponent<Square>().Score = next_score;
                 //get score for next turn
-                next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
+                next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore));
                 nextScore.text = next_score.ToString();
 
             }
         }
-       
-        
+      
 
-        //Swipe manager
-        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
+        if (scores >= expandScore)
+        {
+            Expand();
+            expandScore *= 2;
+        }
+
+            //Swipe manager
+            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             //If square is falling - can't move
             if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
@@ -117,19 +121,14 @@ public class GameManager : Singleton<GameManager>
 
     public void Merge(GameObject first)
     {
-        //first.transform.SetParent(GameManager.Instance.currentSpot.transform);              //comment this for II var
-        
-        first.GetComponent<Square>().Score *= 2;
-
-        first.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-        //first.isStatic = true;
-
-  
-
+        int tmp = first.GetComponent<Square>().Score *= 2;
+        if (tmp>= (int)Mathf.Pow(2, maxScore))
+        {
+            maxScore = (int)Mathf.Log(tmp, 2);
+            
+        }
+        //first.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
     }
-
-   
-
 
     public Vector3 RandomCircle(Vector3 center, float radius, int a)
     {
@@ -150,16 +149,16 @@ public class GameManager : Singleton<GameManager>
         var center = wheel.transform.position;
         for (int i = 0; i < numberObjects; i++)
         {
-
             int a = 360 / numberObjects * i;
             var pos = RandomCircle(center, rad, a);
-            // make the object face the center
-            //var rot = Quaternion.FromToRotation(Vector3.forward, center - pos);
             GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
-            if (i == numberObjects - 1 || i == 0 || i == 1)
+
+            //open up 5 first spots for player
+            if (i == numberObjects - 1 || i == 0 || i == 1 )
             {
                 tmp.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                LastSpot = 1;
+                //the end spot for expanding
+                LastSpot =1;
             }
 
             tmp.name = i.ToString();
@@ -169,8 +168,8 @@ public class GameManager : Singleton<GameManager>
             spots.Add(tmp);
             currentSpot = spots[0];
         }
-
     }
+
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
@@ -182,28 +181,21 @@ public class GameManager : Singleton<GameManager>
         int maxTurns = nBottom+1;
         bool lapTwo = false;
         List<GameObject> rowObjs = new List<GameObject>();
-        
-
-        //Iterate through the circle
+      
+        //Iterate through the circle more than 1 full circle ('count' elements)
         do
-        {
-            
-               
+        {  
             if (index == nBottom)
             {
                 index = 0;
                 lapTwo = true;
             }
-           
             if (spots[index].transform.childCount > squareIndex)
             {
-
                 if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-                {
-                    
+                {  
                     rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                     row++;
-
                     {
                         if (lapTwo)
                             maxTurns++;
@@ -233,10 +225,15 @@ public class GameManager : Singleton<GameManager>
             if (count == maxTurns)
             {
                 Pop(rowObjs, row);
+                row = 0;
+                rowObjs.Clear();
+                count = 0;
+                index = 0;
+                maxTurns = nBottom + 1;
+                break;
             }
         }
-        while (count <= maxTurns);
-      
+        while (count <= maxTurns); 
     }
 
     //Kill all adjacent squares
@@ -248,7 +245,12 @@ public class GameManager : Singleton<GameManager>
             foreach (GameObject rowObj in rowObjs)
             {
                 Debug.Log(rowObj.transform.GetChild(0).GetComponentInChildren<Text>().text);
-                
+
+                //Update the score
+                scores += rowObj.GetComponent<Square>().Score;
+                ScoreText.text = scores.ToString();
+
+
                 if (rowObj.transform.parent != null)
                 {
                     rowObj.transform.position += new Vector3(0, 0, 10);
@@ -261,38 +263,33 @@ public class GameManager : Singleton<GameManager>
             }
             rowObjs.Clear();
         }
+        rowObjs.Clear();
     }
     // Add more columns to the field
     public void Expand()
     {
         //Check if next spot is green and circle isnt full
-        if (LastSpot != 0 && spots[LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(0, 255, 0, 255))
+        if (LastSpot != 0 && spots[LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(0, 255, 0, 255) && LastSpot!=nBottom)
         {
             spots[GameManager.Instance.LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-           LastSpot += 1;
+            LastSpot += 1;
         }
         else
            LastSpot = 0;
     }
-
-    private bool SameScore(int spotIndex, int squareIndex, int checkScore)
-    {
-        if (spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-        {
-            return true;
-        }
-        return false;
-       
-    }
+    
 
     public void GameOver()
     {
         if (currentSpot.transform.childCount == 6)
         {
+            //full spot colors red and opens another one
             currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+           
             Debug.Log("YAYAYAYAYAY");
         }
         int reds = 0;
+
         foreach (GameObject spot in spots)
         {
             if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255))
@@ -300,8 +297,9 @@ public class GameManager : Singleton<GameManager>
                 reds++;
             }
         }
-        if (reds == spots.Count)
+        if (reds == spots.Count && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
         {
+            nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
