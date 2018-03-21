@@ -76,6 +76,7 @@ public class Square : MonoBehaviour {
 
         if (other.gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex()>other.gameObject.transform.GetSiblingIndex())
         {
+            
             if (this.score == other.gameObject.GetComponent<Square>().Score /* && !bottom*/)
             {
                 IsColliding = true;
@@ -86,6 +87,7 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
+                
                 //gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
                 gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
 

@@ -49,14 +49,14 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         //Maximum spawn is 8
-        maxScore = 4;
+        maxScore = 3;
         expandScore = 100;
 
         spots = new List<GameObject>();
         scores = 0;
         ScoreText.text = scores.ToString();
 
-        //Random next score to appear
+        //Random next score to appear (2^3 max <-------)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
 
@@ -70,6 +70,7 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
+
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one and not blocked
         if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
                         || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) && !currentSpot.GetComponent<Spot>().Blocked)
@@ -83,8 +84,8 @@ public class GameManager : Singleton<GameManager>
                 //spawn a square
                 squareSpawn = Instantiate(squarePrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 squareSpawn.GetComponent<Square>().Score = next_score;
-                //get score for next turn
-                next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore));
+                //get score for next turn (non-inclusive)
+                next_score = (int)Mathf.Pow(2, Random.Range(1,maxScore+1));
                 nextScore.text = next_score.ToString();
 
             }
@@ -130,10 +131,13 @@ public class GameManager : Singleton<GameManager>
     public void Merge(GameObject first)
     {
         int tmp = first.GetComponent<Square>().Score *= 2;
-        if (tmp>= (int)Mathf.Pow(2, maxScore))
+        Debug.Log(tmp);
+       
+        if (tmp > (int)Mathf.Pow(2, maxScore))
         {
             maxScore = (int)Mathf.Log(tmp, 2);
-            
+            Debug.Log(" maxSCORE " + maxScore);
+            Expand(1);
         }
     }
 
@@ -269,20 +273,29 @@ public class GameManager : Singleton<GameManager>
             }
             rowObjs.Clear();
         }
-        rowObjs.Clear();
+       
     }
     // Add more columns to the field
-    public void Expand()
+    public void Expand(int retract=0)
     {
         //Check if next spot is green and circle isnt full
-        if (LastSpot != 0 && spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+        if (LastSpot != 0 && spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) && retract == 0)
         {
             spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
             spots[LastSpot - 1].GetComponent<Spot>().Blocked = true;
             LastSpot -= 1;
+            Debug.Log("BLOCK " + (LastSpot - 1));
+        }
+        else if (LastSpot != 0 && spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && retract != 0)
+        {
+            Debug.Log("UNBLOCK " + (LastSpot));
+            spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+            spots[LastSpot].GetComponent<Spot>().Blocked = false;
+
+            LastSpot += 1;
         }
         else
-           LastSpot = nBottom;
+            LastSpot = nBottom;
     }
     
 
