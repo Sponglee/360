@@ -135,9 +135,11 @@ public class GameManager : Singleton<GameManager>
        
         if (tmp > (int)Mathf.Pow(2, maxScore))
         {
-            maxScore = (int)Mathf.Log(tmp, 2);
+            //maxScore = (int)Mathf.Log(tmp, 2);
             Debug.Log(" maxSCORE " + maxScore);
-            Expand(1);
+            //UNBLOCK
+            //Expand(1);
+            //first.GetComponent<Collider2D>().isTrigger = true;
         }
     }
 
@@ -286,7 +288,7 @@ public class GameManager : Singleton<GameManager>
             LastSpot -= 1;
             Debug.Log("BLOCK " + (LastSpot - 1));
         }
-        else if (LastSpot != 0 && spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && retract != 0)
+        else if (LastSpot != nBottom && spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && retract != 0 && spots[LastSpot]!=null)
         {
             Debug.Log("UNBLOCK " + (LastSpot));
             spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
