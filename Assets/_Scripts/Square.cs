@@ -6,15 +6,17 @@ using UnityEngine.UI;
 public class Square : MonoBehaviour {
 
     [SerializeField]
-    public bool bottom=false;
+    public bool bottom = false;
     private int row;
     public int Row
     { get { return row; } set { row = value; } }
     [SerializeField]
     private int score;
     public int Score
-    { get {return score;} set {score = value;} }
+    { get { return score; } set { score = value; } }
 
+
+  
     //for storing data
     public Transform Column
     {get{return column;}set{column = value;}}
@@ -26,6 +28,7 @@ public class Square : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
         gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
@@ -97,7 +100,14 @@ public class Square : MonoBehaviour {
                 {
                     if (gameObject.transform.parent.childCount < 6)
                     {
-                        gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                        if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+                        {
+                            Debug.Log("u can ");
+                            gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                        }
+                           
+                        else
+                            Debug.Log("u can't drop it");
                     }
                 }
                

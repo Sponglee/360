@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Spot : MonoBehaviour {
 
-    
-	// Use this for initialization
-	void Start () {
-		
+    //blocked for expanding
+    private bool blocked;
+    public bool Blocked    {get{return blocked;}set{blocked = value;}}
+
+
+    // Use this for initialization
+    void Start () {
+        blocked = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        Debug.Log("name " + gameObject.name + " blocked " + blocked);
 	}
 
 
@@ -21,7 +25,7 @@ public class Spot : MonoBehaviour {
        
         if (other.CompareTag("line") && gameObject.CompareTag("spot"))
         {
-            Debug.Log("CYKA");
+            
             GameManager.Instance.currentSpot = gameObject;
         }
     }

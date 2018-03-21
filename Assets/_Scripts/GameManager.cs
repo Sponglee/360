@@ -32,7 +32,8 @@ public class GameManager : Singleton<GameManager>
     private float coolDown;
 
     // number of objects
-    public int nBottom = 20;
+    public int nBottom = 8;
+
     //Next square's score
     public Text nextScore;
     public static int next_score;
@@ -41,6 +42,8 @@ public class GameManager : Singleton<GameManager>
     public int scores;
     public Text ScoreText;
 
+    // Obj list for pop checkrow
+    List<GameObject> rowObjs;
 
 
     void Start()
@@ -59,13 +62,17 @@ public class GameManager : Singleton<GameManager>
 
         //Initialize level (spots)
         GetSpots(nBottom);
+
+        
+        rowObjs = new List<GameObject>();
     }
 
 
     void Update()
     {
-        //if inside outer ring
-        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)|| (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
+        //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one and not blocked
+        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
+                        || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) && !currentSpot.GetComponent<Spot>().Blocked)
         {
             //turn left or right
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
@@ -87,7 +94,8 @@ public class GameManager : Singleton<GameManager>
         if (scores >= expandScore)
         {
             Expand();
-            expandScore *= 2;
+            expandScore += expandScore/2;
+            Debug.Log("NEXT SCORE " + expandScore);
         }
 
             //Swipe manager
@@ -96,7 +104,7 @@ public class GameManager : Singleton<GameManager>
             //If square is falling - can't move
             if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
             {
-                Debug.Log("NO");
+                //Debug.Log("NO");
             }
             else
             {
@@ -110,7 +118,7 @@ public class GameManager : Singleton<GameManager>
             if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
 
             {
-                Debug.Log("NO");
+                //Debug.Log("NO");
             }
             else
                 wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
@@ -127,7 +135,6 @@ public class GameManager : Singleton<GameManager>
             maxScore = (int)Mathf.Log(tmp, 2);
             
         }
-        //first.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
     }
 
     public Vector3 RandomCircle(Vector3 center, float radius, int a)
@@ -152,14 +159,8 @@ public class GameManager : Singleton<GameManager>
             int a = 360 / numberObjects * i;
             var pos = RandomCircle(center, rad, a);
             GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
-
-            //open up 5 first spots for player
-            if (i == numberObjects - 1 || i == 0 || i == 1 )
-            {
-                tmp.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                //the end spot for expanding
-                LastSpot =1;
-            }
+            //last spot for expanding 
+            LastSpot = nBottom;                             //maybe randomize this??
 
             tmp.name = i.ToString();
             tmp.transform.SetParent(wheel.transform.GetChild(0));
@@ -173,6 +174,7 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
+        rowObjs.Clear();
         //iterator for spots(more than 1 full circle)
         int count = 0;
         //iterator for list
@@ -180,7 +182,7 @@ public class GameManager : Singleton<GameManager>
         int row = 0;
         int maxTurns = nBottom+1;
         bool lapTwo = false;
-        List<GameObject> rowObjs = new List<GameObject>();
+        
       
         //Iterate through the circle more than 1 full circle ('count' elements)
         do
@@ -254,7 +256,11 @@ public class GameManager : Singleton<GameManager>
                 if (rowObj.transform.parent != null)
                 {
                     rowObj.transform.position += new Vector3(0, 0, 10);
-                    rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    if(!rowObj.transform.parent.GetComponent<Spot>().Blocked)
+                    {
+                        rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    }
+                   
                 }
                    
                 rowObj.transform.parent = null;
@@ -269,13 +275,14 @@ public class GameManager : Singleton<GameManager>
     public void Expand()
     {
         //Check if next spot is green and circle isnt full
-        if (LastSpot != 0 && spots[LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(0, 255, 0, 255) && LastSpot!=nBottom)
+        if (LastSpot != 0 && spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
         {
-            spots[GameManager.Instance.LastSpot + 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-            LastSpot += 1;
+            spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            spots[LastSpot - 1].GetComponent<Spot>().Blocked = true;
+            LastSpot -= 1;
         }
         else
-           LastSpot = 0;
+           LastSpot = nBottom;
     }
     
 
@@ -307,26 +314,6 @@ public class GameManager : Singleton<GameManager>
 
 
 
-
-        ////Check for nearest same squares
-        //if (spots[prevSpotIndex].transform.Find(squareIndex.ToString()) != null)
-        //{
-        //    left = spots[prevSpotIndex].transform.Find(squareIndex.ToString()).GetComponent<Square>().Score;
-        //    Debug.Log(" ><>L<<>><> " + left + "<><><><><>  " + spots[prevSpotIndex].transform.Find(squareIndex.ToString()));
-        //}
-
-        //if (spots[nextSpotIndex].transform.Find(squareIndex.ToString()) != null)
-        //{
-        //    right = spots[nextSpotIndex].transform.Find(squareIndex.ToString()).GetComponent<Square>().Score;
-        //    Debug.Log(" ><>R<<>><> " + right + "<><><><><>  " + spots[nextSpotIndex].transform.Find(squareIndex.ToString()));
-        //}
-        //if (right != 0 && left != 0)
-        //{
-        //    if (left == checkScore && checkScore == right)
-        //    {
-        //        Debug.Log("BAM!!!!!");
-        //    }
-        //}
 
     }
 
