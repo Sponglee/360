@@ -186,9 +186,9 @@ public class GameManager : Singleton<GameManager>
         //iterator for list
         int index = 0;
         //int row = 0;
-        int maxTurns = nBottom+1;
+        int maxTurns = nBottom + 1;
         bool lapTwo = false;
-
+        bool fill = false;
 
         //Iterate through the circle more than 1 full circle ('count' elements)
         do
@@ -203,7 +203,7 @@ public class GameManager : Singleton<GameManager>
             //if threre's square on this row
             if (spots[index].transform.childCount > squareIndex)
             {
-                if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+                if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore && !fill)
                 {
                     rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
 
@@ -214,32 +214,48 @@ public class GameManager : Singleton<GameManager>
                 }
                 else
                 {
-                    if (lapTwo || rowObjs.Count>=3)
+                    if (lapTwo)
                     {
                         break;
                     }
-                    else
+                    else if (rowObjs.Count<3)
+                    {
                         rowObjs.Clear();
+                       
+                    }
+                    else if (rowObjs.Count>=3)
+                    {
+                        fill = true;
+                    }
+                       
 
                 }
 
             }
             else
             {
-                if (lapTwo || rowObjs.Count>=3)
+                if (lapTwo)
                 {
                     break;
                 }
-                else
+                else if (rowObjs.Count<3)
+                {
                     rowObjs.Clear();
-                
+                    
+                }
+                else if (rowObjs.Count>=3)
+                {
+                    fill = true;
+                }
+                    
+
             }
             index++;
             count++;
 
             if (count == maxTurns)
             {
-               
+
 
                 break;
             }
@@ -247,12 +263,31 @@ public class GameManager : Singleton<GameManager>
         while (count <= maxTurns);
 
         Debug.Log("BEFORE POP: " + "obj count " + rowObjs.Count);
-        if (rowObjs.Count>=3)
+        if (rowObjs.Count >= 3)
             Pop(rowObjs);
         count = 0;
         index = 0;
         maxTurns = nBottom + 1;
     }
+
+    //public void CheckRow(int spotIndex, int squareIndex, int checkScore)
+    //{
+    //    do
+    //    {
+    //        Debug.Log("YEST " + spotIndex + " ");
+    //    }
+    //    while (spots[spotIndex + 1].transform.childCount > squareIndex && spots[spotIndex + 1].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore);
+    //}
+
+
+
+
+
+
+
+
+
+
 
     //Kill all adjacent squares
     public void Pop(List<GameObject> rowObjs)
