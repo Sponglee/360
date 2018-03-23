@@ -96,7 +96,7 @@ public class GameManager : Singleton<GameManager>
         {
             Expand();
             expandScore += expandScore/2;
-            Debug.Log("NEXT SCORE " + expandScore);
+         
         }
 
             //Swipe manager
@@ -136,7 +136,7 @@ public class GameManager : Singleton<GameManager>
         if (tmp > (int)Mathf.Pow(2, maxScore))
         {
             //maxScore = (int)Mathf.Log(tmp, 2);
-            Debug.Log(" maxSCORE " + maxScore);
+         
             //UNBLOCK
             //Expand(1);
             //first.GetComponent<Collider2D>().isTrigger = true;
@@ -181,127 +181,264 @@ public class GameManager : Singleton<GameManager>
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
         rowObjs.Clear();
-        //iterator for spots(more than 1 full circle)
-        int count = 0;
+       
         //iterator for list
         int index = 0;
-        //int row = 0;
+        int count = 0;
         int maxTurns = nBottom + 1;
         bool lapTwo = false;
-        bool fill = false;
 
+        int firstIndex=0;
+        int nextIndex = 0;
+        bool fill = false;
         //Iterate through the circle more than 1 full circle ('count' elements)
+
+
         do
         {
-            Debug.Log("Index " + count + "rowObjs " + rowObjs.Count);
-            //2nd run 
+
+
             if (index == nBottom)
             {
                 index = 0;
                 lapTwo = true;
             }
-            //if threre's square on this row
+
+            Debug.Log("index " + index + "count " + spots[index].transform.childCount + "square " + squareIndex);
+
+            //if there's square with same squareIndex
             if (spots[index].transform.childCount > squareIndex)
             {
-                if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore && !fill)
+                //if its score is the same
+                if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
                 {
-                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
+                    //if there we're at index 0
+                    Debug.Log("here");
+                    if (index - 1 < 0)
                     {
-                        if (lapTwo)
-                            maxTurns++;
+                        firstIndex = nBottom - 1;
+                    }
+                    else
+                        firstIndex = index - 1;
+
+
+                    Debug.Log("here " + firstIndex + " spot " + spots[firstIndex].name + "squareIndex " + spots[firstIndex].transform.childCount);
+                    // if there's no object to the left and no objs yet    ADDING FIRST ONE
+                    if (rowObjs.Count == 0)
+                    {
+                        //if there's something to the left
+                        if (spots[firstIndex].transform.childCount < squareIndex + 1)
+                        {
+
+                            Debug.Log("here");
+                            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+
+                        }
+                        else
+                        {
+                            if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
+                            {
+                                Debug.Log("here");
+                                rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                            }
+                        }
+                    }
+                    else if (rowObjs.Count != 0 && !fill)
+                    {
+                        rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                    }
+
+                    if (rowObjs.Count != 0)
+                    {
+                        Debug.Log("here");
+                        if (index + 1 >= nBottom - 1)
+                        {
+                            nextIndex = 0;
+                        }
+                        else
+                            nextIndex = index + 1;
+
+
+                       
+                        Debug.Log("here");
+                        //there's something to the right
+                        if (spots[nextIndex].transform.childCount > squareIndex)
+                        {
+                            if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+                            {
+                                if (lapTwo)
+                                    maxTurns++;
+                                
+                                index++;
+                                count++;
+                                continue;
+                            }
+                            else
+                            {
+                                if (rowObjs.Count < 3)
+                                {
+                                    rowObjs.Clear();
+                                }
+                                fill = true;
+                                index++;
+                                count++;
+                                continue;
+
+                            }
+                        }
+                        else
+                        {
+                            if (rowObjs.Count < 3)
+                            {
+                                rowObjs.Clear();
+                                
+                            }
+                            fill = true;
+                            index++;
+                            count++;
+                            continue;
+
+
+
+                        }
+
                     }
                 }
-                else
-                {
-                    if (lapTwo)
-                    {
-                        break;
-                    }
-                    else if (rowObjs.Count<3)
-                    {
-                        rowObjs.Clear();
-                       
-                    }
-                    else if (rowObjs.Count>=3)
-                    {
-                        fill = true;
-                    }
-                       
-
-                }
-
             }
             else
             {
-                if (lapTwo)
-                {
-                    break;
-                }
-                else if (rowObjs.Count<3)
-                {
-                    rowObjs.Clear();
-                    
-                }
-                else if (rowObjs.Count>=3)
-                {
-                    fill = true;
-                }
-                    
-
+                index++;
+                count++;
+                continue;
             }
+
+            Debug.Log("index " + index);
             index++;
             count++;
-
-            if (count == maxTurns)
-            {
-
-
-                break;
-            }
         }
         while (count <= maxTurns);
-
-        Debug.Log("BEFORE POP: " + "obj count " + rowObjs.Count);
-        if (rowObjs.Count >= 3)
-            Pop(rowObjs);
-        count = 0;
+        Pop(rowObjs);
         index = 0;
-        maxTurns = nBottom + 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //do
+        //{
+          
+        //    //2nd run 
+        //    if (index == nBottom)
+        //    {
+        //        index = 0;
+        //        lapTwo = true;
+        //    }
+        //    //if threre's square on this row
+        //    if (spots[index].transform.childCount > squareIndex)
+        //    {
+        //        if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore && !fill)
+        //        {
+        //            firstIndex = index;
+        //            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+
+        //            if (lapTwo)
+        //                maxTurns++;
+        //        }
+        //        else if (fill && spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+        //        {
+        //            rowObjs.Clear();
+        //            fill = false;
+        //            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+        //           
+        //        }
+                
+        //        else
+        //        {
+        //            if (lapTwo)
+        //            {
+        //                break;
+        //            }
+        //            else if (rowObjs.Count<3)
+        //            {
+        //                rowObjs.Clear();
+                       
+        //            }
+        //            else if (rowObjs.Count>=3)
+        //            {
+        //                if (firstIndex - 1 < 0)
+        //                    firstIndex = nBottom;
+        //                if(spots[firstIndex - 1].transform.childCount > squareIndex && spots[firstIndex - 1].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
+        //                {
+        //                    fill = true;
+        //                }
+        //                else break;
+                        
+        //            }
+                       
+
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        if (lapTwo)
+        //        {
+        //            break;
+        //        }
+        //        else if (rowObjs.Count<3)
+        //        {
+        //            rowObjs.Clear();
+                    
+        //        }
+        //        else if (rowObjs.Count>=3)
+        //        {
+        //            fill = true;
+        //        }
+                    
+
+        //    }
+        //    index++;
+        //    count++;
+
+        //    if (count == maxTurns)
+        //    {
+
+
+        //        break;
+        //    }
+        //}
+        //while (count <= maxTurns);
+
+      
+        //if (rowObjs.Count >= 3)
+        //    Pop(rowObjs);
+        //count = 0;
+        //index = 0;
+        //maxTurns = nBottom + 1;
     }
-
-    //public void CheckRow(int spotIndex, int squareIndex, int checkScore)
-    //{
-    //    do
-    //    {
-    //        Debug.Log("YEST " + spotIndex + " ");
-    //    }
-    //    while (spots[spotIndex + 1].transform.childCount > squareIndex && spots[spotIndex + 1].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore);
-    //}
-
-
-
-
-
-
-
-
-
-
 
     //Kill all adjacent squares
     public void Pop(List<GameObject> rowObjs)
     {
-        Debug.Log(rowObjs.Count + " <- count");
-     
             foreach (GameObject rowObj in rowObjs)
             {
-                Debug.Log(" HEHE" + rowObj.transform.GetChild(0).GetComponentInChildren<Text>().text);
-
                 //Update the score
                 scores += rowObj.GetComponent<Square>().Score;
                 ScoreText.text = scores.ToString();
-
 
                 if (rowObj.transform.parent != null)
                 {
@@ -330,11 +467,11 @@ public class GameManager : Singleton<GameManager>
             spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
             spots[LastSpot - 1].GetComponent<Spot>().Blocked = true;
             LastSpot -= 1;
-            Debug.Log("BLOCK " + (LastSpot - 1));
+          
         }
         else if (LastSpot != nBottom && spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && retract != 0 && spots[LastSpot]!=null)
         {
-            Debug.Log("UNBLOCK " + (LastSpot));
+           
             spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
             spots[LastSpot].GetComponent<Spot>().Blocked = false;
 
@@ -352,7 +489,7 @@ public class GameManager : Singleton<GameManager>
             //full spot colors red and opens another one
             currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
            
-            Debug.Log("YAYAYAYAYAY");
+          
         }
         int reds = 0;
 
