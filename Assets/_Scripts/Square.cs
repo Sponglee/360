@@ -54,22 +54,22 @@ public class Square : MonoBehaviour {
     public void OnCollisionEnter2D(Collision2D other)
     {
        
-        if (other.gameObject.CompareTag("spot") && !bottom)
+        if (other.gameObject.CompareTag("spot"))
         {
-            gameObject.transform.SetParent(other.transform);
+           
 
-            gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-            gameObject.transform.position = other.gameObject.transform.position;
+            //gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+            //gameObject.transform.position = other.gameObject.transform.position;
 
             //name of square's position
-            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+            //gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
 
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
            
             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
 
             this.column = other.gameObject.transform;
-            bottom = true;
+            
             
 
         }
@@ -77,7 +77,7 @@ public class Square : MonoBehaviour {
         if (other.gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex()>other.gameObject.transform.GetSiblingIndex())
         {
             
-            if (this.score == other.gameObject.GetComponent<Square>().Score /* && !bottom*/)
+            if (this.score == other.gameObject.GetComponent<Square>().Score )
             {
                 IsColliding = true;
                 //Merge squares
@@ -89,7 +89,7 @@ public class Square : MonoBehaviour {
             {
                 
                 //gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
-                gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+                //gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
 
                 //Check Row
                

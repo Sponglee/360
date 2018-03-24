@@ -193,7 +193,7 @@ public class GameManager : Singleton<GameManager>
         bool fill = false;
         //Iterate through the circle more than 1 full circle ('count' elements)
 
-
+        GameObject tmpSquare = spots[spotIndex].transform.GetChild(squareIndex).gameObject;
         do
         {
 
@@ -251,7 +251,7 @@ public class GameManager : Singleton<GameManager>
                     if (rowObjs.Count != 0)
                     {
                         Debug.Log("here");
-                        if (index + 1 >= nBottom - 1)
+                        if (index + 1 > nBottom - 1)
                         {
                             nextIndex = 0;
                         }
@@ -319,6 +319,39 @@ public class GameManager : Singleton<GameManager>
             count++;
         }
         while (count <= maxTurns);
+
+                        //Merge 3
+
+        //if (rowObjs.Count>=3)
+        //{
+        //    if (rowObjs.Contains(tmpSquare))
+        //    {
+
+        //        int indx = rowObjs.IndexOf(tmpSquare);
+        //        rowObjs[indx].GetComponent<Square>().Score *= 2;
+        //        rowObjs[indx].GetComponentInChildren<Text>().text = tmpSquare.GetComponent<Square>().Score.ToString();
+
+
+        //        if (rowObjs[indx].transform.parent.GetChild(squareIndex - 1).GetComponent<Square>() != null)
+        //        {
+        //            if (rowObjs[indx].transform.parent.GetChild(squareIndex - 1).GetComponent<Square>().Score == rowObjs[indx].GetComponent<Square>().Score)
+        //            {
+        //                GameManager.Instance.Merge(rowObjs[indx]);
+        //                rowObjs[indx].GetComponentInChildren<Text>().text = tmpSquare.GetComponent<Square>().Score.ToString();
+        //                Destroy(rowObjs[indx].transform.parent.GetChild(squareIndex - 1).gameObject);
+        //            }
+        //        }
+
+        //        rowObjs.RemoveAt(indx);
+        //    }
+
+        //}
+
+
+
+
+
+
         Pop(rowObjs);
         index = 0;
 
@@ -494,6 +527,14 @@ public class GameManager : Singleton<GameManager>
           
         }
         int reds = 0;
+        float timer = 2f;
+
+        do
+        {
+            timer -= Time.deltaTime;
+            Debug.Log(timer);
+        }
+        while (timer >= 0);
 
         foreach (GameObject spot in spots)
         {
@@ -507,6 +548,8 @@ public class GameManager : Singleton<GameManager>
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
+
+
 
 
 
