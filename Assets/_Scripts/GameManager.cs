@@ -279,7 +279,8 @@ public class GameManager : Singleton<GameManager>
                                 {
                                     rowObjs.Clear();
                                 }
-                                fill = true;
+                                else
+                                    fill = true;
                                 index++;
                                 count++;
                                 continue;
@@ -293,7 +294,8 @@ public class GameManager : Singleton<GameManager>
                                 rowObjs.Clear();
                                 
                             }
-                            fill = true;
+                            else
+                                fill = true;
                             index++;
                             count++;
                             continue;
