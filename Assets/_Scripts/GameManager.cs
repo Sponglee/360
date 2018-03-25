@@ -44,6 +44,7 @@ public class GameManager : Singleton<GameManager>
     public Text upper;
     public Text nextShrink;
     public static int next_score;
+    public Slider slider;
 
     //scores
     public int scores;
@@ -66,6 +67,9 @@ public class GameManager : Singleton<GameManager>
         ScoreText.text = scores.ToString();
         upper.text = string.Format("upper: {0}", scoreUpper);
         nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+        slider.value = (expandMoves - moves) / expandMoves;
+        Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
+
         //Random next score to appear (2^3 max <-------)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
@@ -97,7 +101,7 @@ public class GameManager : Singleton<GameManager>
                 //get score for next turn (non-inclusive)
                 next_score = (int)Mathf.Pow(2, Random.Range(1,maxScore+1));
                 nextScore.text = next_score.ToString();
-                
+              
             }
         }
       
@@ -108,6 +112,8 @@ public class GameManager : Singleton<GameManager>
             moves = 0;
             expandMoves += expandMoves/2;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+            slider.value = (float)(expandMoves - moves) / expandMoves;
+            Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
 
         }
 
@@ -136,14 +142,14 @@ public class GameManager : Singleton<GameManager>
             else
                 wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
         }
-
+       
     }
 
 
     public void Merge(GameObject first)
     {
         int tmp = first.GetComponent<Square>().Score *= 2;
-        Debug.Log(tmp);
+        first.GetComponent<Square>().ApplyStyle(tmp);
 
         if (tmp > scoreUpper)
         {
@@ -214,7 +220,6 @@ public class GameManager : Singleton<GameManager>
                 lapTwo = true;
             }
 
-            Debug.Log("index " + index + "count " + spots[index].transform.childCount + "square " + squareIndex);
 
             //if there's square with same squareIndex
             if (spots[index].transform.childCount > squareIndex)
@@ -223,7 +228,6 @@ public class GameManager : Singleton<GameManager>
                 if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
                 {
                     //if there we're at index 0
-                    Debug.Log("here");
                     if (index - 1 < 0)
                     {
                         firstIndex = nBottom - 1;
@@ -232,15 +236,13 @@ public class GameManager : Singleton<GameManager>
                         firstIndex = index - 1;
 
 
-                    Debug.Log("here " + firstIndex + " spot " + spots[firstIndex].name + "squareIndex " + spots[firstIndex].transform.childCount);
+                  
                     // if there's no object to the left and no objs yet    ADDING FIRST ONE
                     if (rowObjs.Count == 0)
                     {
                         //if there's something to the left
                         if (spots[firstIndex].transform.childCount < squareIndex + 1)
                         {
-
-                            Debug.Log("here");
                             rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
 
                         }
@@ -248,7 +250,6 @@ public class GameManager : Singleton<GameManager>
                         {
                             if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
                             {
-                                Debug.Log("here");
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                             }
                         }
@@ -260,7 +261,6 @@ public class GameManager : Singleton<GameManager>
 
                     if (rowObjs.Count != 0)
                     {
-                        Debug.Log("here");
                         if (index + 1 > nBottom - 1)
                         {
                             nextIndex = 0;
@@ -268,9 +268,6 @@ public class GameManager : Singleton<GameManager>
                         else
                             nextIndex = index + 1;
 
-
-                       
-                        Debug.Log("here");
                         //there's something to the right
                         if (spots[nextIndex].transform.childCount > squareIndex)
                         {
@@ -323,161 +320,25 @@ public class GameManager : Singleton<GameManager>
                 count++;
                 continue;
             }
-
-            Debug.Log("index " + index);
             index++;
             count++;
         }
         while (count <= maxTurns);
 
-                        //Merge 3
-
-        //if (rowObjs.Count>=3)
-        //{
-        //    if (rowObjs.Contains(tmpSquare))
-        //    {
-
-        //        int indx = rowObjs.IndexOf(tmpSquare);
-        //        rowObjs[indx].GetComponent<Square>().Score *= 2;
-        //        rowObjs[indx].GetComponentInChildren<Text>().text = tmpSquare.GetComponent<Square>().Score.ToString();
-
-
-        //        if (rowObjs[indx].transform.parent.GetChild(squareIndex - 1).GetComponent<Square>() != null)
-        //        {
-        //            if (rowObjs[indx].transform.parent.GetChild(squareIndex - 1).GetComponent<Square>().Score == rowObjs[indx].GetComponent<Square>().Score)
-        //            {
-        //                GameManager.Instance.Merge(rowObjs[indx]);
-        //                rowObjs[indx].GetComponentInChildren<Text>().text = tmpSquare.GetComponent<Square>().Score.ToString();
-        //                Destroy(rowObjs[indx].transform.parent.GetChild(squareIndex - 1).gameObject);
-        //            }
-        //        }
-
-        //        rowObjs.RemoveAt(indx);
-        //    }
-
-        //}
-
-
-
+        
         if(rowObjs.Count == 0)
         {
             moves++;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+            slider.value = (float)(expandMoves - moves) / expandMoves;
+            Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
         }
 
 
         Pop(rowObjs);
         index = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //do
-        //{
-          
-        //    //2nd run 
-        //    if (index == nBottom)
-        //    {
-        //        index = 0;
-        //        lapTwo = true;
-        //    }
-        //    //if threre's square on this row
-        //    if (spots[index].transform.childCount > squareIndex)
-        //    {
-        //        if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore && !fill)
-        //        {
-        //            firstIndex = index;
-        //            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
-        //            if (lapTwo)
-        //                maxTurns++;
-        //        }
-        //        else if (fill && spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-        //        {
-        //            rowObjs.Clear();
-        //            fill = false;
-        //            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-        //           
-        //        }
-                
-        //        else
-        //        {
-        //            if (lapTwo)
-        //            {
-        //                break;
-        //            }
-        //            else if (rowObjs.Count<3)
-        //            {
-        //                rowObjs.Clear();
-                       
-        //            }
-        //            else if (rowObjs.Count>=3)
-        //            {
-        //                if (firstIndex - 1 < 0)
-        //                    firstIndex = nBottom;
-        //                if(spots[firstIndex - 1].transform.childCount > squareIndex && spots[firstIndex - 1].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-        //                {
-        //                    fill = true;
-        //                }
-        //                else break;
-                        
-        //            }
-                       
-
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        if (lapTwo)
-        //        {
-        //            break;
-        //        }
-        //        else if (rowObjs.Count<3)
-        //        {
-        //            rowObjs.Clear();
-                    
-        //        }
-        //        else if (rowObjs.Count>=3)
-        //        {
-        //            fill = true;
-        //        }
-                    
-
-        //    }
-        //    index++;
-        //    count++;
-
-        //    if (count == maxTurns)
-        //    {
-
-
-        //        break;
-        //    }
-        //}
-        //while (count <= maxTurns);
-
-      
-        //if (rowObjs.Count >= 3)
-        //    Pop(rowObjs);
-        //count = 0;
-        //index = 0;
-        //maxTurns = nBottom + 1;
+       
     }
 
     //Kill all adjacent squares
@@ -546,13 +407,21 @@ public class GameManager : Singleton<GameManager>
         do
         {
             timer -= Time.deltaTime;
-            Debug.Log(timer);
+
         }
         while (timer >= 0);
 
         foreach (GameObject spot in spots)
         {
-            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255))
+            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+            {
+                if (spot.transform.GetChild(spot.transform.childCount - 1) !=null && spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score)
+                {
+                    reds++;
+                }
+              
+            }
+            else if(spot.GetComponent<Spot>().Blocked)
             {
                 reds++;
             }

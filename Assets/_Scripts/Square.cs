@@ -15,7 +15,8 @@ public class Square : MonoBehaviour {
     public int Score
     { get { return score; } set { score = value; } }
 
-
+    [SerializeField]
+    private Color32 color;
   
     //for storing data
     public Transform Column
@@ -25,6 +26,60 @@ public class Square : MonoBehaviour {
 
     private Transform column;
 
+
+
+    [SerializeField]
+    private Text SquareText;
+    [SerializeField]
+    private SpriteRenderer SquareColor;
+
+    private void Awake()
+    {
+       
+
+    }
+
+    // Helps ApplyStyle to grab numbers/color
+    void ApplyStyleFromHolder(int index)
+    {
+        SquareText.text = SquareStyleHolder.Instance.SquareStyles[index].Number.ToString();
+        SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
+        SquareColor.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+    }
+    //Gets Values from style script for each square
+    public void ApplyStyle(int num)
+    {
+        switch(num)
+        {
+            case 2:
+                ApplyStyleFromHolder(0);
+                break;
+            case 4:
+                ApplyStyleFromHolder(1);
+                break;
+            case 8:
+                ApplyStyleFromHolder(2);
+                break;
+            case 16:
+                ApplyStyleFromHolder(3);
+                break;
+            case 32:
+                ApplyStyleFromHolder(4);
+                break;
+            case 64:
+                ApplyStyleFromHolder(5);
+                break;
+            case 128:
+                ApplyStyleFromHolder(6);
+                break;
+            case 256:
+                ApplyStyleFromHolder(7);
+                break;
+            default:
+                Debug.LogError("Check the number that u pass to ApplyStyle");
+                break;
+        }
+    }
 
     // Use this for initialization
     void Start () {
@@ -36,7 +91,7 @@ public class Square : MonoBehaviour {
 
         gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
         gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-
+        ApplyStyle(this.score);
     }
 	
 	// Update is called once per frame
@@ -99,28 +154,30 @@ public class Square : MonoBehaviour {
                 //Check GameOver
                 GameManager.Instance.GameOver();
 
-                //Make it green again
-                if (gameObject.transform.parent !=null)
-                {
-                    if (gameObject.transform.parent.childCount < 6)
-                    {
-                        if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
-                        {
-                            Debug.Log("u can ");
-                            gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                        }
-                           
-                        else
-                            Debug.Log("u can't drop it");
-                    }
-                }
                
+
 
             }
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
             //Check for boops
             
+        }
+
+        //Make it green again
+        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+        {
+            if (gameObject.transform.parent.childCount < 6)
+            {
+                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+                {
+                    Debug.Log("u can ");
+                    gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                }
+
+                else
+                    Debug.Log("u can't drop it");
+            }
         }
     }
 
