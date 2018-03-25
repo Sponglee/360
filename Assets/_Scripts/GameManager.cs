@@ -18,7 +18,12 @@ public class GameManager : Singleton<GameManager>
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
     public int maxScore;
-    public int expandScore;
+    [SerializeField]
+    public int scoreUpper;
+    [SerializeField]
+    public int expandMoves;
+    [SerializeField]
+    private int moves;
 
     //Vertical transform of top spot
     public GameObject currentSpot;
@@ -36,6 +41,8 @@ public class GameManager : Singleton<GameManager>
 
     //Next square's score
     public Text nextScore;
+    public Text upper;
+    public Text nextShrink;
     public static int next_score;
 
     //scores
@@ -50,12 +57,15 @@ public class GameManager : Singleton<GameManager>
     {
         //Maximum spawn is 8
         maxScore = 3;
-        expandScore = 100;
+        expandMoves = 10;
+        moves = 0;
+        scoreUpper = (int)Mathf.Pow(2, maxScore);
 
         spots = new List<GameObject>();
         scores = 0;
         ScoreText.text = scores.ToString();
-
+        upper.text = string.Format("upper: {0}", scoreUpper);
+        nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
         //Random next score to appear (2^3 max <-------)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
@@ -87,16 +97,18 @@ public class GameManager : Singleton<GameManager>
                 //get score for next turn (non-inclusive)
                 next_score = (int)Mathf.Pow(2, Random.Range(1,maxScore+1));
                 nextScore.text = next_score.ToString();
-
+                
             }
         }
       
 
-        if (scores >= expandScore)
+        if (moves >= expandMoves)
         {
             Expand();
-            expandScore += expandScore/2;
-         
+            moves = 0;
+            expandMoves += expandMoves/2;
+            nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+
         }
 
             //Swipe manager
@@ -132,14 +144,12 @@ public class GameManager : Singleton<GameManager>
     {
         int tmp = first.GetComponent<Square>().Score *= 2;
         Debug.Log(tmp);
-       
-        if (tmp > (int)Mathf.Pow(2, maxScore))
+
+        if (tmp > scoreUpper)
         {
-            //maxScore = (int)Mathf.Log(tmp, 2);
-         
-            //UNBLOCK
-            //Expand(1);
-            //first.GetComponent<Collider2D>().isTrigger = true;
+            scoreUpper *=2;
+            Instance.upper.text = string.Format("upper: {0}", scoreUpper);
+            Instance.Expand(1);
         }
     }
 
@@ -349,7 +359,11 @@ public class GameManager : Singleton<GameManager>
 
 
 
-
+        if(rowObjs.Count == 0)
+        {
+            moves++;
+            nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+        }
 
 
         Pop(rowObjs);
@@ -527,7 +541,7 @@ public class GameManager : Singleton<GameManager>
           
         }
         int reds = 0;
-        float timer = 2f;
+        float timer = 4f;
 
         do
         {

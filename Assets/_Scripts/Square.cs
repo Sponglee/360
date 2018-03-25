@@ -79,6 +79,8 @@ public class Square : MonoBehaviour {
             
             if (this.score == other.gameObject.GetComponent<Square>().Score )
             {
+                    
+
                 IsColliding = true;
                 //Merge squares
                 GameManager.Instance.Merge(gameObject);
