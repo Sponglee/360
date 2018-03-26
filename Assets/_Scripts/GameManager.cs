@@ -17,6 +17,8 @@ public class GameManager : Singleton<GameManager>
 
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
+    //for random expand spawns
+    GameObject randSpawn = null;
     public int maxScore;
     [SerializeField]
     public int scoreUpper;
@@ -37,7 +39,7 @@ public class GameManager : Singleton<GameManager>
     private float coolDown;
 
     // number of objects
-    public int nBottom = 8;
+    public int nBottom;
 
     //Next square's score
     public Text nextScore;
@@ -56,12 +58,12 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        //Maximum spawn is 8
+        //Apply all the numbers 
         maxScore = 3;
-        expandMoves = 10;
+        expandMoves = 3;
         moves = 0;
         scoreUpper = (int)Mathf.Pow(2, maxScore);
-
+        nBottom = 10;
         spots = new List<GameObject>();
         scores = 0;
         ScoreText.text = scores.ToString();
@@ -85,9 +87,9 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
 
-        //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one and not blocked
+        //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
         if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
-                        || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) && !currentSpot.GetComponent<Spot>().Blocked)
+                        || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
         {
             //turn left or right
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
@@ -106,42 +108,61 @@ public class GameManager : Singleton<GameManager>
         }
       
 
-        if (moves >= expandMoves)
+        if (moves > expandMoves-1)
         {
             Expand();
             moves = 0;
-            expandMoves += expandMoves/2;
+            slider.value = 1;
+
+            //expandMoves += expandMoves/2;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
             slider.value = (float)(expandMoves - moves) / expandMoves;
             Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
 
         }
 
-            //Swipe manager
+            //Turn left
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            //If square is falling - can't move
-            if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
             {
-                //Debug.Log("NO");
-            }
-            else
-            {
-                wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
-            
-            }
+                //if squares are falling - can't move
+                if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+                {
                 
-        }
-        else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-
-            {
-                //Debug.Log("NO");
+                    Debug.Log("NO");
+                }
+                //if randomSpawn is falling - can't move
+                else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+                {
+                    Debug.Log("NO");
+                }
+                else
+                {
+                    
+                  
+                        wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+            
+                }
+                
             }
-            else
-                wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
-        }
+            //Turn right
+            else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                //if squareSpawn is falling - can't move
+                if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+                {
+                    Debug.Log("NO");
+                }
+                //if randomSpawn is falling - can't move
+                else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+                {
+                    Debug.Log("NO");
+                }
+                else
+                {
+                        wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
+                }
+               
+            }
        
     }
 
@@ -155,7 +176,7 @@ public class GameManager : Singleton<GameManager>
         {
             scoreUpper *=2;
             Instance.upper.text = string.Format("upper: {0}", scoreUpper);
-            Instance.Expand(1);
+
         }
     }
 
@@ -331,7 +352,7 @@ public class GameManager : Singleton<GameManager>
             moves++;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
             slider.value = (float)(expandMoves - moves) / expandMoves;
-            Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
+
         }
 
 
@@ -369,26 +390,56 @@ public class GameManager : Singleton<GameManager>
        
     }
     // Add more columns to the field
-    public void Expand(int retract=0)
+    public void Expand()
     {
-        //Check if next spot is green and circle isnt full
-        if (LastSpot != 0 && spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) && retract == 0)
-        {
-            spots[LastSpot - 1].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
-            spots[LastSpot - 1].GetComponent<Spot>().Blocked = true;
-            LastSpot -= 1;
-          
-        }
-        else if (LastSpot != nBottom && spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && retract != 0 && spots[LastSpot]!=null)
-        {
-           
-            spots[LastSpot].transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-            spots[LastSpot].GetComponent<Spot>().Blocked = false;
+        int rng = 0;
+        int randScore = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
 
-            LastSpot += 1;
+        // While Spot[rng] is not current spot - spawn randomSpawn at random spots
+        do
+        {
+         
+            rng = Random.Range(0, nBottom - 1);
+            Debug.Log(currentSpot.name + "   }{   " + rng);
+
+            if (spots[rng].transform.childCount <6)
+            {
+                Debug.Log("<6");
+                //spawn a square at random spot with random score
+                randSpawn = Instantiate(squarePrefab, spots[rng].transform.position + new Vector3(50, 0, 0), Quaternion.identity);
+                randSpawn.GetComponent<Square>().ExpandSpawn = true;
+                randSpawn.GetComponent<Square>().Score = randScore;
+                randSpawn.transform.SetParent(spots[rng].transform);
+                randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
+                //spawn at the same radius as nextSpawn
+                randSpawn.transform.localPosition = new Vector3(7, 0, 0);
+               
+                //Rotate spawns towards center
+                Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
+                diff.Normalize();
+
+                float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+                randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
+
+            }
+            else
+            {
+                Debug.Log("Can't Find any");
+                
+            }
+            //else if (spots[rng].transform.childCount == 6 
+            //            && randScore == spots[rng].transform.GetChild(spots[rng].transform.childCount - 1).GetComponent<Square>().Score)
+            //{
+            //    Debug.Log("same ");
+            //    break;
+            //}
         }
-        else
-            LastSpot = nBottom;
+        while (rng == int.Parse(currentSpot.name));
+
+      
+
+
+
     }
     
 

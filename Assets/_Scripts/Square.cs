@@ -17,7 +17,7 @@ public class Square : MonoBehaviour {
 
     [SerializeField]
     private Color32 color;
-  
+    
     //for storing data
     public Transform Column
     {get{return column;}set{column = value;}}
@@ -26,6 +26,8 @@ public class Square : MonoBehaviour {
 
     private Transform column;
 
+    private bool expandSpawn=false;
+    public bool ExpandSpawn { get; set; }
 
 
     [SerializeField]
@@ -83,15 +85,28 @@ public class Square : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        
-        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
-        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+        if (ExpandSpawn)
+        {
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
-        /******* METHOD PART***/
+            /******* METHOD PART***/
 
-        gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
-        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-        ApplyStyle(this.score);
+         
+            ApplyStyle(this.score);
+        }
+        else
+        {
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+
+            /******* METHOD PART***/
+
+            gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
+            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+            ApplyStyle(this.score);
+        }
+       
     }
 	
 	// Update is called once per frame
