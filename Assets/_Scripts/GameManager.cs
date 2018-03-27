@@ -19,6 +19,9 @@ public class GameManager : Singleton<GameManager>
     GameObject squareSpawn = null;
     //for random expand spawns
     GameObject randSpawn = null;
+
+    //checker for player spawn
+    private bool isSpawn = false;
     public int maxScore;
     [SerializeField]
     public int scoreUpper;
@@ -88,11 +91,15 @@ public class GameManager : Singleton<GameManager>
     {
 
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
-        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
+        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)
                         || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
         {
-            //turn left or right
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
+            //turn left or right and if randomSpawn isnt moving
+            if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+            {
+                Debug.Log("No");
+            }
+            else if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
             {
                 //Cooldown for spawn 0.5sec
                 coolDown = Time.time + 0.5f;
@@ -103,7 +110,7 @@ public class GameManager : Singleton<GameManager>
                 //get score for next turn (non-inclusive)
                 next_score = (int)Mathf.Pow(2, Random.Range(1,maxScore+1));
                 nextScore.text = next_score.ToString();
-              
+                isSpawn = true;
             }
         }
       
@@ -347,8 +354,9 @@ public class GameManager : Singleton<GameManager>
         while (count <= maxTurns);
 
         
-        if(rowObjs.Count == 0)
+        if(rowObjs.Count == 0 && isSpawn)
         {
+            isSpawn = false;
             moves++;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
             slider.value = (float)(expandMoves - moves) / expandMoves;
@@ -420,7 +428,11 @@ public class GameManager : Singleton<GameManager>
 
                 float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
                 randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
-
+                //make spot red if 6th child
+                if(randSpawn.transform.parent.childCount == 6)
+                {
+                    randSpawn.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+                }
             }
             else
             {
@@ -466,7 +478,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
             {
-                if (spot.transform.GetChild(spot.transform.childCount - 1) !=null && spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score)
+                if (spot.transform.GetChild(spot.transform.childCount - 1) !=null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
                 {
                     reds++;
                 }
@@ -477,7 +489,7 @@ public class GameManager : Singleton<GameManager>
                 reds++;
             }
         }
-        if (reds == spots.Count && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
+        if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
         {
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
