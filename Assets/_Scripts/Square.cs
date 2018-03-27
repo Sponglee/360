@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Square : MonoBehaviour {
 
     [SerializeField]
-    public bool bottom = false;
+    public bool IsSpawn = false;
     private int row;
     public int Row
     { get { return row; } set { row = value; } }
@@ -139,18 +139,26 @@ public class Square : MonoBehaviour {
             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
 
             this.column = other.gameObject.transform;
-            
-            
+
+            // if spawned by player - add to moves, update the text
+            if(IsSpawn)
+            {
+                GameManager.Instance.Moves();
+            }
+          
 
         }
-
+        //other square
         if (other.gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex()>other.gameObject.transform.GetSiblingIndex())
         {
             
             if (this.score == other.gameObject.GetComponent<Square>().Score )
             {
-                    
-
+                //if spawned by player and pops - no moves 
+                if (this.IsSpawn)
+                {
+                    this.IsSpawn = false;
+                }
                 IsColliding = true;
                 //Merge squares
                 GameManager.Instance.Merge(gameObject);
@@ -159,12 +167,12 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                
-                //gameObject.transform.SetParent(other.gameObject.transform.parent);                                     //for II VARIANT COMMENT THIS
-                //gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
+                //if spawned by player and no scores - moves++
+                if (IsSpawn)
+                {
+                    GameManager.Instance.Moves();
+                }
 
-                //Check Row
-               
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
                 //Check GameOver
                 GameManager.Instance.GameOver();
@@ -186,12 +194,15 @@ public class Square : MonoBehaviour {
             {
                 if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
                 {
-                    Debug.Log("u can ");
+                    //Debug.Log("u can ");
                     gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
                 }
 
                 else
-                    Debug.Log("u can't drop it");
+                {
+                    //Debug.Log("u can't drop it");
+                }
+
             }
         }
     }
@@ -202,7 +213,7 @@ public class Square : MonoBehaviour {
     {
         if (collision.CompareTag("center") && gameObject.CompareTag("square"))
         {
-            Debug.Log("destroy this");
+            //Debug.Log("destroy this");
             Destroy(gameObject);
         }
 

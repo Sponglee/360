@@ -73,7 +73,7 @@ public class GameManager : Singleton<GameManager>
         upper.text = string.Format("upper: {0}", scoreUpper);
         nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
         slider.value = (expandMoves - moves) / expandMoves;
-        Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
+        
 
         //Random next score to appear (2^3 max <-------)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
@@ -97,7 +97,7 @@ public class GameManager : Singleton<GameManager>
             //turn left or right and if randomSpawn isnt moving
             if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
             {
-                Debug.Log("No");
+                //Debug.Log("No");
             }
             else if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
             {
@@ -110,7 +110,7 @@ public class GameManager : Singleton<GameManager>
                 //get score for next turn (non-inclusive)
                 next_score = (int)Mathf.Pow(2, Random.Range(1,maxScore+1));
                 nextScore.text = next_score.ToString();
-                isSpawn = true;
+                squareSpawn.GetComponent<Square>().IsSpawn = true;
             }
         }
       
@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
             //expandMoves += expandMoves/2;
             nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
             slider.value = (float)(expandMoves - moves) / expandMoves;
-            Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
+            //Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
 
         }
 
@@ -135,12 +135,12 @@ public class GameManager : Singleton<GameManager>
                 if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
                 {
                 
-                    Debug.Log("NO");
+                    //Debug.Log("NO");
                 }
                 //if randomSpawn is falling - can't move
                 else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
                 {
-                    Debug.Log("NO");
+                   // Debug.Log("NO");
                 }
                 else
                 {
@@ -157,12 +157,12 @@ public class GameManager : Singleton<GameManager>
                 //if squareSpawn is falling - can't move
                 if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
                 {
-                    Debug.Log("NO");
+                    //Debug.Log("NO");
                 }
                 //if randomSpawn is falling - can't move
                 else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
                 {
-                    Debug.Log("NO");
+                   // Debug.Log("NO");
                 }
                 else
                 {
@@ -227,11 +227,13 @@ public class GameManager : Singleton<GameManager>
         rowObjs.Clear();
        
         //iterator for list
-        int index = 0;
+        int index = spotIndex;
         int count = 0;
         int maxTurns = nBottom + 1;
         bool lapTwo = false;
 
+        //index of start of rowObjs (outside nbottom numbers to be safe)
+        int startIndex=nBottom+10;
         int firstIndex=0;
         int nextIndex = 0;
         bool fill = false;
@@ -241,13 +243,17 @@ public class GameManager : Singleton<GameManager>
         do
         {
 
-
+            //Second run starting 
             if (index == nBottom)
             {
                 index = 0;
-                lapTwo = true;
+                
             }
 
+            if (index == spotIndex && count >0)
+            {
+                lapTwo = true;
+            }
 
             //if there's square with same squareIndex
             if (spots[index].transform.childCount > squareIndex)
@@ -272,13 +278,23 @@ public class GameManager : Singleton<GameManager>
                         if (spots[firstIndex].transform.childCount < squareIndex + 1)
                         {
                             rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
+                            //if never set up yet
+                            if (startIndex > nBottom)
+                            {
+                                startIndex = firstIndex;
+                            }
+                            
                         }
                         else
                         {
                             if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                //if never set up yet
+                                if (startIndex > nBottom)
+                                {
+                                    startIndex = firstIndex;
+                                }
                             }
                         }
                     }
@@ -310,12 +326,21 @@ public class GameManager : Singleton<GameManager>
                             }
                             else
                             {
-                                if (rowObjs.Count < 3)
+                                if (rowObjs.Count < 3 && startIndex < nBottom + 1)
                                 {
                                     rowObjs.Clear();
+                                    
+                                    //exit the loop if less than 3
+                                    if (Mathf.Abs(startIndex - index) < 2)
+                                        break;
                                 }
                                 else
+                                {
+                                    //if filled row - exit
                                     fill = true;
+                                    break;
+                                }
+                                    
                                 index++;
                                 count++;
                                 continue;
@@ -324,10 +349,15 @@ public class GameManager : Singleton<GameManager>
                         }
                         else
                         {
-                            if (rowObjs.Count < 3)
+                            if (rowObjs.Count < 3 && startIndex<nBottom+1)
                             {
-                                rowObjs.Clear();
                                 
+                                rowObjs.Clear();
+                              
+                                //exit the loop if less than 3
+
+                                if (Mathf.Abs(startIndex - index) < 2)
+                                    break;
                             }
                             else
                                 fill = true;
@@ -352,22 +382,23 @@ public class GameManager : Singleton<GameManager>
             count++;
         }
         while (count <= maxTurns);
-
+        //reset it back to out of reach number
+        startIndex = nBottom + 10;
         
-        if(rowObjs.Count == 0 && isSpawn)
-        {
-            isSpawn = false;
-            moves++;
-            nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
-            slider.value = (float)(expandMoves - moves) / expandMoves;
-
-        }
-
+       
 
         Pop(rowObjs);
         index = 0;
 
        
+    }
+
+    // update moves
+    public void Moves()
+    {
+        moves++;
+        nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
+        slider.value = (float)(expandMoves - moves) / expandMoves;
     }
 
     //Kill all adjacent squares
@@ -408,11 +439,11 @@ public class GameManager : Singleton<GameManager>
         {
          
             rng = Random.Range(0, nBottom - 1);
-            Debug.Log(currentSpot.name + "   }{   " + rng);
+            
 
             if (spots[rng].transform.childCount <6)
             {
-                Debug.Log("<6");
+                Debug.Log("SPAWN");
                 //spawn a square at random spot with random score
                 randSpawn = Instantiate(squarePrefab, spots[rng].transform.position + new Vector3(50, 0, 0), Quaternion.identity);
                 randSpawn.GetComponent<Square>().ExpandSpawn = true;
