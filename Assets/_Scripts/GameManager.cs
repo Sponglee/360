@@ -27,27 +27,20 @@ public class GameManager : Singleton<GameManager>
     public int scoreUpper;
     [SerializeField]
     public int expandMoves;
-    [SerializeField]
+    
+    // only one spot remains (avoid infinite loop)
     private bool noMoves = false;
+    [SerializeField]
     private int moves=0;
     public int Moves
     {
         get
-        {
-            
+        {   
             return moves;
         }
 
         set
         {
-            //if (noMoves)
-            //{
-            //    noMoves = false;
-            //    return;
-            //}
-            //if moves-- don't do anything
-            //if (moves > value )
-            //    return;
             moves = value;
         }
     }
@@ -251,20 +244,14 @@ public class GameManager : Singleton<GameManager>
 
         //iterator for list
         int index = spotIndex;
-        int i = 1;
-        int j = 1;
-        int count = 0;
-        int maxTurns = nBottom + 1;
-        bool lapTwo = false;
         noMoves = false;
         //index of start of rowObjs (outside nbottom numbers to be safe)
         int startIndex = nBottom + 10;
         int endIndex = nBottom + 11;
         int firstIndex = 0;
         int nextIndex = 0;
-        bool fill = false;
-        //Iterate through the circle more than 1 full circle ('count' elements)
-
+     
+        // for later checking 
         GameObject tmpSquare = spots[spotIndex].transform.GetChild(squareIndex).gameObject;
 
         //add placed square to rowOBjs
@@ -273,14 +260,9 @@ public class GameManager : Singleton<GameManager>
 
         do
         {
-           
-
-
             //if there's no start yet
             if (startIndex > nBottom)
             {
-                
-
                                     //passing through 0
                                     if (index - 1 < 0)
                                     {
@@ -316,7 +298,6 @@ public class GameManager : Singleton<GameManager>
                                 index = spotIndex;
                                 continue;
                             }
-
                         }
                         else
                         {
@@ -336,7 +317,6 @@ public class GameManager : Singleton<GameManager>
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 startIndex = nBottom + 10;
-                                i++;
                                 continue;
                             }
                         }
@@ -361,9 +341,6 @@ public class GameManager : Singleton<GameManager>
             //if we found left end
             else if (startIndex < nBottom)
             {
-
-               
-
                         //passing through nBottom (0)
                         if (index +1 > nBottom-1)
                         {
@@ -371,9 +348,6 @@ public class GameManager : Singleton<GameManager>
                         }
                         else
                         index = index + 1;
-
-
-
                         //check next one after setting index+1
                         if (index + 1 > nBottom-1)
                         {
@@ -381,10 +355,6 @@ public class GameManager : Singleton<GameManager>
                         }
                         else
                             nextIndex = index + 1;
-
-
-
-
                 //if there's square with same squareIndex
                 if (spots[index].transform.childCount > squareIndex)
                 {
@@ -402,7 +372,6 @@ public class GameManager : Singleton<GameManager>
                                 endIndex = index;
                                 break;
                             }
-
                         }
                         else
                         {
@@ -420,7 +389,6 @@ public class GameManager : Singleton<GameManager>
                             else if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-                                j++;
                                 continue;
                             }
                         }
@@ -439,193 +407,21 @@ public class GameManager : Singleton<GameManager>
                     break;
                 }
             }
-
-
-            
-           
         }
         while (endIndex > nBottom + 1);
-
         if (rowObjs.Count<3)
         {
-           
-            Debug.Log(endIndex - startIndex + "  " + rowObjs.Count);
             rowObjs.Clear();
             // expand moves++ if this happened by player
             if (tmpSquare.GetComponent<Square>().IsSpawn)
             {
-               
                 ExpandMoves();
             }
-            
         }
         else
         {
-
             Pop(rowObjs);
-            index = 0;
-          
-
         }
-       
-
-
-
-
-
-
-
-
-
-
-
-        //do
-        //{
-
-        //    //Second run starting 
-        //    if (index == nBottom)
-        //    {
-        //        index = 0;
-                
-        //    }
-
-        //    if (index == spotIndex && count >0)
-        //    {
-        //        lapTwo = true;
-        //    }
-
-        //    //if there's square with same squareIndex
-        //    if (spots[index].transform.childCount > squareIndex)
-        //    {
-        //        //if its score is the same
-        //        if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-        //        {
-        //            //if there we're at index 0
-        //            if (index - 1 < 0)
-        //            {
-        //                firstIndex = nBottom - 1;
-        //            }
-        //            else
-        //                firstIndex = index - 1;
-
-
-                  
-        //            // if there's no object to the left and no objs yet    ADDING FIRST ONE
-        //            if (rowObjs.Count == 0)
-        //            {
-        //                //if there's something to the left
-        //                if (spots[firstIndex].transform.childCount < squareIndex + 1)
-        //                {
-        //                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-        //                    //if never set up yet
-        //                    if (startIndex > nBottom)
-        //                    {
-        //                        startIndex = firstIndex;
-        //                    }
-                            
-        //                }
-        //                else
-        //                {
-        //                    if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
-        //                    {
-        //                        rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-        //                        //if never set up yet
-        //                        if (startIndex > nBottom)
-        //                        {
-        //                            startIndex = firstIndex;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            else if (rowObjs.Count != 0 && !fill)
-        //            {
-        //                rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-        //            }
-
-        //            if (rowObjs.Count != 0)
-        //            {
-        //                if (index + 1 > nBottom - 1)
-        //                {
-        //                    nextIndex = 0;
-        //                }
-        //                else
-        //                    nextIndex = index + 1;
-
-        //                //there's something to the right
-        //                if (spots[nextIndex].transform.childCount > squareIndex)
-        //                {
-        //                    if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
-        //                    {
-        //                        if (lapTwo)
-        //                            maxTurns++;
-                                
-        //                        index++;
-        //                        count++;
-        //                        continue;
-        //                    }
-        //                    else
-        //                    {
-        //                        if (rowObjs.Count < 3 && startIndex < nBottom + 1)
-        //                        {
-        //                            rowObjs.Clear();
-                                    
-        //                            //exit the loop if less than 3
-        //                            if (Mathf.Abs(startIndex - index) < 2)
-        //                                break;
-        //                        }
-        //                        else
-        //                        {
-        //                            //if filled row - exit
-        //                            fill = true;
-        //                            break;
-        //                        }
-                                    
-        //                        index++;
-        //                        count++;
-        //                        continue;
-
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (rowObjs.Count < 3 && startIndex<nBottom+1)
-        //                    {
-                                
-        //                        rowObjs.Clear();
-                              
-        //                        //exit the loop if less than 3
-
-        //                        if (Mathf.Abs(startIndex - index) < 2)
-        //                            break;
-        //                    }
-        //                    else
-        //                        fill = true;
-        //                    index++;
-        //                    count++;
-        //                    continue;
-
-
-
-        //                }
-
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        index++;
-        //        count++;
-        //        continue;
-        //    }
-        //    index++;
-        //    count++;
-        //}
-        //while (count <= maxTurns);
-        ////reset it back to out of reach number
-        //startIndex = nBottom + 10;
-        
-       
-
     }
 
     // update moves
@@ -666,17 +462,36 @@ public class GameManager : Singleton<GameManager>
     // Add more columns to the field
     public void Expand()
     {
+
+
         int rng = 0;
-        int randScore = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
+        //randSpawn is upper Power -1 always
+        int upperPow = (int)Mathf.Log(scoreUpper, 2)- 1;
+        int randScore = (int)Mathf.Pow(2, Random.Range(1, upperPow+1));
 
         // While Spot[rng] is not current spot - spawn randomSpawn at random spots
-        do
+        while (true)
         {
          
             rng = Random.Range(0, nBottom - 1);
-            
 
-            if (spots[rng].transform.childCount <6)
+            //corner case where only 1 spot is not full (avoid infinite loop)
+            if (noMoves)
+            {
+                noMoves = false;
+                break;
+            }
+                
+           
+            if (rng == int.Parse(currentSpot.name))
+            {
+                continue;
+            }
+            else if (spots[rng].transform.childCount == 6)
+            {
+                continue;
+            }
+            else if (spots[rng].transform.childCount <6)
             {
                 Debug.Log("SPAWN");
                 //spawn a square at random spot with random score
@@ -699,12 +514,9 @@ public class GameManager : Singleton<GameManager>
                 {
                     randSpawn.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
                 }
+                break;
             }
-            else
-            {
-                Debug.Log("Can't Find any");
-                
-            }
+        
             //else if (spots[rng].transform.childCount == 6 
             //            && randScore == spots[rng].transform.GetChild(spots[rng].transform.childCount - 1).GetComponent<Square>().Score)
             //{
@@ -712,7 +524,7 @@ public class GameManager : Singleton<GameManager>
             //    break;
             //}
         }
-        while (rng == int.Parse(currentSpot.name));
+        
 
       
 
@@ -759,6 +571,11 @@ public class GameManager : Singleton<GameManager>
         {
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+        //corner case where only 1 spot is not full (avoid infinite loop)
+        else if (reds == spots.Count - 1)
+        {
+            noMoves = true;
         }
 
 
