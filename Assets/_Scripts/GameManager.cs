@@ -19,7 +19,7 @@ public class GameManager : Singleton<GameManager>
     GameObject squareSpawn = null;
     //for random expand spawns
     GameObject randSpawn = null;
-
+    public int randSpawnCount;
     //checker for player spawn
     private bool isSpawn = false;
     public int maxScore;
@@ -80,7 +80,8 @@ public class GameManager : Singleton<GameManager>
         //Apply all the numbers 
         maxScore = 3;
         expandMoves = 3;
-        
+        // count of randomSpawns 
+        randSpawnCount = 3;
         scoreUpper = (int)Mathf.Pow(2, maxScore);
         nBottom = 10;
         spots = new List<GameObject>();
@@ -133,15 +134,16 @@ public class GameManager : Singleton<GameManager>
 
         if (Moves > expandMoves-1)
         {
-            Expand();
-            Moves = 0;
-            slider.value = 1;
+            if (!noMoves)
+            {
+                Expand();
+                Moves = 0;
+                slider.value = 1;
 
-            //expandMoves += expandMoves/2;
-            nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
-            slider.value = (float)(expandMoves - Moves) / expandMoves;
-            //Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
-
+                //expandMoves += expandMoves/2;
+                nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+                slider.value = (float)(expandMoves - Moves) / expandMoves;
+            }
         }
 
             //Turn left
@@ -460,20 +462,31 @@ public class GameManager : Singleton<GameManager>
        
     }
     // Add more columns to the field
+    public class RandValues
+    {
+        
+        public int Rng { get; set;}
+        public int RandScore { get; set; }
+    }
+
     public void Expand()
     {
+        
+        List<RandValues> rands = new List<RandValues>();
 
-
-        int rng = 0;
+       
+        
         //randSpawn is upper Power -1 always
-        int upperPow = (int)Mathf.Log(scoreUpper, 2)- 1;
-        int randScore = (int)Mathf.Pow(2, Random.Range(1, upperPow+1));
+        int upperPow = (int)Mathf.Log(scoreUpper, 2) - 1;
+        
 
         // While Spot[rng] is not current spot - spawn randomSpawn at random spots
-        while (true)
+        while (rands.Count<randSpawnCount)
         {
-         
-            rng = Random.Range(0, nBottom - 1);
+            RandValues tmp = new RandValues();
+            //random spot and random score
+            tmp.Rng = Random.Range(0, nBottom - 1);
+            tmp.RandScore = 0;
 
             //corner case where only 1 spot is not full (avoid infinite loop)
             if (noMoves)
@@ -481,57 +494,96 @@ public class GameManager : Singleton<GameManager>
                 noMoves = false;
                 break;
             }
-                
-           
-            if (rng == int.Parse(currentSpot.name))
-            {
-                continue;
-            }
-            else if (spots[rng].transform.childCount == 6)
-            {
-                continue;
-            }
-            else if (spots[rng].transform.childCount <6)
-            {
-                Debug.Log("SPAWN");
-                //spawn a square at random spot with random score
-                randSpawn = Instantiate(squarePrefab, spots[rng].transform.position + new Vector3(50, 0, 0), Quaternion.identity);
-                randSpawn.GetComponent<Square>().ExpandSpawn = true;
-                randSpawn.GetComponent<Square>().Score = randScore;
-                randSpawn.transform.SetParent(spots[rng].transform);
-                randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
-                //spawn at the same radius as nextSpawn
-                randSpawn.transform.localPosition = new Vector3(7, 0, 0);
-               
-                //Rotate spawns towards center
-                Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
-                diff.Normalize();
 
-                float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-                randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
-                //make spot red if 6th child
-                if(randSpawn.transform.parent.childCount == 6)
+            
+            if (tmp.Rng == int.Parse(currentSpot.name))
+            {
+                continue;
+            }
+            else if (spots[tmp.Rng].transform.childCount == 6)
+            {
+                continue;
+            }
+            else if (spots[tmp.Rng].transform.childCount < 6)
+            {
+                if (rands.Count ==0)
                 {
-                    randSpawn.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+                    rands.Add(tmp);
+                    
                 }
-                break;
+                else
+                {
+                    // if there's same rng spot - cycle again
+                    if (Contains(rands, tmp))
+                    {
+                        
+                        continue;
+                    }
+                    else
+                    {
+                        rands.Add(tmp);
+                       
+                        continue;
+                    }
+                }
+               
+                
             }
-        
-            //else if (spots[rng].transform.childCount == 6 
-            //            && randScore == spots[rng].transform.GetChild(spots[rng].transform.childCount - 1).GetComponent<Square>().Score)
-            //{
-            //    Debug.Log("same ");
-            //    break;
-            //}
-        }
-        
 
-      
+
+        }
+        // add random Scores to each randomSquare and spawn them
+        foreach (RandValues rand in rands)
+        {
+           
+            rand.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
+            SpawnRandom(rand.Rng, rand.RandScore);
+        }
+
 
 
 
     }
-    
+
+    //Check if list of classes contains key pairs
+    bool Contains(List<RandValues> list, RandValues nameClass)
+    {
+        foreach (RandValues n in list)
+        {
+            if (n.Rng == nameClass.Rng && n.RandScore == nameClass.RandScore)
+            { return true; }
+        }
+        return false;
+    }
+
+
+    // Spawn randomSquare
+    public void SpawnRandom(int rng, int randScore)
+    {
+        Debug.Log("SPAWN");
+        //spawn a square at random spot with random score
+        randSpawn = Instantiate(squarePrefab, spots[rng].transform.position + new Vector3(50, 0, 0), Quaternion.identity);
+        randSpawn.GetComponent<Square>().ExpandSpawn = true;
+        randSpawn.GetComponent<Square>().Score = randScore;
+        randSpawn.transform.SetParent(spots[rng].transform);
+        randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
+        //spawn at the same radius as nextSpawn
+        randSpawn.transform.localPosition = new Vector3(7, 0, 0);
+
+        //Rotate spawns towards center
+        Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
+        diff.Normalize();
+
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
+        //make spot red if 6th child
+        if (randSpawn.transform.parent.childCount == 6)
+        {
+            randSpawn.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+        }
+    }
+
+
 
     public void GameOver()
     {
@@ -564,17 +616,20 @@ public class GameManager : Singleton<GameManager>
             }
             else if(spot.GetComponent<Spot>().Blocked)
             {
+                
                 reds++;
             }
         }
         if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
         {
+            noMoves = true;
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
         //corner case where only 1 spot is not full (avoid infinite loop)
-        else if (reds == spots.Count - 1)
+        else if (reds >= spots.Count - randSpawnCount)
         {
+            reds++;
             noMoves = true;
         }
 
