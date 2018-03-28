@@ -135,16 +135,19 @@ public class Square : MonoBehaviour {
             //gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
 
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
-           
-            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+            if (this.gameObject.transform.parent !=null)
+            {
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+            }
+            
 
             this.column = other.gameObject.transform;
 
             // if spawned by player - add to moves, update the text
-            if(IsSpawn)
-            {
-                GameManager.Instance.Moves();
-            }
+            //if(IsSpawn)
+            //{
+            //    GameManager.Instance.ExpandMoves();
+            //}
           
 
         }
@@ -167,11 +170,11 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                //if spawned by player and no scores - moves++
-                if (IsSpawn)
-                {
-                    GameManager.Instance.Moves();
-                }
+                //    //if spawned by player and no scores - moves++
+                //    //if (IsSpawn)
+                //    //{
+                //    //    GameManager.Instance.ExpandMoves();
+                //    }
 
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
                 //Check GameOver

@@ -28,12 +28,35 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     public int expandMoves;
     [SerializeField]
-    private int moves;
+    private bool noMoves = false;
+    private int moves=0;
+    public int Moves
+    {
+        get
+        {
+            
+            return moves;
+        }
 
+        set
+        {
+            //if (noMoves)
+            //{
+            //    noMoves = false;
+            //    return;
+            //}
+            //if moves-- don't do anything
+            //if (moves > value )
+            //    return;
+            moves = value;
+        }
+    }
     //Vertical transform of top spot
     public GameObject currentSpot;
     //next spot to turn green
     public int LastSpot { get; set; }
+
+    
 
     //All the spots around the wheel
     public List<GameObject> spots;
@@ -64,15 +87,15 @@ public class GameManager : Singleton<GameManager>
         //Apply all the numbers 
         maxScore = 3;
         expandMoves = 3;
-        moves = 0;
+        
         scoreUpper = (int)Mathf.Pow(2, maxScore);
         nBottom = 10;
         spots = new List<GameObject>();
         scores = 0;
         ScoreText.text = scores.ToString();
         upper.text = string.Format("upper: {0}", scoreUpper);
-        nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
-        slider.value = (expandMoves - moves) / expandMoves;
+        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+        slider.value = (expandMoves - Moves) / expandMoves;
         
 
         //Random next score to appear (2^3 max <-------)
@@ -115,15 +138,15 @@ public class GameManager : Singleton<GameManager>
         }
       
 
-        if (moves > expandMoves-1)
+        if (Moves > expandMoves-1)
         {
             Expand();
-            moves = 0;
+            Moves = 0;
             slider.value = 1;
 
             //expandMoves += expandMoves/2;
-            nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
-            slider.value = (float)(expandMoves - moves) / expandMoves;
+            nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+            slider.value = (float)(expandMoves - Moves) / expandMoves;
             //Debug.Log(" exp-moves " + (expandMoves - moves) + " expM " + expandMoves + "||||| " + slider.value);
 
         }
@@ -233,7 +256,7 @@ public class GameManager : Singleton<GameManager>
         int count = 0;
         int maxTurns = nBottom + 1;
         bool lapTwo = false;
-
+        noMoves = false;
         //index of start of rowObjs (outside nbottom numbers to be safe)
         int startIndex = nBottom + 10;
         int endIndex = nBottom + 11;
@@ -256,16 +279,17 @@ public class GameManager : Singleton<GameManager>
             //if there's no start yet
             if (startIndex > nBottom)
             {
-                //grab spot to the left
-                index = index - i;
+                
 
                                     //passing through 0
-                                    if (index - i < 0)
+                                    if (index - 1 < 0)
                                     {
-                                        index = nBottom - i;
+                                        index = nBottom - 1;
                                     }
+                                    else
+                                    index = index - 1;
 
-                                    //if there we're at index 0 i spots to the left
+                                    //check next left one after getting index-1
                                     if (index - 1 < 0)
                                     {
                                         firstIndex = nBottom - 1;
@@ -310,6 +334,7 @@ public class GameManager : Singleton<GameManager>
                             }
                             else if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore)
                             {
+                                rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 startIndex = nBottom + 10;
                                 i++;
                                 continue;
@@ -337,21 +362,25 @@ public class GameManager : Singleton<GameManager>
             else if (startIndex < nBottom)
             {
 
-                index = index + j;
+               
 
                         //passing through nBottom (0)
-                        if (index +j == nBottom)
+                        if (index +1 > nBottom-1)
                         {
                             index = 0;
                         }
+                        else
+                        index = index + 1;
 
-                        //if there we're at index 0 i spots to the left
-                        if (index - 1 < 0)
+
+
+                        //check next one after setting index+1
+                        if (index + 1 > nBottom-1)
                         {
-                            firstIndex = nBottom - 1;
+                            nextIndex = 0;
                         }
                         else
-                            firstIndex = index - 1;
+                            nextIndex = index + 1;
 
 
 
@@ -382,7 +411,7 @@ public class GameManager : Singleton<GameManager>
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 //if never set up yet
-                                if (startIndex > nBottom)
+                                if (endIndex > nBottom)
                                 {
                                     endIndex = index;
                                     break;
@@ -392,6 +421,7 @@ public class GameManager : Singleton<GameManager>
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 j++;
+                                continue;
                             }
                         }
                     }
@@ -418,16 +448,23 @@ public class GameManager : Singleton<GameManager>
 
         if (rowObjs.Count<3)
         {
+           
             Debug.Log(endIndex - startIndex + "  " + rowObjs.Count);
             rowObjs.Clear();
-            moves++;
+            // expand moves++ if this happened by player
+            if (tmpSquare.GetComponent<Square>().IsSpawn)
+            {
+               
+                ExpandMoves();
+            }
+            
         }
         else
         {
 
             Pop(rowObjs);
             index = 0;
-
+          
 
         }
        
@@ -592,11 +629,11 @@ public class GameManager : Singleton<GameManager>
     }
 
     // update moves
-    public void Moves()
+    public void ExpandMoves()
     {
-        moves++;
-        nextShrink.text = string.Format("next shrink: {0}", expandMoves - moves);
-        slider.value = (float)(expandMoves - moves) / expandMoves;
+        Moves++;
+        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+        slider.value = (float)(expandMoves - Moves) / expandMoves;
     }
 
     //Kill all adjacent squares
