@@ -486,7 +486,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         //if there's atleast 3 spots to spawn randoms
-        if (randList.Count > 2)
+        if (randList.Count == randSpawnCount)
         {
             rands.Clear();
         
@@ -507,7 +507,7 @@ public class GameManager : Singleton<GameManager>
 
                 tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
                 rands.Add(tmp);
-                Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
+                //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
             }
             //spawn all
@@ -526,7 +526,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (n.Rng == check.Rng)
             {
-                Debug.Log("CHECKING " + n.Rng + " and " + check.Rng);
+               
                 return true;
             }
              
