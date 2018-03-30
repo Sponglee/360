@@ -3,7 +3,7 @@ float4 _InnerRadii; // just x & y
 
 
 // gets distances to the edge of the shape, and then distances to 
-_blur, outline and inner_blur 
+//_blur, outline and inner_blur 
 // from the edge of the shape
 float4 ellipse_distances(float theta, float2 radii) {
     float2 rad_outer_blur = radii;

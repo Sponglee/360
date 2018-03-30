@@ -20,19 +20,17 @@ public class GameManager : Singleton<GameManager>
     GameObject squareSpawn = null;
     //for random expand spawns
     GameObject randSpawn = null;
-    //list of randSpawns
-    List<GameObject> randSpawns = null;
+    
     public int randSpawnCount;
     //checker for player spawn
-    private bool isSpawn = false;
+
     public int maxScore;
     [SerializeField]
     public int scoreUpper;
     [SerializeField]
     public int expandMoves;
 
-    // only one spot remains (avoid infinite loop)
-    private bool noMoves = false;
+   
     [SerializeField]
     private int moves = 0;
     public int Moves
@@ -79,6 +77,10 @@ public class GameManager : Singleton<GameManager>
 
     // Obj list for pop checkrow
     List<GameObject> rowObjs;
+   
+    List<RandValues> rands;
+    //list of randSpawns
+    List<GameObject> randSpawns;
 
 
     void Start()
@@ -411,6 +413,7 @@ public class GameManager : Singleton<GameManager>
 
         if (Moves > expandMoves - 1)
         {
+
             Expand();
             Moves = 0;
             slider.value = 1;
@@ -454,7 +457,7 @@ public class GameManager : Singleton<GameManager>
         }
         rowObjs.Clear();
 
-
+      
     }
     // struct to hold randomSpawn values
     public struct RandValues
@@ -466,10 +469,9 @@ public class GameManager : Singleton<GameManager>
 
     public void Expand()
     {
-        randSpawns = new List<GameObject>();
-        List<RandValues> rands = new List<RandValues>();
+        
         RandValues tmp = new RandValues();
-
+        rands = new List<RandValues>();
 
         //randSpawn is upper Power -1 always
         int upperPow = (int)Mathf.Log(scoreUpper, 2) - 1;
@@ -486,7 +488,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         //if there's atleast 3 spots to spawn randoms
-        if (randList.Count == randSpawnCount)
+        if (randList.Count >= randSpawnCount)
         {
             rands.Clear();
         
@@ -495,7 +497,7 @@ public class GameManager : Singleton<GameManager>
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
                 tmp.RandScore = 0;
 
-                if (rands.Count > 1 && Contains(rands, tmp))
+                if (rands.Count >= 1 && Contains(rands, tmp))
                 {
                     while (Contains(rands, tmp))
                     {
@@ -507,13 +509,17 @@ public class GameManager : Singleton<GameManager>
 
                 tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
                 rands.Add(tmp);
-                //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
+                Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
             }
+
+
             //spawn all
             foreach (RandValues rand in rands)
             {
-                
+
+
+                Debug.Log("========");
                 SpawnRandom(rand.Rng, rand.RandScore);
             }
         }
@@ -538,6 +544,7 @@ public class GameManager : Singleton<GameManager>
     // Spawn randomSquare
     public void SpawnRandom(int rng, int randScore)
     {
+        randSpawns = new List<GameObject>();
         Debug.Log("SPAWN");
         //spawn a square at random spot with random score
         randSpawn = Instantiate(squarePrefab, spawns[rng].transform.position, Quaternion.identity);
@@ -561,7 +568,7 @@ public class GameManager : Singleton<GameManager>
 
         randSpawns.Add(randSpawn);
     }
-
+  
 
 
     public void GameOver()

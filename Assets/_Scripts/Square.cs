@@ -26,7 +26,7 @@ public class Square : MonoBehaviour {
 
     private Transform column;
 
-    private bool expandSpawn=false;
+
     public bool ExpandSpawn { get; set; }
 
 
