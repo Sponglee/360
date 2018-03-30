@@ -99,7 +99,7 @@ public class GameManager : Singleton<GameManager>
         slider.value = (expandMoves - Moves) / expandMoves;
 
 
-        //Random next score to appear (2^3 max <-------)
+        //Random next score to appear (2^3 max <-----)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
 
