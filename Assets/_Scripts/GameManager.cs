@@ -479,59 +479,57 @@ public class GameManager : Singleton<GameManager>
 
         foreach(GameObject spot in spots)
         {
-            
             if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
                     && spot.name != currentSpot.name)
             {
                 randList.Add(int.Parse(spot.name));
-               
-
             }
         }
-        //if not the last spot
-        if (randList.Count >= 1)
+        //if there's atleast 3 spots to spawn randoms
+        if (randList.Count > 2)
         {
             rands.Clear();
-
+        
             for (int i = 0; i < randSpawnCount; i++)
             {
-
-                
-
-
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
                 tmp.RandScore = 0;
 
                 if (rands.Count > 1 && Contains(rands, tmp))
                 {
-                    do
+                    while (Contains(rands, tmp))
                     {
                         tmp.Rng = randList[Random.Range(0, randList.Count)];
                         tmp.RandScore = 0;
-
                     }
-                    while (Contains(rands, tmp));
-
+                    
                 }
 
-                rands.Add(tmp);
-
                 tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
-                SpawnRandom(tmp.Rng, tmp.RandScore);
+                rands.Add(tmp);
+                Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
+
+            }
+            //spawn all
+            foreach (RandValues rand in rands)
+            {
+                
+                SpawnRandom(rand.Rng, rand.RandScore);
             }
         }
-
-
-
     }
 
-    //Check if list of classes contains key pairs
-    bool Contains(List<RandValues> list, RandValues nameClass)
+    //Check if list of classes contains same rng
+    bool Contains(List<RandValues> list, RandValues check)
     {
         foreach (RandValues n in list)
         {
-            if (n.Rng == nameClass.Rng && n.RandScore == nameClass.RandScore)
-            { return true; }
+            if (n.Rng == check.Rng)
+            {
+                Debug.Log("CHECKING " + n.Rng + " and " + check.Rng);
+                return true;
+            }
+             
         }
         return false;
     }
@@ -547,8 +545,7 @@ public class GameManager : Singleton<GameManager>
         randSpawn.GetComponent<Square>().Score = randScore;
         randSpawn.transform.SetParent(spots[rng].transform);
         randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
-        //spawn at the same radius as nextSpawn
-        randSpawn.transform.localPosition = new Vector3(7, 0, 0);
+        
 
         //Rotate spawns towards center
         Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
@@ -576,39 +573,34 @@ public class GameManager : Singleton<GameManager>
 
 
         }
-        int reds = 0;
+        //    int reds = 0;
 
 
 
 
-        foreach (GameObject spot in spots)
-        {
-            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
-            {
-                if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
-                {
-                    reds++;
-                }
+        //    foreach (GameObject spot in spots)
+        //    {
+        //        if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+        //        {
+        //            if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
+        //            {
+        //                reds++;
+        //            }
 
-            }
-            else if (spot.GetComponent<Spot>().Blocked)
-            {
+        //        }
+        //        else if (spot.GetComponent<Spot>().Blocked)
+        //        {
 
-                reds++;
-            }
-        }
-        if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
-        {
-            //noMoves = true;
-            nextScore.text = "GAME OVER";
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-        //corner case where only 4 spots is not full 
-        //else if (reds >= spots.Count - randSpawnCount)
-        //{
-        //    reds++;
-        //    noMoves = true;
-        //}
+        //            reds++;
+        //        }
+        //    }
+        //    if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
+        //    {
+        //        //noMoves = true;
+        //        nextScore.text = "GAME OVER";
+        //        Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //    }
+
     }
 
 
