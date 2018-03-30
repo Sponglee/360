@@ -116,24 +116,25 @@ public class GameManager : Singleton<GameManager>
             //turn left or right and if randomSpawn isnt moving
             if (randSpawns !=null && randSpawns.Count != 0)
             {
-                int checkMoves = 0;
-                foreach(GameObject rand in randSpawns)
-                {
-                    if (rand != null && Mathf.Abs(rand.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-                    {
-                        checkMoves++;
-                    }
-                   // Debug.Log("No");
-                }
-                if (checkMoves!=0)
-                {
-                    checkMoves = 0;
-                    ClickSpawn();
-                }
-                else
-                {
-                    ClickSpawn();
-                }
+                //int checkMoves = 0;
+                //foreach(GameObject rand in randSpawns)
+                //{
+                //    if (rand != null && Mathf.Abs(rand.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
+                //    {
+                //        checkMoves++;
+                //    }
+                //   // Debug.Log("No");
+                //}
+                //if (checkMoves!=0)
+                //{
+                //    checkMoves = 0;
+                //    ClickSpawn();
+                //}
+                //else
+                //{
+                //    ClickSpawn();
+                //}
+                ClickSpawn();
             }
             else if (randSpawns == null)
             {
@@ -149,43 +150,17 @@ public class GameManager : Singleton<GameManager>
             //Turn left
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                //if squares are falling - can't move
-                if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-                {
-                
-                    //Debug.Log("NO");
-                }
-                //if randomSpawn is falling - can't move
-                else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-                {
-                   // Debug.Log("NO");
-                }
-                else
-                {
-                    
-                  
+               
                         wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
             
-                }
                 
             }
             //Turn right
             else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-                //if squareSpawn is falling - can't move
-                if (squareSpawn != null && Mathf.Abs(squareSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-                {
-                    //Debug.Log("NO");
-                }
-                //if randomSpawn is falling - can't move
-                else if (randSpawn != null && Mathf.Abs(randSpawn.GetComponent<Rigidbody2D>().velocity.y) > 0.4)
-                {
-                   // Debug.Log("NO");
-                }
-                else
-                {
+               
                         wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
-                }
+                
                
             }
        
@@ -450,7 +425,11 @@ public class GameManager : Singleton<GameManager>
 
         if (Moves > expandMoves - 1)
         {
-            Expand();
+            if (!noMoves)
+            {
+                Expand();
+            }
+           
             Moves = 0;
             slider.value = 1;
 
@@ -671,7 +650,7 @@ public class GameManager : Singleton<GameManager>
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
-        //corner case where only 4 spots is not full 
+        ////corner case where only 4 spots is not full
         //else if (reds >= spots.Count - randSpawnCount)
         //{
         //    reds++;
