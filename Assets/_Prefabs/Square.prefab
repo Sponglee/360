@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2be9fdb9a3e28b458872ceaa5a161aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottom: 0
+  IsSpawn: 0
   score: 0
   color:
     serializedVersion: 2
