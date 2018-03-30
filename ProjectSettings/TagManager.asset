@@ -11,6 +11,7 @@ TagManager:
   - spot
   - line
   - outer
+  - spawn
   layers:
   - Default
   - TransparentFX

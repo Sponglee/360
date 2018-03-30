@@ -119,28 +119,25 @@ public class GameManager : Singleton<GameManager>
                         || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
         {
             ClickSpawn();
-        }
-
-
-
-
-
-        //Turn left
-        if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-
-            wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
-
-        }
-        //Turn right
-        else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-
-            wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
-
 
         }
 
+            //Turn left
+            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+               
+                        wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+           
+            }
+            //Turn right
+            else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+               
+                        wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
+               
+               
+            }
+       
     }
 
     private void ClickSpawn()
@@ -193,7 +190,6 @@ public class GameManager : Singleton<GameManager>
     {
         float rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
 
-
         var center = wheel.transform.position;
         for (int i = 0; i < numberObjects; i++)
         {
@@ -211,7 +207,9 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < numberObjects; i++)
         {
             int a = 360 / numberObjects * i;
-            var pos = RandomCircle(center, rad + 5.5f, a);
+
+            var pos = RandomCircle(center, rad+5.5f, a);
+
             GameObject tmp = Instantiate(spawnPrefab, pos, Quaternion.LookRotation(Vector3.back));
             tmp.name = i.ToString();
             tmp.transform.SetParent(wheel.transform.GetChild(1));
@@ -477,13 +475,16 @@ public class GameManager : Singleton<GameManager>
         int upperPow = (int)Mathf.Log(scoreUpper, 2) - 1;
         List<int> randList = new List<int>();
         //get free spots
-        foreach (GameObject spot in spots)
-        {
 
-            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)
+
+        foreach(GameObject spot in spots)
+        {
+            
+            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
                     && spot.name != currentSpot.name)
             {
                 randList.Add(int.Parse(spot.name));
+               
 
             }
         }
@@ -495,6 +496,7 @@ public class GameManager : Singleton<GameManager>
             for (int i = 0; i < randSpawnCount; i++)
             {
 
+                
 
 
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
