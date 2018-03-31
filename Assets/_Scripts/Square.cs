@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Square : MonoBehaviour {
 
     [SerializeField]
+    private float speed;
     public bool IsSpawn = false;
     private int row;
     public int Row
@@ -17,7 +18,8 @@ public class Square : MonoBehaviour {
 
     [SerializeField]
     private Color32 color;
-    
+
+    public Transform centerPrefab;
     //for storing data
     public Transform Column
     {get{return column;}set{column = value;}}
@@ -26,7 +28,7 @@ public class Square : MonoBehaviour {
 
     private Transform column;
 
-
+    public bool Touched = false;
     public bool ExpandSpawn { get; set; }
 
 
@@ -85,6 +87,9 @@ public class Square : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
+        centerPrefab = GameObject.Find("Wheel").transform;
+    
         if (ExpandSpawn)
         {
             gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
@@ -94,6 +99,7 @@ public class Square : MonoBehaviour {
 
          
             ApplyStyle(this.score);
+
         }
         else
         {
@@ -106,12 +112,31 @@ public class Square : MonoBehaviour {
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             ApplyStyle(this.score);
         }
+
+
        
+
+
     }
 	
 	// Update is called once per frame
 	void Update () {
+        //if Touched - stops 
+       if(!this.Touched)
+        { 
+            
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
+            
+            
+        }
+        
+        // If there's no parent - fall
+        if(this.gameObject.transform.parent == null)
+        {
+            this.Touched = false;
+        }
 
+        // Boundary
         if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
         {
             Destroy(gameObject);
@@ -121,25 +146,21 @@ public class Square : MonoBehaviour {
 
     }
 
+
     public void OnCollisionEnter2D(Collision2D other)
     {
-       
+
         if (other.gameObject.CompareTag("spot"))
         {
-           
+            //Make it fall down
+            Debug.Log("SPOTTOUCH");
+            this.Touched = true;
 
-            //gameObject.GetComponent<SpriteRenderer>().color = new Color32(200, 200, 200, 255);
-            //gameObject.transform.position = other.gameObject.transform.position;
-
-            //name of square's position
-            //gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-
-            //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
-            if (this.gameObject.transform.parent !=null)
+            if (this.gameObject.transform.parent != null)
             {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
             }
-            
+
 
             this.column = other.gameObject.transform;
 
@@ -148,24 +169,25 @@ public class Square : MonoBehaviour {
             //{
             //    GameManager.Instance.ExpandMoves();
             //}
-          
+
 
         }
         //other square
-        if (other.gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex()>other.gameObject.transform.GetSiblingIndex())
+        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
         {
-            
-            if (this.score == other.gameObject.GetComponent<Square>().Score )
+            Debug.Log(gameObject.transform.GetSiblingIndex() + " SSSSSS " + other.gameObject.transform.GetSiblingIndex());
+            if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
                 //if spawned by player and pops - no moves 
                 if (this.IsSpawn)
                 {
                     this.IsSpawn = false;
                 }
-                IsColliding = true;
+            
                 //Merge squares
                 GameManager.Instance.Merge(gameObject);
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+              
                 Destroy(other.gameObject);
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
@@ -176,23 +198,28 @@ public class Square : MonoBehaviour {
                 //    //    GameManager.Instance.ExpandMoves();
                 //    }
 
+                //Make it fall down
+                this.Touched = true;
+                Debug.Log("SQUARE COLLISION");
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
                 //Check GameOver
                 GameManager.Instance.GameOver();
 
-               
+
 
 
             }
+
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
             //Check for boops
-            
+
         }
 
         //Make it green again
         if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
         {
+
             if (gameObject.transform.parent.childCount < 6)
             {
                 if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
@@ -200,28 +227,57 @@ public class Square : MonoBehaviour {
                     //Debug.Log("u can ");
                     gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
                 }
-
-                else
-                {
-                    //Debug.Log("u can't drop it");
-                }
-
             }
         }
+
+
+
     }
 
 
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("center") && gameObject.CompareTag("square"))
+        //Destroy on contact with center
+        if (other.CompareTag("center") && gameObject.CompareTag("square"))
         {
             //Debug.Log("destroy this");
             Destroy(gameObject);
         }
+        //if (other.gameObject.CompareTag("square") && this.score != other.gameObject.GetComponent<Square>().Score
+
+        //                && gameObject.transform.parent != null)
+        //{
+        //    //this.Touched = true;
+        //    Debug.Log("SQUARE ENTER");
+        //}
+
 
     }
-    
+
+    public void OnTriggerExit2D(Collider2D other)
+    {
+        //square and other is lower than this
+        if (other.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
+        {
+            Debug.Log("SQUARE EXIT");
+            gameObject.GetComponent<Square>().Touched = false;
+        }
+
+    }
+
+
+    //public void OnTriggerStay2D(Collider2D other)
+    //{
+
+    //    if (other.CompareTag("square")&& gameObject.transform.parent !=null && other.gameObject.transform.parent !=null)
+    //    {
+    //        Debug.Log("Stay");
+    //        this.Touched = true;
+    //    }
+    //}
+
+
 }
 
 

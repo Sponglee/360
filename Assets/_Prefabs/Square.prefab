@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 50681241844705552}
   - component: {fileID: 114245831885718896}
   - component: {fileID: 114706228793362738}
+  - component: {fileID: 61689537521209616}
   m_Layer: 0
   m_Name: Square
   m_TagString: square
@@ -102,6 +103,31 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!61 &61689537521209616
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523403489220356}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.15}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 1.2}
+  m_EdgeRadius: 0
 --- !u!61 &61812630713143364
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -110,7 +136,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1523403489220356}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 0cb77231a430b454fb792ff7ffcc3943, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -225,11 +251,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2be9fdb9a3e28b458872ceaa5a161aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 10
   IsSpawn: 0
   score: 0
   color:
     serializedVersion: 2
     rgba: 0
+  centerPrefab: {fileID: 0}
+  Touched: 0
   SquareText: {fileID: 114709778573452866}
   SquareColor: {fileID: 212341414957439470}
 --- !u!114 &114498820951125008
@@ -259,7 +288,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1523403489220356}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ec5db41a3153074c9c00ba55ee6036c, type: 3}
   m_Name: 

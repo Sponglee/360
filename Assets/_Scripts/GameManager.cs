@@ -443,7 +443,7 @@ public class GameManager : Singleton<GameManager>
 
             if (rowObj.transform.parent != null)
             {
-                rowObj.transform.position += new Vector3(0, 0, 10);
+                //rowObj.transform.position += new Vector3(0, 0, 10);
                 if (!rowObj.transform.parent.GetComponent<Spot>().Blocked)
                 {
                     rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
@@ -451,8 +451,20 @@ public class GameManager : Singleton<GameManager>
 
             }
 
-            rowObj.transform.parent = null;
+            //Make upper square drop
+            if (rowObj.transform.parent.childCount - rowObj.transform.GetSiblingIndex() > 1)
+            {
+               
+                rowObj.transform.parent.GetChild(rowObj.transform.GetSiblingIndex() + 1).gameObject.GetComponent<Square>().Touched = false;
+            }
+            //Make this square drop
+            rowObj.GetComponent<Square>().Touched = false;
             rowObj.GetComponent<Collider2D>().isTrigger = true;
+
+
+            
+            //Detach this square from parent
+            rowObj.transform.parent = null;
 
         }
         rowObjs.Clear();
@@ -509,7 +521,7 @@ public class GameManager : Singleton<GameManager>
 
                 tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
                 rands.Add(tmp);
-                Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
+                //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
             }
 
@@ -519,7 +531,7 @@ public class GameManager : Singleton<GameManager>
             {
 
 
-                Debug.Log("========");
+                //Debug.Log("========");
                 SpawnRandom(rand.Rng, rand.RandScore);
             }
         }
@@ -545,7 +557,7 @@ public class GameManager : Singleton<GameManager>
     public void SpawnRandom(int rng, int randScore)
     {
         randSpawns = new List<GameObject>();
-        Debug.Log("SPAWN");
+        //Debug.Log("SPAWN");
         //spawn a square at random spot with random score
         randSpawn = Instantiate(squarePrefab, spawns[rng].transform.position, Quaternion.identity);
         randSpawn.GetComponent<Square>().ExpandSpawn = true;
