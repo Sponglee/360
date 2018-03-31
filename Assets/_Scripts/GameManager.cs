@@ -592,33 +592,33 @@ public class GameManager : Singleton<GameManager>
 
 
         }
-        //    int reds = 0;
+        int reds = 0;
 
 
 
 
-        //    foreach (GameObject spot in spots)
-        //    {
-        //        if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
-        //        {
-        //            if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
-        //            {
-        //                reds++;
-        //            }
+        foreach (GameObject spot in spots)
+        {
+            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+            {
+                if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
+                {
+                    reds++;
+                }
 
-        //        }
-        //        else if (spot.GetComponent<Spot>().Blocked)
-        //        {
+            }
+            else if (spot.GetComponent<Spot>().Blocked)
+            {
 
-        //            reds++;
-        //        }
-        //    }
-        //    if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
-        //    {
-        //        //noMoves = true;
-        //        nextScore.text = "GAME OVER";
-        //        Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        //    }
+                reds++;
+            }
+        }
+        if (reds == spots.Count /*&& (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
+        {
+            //noMoves = true;
+            nextScore.text = "GAME OVER";
+            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
 
     }
 

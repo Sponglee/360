@@ -153,7 +153,7 @@ public class Square : MonoBehaviour {
         if (other.gameObject.CompareTag("spot"))
         {
             //Make it fall down
-            Debug.Log("SPOTTOUCH");
+            
             this.Touched = true;
 
             if (this.gameObject.transform.parent != null)
@@ -175,7 +175,7 @@ public class Square : MonoBehaviour {
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
         {
-            Debug.Log(gameObject.transform.GetSiblingIndex() + " SSSSSS " + other.gameObject.transform.GetSiblingIndex());
+            //Debug.Log(gameObject.transform.GetSiblingIndex() + " SSSSSS " + other.gameObject.transform.GetSiblingIndex());
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
                 //if spawned by player and pops - no moves 
@@ -200,7 +200,7 @@ public class Square : MonoBehaviour {
 
                 //Make it fall down
                 this.Touched = true;
-                Debug.Log("SQUARE COLLISION");
+                //Debug.Log("SQUARE COLLISION");
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
                 //Check GameOver
                 GameManager.Instance.GameOver();
@@ -260,7 +260,7 @@ public class Square : MonoBehaviour {
         //square and other is lower than this
         if (other.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
         {
-            Debug.Log("SQUARE EXIT");
+            //Debug.Log("SQUARE EXIT");
             gameObject.GetComponent<Square>().Touched = false;
         }
 

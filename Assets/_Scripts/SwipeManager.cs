@@ -21,16 +21,18 @@ public class SwipeManager : Singleton<SwipeManager> {
 
     public SwipeDirection Direction { set; get; }
 
-
+  
     private Vector3 touchPosition;
 
     private float swipeResistanceX = 25f;
     private float swipeResistanceY = 100f;
 
     public bool SwipeC = true;
+    public bool swipeValue = false;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -50,7 +52,7 @@ public class SwipeManager : Singleton<SwipeManager> {
 
             if (Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
                 {
-                    if (SwipeC)
+                    if (!swipeValue)
                     {
                         Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Left : SwipeDirection.Right;
                     }
@@ -84,9 +86,10 @@ public class SwipeManager : Singleton<SwipeManager> {
         return (Direction & dir) == dir;
     }
 
-    public bool SwipeChange(bool value)
+
+    public void SwipeChange()
     {
-        value = !value;
-        return value;
+        swipeValue = !swipeValue;
+
     }
 }
