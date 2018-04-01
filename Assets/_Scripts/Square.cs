@@ -174,7 +174,7 @@ public class Square : MonoBehaviour {
             this.Touched = true;
 
 
-            Debug.Log("IT'SA ME MARIO");
+            //Debug.Log("IT'SA ME MARIO");
             if (this.gameObject.transform.parent != null)
             {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
