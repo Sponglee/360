@@ -123,18 +123,27 @@ public class Square : MonoBehaviour {
 	void FixedUpdate () {
         //if Touched - stops 
        if(!this.Touched)
-        { 
-            
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
+        {
+            if (gameObject.transform.GetSiblingIndex() == 1)
+            {
+                
+                Vector3 destination = new Vector3(0.55f, 0, 0);
+                
+                gameObject.transform.localPosition = Vector2.MoveTowards(transform.localPosition, destination , speed * Time.deltaTime);
+                
+            }
+            else
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
             
             
         }
         else
         {
             // if first square - move up by square length/2 (maybe variable this 0.55?)
-            if (gameObject.transform.GetSiblingIndex() == 1)
+            if (gameObject.transform.GetSiblingIndex() == 1 && gameObject.transform.localPosition != new Vector3(0.55f, 0, 0))
             {
                 gameObject.transform.localPosition = new Vector3(0.55f, 0, 0);
+                
             }
         }
         
@@ -154,25 +163,25 @@ public class Square : MonoBehaviour {
 
     }
 
-
+    // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
 
         if (other.gameObject.CompareTag("spot"))
         {
-            //Make it fall down
+            //Make it stay 
             
             this.Touched = true;
 
-            
-          
+
+            Debug.Log("IT'SA ME MARIO");
             if (this.gameObject.transform.parent != null)
             {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
             }
 
 
-            this.column = other.gameObject.transform;
+            //this.column = other.gameObject.transform;
 
             // if spawned by player - add to moves, update the text
             //if(IsSpawn)
