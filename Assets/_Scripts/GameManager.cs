@@ -483,7 +483,7 @@ public class GameManager : Singleton<GameManager>
         rands = new List<RandValues>();
 
         //randSpawn is upper Power -1 always
-        int upperPow = (int)Mathf.Log(scoreUpper, 2);
+        int upperPow = (int)Mathf.Log(scoreUpper, 2)-1;
         List<int> randList = new List<int>();
         //get free spots
 
