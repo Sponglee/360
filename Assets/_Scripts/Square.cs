@@ -120,7 +120,7 @@ public class Square : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         //if Touched - stops 
        if(!this.Touched)
         { 
@@ -128,6 +128,14 @@ public class Square : MonoBehaviour {
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
             
             
+        }
+        else
+        {
+            // if first square - move up by square length/2 (maybe variable this 0.55?)
+            if (gameObject.transform.GetSiblingIndex() == 1)
+            {
+                gameObject.transform.localPosition = new Vector3(0.55f, 0, 0);
+            }
         }
         
         // If there's no parent - fall
@@ -156,6 +164,8 @@ public class Square : MonoBehaviour {
             
             this.Touched = true;
 
+            
+          
             if (this.gameObject.transform.parent != null)
             {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);

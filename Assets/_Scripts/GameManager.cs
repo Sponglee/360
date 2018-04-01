@@ -120,8 +120,10 @@ public class GameManager : Singleton<GameManager>
         if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)
                         || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
         {
-            ClickSpawn();
-
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
+            {
+                ClickSpawn();
+            }
         }
 
             //Turn left
@@ -144,8 +146,7 @@ public class GameManager : Singleton<GameManager>
 
     private void ClickSpawn()
     {
-        if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
-        {
+     
             //Cooldown for spawn 0.5sec
             coolDown = Time.time + 0.5f;
 
@@ -157,10 +158,6 @@ public class GameManager : Singleton<GameManager>
             nextScore.text = next_score.ToString();
             squareSpawn.GetComponent<Square>().IsSpawn = true;
 
-
-
-
-        }
     }
 
     public void Merge(GameObject first)
