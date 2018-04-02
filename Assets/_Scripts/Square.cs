@@ -164,7 +164,6 @@ public class Square : MonoBehaviour {
             
             this.Touched = true;
 
-
             if (this.gameObject.transform.parent != null)
             {
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
