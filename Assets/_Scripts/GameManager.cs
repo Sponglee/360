@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject squarePrefab;
     public GameObject spotPrefab;
     public GameObject spawnPrefab;
+    public GameObject gridPrefab;
     public Transform wheelSquares;
 
     //prefab for controlling movement while falling
@@ -57,6 +58,8 @@ public class GameManager : Singleton<GameManager>
     //All the spots around the wheel
     public List<GameObject> spots;
     public List<GameObject> spawns;
+    public GameObject[,] grids;
+ 
 
     //spawn cooldown
     private float coolDown;
@@ -94,6 +97,9 @@ public class GameManager : Singleton<GameManager>
         nBottom = 10;
         spots = new List<GameObject>();
         spawns = new List<GameObject>();
+        grids = new GameObject[nBottom,5];
+
+
         scores = 0;
         ScoreText.text = scores.ToString();
         upper.text = string.Format("upper: {0}", scoreUpper);
@@ -188,37 +194,54 @@ public class GameManager : Singleton<GameManager>
     public void GetSpots(int numberObjects)
     {
         float rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
-
         var center = wheel.transform.position;
-        for (int i = 0; i < numberObjects; i++)
-        {
-            int a = 360 / numberObjects * i;
-            var pos = RandomCircle(center, rad, a);
-            GameObject tmp = Instantiate(spotPrefab, pos, Quaternion.LookRotation(Vector3.back));
-            tmp.name = i.ToString();
-            tmp.transform.SetParent(wheel.transform.GetChild(0));
-            tmp.transform.LookAt(center, Vector3.right);
-            tmp.transform.Rotate(0, 90, 0);
-            spots.Add(tmp);
-            currentSpot = spots[0];
-        }
-        //spawn positions
-        for (int i = 0; i < numberObjects; i++)
-        {
-            int a = 360 / numberObjects * i;
 
-            var pos = RandomCircle(center, rad+5.5f, a);
+        //Spots, spawns and grid for movement
+        SpawnSpots(spotPrefab, numberObjects, center, rad,1, spots);
+        SpawnSpots(spawnPrefab, numberObjects, center, rad+5.5f,1, spawns);
+        SpawnSpots(gridPrefab, numberObjects, center, rad+0.55f, 5, null, grids);
 
-            GameObject tmp = Instantiate(spawnPrefab, pos, Quaternion.LookRotation(Vector3.back));
-            tmp.name = i.ToString();
-            tmp.transform.SetParent(wheel.transform.GetChild(1));
-            tmp.transform.LookAt(center, Vector3.right);
-            tmp.transform.Rotate(0, 90, 0);
-            spawns.Add(tmp);
-            currentSpot = spots[0];
-        }
     }
 
+                    int a = 360 / numberObjects * i;
+                    GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
+                    tmp.name = i.ToString();
+
+                    int toggle = 0;
+                    
+                    if (prefab.CompareTag("spot"))
+                    {
+                        toggle = 0;
+                    }
+                    else if (prefab.CompareTag("spawn"))
+                    {
+                        toggle = 1;
+                    }
+                    else if(prefab.CompareTag("grid"))
+                    {
+                        toggle = 2;
+                    }
+                    
+                    tmp.transform.SetParent(wheel.transform.GetChild(toggle));
+                    tmp.transform.LookAt(center, Vector3.right);
+                    tmp.transform.Rotate(0, 90, 0);
+                    if (grids!=null)
+                    {
+                        grids[i,j] = tmp;
+                    }
+                    else
+                    {
+                        lists.Add(tmp);
+
+                        if (lists[0].CompareTag("spot"))
+                            currentSpot = lists[0];
+                    }
+                       
+                }
+ 
+            }
+        
+    }
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
@@ -405,7 +428,9 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            StartCoroutine(Bling(rowObjs));
             Pop(rowObjs);
+            
         }
 
         if (Moves > expandMoves - 1)
@@ -421,6 +446,31 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+
+
+
+    IEnumerator Bling(List<GameObject> rowObjs)
+    {
+        foreach(GameObject rowObj in rowObjs)
+        {
+            StartCoroutine(Scale(rowObj, new Vector3(0.01f, 0.01f, 0.01f), new Vector3(0.03f, 0.03f, 0.03f)));
+        }
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator Scale(GameObject rowObj, Vector3 from, Vector3 to)
+    {
+        float progress = 0;
+        while (progress <= 1)
+        {
+            rowObj.transform.GetChild(0).GetChild(0).localScale = Vector3.Lerp(from, to, progress);
+            progress += Time.deltaTime;
+            yield return null;
+        }
+        rowObj.transform.GetChild(0).GetChild(0).localScale = to;
+       
+       
+    }
     // update moves
     public void ExpandMoves()
     {

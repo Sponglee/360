@@ -12,6 +12,7 @@ TagManager:
   - line
   - outer
   - spawn
+  - grid
   layers:
   - Default
   - TransparentFX

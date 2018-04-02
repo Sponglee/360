@@ -120,7 +120,7 @@ public class Square : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
         //if Touched - stops 
        if(!this.Touched)
         { 
@@ -137,9 +137,9 @@ public class Square : MonoBehaviour {
                 gameObject.transform.localPosition = new Vector3(0.55f, 0, 0);
             }
         }
-        
+
         // If there's no parent - fall
-        if(this.gameObject.transform.parent == null)
+        if (this.gameObject.transform.parent == null)
         {
             this.Touched = false;
         }
