@@ -200,9 +200,15 @@ public class GameManager : Singleton<GameManager>
         rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
         center = wheel.transform.position;
 
+        
         //Spots, spawns and grid for movement
         SpawnSpots(spotPrefab, rad,1, spots);
         SpawnSpots(spawnPrefab, rad+5.5f,1, spawns);
+
+        currentSpot = spots[0];
+        currentSpawn = spawns[0];
+
+
         SpawnSpots(gridPrefab, rad+0.55f, 5, null, grids);
 
     }
@@ -214,11 +220,11 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < nBottom; i++)
         {
-            for (int j = 0; i < count; j++)
+            for (int j = 0; j < count; j++)
             {
                
                 int a = 360 / nBottom * i;
-                var pos = RandomCircle(center, rad, a);
+                var pos = RandomCircle(center, rad+0.9f*j, a);
                 GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
                 tmp.name = i.ToString();
 
@@ -243,13 +249,13 @@ public class GameManager : Singleton<GameManager>
                 if (grids != null)
                 {
                     grids[i, j] = tmp;
+                    tmp.transform.SetParent(GameManager.Instance.spawns[i].transform);
+                    tmp.name = (j+1).ToString();
                 }
                 else
                 {
                     lists.Add(tmp);
 
-                    if (lists[0].CompareTag("spot"))
-                        currentSpot = lists[0];
                 }
             }
         }
@@ -443,6 +449,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+
             StartCoroutine(Bling(rowObjs));
             Pop(rowObjs);
             
@@ -468,7 +475,7 @@ public class GameManager : Singleton<GameManager>
     {
         foreach(GameObject rowObj in rowObjs)
         {
-            StartCoroutine(Scale(rowObj, new Vector3(0.01f, 0.01f, 0.01f), new Vector3(0.03f, 0.03f, 0.03f)));
+            StartCoroutine(Scale(rowObj, new Vector3(0.01f, 0.01f, 0.01f), new Vector3(0.02f, 0.02f, 0.02f)));
         }
         yield return new WaitForSeconds(0.5f);
     }
@@ -513,20 +520,7 @@ public class GameManager : Singleton<GameManager>
 
             }
 
-            //Make upper square drop
-            if (rowObj.transform.parent.childCount - rowObj.transform.GetSiblingIndex() > 1)
-            {
-               
-                rowObj.transform.parent.GetChild(rowObj.transform.GetSiblingIndex() + 1).gameObject.GetComponent<Square>().Touched = false;
-            }
-            //Make this square drop
-            rowObj.GetComponent<Square>().Touched = false;
-            rowObj.GetComponent<Collider2D>().isTrigger = true;
-
-
-            
-            //Detach this square from parent
-            rowObj.transform.parent = null;
+            rowObj.GetComponent<Square>().Touched = true;
 
         }
         rowObjs.Clear();

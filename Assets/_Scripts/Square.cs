@@ -37,6 +37,9 @@ public class Square : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer SquareColor;
 
+
+    Vector3 destination;
+
     private void Awake()
     {
        
@@ -88,11 +91,11 @@ public class Square : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        centerPrefab = GameObject.Find("Wheel").transform;
-    
+       
+
         if (ExpandSpawn)
         {
-            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            //gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
             /******* METHOD PART***/
@@ -103,7 +106,7 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            //gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
             /******* METHOD PART***/
@@ -114,133 +117,32 @@ public class Square : MonoBehaviour {
         }
 
 
-       
 
+        //Destinations
+        centerPrefab = GameObject.Find("Wheel").transform;
 
+        //destination = GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position;
     }
 	
 	// Update is called once per frame
-	void LateUpdate () {
-        //if Touched - stops 
-       if(!this.Touched)
-        { 
-            
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
-            
-            
-        }
+	void Update () {
+
+
+        if (!Touched)
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
         else
-        {
-            // if first square - move up by square length/2 (maybe variable this 0.55?)
-            if (gameObject.transform.GetSiblingIndex() == 1)
-            {
-                gameObject.transform.localPosition = new Vector3(0.55f, 0, 0);
-            }
-        }
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, centerPrefab.position, speed * Time.deltaTime);
 
-        // If there's no parent - fall
-        if (this.gameObject.transform.parent == null)
-        {
-            this.Touched = false;
-        }
-
-        // Boundary
-        if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
-        {
-            Destroy(gameObject);
-        }
+        //// Boundary
+        //if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
+        //{
+        //    Destroy(gameObject);
+        //}
 
 
 
     }
 
-
-    public void OnCollisionEnter2D(Collision2D other)
-    {
-
-        if (other.gameObject.CompareTag("spot"))
-        {
-            //Make it fall down
-            
-            this.Touched = true;
-
-            if (this.gameObject.transform.parent != null)
-            {
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
-            }
-
-
-            this.column = other.gameObject.transform;
-
-            // if spawned by player - add to moves, update the text
-            //if(IsSpawn)
-            //{
-            //    GameManager.Instance.ExpandMoves();
-            //}
-
-
-        }
-        //other square
-        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
-        {
-            //Debug.Log(gameObject.transform.GetSiblingIndex() + " SSSSSS " + other.gameObject.transform.GetSiblingIndex());
-            if (this.score == other.gameObject.GetComponent<Square>().Score)
-            {
-                //if spawned by player and pops - no moves 
-                if (this.IsSpawn)
-                {
-                    this.IsSpawn = false;
-                }
-            
-                //Merge squares
-                GameManager.Instance.Merge(gameObject);
-                gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-              
-                Destroy(other.gameObject);
-            }
-            else if (this.score != other.gameObject.GetComponent<Square>().Score)
-            {
-                //    //if spawned by player and no scores - moves++
-                //    //if (IsSpawn)
-                //    //{
-                //    //    GameManager.Instance.ExpandMoves();
-                //    }
-
-                //Make it fall down
-                this.Touched = true;
-                //Debug.Log("SQUARE COLLISION");
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
-                //Check GameOver
-                GameManager.Instance.GameOver();
-
-
-
-
-            }
-
-            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-            //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
-            //Check for boops
-
-        }
-
-        //Make it green again
-        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
-        {
-
-            if (gameObject.transform.parent.childCount < 6)
-            {
-                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
-                {
-                    //Debug.Log("u can ");
-                    gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                }
-            }
-        }
-
-
-
-    }
 
 
 
@@ -252,38 +154,38 @@ public class Square : MonoBehaviour {
             //Debug.Log("destroy this");
             Destroy(gameObject);
         }
-        //if (other.gameObject.CompareTag("square") && this.score != other.gameObject.GetComponent<Square>().Score
 
-        //                && gameObject.transform.parent != null)
-        //{
-        //    //this.Touched = true;
-        //    Debug.Log("SQUARE ENTER");
-        //}
-
-
-    }
-
-    public void OnTriggerExit2D(Collider2D other)
-    {
-        //square and other is lower than this
-        if (other.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
+        if (other.CompareTag("spot"))
         {
-            //Debug.Log("SQUARE EXIT");
-            gameObject.GetComponent<Square>().Touched = false;
+
+            if (transform.parent != null)
+            {
+                GameManager.Instance.CheckRow(int.Parse(transform.parent.name), transform.GetSiblingIndex(), score);
+            }
+        }
+
+
+        if (other.CompareTag("square") && this.score == other.GetComponent<Square>().Score
+
+                        && transform.parent != null)
+        {
+                GameManager.Instance.Merge(gameObject);
+                Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("square") &&  this.score != other.GetComponent<Square>().Score)
+        {
+          
+            ////Make it fall down
+            //this.Touched = true;
+            //Debug.Log("SQUARE COLLISION");
+            GameManager.Instance.CheckRow(int.Parse(transform.parent.name), transform.GetSiblingIndex(), score);
+            //Check GameOver
+            GameManager.Instance.GameOver();
+
+
         }
 
     }
-
-
-    //public void OnTriggerStay2D(Collider2D other)
-    //{
-
-    //    if (other.CompareTag("square")&& gameObject.transform.parent !=null && other.gameObject.transform.parent !=null)
-    //    {
-    //        Debug.Log("Stay");
-    //        this.Touched = true;
-    //    }
-    //}
 
 
 }
