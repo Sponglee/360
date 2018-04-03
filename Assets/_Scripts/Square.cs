@@ -130,20 +130,70 @@ public class Square : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        //if Touched - stops 
+       if(!this.Touched)
+        { 
+            
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameObject.Find("Wheel").transform.position, speed * Time.deltaTime);
+            
+            
+        }
+        else
+        {
+            // if first square - move up by square length/2 (maybe variable this 0.55?)
+            if (gameObject.transform.GetSiblingIndex() == 1)
+            {
+                gameObject.transform.localPosition = new Vector3(0.55f, 0, 0);
+            }
+        }
+        
+        // If there's no parent - fall
+        if(this.gameObject.transform.parent == null)
+        {
+            this.Touched = false;
+        }
 
-        if (!Touched)
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
-        else if (Touched && gameObject.transform.parent == null && !Scaling)
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, centerPrefab.position, speed * Time.deltaTime);
-
-        //// Boundary
-        //if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
-        //{
-        //    Destroy(gameObject);
-        //}
+        // Boundary
+        if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
+        {
+            Destroy(gameObject);
+        }
 
 
 
+    }
+
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+
+        if (other.gameObject.CompareTag("spot"))
+        {
+            //Make it fall down
+
+            this.Touched = true;
+
+
+            if (this.gameObject.transform.parent != null)
+            {
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+            }
+
+
+
+            if (!Touched)
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
+            else if (Touched && gameObject.transform.parent == null && !Scaling)
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, centerPrefab.position, speed * Time.deltaTime);
+
+            //// Boundary
+            //if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
+            //{
+            //    Destroy(gameObject);
+            //}
+
+
+        }
     }
 
 

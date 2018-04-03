@@ -474,6 +474,20 @@ public class GameManager : Singleton<GameManager>
             {
                 Debug.Log(tmpSquare.name);
                 ExpandMoves();
+
+
+                if (Moves > expandMoves - 1)
+                {
+
+                    Expand();
+                    Moves = 0;
+                    slider.value = 1;
+
+                    //expandMoves += expandMoves/2;
+                    nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+                    slider.value = (float)(expandMoves - Moves) / expandMoves;
+                }
+
             }
             else
                 tmp.Merged = false;
@@ -487,17 +501,7 @@ public class GameManager : Singleton<GameManager>
             
         }
 
-        if (Moves > expandMoves - 1)
-        {
-
-            Expand();
-            Moves = 0;
-            slider.value = 1;
-
-            //expandMoves += expandMoves/2;
-            nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
-            slider.value = (float)(expandMoves - Moves) / expandMoves;
-        }
+       
     }
 
 
@@ -554,8 +558,7 @@ public class GameManager : Singleton<GameManager>
         rands = new List<RandValues>();
 
         //randSpawn is upper Power -1 always
-
-        int upperPow = (int)Mathf.Log(scoreUpper, 2) - 1;
+        int upperPow = (int)Mathf.Log(scoreUpper, 2)-1;
         List<int> randList = new List<int>();
         //get free spots
 
@@ -593,16 +596,20 @@ public class GameManager : Singleton<GameManager>
                 //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
             }
+            
 
 
             //spawn all
             foreach (RandValues rand in rands)
             {
-
-
                 //Debug.Log("========");
                 SpawnRandom(rand.Rng, rand.RandScore);
             }
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111remove this if something's wrong
+        else
+        {
+            rands.Clear();
         }
     }
 
