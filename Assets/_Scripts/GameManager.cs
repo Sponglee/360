@@ -88,7 +88,12 @@ public class GameManager : Singleton<GameManager>
     //For getspots
     Vector3 center;
     float rad;
+
+    private bool TimeSlowed = false;
     
+    public float slowdownFactor = 0.05f;
+    public float slowdownLength = 2f;
+
 
     void Start()
     {
@@ -151,8 +156,33 @@ public class GameManager : Singleton<GameManager>
                
                
             }
-       
+
+            //Get time back
+            if (TimeSlowed)
+            {
+               
+                Time.timeScale += (1f / slowdownLength)*Time.unscaledDeltaTime;
+                //Time.timeScale = Mathf.Clamp(Time.time, 0f, 1f);
+                if (Time.timeScale >= 1)
+                    {
+                        Time.timeScale = 1;
+                        TimeSlowed = false;
+                    }
+                    
+            }
     }
+
+
+    // Slow motion thing
+    public void SlowDown()
+    {
+        TimeSlowed = true;
+        Time.timeScale = slowdownFactor;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+    }
+
+
+
 
     private void ClickSpawn()
     {
@@ -438,19 +468,21 @@ public class GameManager : Singleton<GameManager>
         if (rowObjs.Count < 3)
         {
             rowObjs.Clear();
+            Square tmp = tmpSquare.GetComponent<Square>();
             // expand moves++ if this happened by player
-            if (tmpSquare.GetComponent<Square>().IsSpawn)
+            if (tmp.IsSpawn && !tmp.Merged)
             {
-
+                Debug.Log(tmpSquare.name);
                 ExpandMoves();
-
-
             }
+            else
+                tmp.Merged = false;
         }
         else
         {
 
-            StartCoroutine(Bling(rowObjs));
+            
+            SlowDown();
             Pop(rowObjs);
             
         }
@@ -470,29 +502,9 @@ public class GameManager : Singleton<GameManager>
 
 
 
-
-    IEnumerator Bling(List<GameObject> rowObjs)
-    {
-        foreach(GameObject rowObj in rowObjs)
-        {
-            StartCoroutine(Scale(rowObj, new Vector3(0.01f, 0.01f, 0.01f), new Vector3(0.02f, 0.02f, 0.02f)));
-        }
-        yield return new WaitForSeconds(0.5f);
-    }
-
-    public IEnumerator Scale(GameObject rowObj, Vector3 from, Vector3 to)
-    {
-        float progress = 0;
-        while (progress <= 1)
-        {
-            rowObj.transform.GetChild(0).GetChild(0).localScale = Vector3.Lerp(from, to, progress);
-            progress += Time.deltaTime;
-            yield return null;
-        }
-        rowObj.transform.GetChild(0).GetChild(0).localScale = to;
+   
        
-       
-    }
+    
     // update moves
     public void ExpandMoves()
     {
@@ -520,8 +532,8 @@ public class GameManager : Singleton<GameManager>
 
             }
 
+            rowObj.transform.SetParent(null);
             rowObj.GetComponent<Square>().Touched = true;
-
         }
         rowObjs.Clear();
 

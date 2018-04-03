@@ -7,7 +7,7 @@ public class Square : MonoBehaviour {
 
     [SerializeField]
     private float speed;
-    public bool IsSpawn = false;
+ 
     private int row;
     public int Row
     { get { return row; } set { row = value; } }
@@ -24,11 +24,14 @@ public class Square : MonoBehaviour {
     public Transform Column
     {get{return column;}set{column = value;}}
 
-    public bool IsColliding { get; set; }
+
 
     private Transform column;
 
+    public bool Scaling = false;
+    public bool Merged = false;
     public bool Touched = false;
+    public bool IsSpawn = false;
     public bool ExpandSpawn { get; set; }
 
 
@@ -130,7 +133,7 @@ public class Square : MonoBehaviour {
 
         if (!Touched)
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
-        else
+        else if (Touched && gameObject.transform.parent == null && !Scaling)
             gameObject.transform.position = Vector2.MoveTowards(transform.position, centerPrefab.position, speed * Time.deltaTime);
 
         //// Boundary
@@ -142,7 +145,6 @@ public class Square : MonoBehaviour {
 
 
     }
-
 
 
 
@@ -165,20 +167,23 @@ public class Square : MonoBehaviour {
         }
 
 
-        if (other.CompareTag("square") && this.score == other.GetComponent<Square>().Score
-
-                        && transform.parent != null)
+        if (other.CompareTag("square") && this.score == other.GetComponent<Square>().Score && transform.parent != null && transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
         {
-                GameManager.Instance.Merge(gameObject);
-                Destroy(other.gameObject);
+            Destroy(other.gameObject);
+            this.Merged = true;
+            GameManager.Instance.Merge(gameObject);
+                
         }
-        else if (other.CompareTag("square") &&  this.score != other.GetComponent<Square>().Score)
+        else if (other.CompareTag("square") &&  this.score != other.GetComponent<Square>().Score && transform.parent != null && transform.GetSiblingIndex() > other.transform.GetSiblingIndex())
         {
-          
+            
             ////Make it fall down
             //this.Touched = true;
             //Debug.Log("SQUARE COLLISION");
+
             GameManager.Instance.CheckRow(int.Parse(transform.parent.name), transform.GetSiblingIndex(), score);
+          
+           
             //Check GameOver
             GameManager.Instance.GameOver();
 
