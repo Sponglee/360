@@ -85,6 +85,10 @@ public class GameManager : Singleton<GameManager>
     //list of randSpawns
     List<GameObject> randSpawns;
 
+    //For getspots
+    Vector3 center;
+    float rad;
+    
 
     void Start()
     {
@@ -112,7 +116,7 @@ public class GameManager : Singleton<GameManager>
         nextScore.text = next_score.ToString();
 
         //Initialize level (spots)
-        GetSpots(nBottom);
+        GetSpots();
 
 
         rowObjs = new List<GameObject>();
@@ -191,57 +195,68 @@ public class GameManager : Singleton<GameManager>
     }
 
     //Sets up spots for spawns
-    public void GetSpots(int numberObjects)
+    public void GetSpots()
     {
-        float rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
-        var center = wheel.transform.position;
+        rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
+        center = wheel.transform.position;
 
         //Spots, spawns and grid for movement
-        SpawnSpots(spotPrefab, numberObjects, center, rad,1, spots);
-        SpawnSpots(spawnPrefab, numberObjects, center, rad+5.5f,1, spawns);
-        SpawnSpots(gridPrefab, numberObjects, center, rad+0.55f, 5, null, grids);
+        SpawnSpots(spotPrefab, rad,1, spots);
+        SpawnSpots(spawnPrefab, rad+5.5f,1, spawns);
+        SpawnSpots(gridPrefab, rad+0.55f, 5, null, grids);
 
     }
 
-                    int a = 360 / numberObjects * i;
-                    GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
-                    tmp.name = i.ToString();
 
-                    int toggle = 0;
-                    
-                    if (prefab.CompareTag("spot"))
-                    {
-                        toggle = 0;
-                    }
-                    else if (prefab.CompareTag("spawn"))
-                    {
-                        toggle = 1;
-                    }
-                    else if(prefab.CompareTag("grid"))
-                    {
-                        toggle = 2;
-                    }
-                    
-                    tmp.transform.SetParent(wheel.transform.GetChild(toggle));
-                    tmp.transform.LookAt(center, Vector3.right);
-                    tmp.transform.Rotate(0, 90, 0);
-                    if (grids!=null)
-                    {
-                        grids[i,j] = tmp;
-                    }
-                    else
-                    {
-                        lists.Add(tmp);
 
-                        if (lists[0].CompareTag("spot"))
-                            currentSpot = lists[0];
-                    }
-                       
+    private void SpawnSpots(GameObject prefab, float rad, int count, List<GameObject> lists = null, GameObject[,] grids=null)
+    {
+
+        for (int i = 0; i < nBottom; i++)
+        {
+            for (int j = 0; i < count; j++)
+            {
+               
+                int a = 360 / nBottom * i;
+                var pos = RandomCircle(center, rad, a);
+                GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
+                tmp.name = i.ToString();
+
+                int toggle = 0;
+
+                if (prefab.CompareTag("spot"))
+                {
+                    toggle = 0;
                 }
- 
+                else if (prefab.CompareTag("spawn"))
+                {
+                    toggle = 1;
+                }
+                else if (prefab.CompareTag("grid"))
+                {
+                    toggle = 2;
+                }
+
+                tmp.transform.SetParent(wheel.transform.GetChild(toggle));
+                tmp.transform.LookAt(center, Vector3.right);
+                tmp.transform.Rotate(0, 90, 0);
+                if (grids != null)
+                {
+                    grids[i, j] = tmp;
+                }
+                else
+                {
+                    lists.Add(tmp);
+
+                    if (lists[0].CompareTag("spot"))
+                        currentSpot = lists[0];
+                }
             }
-        
+        }
+
+                       
     }
+ 
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
