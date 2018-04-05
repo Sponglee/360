@@ -152,20 +152,60 @@ public class GameManager : Singleton<GameManager>
             //Turn left
             if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                        
-                        wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
-           
-            }
+
+                    //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+                    StartCoroutine(Rotate(Vector3.forward, 360/nBottom, 0.2f));
+
+        }
             //Turn right
             else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-               
-                        wheel.transform.Rotate(Vector3.forward, -360 / nBottom);
-               
-               
-            }
+
+                    StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, 0.2f));
+
+
+        }
        
     }
+
+    //Smooth rotation coroutine
+
+
+    IEnumerator Rotate(Vector3 axis, float angle, float duration = 0.2f)
+    {
+        Quaternion from = wheel.transform.rotation;
+        Quaternion to = wheel.transform.rotation;
+        to *= Quaternion.Euler(axis * angle);
+
+        float elapsed = 0.0f;
+        while (elapsed < duration)
+        {
+
+            wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
+            elapsed += Time.deltaTime;
+            
+            yield return null;
+        }
+        float differ = Quaternion.Angle(from, to);
+      
+        //Get rid of difference flaw to the left
+        if (Mathf.Abs(differ - angle) <= 0.500001f && angle < 0)
+        {
+                to = Quaternion.Euler(axis * angle);         
+        }
+        // Get rid of difference flaw to the right
+        else if (Mathf.Abs(differ+angle) <=0.500001f && angle > 0)
+        {
+            to = Quaternion.Euler(axis * -angle);
+        }
+        wheel.transform.rotation = to;
+
+     
+    }
+
+
+
+
 
     private void ClickSpawn()
     {
