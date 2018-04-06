@@ -155,7 +155,16 @@ public class GameManager : Singleton<GameManager>
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress )
             {
                 ClickSpawn();
-                popObjs.Clear();
+                foreach(List<GameObject> checkObjs in popObjs)
+                {
+                    if (checkObjs.Count != 0)
+                    {
+                        Pop(checkObjs);
+                        Debug.Log("NOT NULL");
+                    }
+                    
+                }
+                
             }
         }
 
@@ -557,13 +566,28 @@ public class GameManager : Singleton<GameManager>
     {
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
-        foreach(List<GameObject> rowObjs in thisPopObjs)
+        foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-           // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
-            Pop(rowObjs);
+            if (thisPopObjs.Count > 1)
+            {
+                //yield return new WaitForSeconds(0.2f);
+                // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
+                Pop(rowObjs);
+            }
+            else if (thisPopObjs.Count ==1)
+            {
+                Pop(rowObjs);
+            }
+               
+            
+           
         }
-       
-       
+
+        for (int i = 0; i < popObjs.Count; i++)
+        {
+            if (popObjs[i].Count == 0)
+                popObjs.RemoveAt(i);
+        }
     }
 
     // update moves
@@ -759,7 +783,7 @@ public class GameManager : Singleton<GameManager>
         if (reds == spots.Count && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
         {
             //noMoves = true;
-            Time.timeScale = 0;
+           
             nextScore.text = "GAME OVER";
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
