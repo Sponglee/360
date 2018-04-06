@@ -101,6 +101,9 @@ public class GameManager : Singleton<GameManager>
     float rad;
 
     public bool CheckInProgress = false;
+    private bool RotationProgress = false;
+    public float rotationDuration = 0.2f;
+
 
     void Start()
     {
@@ -114,7 +117,7 @@ public class GameManager : Singleton<GameManager>
         spots = new List<GameObject>();
         spawns = new List<GameObject>();
         grids = new GameObject[nBottom, 5];
-
+       
         scores = 0;
         ScoreText.text = scores.ToString();
         upper.text = string.Format("upper: {0}", scoreUpper);
@@ -132,47 +135,64 @@ public class GameManager : Singleton<GameManager>
 
         rowObjs = new List<GameObject>();
         popObjs = new List<List<GameObject>>();
+
+        
+       
+        
+
     }
 
 
     void Update()
     {
 
+
+        
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
         if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)
                         || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
         {
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown)
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress )
             {
                 ClickSpawn();
                 popObjs.Clear();
             }
         }
 
-            //Turn left
-            if (SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
 
-                    //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
-                    StartCoroutine(Rotate(Vector3.forward, 360/nBottom, 0.2f));
+
+        //// Debug.Log(wheel.transform.eulerAngles.z);
+        // if ((wheel.transform.eulerAngles.z % (360 / nBottom)) == 0)
+        //     Debug.Log("YAYAYAYAYAY " + wheel.transform.eulerAngles.z);
+
+                                                                                                                //<---- FOR SPINNING AROUND
+        // (wheel.transform.eulerAngles.z % (360 / nBottom)) == 0 
+
+        //Turn left
+        if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
+        {
+
+            //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+            StartCoroutine(Rotate(Vector3.forward, 360 / nBottom, rotationDuration));
 
         }
-            //Turn right
-            else if (SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow))
+        //Turn right
+        else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
             {
 
-                    StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, 0.2f));
+                    StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
 
 
         }
+        
        
     }
 
     //Smooth rotation coroutine
-
-
     IEnumerator Rotate(Vector3 axis, float angle, float duration = 0.2f)
     {
+        //RotationCoolDown = Time.time + duration;
+        RotationProgress = true;
         Quaternion from = wheel.transform.rotation;
         Quaternion to = wheel.transform.rotation;
         to *= Quaternion.Euler(axis * angle);
@@ -200,7 +220,7 @@ public class GameManager : Singleton<GameManager>
         }
         wheel.transform.rotation = to;
 
-     
+        RotationProgress = false;
     }
 
 
