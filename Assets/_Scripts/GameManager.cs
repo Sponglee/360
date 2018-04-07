@@ -256,8 +256,15 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public void Merge(GameObject first)
+    public void Merge(GameObject first, GameObject second=null)
     {
+        StartCoroutine(StopMerge(first,second));
+    }
+    //delay for merge
+    private IEnumerator StopMerge(GameObject first, GameObject second=null)
+    {
+        yield return new WaitForSeconds(0.2f);
+        Destroy(second);
         int tmp = first.GetComponent<Square>().Score *= 2;
         first.GetComponent<Square>().ApplyStyle(tmp);
 
@@ -268,6 +275,8 @@ public class GameManager : Singleton<GameManager>
 
         }
     }
+
+
 
     public Vector3 RandomCircle(Vector3 center, float radius, int a)
     {
@@ -346,6 +355,9 @@ public class GameManager : Singleton<GameManager>
 
 
     }
+
+
+
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore)
     {
@@ -520,7 +532,9 @@ public class GameManager : Singleton<GameManager>
             }
         }
         while (endIndex > nBottom + 1);
-        if (rowObjs.Count < 3)
+
+        // 2 or 3 row?
+        if (rowObjs.Count < 2)
         {
             
             // expand moves++ if this happened by player
@@ -544,7 +558,8 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            Debug.Log("POP");
+            rowObjs.Remove(tmpSquare);
+            
             //If there's no same rowObj in pop - add
             if (!popObjs.Contains(rowObjs))
             {
@@ -558,11 +573,11 @@ public class GameManager : Singleton<GameManager>
         
 
         //Start killing rowObjs one by one
-        StartCoroutine(Stop(popObjs));
+        StartCoroutine(StopPop(popObjs, tmpSquare, wheel));
     }
 
   
-    IEnumerator Stop(List<List<GameObject>> thisPopObjs)
+    IEnumerator StopPop(List<List<GameObject>> thisPopObjs, GameObject tmpSquare, GameObject wheel)
     {
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
@@ -572,17 +587,22 @@ public class GameManager : Singleton<GameManager>
             {
                 //yield return new WaitForSeconds(0.2f);
                 // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
-                Pop(rowObjs);
+                Pop(rowObjs, tmpSquare);
             }
             else if (thisPopObjs.Count ==1)
             {
-                Pop(rowObjs);
+                Pop(rowObjs, tmpSquare);
             }
-               
-            
-           
-        }
 
+         
+          
+            
+                
+            //Debug.Log(wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1).name);
+           
+
+        }
+        //Clear pop objs list
         for (int i = 0; i < popObjs.Count; i++)
         {
             if (popObjs[i].Count == 0)
@@ -601,9 +621,20 @@ public class GameManager : Singleton<GameManager>
 
 
 
+
+
+
+
     //Kill all adjacent squares
-    public void Pop(List<GameObject> rowObjs)
+    public void Pop(List<GameObject> rowObjs, GameObject tmpSquare= null)
     {
+
+
+
+        //Keep one that has fallen
+        Merge(tmpSquare);
+
+        // Move others
         if (rowObjs.Count != 0)
         {
             foreach (GameObject rowObj in rowObjs)
@@ -622,15 +653,8 @@ public class GameManager : Singleton<GameManager>
 
                 }
 
-                ////Make upper square drop
-                //if (rowObj.transform.parent.childCount - rowObj.transform.GetSiblingIndex() > 1)
-                //{
-
-                //    rowObj.transform.parent.GetChild(rowObj.transform.GetSiblingIndex() + 1).gameObject.GetComponent<Square>().Touched = false;
-                //}
-                //Make this square drop
-                //rowObj.GetComponent<Square>().Touched = false;
-                rowObj.GetComponent<Collider2D>().isTrigger = true;
+                rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
+                rowObj.GetComponent<Collider2D>().enabled = false;
 
 
 
@@ -640,11 +664,33 @@ public class GameManager : Singleton<GameManager>
             }
             rowObjs.Clear();
         }
-       
 
-      
+        //Check for merges/pops around
+        Transform checkTmp;
+
+        if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
+        {
+            //object lower to tmpSquare
+            checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1);
+
+            if (checkTmp != null && checkTmp.name != "Donut"
+                 && tmpSquare.GetComponent<Square>().Score == checkTmp.GetComponent<Square>().Score)
+            {
+                Debug.Log(tmpSquare.GetComponent<Square>().Score + " ||| " + checkTmp.GetComponent<Square>().Score);
+                Merge(tmpSquare, checkTmp.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
+
+
+
+            }
+        }
+        tmpSquare = null;
+
     }
    
+
+
+
+
 
     public void Expand()
     {

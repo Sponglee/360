@@ -19,10 +19,23 @@ public class Square : MonoBehaviour {
     [SerializeField]
     private Color32 color;
 
+    //pop moving point
     public Transform centerPrefab;
-    //for storing data
-    public Transform Column
-    {get{return column;}set{column = value;}}
+ 
+    private Transform squareTmpSquare = null;
+    public Transform SquareTmpSquare
+    {
+        get
+        {
+            return squareTmpSquare;
+        }
+
+        set
+        {
+            squareTmpSquare = value;
+            
+        }
+    }
 
     public bool IsColliding { get; set; }
 
@@ -30,7 +43,8 @@ public class Square : MonoBehaviour {
 
     private bool touched = false;
     public bool ExpandSpawn { get; set; }
-  
+
+   
 
     [SerializeField]
     private Text SquareText;
@@ -88,7 +102,7 @@ public class Square : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        centerPrefab = GameObject.Find("Wheel").transform;
+      
     
         if (ExpandSpawn)
         {
@@ -136,7 +150,7 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, centerPrefab.position, speed * Time.deltaTime);
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, speed * Time.deltaTime);
         }
 
         //}
@@ -153,6 +167,10 @@ public class Square : MonoBehaviour {
 
         // Boundary
         if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
+        {
+            Destroy(gameObject);
+        }
+        else if (squareTmpSquare != null && transform.position == squareTmpSquare.position)
         {
             Destroy(gameObject);
         }
@@ -203,9 +221,9 @@ public class Square : MonoBehaviour {
                     this.IsSpawn = false;
                 }
 
-                //Merge squares
-                Destroy(other.gameObject);
-                GameManager.Instance.Merge(gameObject);
+                
+                
+                GameManager.Instance.Merge(gameObject, other.gameObject);
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
               
                
