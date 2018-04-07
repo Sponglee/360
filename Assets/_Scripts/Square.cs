@@ -28,9 +28,9 @@ public class Square : MonoBehaviour {
 
     private Transform column;
 
-    public bool Touched = false;
+    private bool touched = false;
     public bool ExpandSpawn { get; set; }
-
+  
 
     [SerializeField]
     private Text SquareText;
@@ -120,7 +120,7 @@ public class Square : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void FixedUpdate() {
+    void Update() {
         //if Touched - stops 
         //if(!this.Touched)
         // {
@@ -190,22 +190,25 @@ public class Square : MonoBehaviour {
 
         }
         //other square
-        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex())
+        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
         {
-            //Debug.Log(gameObject.transform.GetSiblingIndex() + " SSSSSS " + other.gameObject.transform.GetSiblingIndex());
+            other.gameObject.GetComponent<Square>().touched = true;
+           
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
+                Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
                 //if spawned by player and pops - no moves 
                 if (this.IsSpawn)
                 {
                     this.IsSpawn = false;
                 }
-            
+
                 //Merge squares
+                Destroy(other.gameObject);
                 GameManager.Instance.Merge(gameObject);
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
               
-                Destroy(other.gameObject);
+               
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
@@ -224,15 +227,16 @@ public class Square : MonoBehaviour {
                     //Check GameOver
                     GameManager.Instance.GameOver();
                 //}
-               
 
 
 
+                Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
 
             }
 
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-            //Debug.Log(" -->> " + int.Parse(gameObject.transform.parent.name) + "   :   " + gameObject.transform.GetSiblingIndex() + "  :  " + score);
+            //other.gameObject.GetComponent<Square>().touched = false;
+           
             //Check for boops
 
         }
