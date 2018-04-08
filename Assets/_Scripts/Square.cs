@@ -141,9 +141,9 @@ public class Square : MonoBehaviour {
         // If it's first and not touched - fall
         if (this.gameObject.transform.parent != null)
         {
-            if (gameObject.transform.GetSiblingIndex() == 5)
-            { }
-            //gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(4).position, speed * Time.deltaTime);
+            if (gameObject.transform.GetSiblingIndex() == 6)
+            
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, speed * Time.deltaTime);
             else
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
 
@@ -217,7 +217,7 @@ public class Square : MonoBehaviour {
            
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
-                //Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+                Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
                 //if spawned by player and pops - no moves 
                 if (this.IsSpawn)
                 {
@@ -251,7 +251,7 @@ public class Square : MonoBehaviour {
 
 
 
-                //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+                Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
 
             }
 
@@ -266,12 +266,12 @@ public class Square : MonoBehaviour {
         if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
         {
 
-            if (gameObject.transform.parent.childCount < 5)
+            if (gameObject.transform.parent.childCount < 6)
             {
                 if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
                 {
                     //Debug.Log("u can ");
-                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
                 }
             }
         }

@@ -1700,7 +1700,7 @@ MonoBehaviour:
   maxScore: 0
   scoreUpper: 0
   expandMoves: 97
-  stopDelay: 0
+  stopDelay: 0.1
   moves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}

@@ -199,6 +199,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 0
   centerPrefab: {fileID: 0}
+  Touched: 0
   SquareText: {fileID: 114709778573452866}
   SquareColor: {fileID: 212341414957439470}
 --- !u!114 &114498820951125008
