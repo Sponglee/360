@@ -194,6 +194,9 @@ public class Square : MonoBehaviour {
             //if (!GameManager.Instance.CheckInProgress)
             //{
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
+
+
+                
             //}
 
 

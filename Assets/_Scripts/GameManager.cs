@@ -377,6 +377,8 @@ public class GameManager : Singleton<GameManager>
         int firstIndex = 0;
         int nextIndex = 0;
 
+
+        Debug.Log(">>" + spotIndex + " " + squareIndex + " " + checkScore);
         // for later checking 
         GameObject tmpSquare = spots[spotIndex].transform.GetChild(squareIndex).gameObject;
 
@@ -573,13 +575,17 @@ public class GameManager : Singleton<GameManager>
 
             
         }
-        
 
-        //Start killing rowObjs one by one
+
+
+
         StartCoroutine(StopPop(popObjs, tmpSquare, wheel));
+
+
+
     }
 
-  
+    
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, GameObject tmpSquare, GameObject wheel)
     {
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
@@ -598,12 +604,15 @@ public class GameManager : Singleton<GameManager>
             }
 
          
-          
-            
-                
-            //Debug.Log(wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1).name);
-           
+            Transform checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex());
 
+
+
+            //Debug.Log(wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1).name);
+
+            //POP NEXT ONE ASWELL
+
+            yield return StartCoroutine(FurtherPop(tmpSquare,checkTmp, wheel));
         }
         //Clear pop objs list
         for (int i = 0; i < popObjs.Count; i++)
@@ -612,6 +621,50 @@ public class GameManager : Singleton<GameManager>
                 popObjs.RemoveAt(i);
         }
     }
+
+    private IEnumerator FurtherPop(GameObject tmpSquare, Transform checkTmp, GameObject wheel)
+    {
+        yield return new WaitForSeconds(0.2f);
+        // check consequent squares and pop them
+        Transform checkLeft = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) - 1);
+        Transform checkRight = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) + 1);
+
+        if (checkLeft.childCount != 0)
+        {
+
+            if (checkLeft.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+
+            {
+                Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
+
+                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
+
+
+            }
+
+        }
+        else if (checkRight.childCount != 0)
+        {
+            if (checkRight.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+            {
+                Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
+
+
+                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
+
+
+            }
+        }
+
+
+
+
+        
+    }
+
+
+
+
 
     // update moves
     public void ExpandMoves()
@@ -670,34 +723,24 @@ public class GameManager : Singleton<GameManager>
 
         //Check for merges/pops around
         Transform checkTmp;
-
+        
         if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
         {
-           
+
             //object lower to tmpSquare
             if (tmpSquare.transform.GetSiblingIndex() > 0)
             {
                 checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1);
-                
+
                 //check if lower one is same score
                 if (checkTmp != null
-                        && tmpSquare.GetComponent<Square>().Score*2 == checkTmp.GetComponent<Square>().Score)
+                        && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
                 {
-
-
                     Merge(tmpSquare, checkTmp.gameObject);
-                   //StartCoroutine(StopMerge(tmpSquare, checkTmp.gameObject));
-
-
-
-                }
+                    //StartCoroutine(StopMerge(tmpSquare, checkTmp.gameObject));
+                }      
             }
-            
-
-          
-        }
-        tmpSquare = null;
-
+        }     
     }
    
 
