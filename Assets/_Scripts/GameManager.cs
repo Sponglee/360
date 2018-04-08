@@ -104,6 +104,7 @@ public class GameManager : Singleton<GameManager>
     private bool RotationProgress = false;
     public float rotationDuration = 0.2f;
     private bool noMoves=false;
+    private bool FurtherPopBool = false;
 
     void Start()
     {
@@ -266,9 +267,11 @@ public class GameManager : Singleton<GameManager>
     //delay for merge
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
+        
         yield return new WaitForSeconds(0.2f);
-        Destroy(second);
         int tmp = first.GetComponent<Square>().Score *= 2;
+        Destroy(second);
+        
         first.GetComponent<Square>().ApplyStyle(tmp);
 
         if (tmp > scoreUpper)
@@ -582,7 +585,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(StopPop(popObjs, tmpSquare, wheel));
 
 
-
+       
     }
 
     
@@ -613,6 +616,20 @@ public class GameManager : Singleton<GameManager>
             //POP NEXT ONE ASWELL
 
             yield return StartCoroutine(FurtherPop(tmpSquare,checkTmp, wheel));
+
+            //if (FurtherPopBool)
+            //{
+            //    yield break;
+            //}
+
+            if (FurtherPopBool)
+            {
+               
+                FurtherPopBool = false;
+                Debug.Log("I AM HERE");
+                tmpSquare.transform.localPosition += new Vector3 (0.5f,0,0);
+                yield break;
+            }
         }
         //Clear pop objs list
         for (int i = 0; i < popObjs.Count; i++)
@@ -626,18 +643,48 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(0.2f);
         // check consequent squares and pop them
-        Transform checkLeft = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) - 1);
-        Transform checkRight = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) + 1);
+
+        int leftIndex = int.Parse(tmpSquare.transform.parent.name) - 1;
+        int rightIndex = int.Parse(tmpSquare.transform.parent.name) + 1;
+
+
+
+        //passing through 0
+        if (leftIndex < 0)
+        {
+            leftIndex = nBottom - 1;
+        }
+
+        //passing through nBottom (0)
+        if (rightIndex + 1 > nBottom - 1)
+        {
+            rightIndex = 0;
+        }
+
+
+        Transform checkLeft = wheel.transform.GetChild(0).GetChild(leftIndex);
+        Transform checkRight = wheel.transform.GetChild(0).GetChild(rightIndex);
 
         if (checkLeft.childCount != 0)
         {
 
-            if (checkLeft.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+            if (checkLeft.childCount > tmpSquare.transform.GetSiblingIndex() && checkLeft.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
 
             {
+                foreach (List<GameObject> checkObjs in popObjs)
+                {
+                    if (checkObjs.Count != 0)
+                    {
+                        Pop(checkObjs);
+                        Debug.Log("NOT NULL");
+                    }
+
+                }
                 Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
 
-                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
+                FurtherPopBool = true;
+                yield break;
+                //CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
 
 
             }
@@ -647,10 +694,21 @@ public class GameManager : Singleton<GameManager>
         {
             if (checkRight.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
             {
+                foreach (List<GameObject> checkObjs in popObjs)
+                {
+                    if (checkObjs.Count != 0)
+                    {
+                        Pop(checkObjs);
+                        Debug.Log("NOT NULL");
+                    }
+
+                }
                 Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
 
 
-                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
+                FurtherPopBool = true;
+                yield break;
+                //CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
 
 
             }
@@ -709,6 +767,7 @@ public class GameManager : Singleton<GameManager>
 
                 }
 
+                //set a direction to move
                 rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
                 rowObj.GetComponent<Collider2D>().enabled = false;
 
@@ -723,7 +782,7 @@ public class GameManager : Singleton<GameManager>
 
         //Check for merges/pops around
         Transform checkTmp;
-        
+
         if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
         {
 
@@ -736,11 +795,11 @@ public class GameManager : Singleton<GameManager>
                 if (checkTmp != null
                         && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
                 {
-                    Merge(tmpSquare, checkTmp.gameObject);
+                    Debug.Log("AND HERE");                   //Merge(tmpSquare, checkTmp.gameObject);
                     //StartCoroutine(StopMerge(tmpSquare, checkTmp.gameObject));
-                }      
+                }
             }
-        }     
+        }
     }
    
 
