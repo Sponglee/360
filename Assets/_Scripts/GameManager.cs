@@ -110,7 +110,7 @@ public class GameManager : Singleton<GameManager>
     {
         //Apply all the numbers 
         maxScore = 3;
-        expandMoves = 3;
+        expandMoves = 30000;
         // count of randomSpawns 
         randSpawnCount = 3;
         scoreUpper = (int)Mathf.Pow(2, maxScore);
@@ -150,8 +150,8 @@ public class GameManager : Singleton<GameManager>
 
         
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
-        if (currentSpot.transform.childCount <= 5 && currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255)
-                        || (currentSpot.transform.childCount == 6 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score) /*&& !currentSpot.GetComponent<Spot>().Blocked*/)
+        if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+                        /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
         {
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves )
             {
@@ -261,6 +261,9 @@ public class GameManager : Singleton<GameManager>
     {
         StartCoroutine(StopMerge(first,second));
     }
+
+
+
     //delay for merge
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
@@ -759,7 +762,7 @@ public class GameManager : Singleton<GameManager>
                     //rowObj.transform.position += new Vector3(0, 0, 10);
                     if (!rowObj.transform.parent.GetComponent<Spot>().Blocked)
                     {
-                        rowObj.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                        rowObj.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
                     }
 
                 }
@@ -783,7 +786,6 @@ public class GameManager : Singleton<GameManager>
         if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
         {
 
-
             //object lower to tmpSquare
             if (tmpSquare.transform.GetSiblingIndex() > 0)
             {
@@ -796,7 +798,6 @@ public class GameManager : Singleton<GameManager>
                     Debug.Log("AND HERE");                   //Merge(tmpSquare, checkTmp.gameObject);
                     //StartCoroutine(StopMerge(tmpSquare, checkTmp.gameObject));
                 }
-
             }
         }
     }
@@ -820,7 +821,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach(GameObject spot in spots)
         {
-            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
+            if (spot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
                     && spot.name != currentSpot.name)
             {
                 randList.Add(int.Parse(spot.name));
@@ -904,9 +905,9 @@ public class GameManager : Singleton<GameManager>
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
         //make spot red if 6th child
-        if (randSpawn.transform.parent.childCount == 6)
+        if (randSpawn.transform.parent.childCount == 5)
         {
-            randSpawn.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
         }
 
         randSpawns.Add(randSpawn);
@@ -916,10 +917,10 @@ public class GameManager : Singleton<GameManager>
 
     public void GameOver()
     {
-        if (currentSpot.transform.childCount == 6)
+        if (currentSpot.transform.childCount == 5)
         {
             //full spot colors red and opens another one
-            currentSpot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            currentSpot.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
 
 
         }
@@ -930,7 +931,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach (GameObject spot in spots)
         {
-            if (spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+            if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
             {
                 if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
                 {
@@ -944,7 +945,7 @@ public class GameManager : Singleton<GameManager>
                 reds++;
             }
         }
-        if (reds == spots.Count && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score))
+        if (reds == spots.Count /* && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
         {
             noMoves = true;
            

@@ -141,7 +141,7 @@ public class Square : MonoBehaviour {
         // If it's first and not touched - fall
         if (this.gameObject.transform.parent != null)
         {
-            if (gameObject.transform.GetSiblingIndex() == 6)
+            if (gameObject.transform.GetSiblingIndex() == 5)
             
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, speed * Time.deltaTime);
             else
@@ -266,12 +266,12 @@ public class Square : MonoBehaviour {
         if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
         {
 
-            if (gameObject.transform.parent.childCount < 6)
+            if (gameObject.transform.parent.childCount < 5)
             {
                 if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
                 {
                     //Debug.Log("u can ");
-                    gameObject.transform.parent.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
                 }
             }
         }
