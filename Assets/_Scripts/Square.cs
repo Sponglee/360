@@ -106,7 +106,7 @@ public class Square : MonoBehaviour {
     
         if (ExpandSpawn)
         {
-  
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
             /******* METHOD PART***/
@@ -117,7 +117,7 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            
+            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
             /******* METHOD PART***/
