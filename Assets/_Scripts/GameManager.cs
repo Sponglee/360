@@ -604,7 +604,7 @@ public class GameManager : Singleton<GameManager>
             }
 
          
-            Transform checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex());
+            //Transform checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex());
 
 
 
@@ -612,7 +612,7 @@ public class GameManager : Singleton<GameManager>
 
             //POP NEXT ONE ASWELL
 
-            yield return StartCoroutine(FurtherPop(tmpSquare,checkTmp, wheel));
+            
         }
         //Clear pop objs list
         for (int i = 0; i < popObjs.Count; i++)
@@ -622,45 +622,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private IEnumerator FurtherPop(GameObject tmpSquare, Transform checkTmp, GameObject wheel)
-    {
-        yield return new WaitForSeconds(0.2f);
-        // check consequent squares and pop them
-        Transform checkLeft = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) - 1);
-        Transform checkRight = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name) + 1);
-
-        if (checkLeft.childCount != 0)
-        {
-
-            if (checkLeft.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
-
-            {
-                Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
-
-                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
-
-
-            }
-
-        }
-        else if (checkRight.childCount != 0)
-        {
-            if (checkRight.GetChild(tmpSquare.transform.GetSiblingIndex()).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
-            {
-                Debug.Log(int.Parse(checkTmp.transform.parent.name) + " " + tmpSquare.transform.GetSiblingIndex());
-
-
-                CheckRow(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex(), tmpSquare.GetComponent<Square>().Score);
-
-
-            }
-        }
-
-
-
-
-        
-    }
+  
 
 
 
@@ -736,14 +698,19 @@ public class GameManager : Singleton<GameManager>
                 if (checkTmp != null
                         && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
                 {
-                    Merge(tmpSquare, checkTmp.gameObject);
-                    //StartCoroutine(StopMerge(tmpSquare, checkTmp.gameObject));
+                    
+                    StartCoroutine(FurtherMerge(tmpSquare));
                 }      
             }
         }     
     }
    
+    private IEnumerator FurtherMerge(GameObject tmpSquare)
+    {
+        yield return new WaitForSeconds(0.2f);
 
+        tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+    }
 
 
 
