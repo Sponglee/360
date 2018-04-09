@@ -32,6 +32,9 @@ public class GameManager : Singleton<GameManager>
     public int expandMoves;
     [SerializeField]
     private float stopDelay;
+
+    [SerializeField]
+    private bool IsRunning = false;
    
     [SerializeField]
     private int moves = 0;
@@ -111,7 +114,7 @@ public class GameManager : Singleton<GameManager>
     {
         //Apply all the numbers 
         maxScore = 3;
-        expandMoves = 30000;
+        expandMoves = 3;
         // count of randomSpawns 
         randSpawnCount = 3;
         scoreUpper = (int)Mathf.Pow(2, maxScore);
@@ -138,9 +141,9 @@ public class GameManager : Singleton<GameManager>
         //rowObjs = new List<GameObject>();
         popObjs = new List<List<GameObject>>();
 
-
         tmpSquares = new List<GameObject>();
-        
+
+
 
     }
 
@@ -154,7 +157,7 @@ public class GameManager : Singleton<GameManager>
         if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                         /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
         {
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves )
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves)
             {
                 ClickSpawn();
 
@@ -172,7 +175,8 @@ public class GameManager : Singleton<GameManager>
                     }
                     
                 }
-                
+                if (tmpSquares.Count != 0)
+                    tmpSquares.Clear();
             }
         }
 
@@ -274,6 +278,7 @@ public class GameManager : Singleton<GameManager>
     //delay for merge
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
+
         yield return new WaitForSeconds(0.2f);
         Destroy(second);
         int tmp = first.GetComponent<Square>().Score *= 2;
@@ -286,6 +291,8 @@ public class GameManager : Singleton<GameManager>
 
         }
         first.GetComponent<Square>().Touched = false;
+
+     
     }
 
 
@@ -373,6 +380,7 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
+       
         //Debug.Log("ScheckRow"+spotIndex);
         List<GameObject> rowObjs = new List<GameObject>();
         //starts check
@@ -575,7 +583,13 @@ public class GameManager : Singleton<GameManager>
         {
             //Get rid of the one we keep
             rowObjs.Remove(tmpSquare);
-            
+
+            //add its tmpSquare to list
+            if(!tmpSquares.Contains(tmpSquare))
+            {
+                tmpSquares.Add(tmpSquare);
+            }
+           
             //If there's no same rowObj in pop - add
             if (!popObjs.Contains(rowObjs))
             {
@@ -590,40 +604,26 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        StartCoroutine(StopPop(popObjs, tmpSquare, wheel));
+        StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
 
 
 
     }
 
-    
-    IEnumerator StopPop(List<List<GameObject>> thisPopObjs, GameObject tmpSquare, GameObject wheel)
+
+    IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
+      
+        int count = 0;
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
         
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-            //if (thisPopObjs.Count > 1)
-            //{
-            //    //yield return new WaitForSeconds(0.2f);
-            //    // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
-            //    Pop(rowObjs, tmpSquare);
-            //}
-            //else if (thisPopObjs.Count ==1)
-            //{
-                Pop(rowObjs, tmpSquare);
-            //}
+              
+                Pop(rowObjs, tmpSquares[count]);
 
-            
-            //Transform checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex());
-
-
-
-            //Debug.Log(wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1).name);
-
-            //POP NEXT ONE ASWELL
-
+                count++;
             
         }
         //Clear pop objs list
@@ -632,6 +632,13 @@ public class GameManager : Singleton<GameManager>
             if (popObjs[i].Count == 0)
                 popObjs.RemoveAt(i);
         }
+        for (int i = 0; i < tmpSquares.Count; i++)
+        {
+                tmpSquares.RemoveAt(i);
+        }
+
+
+       
     }
 
   
@@ -640,16 +647,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    // update moves
-    public void ExpandMoves()
-    {
-        Moves++;
-        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
-        slider.value = (float)(expandMoves - Moves) / expandMoves;
-    }
-
-
-
+  
 
 
 
@@ -658,7 +656,7 @@ public class GameManager : Singleton<GameManager>
     //Kill all adjacent squares
     public void Pop(List<GameObject> rowObjs, GameObject tmpSquare= null)
     {
-
+       
 
 
         //Keep one that has fallen
@@ -682,7 +680,7 @@ public class GameManager : Singleton<GameManager>
                     }
 
                 }
-
+              
                 rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
                 rowObj.GetComponent<Collider2D>().enabled = false;
 
@@ -716,20 +714,32 @@ public class GameManager : Singleton<GameManager>
             }
 
             //if ()
-        } 
+        }
 
 
 
 
 
-        
+       
+
     }
-   
+
     private IEnumerator FurtherMerge(GameObject tmpSquare)
     {
         yield return new WaitForSeconds(0.2f);
 
         tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+
+       
+    }
+
+
+    // update moves
+    public void ExpandMoves()
+    {
+        Moves++;
+        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+        slider.value = (float)(expandMoves - Moves) / expandMoves;
     }
 
 
@@ -765,9 +775,9 @@ public class GameManager : Singleton<GameManager>
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
                 tmp.RandScore = 0;
 
-                if (rands.Count >= 1 && Contains(rands, tmp))
+                if (rands.Count >= 1 && ListContains(rands, tmp))
                 {
-                    while (Contains(rands, tmp))
+                    while (ListContains(rands, tmp))
                     {
                         tmp.Rng = randList[Random.Range(0, randList.Count)];
                         tmp.RandScore = 0;
@@ -780,15 +790,10 @@ public class GameManager : Singleton<GameManager>
                 //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
             }
-            
 
 
-            //spawn all
-            foreach (RandValues rand in rands)
-            {
-                //Debug.Log("========");
-                SpawnRandom(rand.Rng, rand.RandScore);
-            }
+            StartCoroutine(StopRandom(rands));
+           
         }
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111remove this if something's wrong
         else
@@ -797,8 +802,25 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    //Spread random spawns
+    private IEnumerator StopRandom(List<RandValues>rands)
+    {
+        //spawn all
+        foreach (RandValues rand in rands)
+        {
+            yield return new WaitForSeconds(0.2f);
+            //Debug.Log("========");
+            SpawnRandom(rand.Rng, rand.RandScore);
+        }
+    }
+
+
+
+
+
+
     //Check if list of classes contains same rng
-    bool Contains(List<RandValues> list, RandValues check)
+    bool ListContains(List<RandValues> list, RandValues check)
     {
         foreach (RandValues n in list)
         {
