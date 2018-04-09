@@ -87,6 +87,8 @@ public class GameManager : Singleton<GameManager>
     List<RandValues> rands;
     //list of randSpawns
     List<GameObject> randSpawns;
+    List<GameObject> tmpSquares;
+
 
     // struct to hold randomSpawn values
     public struct RandValues
@@ -136,8 +138,8 @@ public class GameManager : Singleton<GameManager>
         //rowObjs = new List<GameObject>();
         popObjs = new List<List<GameObject>>();
 
-        
-       
+
+        tmpSquares = new List<GameObject>();
         
 
     }
@@ -155,7 +157,13 @@ public class GameManager : Singleton<GameManager>
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves )
             {
                 ClickSpawn();
-                foreach(List<GameObject> checkObjs in popObjs)
+
+                // Reset tmpSquares each move
+                tmpSquares.Clear();
+
+
+                //Pop checkObjs if there's any left
+                foreach (List<GameObject> checkObjs in popObjs)
                 {
                     if (checkObjs.Count != 0)
                     {
@@ -277,6 +285,7 @@ public class GameManager : Singleton<GameManager>
             Instance.upper.text = string.Format("upper: {0}", scoreUpper);
 
         }
+        first.GetComponent<Square>().Touched = false;
     }
 
 
@@ -362,7 +371,7 @@ public class GameManager : Singleton<GameManager>
 
 
     //Checks for 3 in a row
-    public void CheckRow(int spotIndex, int squareIndex, int checkScore)
+    public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
         //Debug.Log("ScheckRow"+spotIndex);
         List<GameObject> rowObjs = new List<GameObject>();
@@ -378,9 +387,10 @@ public class GameManager : Singleton<GameManager>
         int nextIndex = 0;
 
 
-        Debug.Log(">>" + spotIndex + " " + squareIndex + " " + checkScore);
+        //Debug.Log(">>" + spotIndex + " " + squareIndex + " " + checkScore);
         // for later checking 
-        GameObject tmpSquare = spots[spotIndex].transform.GetChild(squareIndex).gameObject;
+        //GameObject tmpSquare = spots[spotIndex].transform.GetChild(squareIndex).gameObject;
+       
 
         //add placed square to rowOBjs
         rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
@@ -563,6 +573,7 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            //Get rid of the one we keep
             rowObjs.Remove(tmpSquare);
             
             //If there's no same rowObj in pop - add
@@ -590,20 +601,21 @@ public class GameManager : Singleton<GameManager>
     {
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
+        
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-            if (thisPopObjs.Count > 1)
-            {
-                //yield return new WaitForSeconds(0.2f);
-                // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
+            //if (thisPopObjs.Count > 1)
+            //{
+            //    //yield return new WaitForSeconds(0.2f);
+            //    // Debug.Log(" OBJS COUNT AT THE END: " +rowObjs[0].GetComponent<Square>().Score);
+            //    Pop(rowObjs, tmpSquare);
+            //}
+            //else if (thisPopObjs.Count ==1)
+            //{
                 Pop(rowObjs, tmpSquare);
-            }
-            else if (thisPopObjs.Count ==1)
-            {
-                Pop(rowObjs, tmpSquare);
-            }
+            //}
 
-         
+            
             //Transform checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex());
 
 
@@ -702,7 +714,15 @@ public class GameManager : Singleton<GameManager>
                     StartCoroutine(FurtherMerge(tmpSquare));
                 }      
             }
-        }     
+
+            //if ()
+        } 
+
+
+
+
+
+        
     }
    
     private IEnumerator FurtherMerge(GameObject tmpSquare)

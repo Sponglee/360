@@ -40,11 +40,27 @@ public class Square : MonoBehaviour {
     public bool IsColliding { get; set; }
 
     private Transform column;
-
+    [SerializeField]
     private bool touched = false;
+   
+
+    public bool Touched
+    {
+        get
+        {
+            return touched;
+        }
+
+        set
+        {
+            touched = value;
+        }
+    }
+
+
+
     public bool ExpandSpawn { get; set; }
 
-   
 
     [SerializeField]
     private Text SquareText;
@@ -141,7 +157,7 @@ public class Square : MonoBehaviour {
         // If it's first and not touched - fall
         if (this.gameObject.transform.parent != null)
         {
-            if (gameObject.transform.GetSiblingIndex() == 5)
+            if (gameObject.transform.GetSiblingIndex() == 5 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
             
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, speed * Time.deltaTime);
             else
@@ -185,39 +201,21 @@ public class Square : MonoBehaviour {
 
         if (other.gameObject.CompareTag("spot"))
         {
-            ////Make it stay 
-            
-            //this.Touched = true;
+            Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
+            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
 
-            //Debug.Log("IT'SA ME MARIO");
-            //if (!GameManager.Instance.CheckInProgress)
-            //{
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
-
-
-                
-            //}
-
-
-            //this.column = other.gameObject.transform;
-
-            // if spawned by player - add to moves, update the text
-            //if(IsSpawn)
-            //{
-            //    GameManager.Instance.ExpandMoves();
-            //}
-
-
+           
         }
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
         {
+            //make sure checks only one of 2 collisions (one that is not touched
             other.gameObject.GetComponent<Square>().touched = true;
            
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
-                Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+               // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
                 //if spawned by player and pops - no moves 
                 if (this.IsSpawn)
                 {
@@ -228,30 +226,27 @@ public class Square : MonoBehaviour {
                 
                 GameManager.Instance.Merge(gameObject, other.gameObject);
                 gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-              
                
+
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                //    //if spawned by player and no scores - moves++
-                //    //if (IsSpawn)
-                //    //{
-                //    //    GameManager.Instance.ExpandMoves();
-                //    }
+                Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
 
-                ////Make it fall down
-                //this.Touched = true;
-                //Debug.Log("SQUARE COLLISION");
-                //if(!GameManager.Instance.CheckInProgress)
-                //{
-                    GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score);
-                    //Check GameOver
-                    GameManager.Instance.GameOver();
-                //}
+
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+
+
+                //reset Touched bool 
+                StartCoroutine(StopTouch(other.gameObject));
+                
+                //Check GameOver
+                GameManager.Instance.GameOver();
+              
 
 
 
-                Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+                //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
 
             }
 
@@ -279,6 +274,14 @@ public class Square : MonoBehaviour {
 
 
     }
+
+
+    private IEnumerator StopTouch(GameObject first)
+    {
+        yield return new WaitForSeconds(0.15f);
+        first.GetComponent<Square>().touched = false;
+    }
+
 
 
 
