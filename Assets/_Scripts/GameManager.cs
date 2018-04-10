@@ -281,6 +281,10 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitForSeconds(0.2f);
         Destroy(second);
+        if (first == null)
+        {
+            yield break;
+        }
         int tmp = first.GetComponent<Square>().Score *= 2;
         first.GetComponent<Square>().ApplyStyle(tmp);
 
@@ -694,27 +698,30 @@ public class GameManager : Singleton<GameManager>
         }
 
         //Check for merges/pops around
-        Transform checkTmp;
-        
-        if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
-        {
+        //Transform checkTmp;
 
-            //object lower to tmpSquare
-            if (tmpSquare.transform.GetSiblingIndex() > 0)
-            {
-                checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1);
+        StartCoroutine(FurtherMerge(tmpSquare));
+        //if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
+        //{
 
-                //check if lower one is same score
-                if (checkTmp != null
-                        && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
-                {
-                    
-                    StartCoroutine(FurtherMerge(tmpSquare));
-                }      
-            }
+        //    //object lower to tmpSquare
+        //    if (tmpSquare.transform.GetSiblingIndex() > 0)
+        //    {
+        //       // checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1);
 
-            //if ()
-        }
+
+
+        //        ////check if lower one is same score
+        //        //if (checkTmp != null
+        //        //        && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
+        //        //{
+
+        //        //    StartCoroutine(FurtherMerge(tmpSquare));
+        //        //}      
+        //    }
+
+        //    //if ()
+        //}
 
 
 
@@ -727,8 +734,15 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator FurtherMerge(GameObject tmpSquare)
     {
         yield return new WaitForSeconds(0.2f);
+        Debug.Log("OINK");
+        if (tmpSquare != null)
+        {
+            tmpSquare.transform.localPosition += new Vector3(0.2f, 0, 0);
+        }
+        else
+            yield break;
 
-        tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+        
 
        
     }

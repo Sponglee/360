@@ -201,7 +201,7 @@ public class Square : MonoBehaviour {
 
         if (other.gameObject.CompareTag("spot"))
         {
-            Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
+           // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
 
@@ -231,7 +231,7 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
+               // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
 
 
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
