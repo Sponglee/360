@@ -33,8 +33,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private float stopDelay;
 
-    [SerializeField]
-    private bool IsRunning = false;
+    //[SerializeField]
+    //private bool IsRunning = false;
    
     [SerializeField]
     private int moves = 0;
@@ -92,6 +92,8 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> randSpawns;
     List<GameObject> tmpSquares;
 
+    //Toggle while rand are dropping
+    private bool randSpawning = false;
 
     // struct to hold randomSpawn values
     public struct RandValues
@@ -157,7 +159,7 @@ public class GameManager : Singleton<GameManager>
         if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                         /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
         {
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves)
+            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
             {
                 ClickSpawn();
 
@@ -765,6 +767,9 @@ public class GameManager : Singleton<GameManager>
         RandValues tmp = new RandValues();
         rands = new List<RandValues>();
 
+        //Rand Score checker
+        List<int> randCheckTmp = new List<int>();
+
         //randSpawn is upper Power -1 always
         int upperPow = (int)Mathf.Log(scoreUpper, 2)-1;
         List<int> randList = new List<int>();
@@ -799,7 +804,14 @@ public class GameManager : Singleton<GameManager>
                     
                 }
 
-                tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
+                do
+                {
+                    tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 2));
+                }
+                while (randCheckTmp.Contains(tmp.RandScore) && tmp.RandScore == 256);
+                randCheckTmp.Add(tmp.RandScore);
+                    
+                    Debug.Log(" RANDSCORE " + tmp.RandScore);
                 rands.Add(tmp);
                 //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
@@ -819,6 +831,7 @@ public class GameManager : Singleton<GameManager>
     //Spread random spawns
     private IEnumerator StopRandom(List<RandValues>rands)
     {
+        randSpawning = true;
         //spawn all
         foreach (RandValues rand in rands)
         {
@@ -826,6 +839,7 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log("========");
             SpawnRandom(rand.Rng, rand.RandScore);
         }
+        randSpawning = false;
     }
 
 
@@ -848,6 +862,21 @@ public class GameManager : Singleton<GameManager>
         return false;
     }
 
+
+    //Check if list of classes contains same rng
+    bool RandScoreContains(List<RandValues> list, RandValues check)
+    {
+        foreach (RandValues n in list)
+        {
+            if (n.RandScore == check.Rng)
+            {
+
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     // Spawn randomSquare
     public void SpawnRandom(int rng, int randScore)
