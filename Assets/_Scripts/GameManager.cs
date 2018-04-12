@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     
     public int randSpawnCount;
     //checker for player spawn
+    private bool firstRands = true;
 
     public int maxScore;
     [SerializeField]
@@ -94,6 +95,7 @@ public class GameManager : Singleton<GameManager>
 
     //Toggle while rand are dropping
     private bool randSpawning = false;
+    int tmpRands;
 
     // struct to hold randomSpawn values
     public struct RandValues
@@ -145,7 +147,8 @@ public class GameManager : Singleton<GameManager>
 
         tmpSquares = new List<GameObject>();
 
-
+        //for first spwan of 2
+        tmpRands = randSpawnCount;
 
     }
 
@@ -763,7 +766,17 @@ public class GameManager : Singleton<GameManager>
 
     public void Expand()
     {
-        
+      
+
+        if (firstRands)
+        {
+            randSpawnCount -= 1;
+            firstRands = false;
+        }
+        else
+            randSpawnCount = tmpRands;
+
+
         RandValues tmp = new RandValues();
         rands = new List<RandValues>();
 
@@ -788,7 +801,7 @@ public class GameManager : Singleton<GameManager>
         if (randList.Count >= randSpawnCount)
         {
             rands.Clear();
-        
+            
             for (int i = 0; i < randSpawnCount; i++)
             {
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
@@ -806,7 +819,7 @@ public class GameManager : Singleton<GameManager>
 
                 do
                 {
-                    tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 2));
+                    tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
                 }
                 while (randCheckTmp.Contains(tmp.RandScore) && tmp.RandScore == 256);
                 randCheckTmp.Add(tmp.RandScore);
