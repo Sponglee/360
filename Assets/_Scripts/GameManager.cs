@@ -812,7 +812,9 @@ public class GameManager : Singleton<GameManager>
                     while (ListContains(rands, tmp))
                     {
                         tmp.Rng = randList[Random.Range(0, randList.Count)];
+                       
                         tmp.RandScore = 0;
+
                     }
                     
                 }
@@ -820,11 +822,12 @@ public class GameManager : Singleton<GameManager>
                 do
                 {
                     tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
+                    Debug.Log(" RANDSCORE " + tmp.RandScore);
                 }
-                while (randCheckTmp.Contains(tmp.RandScore) && tmp.RandScore == 256);
+                while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore == 256);
                 randCheckTmp.Add(tmp.RandScore);
                     
-                    Debug.Log(" RANDSCORE " + tmp.RandScore);
+                   
                 rands.Add(tmp);
                 //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
 
