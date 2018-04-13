@@ -61,6 +61,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSpawn;
     //next spot to turn green
     public int LastSpot { get; set; }
+    private bool IsFurtherMerge = false;
 
 
 
@@ -91,6 +92,8 @@ public class GameManager : Singleton<GameManager>
     // list of rowObjs to execute(resets each click)
     List<List<GameObject>> popObjs;
 
+    // list of furthre pop/merge things
+    List<GameObject> furtherPopObjs;
 
     List<RandValues> rands;
     //list of randSpawns
@@ -152,6 +155,7 @@ public class GameManager : Singleton<GameManager>
 
         tmpSquares = new List<GameObject>();
 
+        furtherPopObjs = new List<GameObject>();
         //for first spwan of 2
         tmpRands = randSpawnCount;
 
@@ -172,7 +176,7 @@ public class GameManager : Singleton<GameManager>
                 ClickSpawn();
 
                 // Reset tmpSquares each move
-                tmpSquares.Clear();
+                //tmpSquares.Clear();
 
 
                 //Pop checkObjs if there's any left
@@ -185,8 +189,7 @@ public class GameManager : Singleton<GameManager>
                     }
                     
                 }
-                if (tmpSquares.Count != 0)
-                    tmpSquares.Clear();
+              
             }
         }
 
@@ -293,7 +296,7 @@ public class GameManager : Singleton<GameManager>
         Destroy(second);
         if (first == null)
         {
-            yield break;
+            //yield break;
         }
         int tmp = first.GetComponent<Square>().Score *= 2;
         first.GetComponent<Square>().ApplyStyle(tmp);
@@ -570,12 +573,12 @@ public class GameManager : Singleton<GameManager>
         }
         while (endIndex > nBottom + 1);
 
-        // 2 or 3 row?
+        // 2 row
         if (rowObjs.Count < 2)
         {
             
             // expand moves++ if this happened by player
-            if (tmpSquare.GetComponent<Square>().IsSpawn)
+            if (tmpSquare.GetComponent<Square>().IsSpawn || IsFurtherMerge)
             {
 
                 ExpandMoves();
@@ -615,11 +618,10 @@ public class GameManager : Singleton<GameManager>
             
         }
 
-
-
+       
+        
 
         StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
-
 
 
     }
@@ -636,7 +638,7 @@ public class GameManager : Singleton<GameManager>
         {
               
                 Pop(rowObjs, tmpSquares[count]);
-
+                StartCoroutine(FurtherMerge(tmpSquares[count]));
                 count++;
             
         }
@@ -651,7 +653,7 @@ public class GameManager : Singleton<GameManager>
                 tmpSquares.RemoveAt(i);
         }
 
-
+       
        
     }
 
@@ -682,8 +684,11 @@ public class GameManager : Singleton<GameManager>
             foreach (GameObject rowObj in rowObjs)
             {
                 //Update the score
-                scores += rowObj.GetComponent<Square>().Score;
-                ScoreText.text = scores.ToString();
+                if (rowObj.GetComponent<Square>() != null)
+                {
+                    scores += rowObj.GetComponent<Square>().Score;
+                    ScoreText.text = scores.ToString();
+                }
 
                 if (rowObj.transform.parent != null)
                 {
@@ -699,7 +704,7 @@ public class GameManager : Singleton<GameManager>
                 rowObj.GetComponent<Collider2D>().enabled = false;
 
 
-
+                StartCoroutine(FurtherMerge(rowObj));
                 //Detach this square from parent
                 rowObj.transform.parent = null;
 
@@ -710,29 +715,11 @@ public class GameManager : Singleton<GameManager>
         //Check for merges/pops around
         //Transform checkTmp;
 
-        StartCoroutine(FurtherMerge(tmpSquare));
-        //if (wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)) != null)
-        //{
 
-        //    //object lower to tmpSquare
-        //    if (tmpSquare.transform.GetSiblingIndex() > 0)
-        //    {
-        //       // checkTmp = wheel.transform.GetChild(0).GetChild(int.Parse(tmpSquare.transform.parent.name)).GetChild(tmpSquare.transform.GetSiblingIndex() - 1);
+       
 
-
-
-        //        ////check if lower one is same score
-        //        //if (checkTmp != null
-        //        //        && tmpSquare.GetComponent<Square>().Score * 2 == checkTmp.GetComponent<Square>().Score)
-        //        //{
-
-        //        //    StartCoroutine(FurtherMerge(tmpSquare));
-        //        //}      
-        //    }
-
-        //    //if ()
-        //}
-
+        //StartCoroutine(FurtherMerge(tmpSquare));
+     
 
 
 
@@ -741,16 +728,27 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private IEnumerator FurtherMerge(GameObject tmpSquare)
+    public IEnumerator FurtherMerge(GameObject tmpSquare)
     {
-        yield return new WaitForSeconds(0.2f);
-        Debug.Log("OINK");
-        if (tmpSquare != null)
-        {
-            tmpSquare.transform.localPosition += new Vector3(0.2f, 0, 0);
-        }
-        else
-            yield break;
+            IsFurtherMerge = true;
+            //Debug.Log("START OINK " + Time.deltaTime);
+
+            yield return new WaitForSeconds(0.2f);
+            if (tmpSquare != null)
+            {
+                //for (int i = tmpSquare.transform.GetSiblingIndex(); i < tmpSquare.transform.parent.childCount; i++)
+                //{
+                    tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+                //    Debug.Log(" BOUNCE " + i);
+                //}
+              
+            }
+            //Debug.Log("OINK " + Time.deltaTime);
+
+            IsFurtherMerge = false;
+       
+        //else
+        //    yield break;
 
         
 
@@ -775,7 +773,7 @@ public class GameManager : Singleton<GameManager>
          
         //spawn only 2 when upper is 8
 
-        if (maxScore == 3)
+        if (scoreUpper == 8)
         {
             randSpawnCount = tmpRands - 1;
           
@@ -798,7 +796,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach(GameObject spot in spots)
         {
-            if (spot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255) 
+            if (spot.transform.childCount < 5
                     && spot.name != currentSpot.name)
             {
                 randList.Add(int.Parse(spot.name));
@@ -829,7 +827,7 @@ public class GameManager : Singleton<GameManager>
                 do
                 {
                     tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
-                    Debug.Log(" RANDSCORE " + tmp.RandScore);
+                   // Debug.Log(" RANDSCORE " + tmp.RandScore);
                 }
                 while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore >= 256);
                 randCheckTmp.Add(tmp.RandScore);
@@ -961,27 +959,30 @@ public class GameManager : Singleton<GameManager>
                 reds++;
             }
         }
-        if (reds == spots.Count /* && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
-        {
-            noMoves = true;
-           
-            nextScore.text = "GAME OVER";
 
-            StartCoroutine(StopGameOver());
-
-            Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
+        StartCoroutine(StopGameOver(reds));
 
 
-    
     }
 
 
-    private IEnumerator StopGameOver()
+    private IEnumerator StopGameOver(int reds)
     {
         yield return new WaitForSeconds(0.2f);
+        if (reds == spots.Count /* && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
+        {
+            noMoves = true;
+
+            yield return new WaitForSeconds(0.2f);
+            OpenMenu();
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+
+            
+        }
+      
+
        
-        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+       
     }
 
 

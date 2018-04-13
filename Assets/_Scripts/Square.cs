@@ -172,7 +172,10 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, speed * Time.deltaTime);
+            if( SquareTmpSquare != null)
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, speed * Time.deltaTime);
+            else
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, speed * Time.deltaTime);
         }
 
         //}
@@ -282,6 +285,7 @@ public class Square : MonoBehaviour {
         if (this.score >= 256)
         {
             this.IsTop = true;
+           
             this.gameObject.transform.parent = null;
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         }
