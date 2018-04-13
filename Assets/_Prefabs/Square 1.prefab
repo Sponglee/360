@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 50681241844705552}
   - component: {fileID: 114245831885718896}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Square 1
   m_TagString: square
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   IsSpawn: 0
-  score: 0
+  score: 128
   color:
     serializedVersion: 2
     rgba: 0

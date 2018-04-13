@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
 
-
+    [SerializeField]
+    private GameObject ui;
+    [SerializeField]
+    private GameObject menu;
 
     [SerializeField]
     public GameObject wheel;
@@ -116,6 +120,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        
         //Apply all the numbers 
         maxScore = 3;
         expandMoves = 3;
@@ -767,11 +772,13 @@ public class GameManager : Singleton<GameManager>
     public void Expand()
     {
       
+         
+        //spawn only 2 when upper is 8
 
-        if (firstRands)
+        if (maxScore == 3)
         {
-            randSpawnCount -= 1;
-            firstRands = false;
+            randSpawnCount = tmpRands - 1;
+          
         }
         else
             randSpawnCount = tmpRands;
@@ -824,7 +831,7 @@ public class GameManager : Singleton<GameManager>
                     tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
                     Debug.Log(" RANDSCORE " + tmp.RandScore);
                 }
-                while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore == 256);
+                while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore >= 256);
                 randCheckTmp.Add(tmp.RandScore);
                     
                    
@@ -959,15 +966,44 @@ public class GameManager : Singleton<GameManager>
             noMoves = true;
            
             nextScore.text = "GAME OVER";
+
+            StartCoroutine(StopGameOver());
+
             Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!GAMOVER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
+
+    
+    }
+
+
+    private IEnumerator StopGameOver()
+    {
+        yield return new WaitForSeconds(0.2f);
+        ui.SetActive(false);
+        menu.SetActive(true);
+
+        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
     }
 
 
 
 
 
+    //Restarts game
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+      
 
+        //GameOverMenu.SetActive(false);
+        //In case game was paused before
+        Time.timeScale = 1;
+    }
 
+    //Quit
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }

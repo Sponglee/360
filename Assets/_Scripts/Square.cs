@@ -21,6 +21,8 @@ public class Square : MonoBehaviour {
 
     //pop moving point
     public Transform centerPrefab;
+
+    private bool IsTop = false;
  
     private Transform squareTmpSquare = null;
     public Transform SquareTmpSquare
@@ -164,6 +166,10 @@ public class Square : MonoBehaviour {
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
 
         }
+        else if (this.IsTop == true)
+        {
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, speed * Time.deltaTime);
+        }
         else
         {
             gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, speed * Time.deltaTime);
@@ -198,6 +204,7 @@ public class Square : MonoBehaviour {
     // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
+       
 
         if (other.gameObject.CompareTag("spot"))
         {
@@ -272,7 +279,12 @@ public class Square : MonoBehaviour {
         }
 
 
-
+        if (this.score >= 256)
+        {
+            this.IsTop = true;
+            this.gameObject.transform.parent = null;
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
     }
 
 
@@ -290,6 +302,8 @@ public class Square : MonoBehaviour {
         //Destroy on contact with center
         if (other.CompareTag("center") && gameObject.CompareTag("square"))
         {
+            GameManager.Instance.scores += this.score;
+            GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
             //Debug.Log("destroy this");
             Destroy(gameObject);
         }
