@@ -980,22 +980,25 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator StopGameOver()
     {
         yield return new WaitForSeconds(0.2f);
-        ui.SetActive(false);
-        menu.SetActive(true);
-
+       
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
     }
 
 
+    public void OpenMenu()
+    {
+        ui.SetActive(!ui.activeSelf);
+        menu.SetActive(!menu.activeSelf);
 
+    }
 
 
     //Restarts game
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-      
 
+        OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before
         Time.timeScale = 1;
