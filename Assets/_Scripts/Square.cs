@@ -295,7 +295,8 @@ public class Square : MonoBehaviour {
     private IEnumerator StopTouch(GameObject first)
     {
         yield return new WaitForSeconds(0.15f);
-        first.GetComponent<Square>().touched = false;
+        if (first != null)
+            first.GetComponent<Square>().touched = false;
     }
 
 

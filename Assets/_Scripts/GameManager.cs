@@ -122,8 +122,8 @@ public class GameManager : Singleton<GameManager>
     private bool noMoves=false;
 
 
-
-
+    Ray ray;
+    //RaycastHit hit;
 
     void Start()
     {
@@ -164,7 +164,7 @@ public class GameManager : Singleton<GameManager>
         tmpRands = randSpawnCount;
 
 
-
+     
       
     }
 
@@ -172,7 +172,6 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
 
-        
 
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
         if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
@@ -180,22 +179,14 @@ public class GameManager : Singleton<GameManager>
         {
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
             {
-
-                //RAYCASTING TO AVOID CLICKING MENU SPAWN
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    // Then you could find your GO with a specific tag by doing something like:
-                    if (!hit.transform.gameObject.CompareTag("ui"))
-                    {
-                        ClickSpawn();
-                    }
-                    else
-                        Debug.Log("ui");
-                }
-
+                if (EventSystem.current.IsPointerOverGameObject())
+                    return;
+               
+                    ClickSpawn();
+             
+             
+                   
+               
 
              
                     
@@ -324,16 +315,21 @@ public class GameManager : Singleton<GameManager>
         {
             //yield break;
         }
-        int tmp = first.GetComponent<Square>().Score *= 2;
-        first.GetComponent<Square>().ApplyStyle(tmp);
-
-        if (tmp > scoreUpper)
+        if (first != null)
         {
-            scoreUpper *= 2;
-            Instance.upper.text = string.Format("upper: {0}", scoreUpper);
+            int tmp = first.GetComponent<Square>().Score *= 2;
+            first.GetComponent<Square>().ApplyStyle(tmp);
+
+            if (tmp > scoreUpper)
+            {
+                scoreUpper *= 2;
+                Instance.upper.text = string.Format("upper: {0}", scoreUpper);
+
+            }
+            first.GetComponent<Square>().Touched = false;
 
         }
-        first.GetComponent<Square>().Touched = false;
+       
 
      
     }
@@ -725,14 +721,17 @@ public class GameManager : Singleton<GameManager>
                     }
 
                 }
-              
-                rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
-                rowObj.GetComponent<Collider2D>().isTrigger = true;
+              if (rowObj.transform != null && tmpSquare != null)
+                {
+                    rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
+                    rowObj.GetComponent<Collider2D>().isTrigger = true;
 
 
-                StartCoroutine(FurtherMerge(rowObj));
-                //Detach this square from parent
-                rowObj.transform.parent = null;
+                    StartCoroutine(FurtherMerge(rowObj));
+                    //Detach this square from parent
+                    rowObj.transform.parent = null;
+                }
+                
 
             }
             rowObjs.Clear();
@@ -1016,7 +1015,7 @@ public class GameManager : Singleton<GameManager>
     {
         ui.SetActive(!ui.activeSelf);
         menu.SetActive(!menu.activeSelf);
-
+        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score : {0}", scores);
     }
 
 

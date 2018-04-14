@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 /** Swipe direction */
 public enum SwipeDirection
@@ -31,6 +30,8 @@ public class SwipeManager : Singleton<SwipeManager> {
     public bool swipeValue = false;
 
 
+
+    public Text SwipeDirect;
     // Use this for initialization
     void Start () {
 		
@@ -89,7 +90,13 @@ public class SwipeManager : Singleton<SwipeManager> {
 
     public void SwipeChange()
     {
+        string swipeArrow;
+        if (swipeValue == true)
+            swipeArrow = "<--";
+        else
+            swipeArrow = "-->";
         swipeValue = !swipeValue;
+        SwipeDirect.text = string.Format("Swipe Direction {0}", swipeArrow);
 
     }
 }
