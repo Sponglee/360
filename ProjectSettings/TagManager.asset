@@ -13,6 +13,7 @@ TagManager:
   - outer
   - spawn
   - grid
+  - ui
   layers:
   - Default
   - TransparentFX

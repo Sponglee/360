@@ -121,6 +121,10 @@ public class GameManager : Singleton<GameManager>
     public float rotationDuration = 0.2f;
     private bool noMoves=false;
 
+
+
+
+
     void Start()
     {
         
@@ -159,21 +163,43 @@ public class GameManager : Singleton<GameManager>
         //for first spwan of 2
         tmpRands = randSpawnCount;
 
+
+
+      
     }
 
 
     void Update()
     {
 
-
         
+
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
         if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                         /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
         {
             if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
             {
-                ClickSpawn();
+
+                //RAYCASTING TO AVOID CLICKING MENU SPAWN
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    // Then you could find your GO with a specific tag by doing something like:
+                    if (!hit.transform.gameObject.CompareTag("ui"))
+                    {
+                        ClickSpawn();
+                    }
+                    else
+                        Debug.Log("ui");
+                }
+
+
+             
+                    
+                
 
                 // Reset tmpSquares each move
                 //tmpSquares.Clear();
@@ -701,7 +727,7 @@ public class GameManager : Singleton<GameManager>
                 }
               
                 rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
-                rowObj.GetComponent<Collider2D>().enabled = false;
+                rowObj.GetComponent<Collider2D>().isTrigger = true;
 
 
                 StartCoroutine(FurtherMerge(rowObj));
