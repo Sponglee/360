@@ -152,7 +152,7 @@ public class Square : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
         //if Touched - stops 
         //if(!this.Touched)
         // {

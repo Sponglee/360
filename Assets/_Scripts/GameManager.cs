@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
-{
 
+{ 
     [SerializeField]
     private GameObject ui;
     [SerializeField]
@@ -122,8 +122,9 @@ public class GameManager : Singleton<GameManager>
     private bool noMoves=false;
 
 
-    Ray ray;
-    //RaycastHit hit;
+    //for ui check
+    static int hotControl;
+
 
     void Start()
     {
@@ -168,46 +169,64 @@ public class GameManager : Singleton<GameManager>
       
     }
 
+ 
 
     void Update()
     {
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+
+        //    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //    Vector2 mousePos2D = new Vector2(mouseWorldPos.x, mouseWorldPos.y);
+
+        //    Debug.Log(mousePos2D);
+
+        //    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
+
+        //      Debug.Log(hit.transform.gameObject.tag);
+          
+
+                
+        //}
+
+
+
 
 
         //if inside outer ring and not blocked by extend and is not red   OR is the same score as next one
         if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                         /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
         {
-            if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
+
+            
+            
             {
-                if (EventSystem.current.IsPointerOverGameObject())
-                    return;
-               
-                    ClickSpawn();
-             
-             
-                   
-               
-
-             
-                    
-                
-
-                // Reset tmpSquares each move
-                //tmpSquares.Clear();
-
-
-                //Pop checkObjs if there's any left
-                foreach (List<GameObject> checkObjs in popObjs)
+                if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
                 {
-                    if (checkObjs.Count != 0)
+                    if (EventSystem.current.IsPointerOverGameObject())
                     {
-                        Pop(checkObjs);
-                        Debug.Log("NOT NULL");
+                        Debug.Log("IS");
+                        return;
                     }
-                    
+                        
+                    else
+                        ClickSpawn();
+
+
+                    foreach (List<GameObject> checkObjs in popObjs)
+                    {
+                        if (checkObjs.Count != 0)
+                        {
+                            Pop(checkObjs);
+                            Debug.Log("NOT NULL");
+                        }
+
+                    }
+
                 }
-              
             }
+            
         }
 
 
