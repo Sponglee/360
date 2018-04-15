@@ -125,6 +125,11 @@ public class GameManager : Singleton<GameManager>
     //for ui check
     static int hotControl;
 
+    private bool mouseDown = false;
+    private bool MenuUp = false;
+
+
+
 
     void Start()
     {
@@ -169,13 +174,30 @@ public class GameManager : Singleton<GameManager>
       
     }
 
- 
+   
 
     void Update()
     {
 
-        //if (Input.GetMouseButtonDown(0))
-        //{
+     
+            if(IsPointerOverUIObject() && Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("UI");
+                mouseDown = false;
+                return; 
+
+            }
+            else if (Input.GetMouseButtonDown(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
+            {
+                mouseDown = true;
+                
+            }
+            if(Input.GetMouseButtonUp(0) && mouseDown && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
+            {
+                    ClickSpawn();
+                    mouseDown = false;
+            }
+            
 
         //    Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //    Vector2 mousePos2D = new Vector2(mouseWorldPos.x, mouseWorldPos.y);
@@ -185,9 +207,9 @@ public class GameManager : Singleton<GameManager>
         //    RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
 
         //      Debug.Log(hit.transform.gameObject.tag);
-          
 
-                
+
+
         //}
 
 
@@ -201,41 +223,42 @@ public class GameManager : Singleton<GameManager>
 
             
             
-            {
-                if (Input.GetMouseButtonUp(0) && SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning)
-                {
-                    if (EventSystem.current.IsPointerOverGameObject())
-                    {
-                        Debug.Log("IS");
-                        return;
-                    }
-                        
-                    else
-                        ClickSpawn();
+            
+                
+                //    if (EventSystem.current.IsPointerOverGameObject())
+                //    {
+                //        Debug.Log("IS");
+                //        return;
+                //    }
+                //    if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+                //    {
+                //        if (EventSystem.current.IsPointerOverGameObject(Input.touches[0].fingerId))
+                //        {
+                //            Debug.Log("TOUCH");
+                //            return;
+                //        }
+                            
+                //    }
+                    
+                //        ClickSpawn();
 
 
-                    foreach (List<GameObject> checkObjs in popObjs)
-                    {
-                        if (checkObjs.Count != 0)
-                        {
-                            Pop(checkObjs);
-                            Debug.Log("NOT NULL");
-                        }
+                //    foreach (List<GameObject> checkObjs in popObjs)
+                //    {
+                //        if (checkObjs.Count != 0)
+                //        {
+                //            Pop(checkObjs);
+                //            Debug.Log("NOT NULL");
+                //        }
 
-                    }
+                //    }
 
-                }
-            }
+                //}
+            
             
         }
 
 
-
-        //// Debug.Log(wheel.transform.eulerAngles.z);
-        // if ((wheel.transform.eulerAngles.z % (360 / nBottom)) == 0)
-        //     Debug.Log("YAYAYAYAYAY " + wheel.transform.eulerAngles.z);
-
-                                                                                                                //<---- FOR SPINNING AROUND
         // (wheel.transform.eulerAngles.z % (360 / nBottom)) == 0 
 
         //Turn left
@@ -257,6 +280,20 @@ public class GameManager : Singleton<GameManager>
         
        
     }
+
+     private bool IsPointerOverUIObject()
+    {
+     PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+     eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+     List<RaycastResult> results = new List<RaycastResult>();
+     EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        if(results.Count > 0) return results[0].gameObject.CompareTag("ui");
+        else return false;
+     
+    }
+
+
+
 
     //Smooth rotation coroutine
     IEnumerator Rotate(Vector3 axis, float angle, float duration = 0.2f)
@@ -679,6 +716,7 @@ public class GameManager : Singleton<GameManager>
         {
               
                 Pop(rowObjs, tmpSquares[count]);
+                //yield return new WaitForSeconds(0.2f);
                 StartCoroutine(FurtherMerge(tmpSquares[count]));
                 count++;
             
@@ -1035,6 +1073,7 @@ public class GameManager : Singleton<GameManager>
         ui.SetActive(!ui.activeSelf);
         menu.SetActive(!menu.activeSelf);
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score : {0}", scores);
+        MenuUp = !MenuUp;
     }
 
 
