@@ -278,7 +278,7 @@ public class GameManager : Singleton<GameManager>
 
         Vector3 direction1 = screenPos - wheel.transform.position;
 
-        Vector3 direction = screenPos - wheel.transform.position;
+        //ANGLE BETWEEN 2 VECTORS (with negative values)
         float angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction1)), Vector3.Dot(wheel.transform.up, direction1)) * Mathf.Rad2Deg;
 
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
