@@ -198,14 +198,14 @@ public class GameManager : Singleton<GameManager>
                 Vector3 direction = screenPos - wheel.transform.position;
                 clickAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
 
-            clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
+                clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
                // Debug.DrawLine(screenPos, mousePos);
                 Debug.Log(clickAngle);
 
             
 
             }
-            else if (Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
+            else if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
             {
                 Debug.DrawLine(5f*wheel.transform.up- new Vector3(0,7f), wheel.transform.position, Color.red);
                 Debug.DrawLine(wheel.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition), Color.white);
@@ -277,23 +277,14 @@ public class GameManager : Singleton<GameManager>
 
 
         Vector3 direction1 = screenPos - wheel.transform.position;
-        
-        float angle = Vector3.Angle(wheel.transform.up, direction1);
+
+        Vector3 direction = screenPos - wheel.transform.position;
+        float angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction1)), Vector3.Dot(wheel.transform.up, direction1)) * Mathf.Rad2Deg;
+
+        wheel.transform.Rotate(Vector3.forward, startAngle - angle);
        
 
-        if (clickAngle < 0.9)
-        {
-            wheel.transform.Rotate(Vector3.forward, startAngle + angle);
-        }
-        else if (clickAngle > 0.9)
-        {
-            wheel.transform.Rotate(Vector3.forward, startAngle - angle);
-        }
-        else
-            return;
-        
-
-
+        Debug.Log(clickAngle + " @" + angle);
         //StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
     }
 
