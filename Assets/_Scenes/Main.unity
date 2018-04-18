@@ -2505,7 +2505,7 @@ MonoBehaviour:
   spawnPrefab: {fileID: 1679439421920422, guid: 0a5fd7673d6f0264586ba4c9963525b2,
     type: 2}
   gridPrefab: {fileID: 1679439421920422, guid: 7c47bd787aa4c694fab5d50412cdd6be, type: 2}
-  wheelSquares: {fileID: 0}
+  line: {fileID: 1287057630}
   randSpawnCount: 0
   maxScore: 0
   scoreUpper: 0
