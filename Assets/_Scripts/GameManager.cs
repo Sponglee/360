@@ -384,7 +384,7 @@ public class GameManager : Singleton<GameManager>
         Quaternion from = wheel.transform.rotation;
 
         Quaternion to = from * Quaternion.Euler(0, 0, angle);
-        Debug.Log(to.z*Mathf.Rad2Deg);
+     
         float elapsed = 0.0f;
         while (elapsed < duration)
         {
@@ -396,21 +396,18 @@ public class GameManager : Singleton<GameManager>
         }
 
 
+        Quaternion difRot = wheel.transform.rotation;
 
+        float differ = rotSpot*(360/nBottom) - difRot.eulerAngles.z;
+        Debug.Log("differ " + differ + "(    " + rotSpot*(360/nBottom) + " - rot, " + difRot.eulerAngles.z + "  )");
 
-        float differ = from.eulerAngles.z;
+        //Get rid of difference flaw to the left
+        if (Mathf.Abs(differ) > 0.01)
+        {
+            Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
+            wheel.transform.rotation = finalRot;
+        }
 
-
-        ////Get rid of difference flaw to the left
-        //if (Mathf.Abs(differ - angle) <= 360 / (nBottom * 2))
-        //{
-        //    wheel.transform.rotation = Quaternion.Euler(Vector3.forward * angle);
-        //}
-        ////// Get rid of difference flaw to the right
-        //else if (Mathf.Abs(differ + angle) <= 360 / (nBottom * 2))
-        //{
-        //    wheel.transform.rotation = Quaternion.Euler(Vector3.forward * -angle);
-        //}
 
 
         RotationProgress = false;
@@ -1158,11 +1155,17 @@ public class GameManager : Singleton<GameManager>
         {
             noMoves = true;
 
-            yield return new WaitForSeconds(0.2f);
-            OpenMenu();
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+            yield return new WaitForSeconds(0.4f);
+            if (reds == spots.Count /* && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
+            {
+                OpenMenu();
+                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
 
-            
+            }
+            else
+                noMoves = false;
+
+
         }
       
 
