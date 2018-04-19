@@ -132,7 +132,13 @@ public class GameManager : Singleton<GameManager>
 
     private Vector3 clickDirection;
     private float clickAngle;
-    
+    int rotSpot;
+
+
+
+    Vector3 lineDir;
+    Vector3 spotDir;
+
     void Start()
     {
         
@@ -180,67 +186,103 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
+//Debug.Log("$" + wheel.transform.rotation.z * Mathf.Rad2Deg);
+        Debug.DrawLine(lineDir, wheel.transform.position, Color.cyan);
+        Debug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan);
 
-     
-            if(!IsPointerOverUIObject() && Input.GetMouseButtonDown(0))
+
+        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0))
+        {
+            mouseDown = true;
+
+
+
+
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = 10;
+
+            Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+
+            Vector3 direction = screenPos - wheel.transform.position;
+            clickAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
+
+            clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
+            // Debug.DrawLine(screenPos, mousePos);
+            // Debug.Log(clickAngle);
+
+
+
+        }
+        else if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
+        {
+            Debug.DrawLine(5f * wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red);
+            Debug.DrawLine(wheel.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition), Color.white);
+
+
+
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.z = 10;
+
+            Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+
+            Vector3 direction1 = screenPos - wheel.transform.position;
+
+            //ANGLE BETWEEN 2 VECTORS (with negative values)
+            float angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction1)), Vector3.Dot(wheel.transform.up, direction1)) * Mathf.Rad2Deg;
+
+
+
+            // touch resistance
+            if (Mathf.Abs(clickAngle - angle) < 5f && !RotationProgress)
             {
-                mouseDown = true;
-
-
-
-
-                Vector3 mousePos = Input.mousePosition;
-                mousePos.z = 10;
-
-                Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-
-                Vector3 direction = screenPos - wheel.transform.position;
-                clickAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
-
-                clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
-               // Debug.DrawLine(screenPos, mousePos);
-                Debug.Log(clickAngle);
-
-            
-
-            }
-            else if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
-            {
-                Debug.DrawLine(5f*wheel.transform.up- new Vector3(0,7f), wheel.transform.position, Color.red);
-                Debug.DrawLine(wheel.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition), Color.white);
-                FollowMouse(clickAngle, clickDirection);
                 
+                return;
+
             }
-            if (Input.GetMouseButtonUp(0) && mouseDown && !RotationProgress && !noMoves && !MenuUp)
+            else
+            {
+
+                FollowMouse(clickAngle, clickDirection);
+                //Debug.Log(clickAngle + " @" + angle);
+                //StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
+            }
+
+
+
+        }
+          
+            if (Input.GetMouseButtonUp(0) && mouseDown && RotationProgress && !noMoves && !MenuUp)
             {
 
 
 
+            StartCoroutine(Rotate((int.Parse(currentSpawn.name)), rotationDuration));
 
-                //StartCoroutine(Rotate(Vector3.forward, (int.Parse(currentSpawn.name)), rotationDuration));
+            //if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
+            //{
 
-                //if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
-                //{
+            //    //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
 
-                //    //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+            //    StartCoroutine(Rotate(Vector3.forward, ((int.Parse(currentSpawn.name)+1) * (360 / nBottom)), rotationDuration));
 
-                //    StartCoroutine(Rotate(Vector3.forward, ((int.Parse(currentSpawn.name)+1) * (360 / nBottom)), rotationDuration));
+            //}
+            ////Turn right
+            //else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
+            //{
 
-                //}
-                ////Turn right
-                //else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
-                //{
-
-                //    StartCoroutine(Rotate(Vector3.forward, ((int.Parse(currentSpawn.name)-1) * (360 / nBottom)), rotationDuration));
+            //    StartCoroutine(Rotate(Vector3.forward, ((int.Parse(currentSpawn.name)-1) * (360 / nBottom)), rotationDuration));
 
 
-                //}
+            //}
+                //RotationProgress = false;
                 mouseDown = false;
 
             }
-        if (Input.GetMouseButtonUp(0)  &&SwipeManager.Instance.Direction == SwipeDirection.None && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
+        if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
         {
+            RotationProgress = false;
             if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
             /* || (currentSpot.transform.childCount == 5 && next_score == currentSpot.transform.GetChild(currentSpot.transform.childCount-1).GetComponent<Square>().Score && !currentSpot.GetComponent<Spot>().Blocked)*/
             {
@@ -270,6 +312,7 @@ public class GameManager : Singleton<GameManager>
 
     private void FollowMouse(float startAngle, Vector3 startDirection)
     {
+        RotationProgress = true;
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 10;
 
@@ -282,19 +325,9 @@ public class GameManager : Singleton<GameManager>
         float angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction1)), Vector3.Dot(wheel.transform.up, direction1)) * Mathf.Rad2Deg;
 
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
-       
-
-        //Debug.Log(clickAngle + " @" + angle);
-        //StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
-    }
-
-
-    //Smooth rotation coroutine
-    IEnumerator Rotate(Vector3 axis, int spot, float duration = 0.2f)
-    {
         int firstSpot;
         int nextSpot;
-        float angle;
+        int spot = int.Parse(currentSpot.name);
 
         //passing through 0
         if (spot - 1 < 0)
@@ -317,55 +350,68 @@ public class GameManager : Singleton<GameManager>
 
         //check which spot is closer:
 
-        int rotSpot = ClosestSpot(spotDist);
+        rotSpot = ClosestSpot(spotDist);
+
+        //Debug.Log(rotSpot);
+        
+    }
+
+
+    //Smooth rotation coroutine
+    IEnumerator Rotate(int spot, float duration = 0.2f)
+    {
+        float angle;
+        
+
+
+
 
         if (rotSpot == -1) angle = 0;
         else
         {
             Vector3 lineDir = line.position - wheel.transform.position;
             Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
+           
 
             angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-            Debug.Log(" ROT AGNLE " + angle + " |||| " + rotSpot);
 
+            Debug.Log("@" + angle);
         }
-
-        
 
 
         //RotationCoolDown = Time.time + duration;
-        RotationProgress = true;
+        
         Quaternion from = wheel.transform.rotation;
-      
-        Quaternion to = Quaternion.Euler(axis * angle);
 
+        Quaternion to = from * Quaternion.Euler(0, 0, angle);
+        Debug.Log(to.z*Mathf.Rad2Deg);
         float elapsed = 0.0f;
         while (elapsed < duration)
         {
 
             wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
             elapsed += Time.deltaTime;
-            
+
             yield return null;
         }
 
 
-        
-        
-        float differ = from.eulerAngles.z;
-       
 
-        //Get rid of difference flaw to the left
-        if (Mathf.Abs(differ - angle) <= 360 / (nBottom * 2))
-        {
-            wheel.transform.rotation = Quaternion.Euler(Vector3.forward * angle);
-        }
-        //// Get rid of difference flaw to the right
-        else if (Mathf.Abs(differ + angle) <= 360 / (nBottom * 2))
-        {
-            wheel.transform.rotation = Quaternion.Euler(Vector3.forward * -angle);
-        }
-        
+
+        float differ = from.eulerAngles.z;
+
+
+        ////Get rid of difference flaw to the left
+        //if (Mathf.Abs(differ - angle) <= 360 / (nBottom * 2))
+        //{
+        //    wheel.transform.rotation = Quaternion.Euler(Vector3.forward * angle);
+        //}
+        ////// Get rid of difference flaw to the right
+        //else if (Mathf.Abs(differ + angle) <= 360 / (nBottom * 2))
+        //{
+        //    wheel.transform.rotation = Quaternion.Euler(Vector3.forward * -angle);
+        //}
+
 
         RotationProgress = false;
       

@@ -75,7 +75,7 @@ public class SwipeManager : Singleton<SwipeManager> {
                         Direction |= (deltaRot < 0) ? SwipeDirection.Right : SwipeDirection.Left;
                 //}
 
-            Debug.Log("wheel rotation " + touchRotation.z*Mathf.Rad2Deg + "wheel current " + wheel.rotation.z*Mathf.Rad2Deg + "dir " + Direction);
+           // Debug.Log("wheel rotation " + touchRotation.z*Mathf.Rad2Deg + "wheel current " + wheel.rotation.z*Mathf.Rad2Deg + "dir " + Direction);
         }
         
     }
