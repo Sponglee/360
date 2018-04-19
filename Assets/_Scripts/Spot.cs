@@ -27,6 +27,7 @@ public class Spot : MonoBehaviour {
         {
             
             GameManager.Instance.currentSpot = gameObject;
+            Debug.Log(GameManager.Instance.currentSpot);
         }
         else if (other.CompareTag("line") && gameObject.CompareTag("spawn"))
         {

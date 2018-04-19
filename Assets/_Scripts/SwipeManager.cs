@@ -57,7 +57,7 @@ public class SwipeManager : Singleton<SwipeManager> {
          
         if (Input.GetMouseButtonDown(0))
         {
-            touchPosition = Input.mousePosition;
+          
             touchRotation = wheel.rotation;
             timer = Time.deltaTime;
             startTouch = true;
@@ -66,22 +66,18 @@ public class SwipeManager : Singleton<SwipeManager> {
 
         if (Input.GetMouseButton(0))
             {
-                Vector2 deltaSwipe = touchPosition - Input.mousePosition;
-                float deltaRot = touchRotation.z - wheel.rotation.z;
+               // Vector2 deltaSwipe = touchPosition - Input.mousePosition;
+                float deltaRot = Mathf.Abs(wheel.rotation.z*Mathf.Rad2Deg) - Mathf.Abs(touchRotation.z * Mathf.Rad2Deg);
 
-            if (Mathf.Abs(deltaRot) > rotResistance)
-                {
-                    if (!swipeValue)
-                    {
-                        Direction |= (deltaRot< 0) ? SwipeDirection.Left : SwipeDirection.Right;
-                    }
-                    else
+            //if (Mathf.Abs(deltaRot) > rotResistance)
+            //    {
+                    
                         Direction |= (deltaRot < 0) ? SwipeDirection.Right : SwipeDirection.Left;
-            }
-            
-      
+                //}
+
+            Debug.Log("wheel rotation " + touchRotation.z*Mathf.Rad2Deg + "wheel current " + wheel.rotation.z*Mathf.Rad2Deg + "dir " + Direction);
         }
-       
+        
     }
     public bool IsSwiping (SwipeDirection dir)
     {

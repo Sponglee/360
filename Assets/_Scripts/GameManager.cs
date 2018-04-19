@@ -284,7 +284,7 @@ public class GameManager : Singleton<GameManager>
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
        
 
-        Debug.Log(clickAngle + " @" + angle);
+        //Debug.Log(clickAngle + " @" + angle);
         //StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
     }
 
