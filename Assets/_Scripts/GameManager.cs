@@ -133,6 +133,7 @@ public class GameManager : Singleton<GameManager>
     //spot rotation positions
     private Vector3 clickDirection;
     private float clickAngle;
+    float checkClickAngle;
 
     int rotSpot;
     Vector3 lineDir;
@@ -144,7 +145,8 @@ public class GameManager : Singleton<GameManager>
     Quaternion initRotation;
     Vector3 initClick;
     bool firstClick = true;
-
+    bool followExit = false;
+   
 
 
 
@@ -194,11 +196,15 @@ public class GameManager : Singleton<GameManager>
     {
 
         Debug.DrawLine(5f * wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red);
+
+
+
         if (rotSpot != -1)
         {
             Debug.DrawLine(lineDir, wheel.transform.position, Color.cyan);
             Debug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan);
         }
+
 
         
 
@@ -210,7 +216,10 @@ public class GameManager : Singleton<GameManager>
             timePassed = Time.time + 0.3f;
 
             initClick = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            clickAngle = GetAngle();
+            clickAngle = GetClickAngle();
+            checkClickAngle = clickAngle;
+
+
 
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
             initRotation = wheel.transform.rotation;
@@ -226,15 +235,14 @@ public class GameManager : Singleton<GameManager>
 
 
 
-            float angle = GetAngle();
+            float angle = GetClickAngle();
 
             
 
             // touch resistance
-            if (Mathf.Abs(clickAngle - angle) < 3f && !RotationProgress && firstClick)
+            if (Mathf.Abs(clickAngle - angle) < 5f && !RotationProgress && firstClick)
             {
-                
-                Debug.Log("ONCE");
+            
                 return;
             }
             else
@@ -248,6 +256,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     firstClick = false;
                     FollowMouse(clickAngle, clickDirection);
+                    followExit = true;
                 }
                   
                 
@@ -259,29 +268,39 @@ public class GameManager : Singleton<GameManager>
           
             if (Input.GetMouseButtonUp(0) && mouseDown && !noMoves && !MenuUp)
             {
-                
-               // Debug.Log("MOVE");
-                StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
+            float upAngle = GetClickAngle();
+            
 
-                firstClick = true;
+            Debug.Log("@" + Mathf.Abs(checkClickAngle - upAngle));
+            if (Mathf.Abs(checkClickAngle - upAngle) > 0.2f)
+                {
+
+                    StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
+
+                }
+            
+
+            firstClick = true;
                 mouseDown = false;
 
             }
-        if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
-        {
-            RotationProgress = false;
-            if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+
+            if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
             {
-                ClickSpawn();
-                mouseDown = false;
-            }
+                RotationProgress = false;
+                if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+                {
+                    if (followExit == false)
+                        ClickSpawn();
+                    mouseDown = false;
+                }
 
-        }
+            }
 
     }
 
 
-    private float GetAngle()
+    private float GetClickAngle()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 10;
@@ -300,9 +319,9 @@ public class GameManager : Singleton<GameManager>
 
     private void FollowMouse(float startAngle, Vector3 startDirection)
     {
-        
 
-        float angle = GetAngle();
+        followExit = false;
+        float angle = GetClickAngle();
 
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
         int firstSpot;
@@ -388,8 +407,7 @@ public class GameManager : Singleton<GameManager>
         }
         float differ;
         Quaternion difRot = wheel.transform.rotation;
-
-        yield return new WaitForSeconds(0.02f);
+        
         if (rotSpot != -1)
              differ = rotSpot * (360 / nBottom) - difRot.eulerAngles.z;
         else
