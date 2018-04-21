@@ -194,10 +194,15 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-
+      
         Debug.DrawLine(5f * wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red);
 
 
+
+        Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wheel.transform.position;
+
+        float debugAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
+        Debug.Log(debugAngle);
 
         if (rotSpot != -1)
         {
@@ -227,7 +232,8 @@ public class GameManager : Singleton<GameManager>
             // Debug.Log(clickAngle);
 
         }
-        else if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
+
+        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
         {
           
             Debug.DrawLine(wheel.transform.position, initClick , Color.magenta);
@@ -239,7 +245,7 @@ public class GameManager : Singleton<GameManager>
 
             
 
-            // touch resistance
+            // touch resistance (firstClick for smooth rotation after first displacement
             if (Mathf.Abs(clickAngle - angle) < 5f && !RotationProgress && firstClick)
             {
             
@@ -256,7 +262,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     firstClick = false;
                     FollowMouse(clickAngle, clickDirection);
-                    followExit = true;
+                    
                 }
                   
                 
@@ -268,31 +274,36 @@ public class GameManager : Singleton<GameManager>
           
             if (Input.GetMouseButtonUp(0) && mouseDown && !noMoves && !MenuUp)
             {
-            float upAngle = GetClickAngle();
-            
 
-            Debug.Log("@" + Mathf.Abs(checkClickAngle - upAngle));
-            if (Mathf.Abs(checkClickAngle - upAngle) > 0.2f)
+
+            Vector3 debugDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wheel.transform.position;
+
+            float upAngle =  Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, debugDirection)), Vector3.Dot(wheel.transform.up, debugDirection)) * Mathf.Rad2Deg;
+
+
+            Debug.Log("UP " + upAngle + " CHECK " + checkClickAngle);
+           
+            if (Mathf.Abs(checkClickAngle - upAngle) > 0f)
                 {
-
+                Debug.Log("Coroutine");
                     StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
 
                 }
-            
 
-            firstClick = true;
+
+                firstClick = true;
                 mouseDown = false;
 
             }
 
             if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
             {
-                RotationProgress = false;
+              
                 if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                 {
-                    if (followExit == false)
+                    
                         ClickSpawn();
-                    mouseDown = false;
+                   
                 }
 
             }
@@ -309,6 +320,7 @@ public class GameManager : Singleton<GameManager>
 
 
         Vector3 direction = screenPos - wheel.transform.position;
+
         return Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
 
     }

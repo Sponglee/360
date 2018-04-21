@@ -57,11 +57,7 @@ public class SwipeManager : Singleton<SwipeManager> {
          
         if (Input.GetMouseButtonDown(0))
         {
-          
-            touchRotation = wheel.rotation;
-            timer = Time.deltaTime;
-            startTouch = true;
-            Direction = SwipeDirection.None;
+
         }
 
         if (Input.GetMouseButton(0))
