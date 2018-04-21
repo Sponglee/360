@@ -148,7 +148,7 @@ public class GameManager : Singleton<GameManager>
     bool firstClick = true;
     bool followExit = false;
     //For clickspawn
-    bool noRot = true;
+    bool cantSpawn = true;
 
 
 
@@ -203,25 +203,25 @@ public class GameManager : Singleton<GameManager>
 
     void Update()
     {
-      
-        Debug.DrawLine(5f * wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red);
+        //wheel.transform.up line
+        GLDebug.DrawLine(wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red, 0, true);
 
 
 
-       
         if (rotSpot != -1)
         {
-            Debug.DrawLine(lineDir, wheel.transform.position, Color.cyan);
-            Debug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan);
+            // spot sticky line
+            GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
+          
         }
 
 
         
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0))
+        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp && !randSpawning)
         {
             mouseDown = true;
-            
+            cantSpawn = false;
             //FollowMouse delay
             followCoolDown = Time.time + follow__Delay;
 
@@ -229,7 +229,7 @@ public class GameManager : Singleton<GameManager>
             clickAngle = GetClickAngle();
            
             checkClickAngle = clickAngle;
-            Debug.Log("CHECK " + checkClickAngle);
+            //Debug.Log("CHECK " + checkClickAngle);
 
 
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
@@ -239,10 +239,13 @@ public class GameManager : Singleton<GameManager>
         }
 
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
-        {
-          
-            Debug.DrawLine(wheel.transform.position, initClick , Color.magenta);
-            Debug.DrawLine(wheel.transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition), Color.white);
+         {
+            //initialClick /clickAngle
+            GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 0, true);
+
+            //upangle
+            GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 0, true);
+
 
 
 
@@ -253,19 +256,22 @@ public class GameManager : Singleton<GameManager>
             // touch resistance (firstClick for smooth rotation after first displacement
             if (Mathf.Abs(clickAngle - upAngle) < follow__Angle && !RotationProgress && firstClick)
             {
-                noRot = true;
+                //for click spawn
+                if (Mathf.Abs(clickAngle - upAngle) > dif__Angle)
+                    cantSpawn = true;
                 return;
             }
             else
             {
-                noRot = false;
-                if(Time.time<followCoolDown)
+                cantSpawn = true;
+                if (Time.time<followCoolDown)
                 {
                     //no closestSpot
                     rotSpot = -1;
                 }
                 else
                 {
+
                     firstClick = false;
                     FollowMouse(clickAngle, clickDirection);
                     
@@ -291,15 +297,15 @@ public class GameManager : Singleton<GameManager>
                     firstClick = true;
                     mouseDown = false;
                 }
-                
-                if (noRot && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+
+                if (!cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                 {
-                    
-                        ClickSpawn();
-                   
+
+                    ClickSpawn();
+                    cantSpawn = true;
                 }
 
-            }
+        }
 
     }
 
@@ -395,7 +401,7 @@ public class GameManager : Singleton<GameManager>
            
             angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
 
-            //Debug.Log("@" + angle);
+            Debug.Log("@" + angle);
         }
 
         Quaternion from = wheel.transform.rotation;
@@ -426,7 +432,9 @@ public class GameManager : Singleton<GameManager>
         }
 
         RotationProgress = false;
-      
+
+        // for sticky ray
+        rotSpot = -1;
     }
 
 

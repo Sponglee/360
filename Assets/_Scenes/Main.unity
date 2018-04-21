@@ -1819,6 +1819,7 @@ GameObject:
   - component: {fileID: 877791590}
   - component: {fileID: 877791589}
   - component: {fileID: 877791593}
+  - component: {fileID: 877791594}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1904,6 +1905,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
+--- !u!114 &877791594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 877791588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9e1073994519b64c8323d5f7fa33737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleKey: 0
+  displayLines: 1
+  displayGizmos: 1
+  materialOn: {fileID: 2100000, guid: 0efde5faabf35504b9b5dfa78ffe8a0c, type: 2}
 --- !u!1 &886396668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2137,15 +2153,10 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  m_OnValueChanged:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1680771746}
-        m_MethodName: TweakValues
-        m_Mode: 1
+        m_MethodName: TweakFollow
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2154,6 +2165,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
@@ -2997,6 +3013,9 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
   rotationDuration: 0.2
+  follow__Delay: 0.5
+  follow__Angle: 5
+  dif__Angle: 0.03
 --- !u!4 &1680771747
 Transform:
   m_ObjectHideFlags: 0
@@ -3429,15 +3448,10 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  m_OnValueChanged:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1680771746}
-        m_MethodName: TweakValues
-        m_Mode: 1
+        m_MethodName: TweakDelay
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3446,6 +3460,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
@@ -3505,7 +3524,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1881912250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3969,15 +3988,10 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  m_OnValueChanged:
-    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1680771746}
         m_MethodName: TweakAngle
-        m_Mode: 5
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3986,6 +4000,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+    m_TypeName: UnityEngine.UI.InputField+SubmitEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
