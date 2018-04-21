@@ -199,11 +199,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wheel.transform.position;
-
-        float debugAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
-        Debug.Log(debugAngle);
-
+       
         if (rotSpot != -1)
         {
             Debug.DrawLine(lineDir, wheel.transform.position, Color.cyan);
@@ -228,12 +224,11 @@ public class GameManager : Singleton<GameManager>
 
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
             initRotation = wheel.transform.rotation;
-            // Debug.DrawLine(screenPos, mousePos);
-            // Debug.Log(clickAngle);
+            
 
         }
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) /*&& SwipeManager.Instance.Direction != SwipeDirection.None && Time.time > coolDown && !RotationProgress */&& !noMoves && !randSpawning && !MenuUp)
+        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
         {
           
             Debug.DrawLine(wheel.transform.position, initClick , Color.magenta);
@@ -283,7 +278,7 @@ public class GameManager : Singleton<GameManager>
 
             Debug.Log("UP " + upAngle + " CHECK " + checkClickAngle);
            
-            if (Mathf.Abs(checkClickAngle - upAngle) > 0f)
+            if (Mathf.Abs(checkClickAngle - upAngle) > 0.2f)
                 {
                 Debug.Log("Coroutine");
                     StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
