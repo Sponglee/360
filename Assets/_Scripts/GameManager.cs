@@ -133,6 +133,7 @@ public class GameManager : Singleton<GameManager>
     //spot rotation positions
     private Vector3 clickDirection;
     private float clickAngle;
+    private float upAngle;
     float checkClickAngle;
 
     int rotSpot;
@@ -140,15 +141,23 @@ public class GameManager : Singleton<GameManager>
     Vector3 spotDir;
 
     //swipe cooldown resistance
-    float timePassed;
+    float followCoolDown;
     bool rotDigit;
     Quaternion initRotation;
     Vector3 initClick;
     bool firstClick = true;
     bool followExit = false;
-   
+    //For clickspawn
+    bool noRot = true;
 
 
+
+    /*---------------------
+     * */
+    
+    public float follow__Delay = 0.5f;
+    public float follow__Angle = 5f;
+    public float dif__Angle= 0.03f;
 
     void Start()
     {
@@ -214,12 +223,13 @@ public class GameManager : Singleton<GameManager>
             mouseDown = true;
             
             //FollowMouse delay
-            timePassed = Time.time + 0.3f;
+            followCoolDown = Time.time + follow__Delay;
 
             initClick = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             clickAngle = GetClickAngle();
+           
             checkClickAngle = clickAngle;
-
+            Debug.Log("CHECK " + checkClickAngle);
 
 
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
@@ -228,7 +238,7 @@ public class GameManager : Singleton<GameManager>
 
         }
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
+        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
         {
           
             Debug.DrawLine(wheel.transform.position, initClick , Color.magenta);
@@ -236,19 +246,20 @@ public class GameManager : Singleton<GameManager>
 
 
 
-            float angle = GetClickAngle();
+            upAngle = GetClickAngle();
 
             
 
             // touch resistance (firstClick for smooth rotation after first displacement
-            if (Mathf.Abs(clickAngle - angle) < 5f && !RotationProgress && firstClick)
+            if (Mathf.Abs(clickAngle - upAngle) < follow__Angle && !RotationProgress && firstClick)
             {
-            
+                noRot = true;
                 return;
             }
             else
             {
-                if(Time.time<timePassed)
+                noRot = false;
+                if(Time.time<followCoolDown)
                 {
                     //no closestSpot
                     rotSpot = -1;
@@ -267,34 +278,21 @@ public class GameManager : Singleton<GameManager>
 
         }
           
-            if (Input.GetMouseButtonUp(0) && mouseDown && !noMoves && !MenuUp)
-            {
-
-
-            Vector3 debugDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wheel.transform.position;
-
-            float upAngle =  Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, debugDirection)), Vector3.Dot(wheel.transform.up, debugDirection)) * Mathf.Rad2Deg;
-
-
-            Debug.Log("UP " + upAngle + " CHECK " + checkClickAngle);
-           
-            if (Mathf.Abs(checkClickAngle - upAngle) > 0.2f)
-                {
-                Debug.Log("Coroutine");
-                    StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
-
-                }
-
-
-                firstClick = true;
-                mouseDown = false;
-
-            }
+         
 
             if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
             {
               
-                if (currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+                if (mouseDown)
+                {
+                  
+                    StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
+                
+                    firstClick = true;
+                    mouseDown = false;
+                }
+                
+                if (noRot && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                 {
                     
                         ClickSpawn();
@@ -376,9 +374,9 @@ public class GameManager : Singleton<GameManager>
 
             float difAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(initDir, mouseDir)), Vector3.Dot(initDir, mouseDir)) * Mathf.Rad2Deg;
 
-            if (difAngle > 0.03f)
+            if (difAngle > dif__Angle)
                 angle = -360 / nBottom;
-            else if (difAngle < -0.03f)
+            else if (difAngle < -dif__Angle)
                 angle = 360 / nBottom;
             else
             {
@@ -1152,5 +1150,24 @@ public class GameManager : Singleton<GameManager>
     public void Quit()
     {
         Application.Quit();
+    }
+
+
+
+
+
+    public void TweakAngle(string value)
+    {
+        dif__Angle = float.Parse(value);
+    }
+
+    public void TweakDelay(string value)
+    {
+        follow__Delay = float.Parse(value);
+    }
+
+    public void TweakFollow(string value)
+    {
+        follow__Angle = float.Parse(value);
     }
 }
