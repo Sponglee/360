@@ -28,8 +28,8 @@ public class SwipeManager : Singleton<SwipeManager>
     private Vector3 endTouch;
 
 
-    private float swipeResistanceX = 25f;
-    private float swipeResistanceY = 25f;
+    private float swipeResistance = 10f;
+    
 
     public bool SwipeC = true;
     public bool swipeValue = false;
@@ -61,7 +61,7 @@ public class SwipeManager : Singleton<SwipeManager>
 
 
 
-            if (Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
+            if (Mathf.Abs(deltaSwipe.x) > Mathf.Abs(deltaSwipe.y) && Mathf.Abs(deltaSwipe.x)>swipeResistance)
             {
                 if (screenTouch.y >= 0.5)
                 {
@@ -70,7 +70,7 @@ public class SwipeManager : Singleton<SwipeManager>
                 else
                     Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Left : SwipeDirection.Right;
             }
-            else if (Mathf.Abs(deltaSwipe.y) > swipeResistanceY)
+            else if (Mathf.Abs(deltaSwipe.y) > Mathf.Abs(deltaSwipe.x) && Mathf.Abs(deltaSwipe.y)>swipeResistance)
             {
                 if (screenTouch.x >= 0.5)
                 {

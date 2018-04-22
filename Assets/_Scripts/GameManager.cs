@@ -150,14 +150,14 @@ public class GameManager : Singleton<GameManager>
     bool followExit = false;
     //For clickspawn
     bool cantSpawn = true;
-    //for direction detection
-    string direc;
+    ////for direction detection
+    //string direc;
 
     /*---------------------
      * */
 
     public float follow__Delay = 0.2f;
-    public float follow__Angle = 0.5f;
+    public float follow__Angle = 5f;
     public float dif__Angle= 2f;
     public float differ__Angle=2f;
     //for followup
@@ -230,9 +230,7 @@ public class GameManager : Singleton<GameManager>
         }
 
 
-
-        // for sticky ray
-        //rotSpot = -1;
+        //Debuging lines above
         //========================
 
         if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp)
@@ -272,21 +270,6 @@ public class GameManager : Singleton<GameManager>
             dirAngle = GetFirstClickAngle();
 
 
-
-
-            //CHecks direction for rotation
-            if (!RotationProgress)
-            {
-                if ((clickAngle - dirAngle) < -dif__Angle)
-                    direc = "-";
-                else if ((clickAngle - dirAngle) > dif__Angle)
-                    direc = "+";
-                else
-                    cantSpawn = false;    
-            }
-          
-                
-
             //Debug.Log(SwipeManager.Instance.Direction);
 
 
@@ -295,9 +278,7 @@ public class GameManager : Singleton<GameManager>
             // touch resistance (firstClick for smooth rotation after first displacement
             if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick)
             {
-                //for click spawn
-                if (Mathf.Abs(clickAngle - dirAngle) > dif__Angle)
-                    cantSpawn = false;
+                
                 return;
             }
             else
@@ -307,12 +288,17 @@ public class GameManager : Singleton<GameManager>
                     
 
                
-                    firstClick = false;
-                    if (!randSpawning)
-                        FollowMouse(clickAngle, clickDirection);
-               
-                  
-                
+                firstClick = false;
+                if (!randSpawning)
+                {
+                    Debug.Log("FOLLOW MOUSE");
+                   // FollowMouse(clickAngle, clickDirection);
+                   
+                }
+
+
+
+
             }
 
 
@@ -329,23 +315,41 @@ public class GameManager : Singleton<GameManager>
                    
                     if (int.Parse(currentSpot.name) == checkClickSpot)
                     {
-                      //  Debug.Log(" NO MOVE");
-                        //no closestSpot
                         rotSpot = -1;
-                    }
+                        Debug.Log(">>>>" + rotSpot);
+                        if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
+                        {
 
-                    if (cantSpawn)
+                            //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+                            StartCoroutine(Rotate(rotationDuration, 360 / nBottom));
+
+                        }
+                        //Turn right
+                        else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
+                        {
+
+                            StartCoroutine(Rotate(rotationDuration, -360 / nBottom));
+
+
+                        }
+                    }
+                    else
                     {
-                        RotationProgress = true;
-                        StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
-                        
+                    
+                        if (cantSpawn)
+                            {
+                                RotationProgress = true;
+                                StartCoroutine(Rotate(rotationDuration));
+                            
+                            }
                     }
 
-                firstClick = true;
+                    firstClick = true;
                     mouseDown = false;
-                }
 
-                if (!randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+            }
+
+                if (SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
                 {
 
                     ClickSpawn();
@@ -414,70 +418,40 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    //Smooth rotation coroutine
-    IEnumerator Rotate(int spot, float duration = 0.2f, bool digit=true)
+    ////Smooth rotation coroutine
+    IEnumerator Rotate(float duration = 0.2f, float angle = 0)
     {
-       
-        float angle;
-        int thisSpot;
-        int firstSpot;
-        int nextSpot;
+
+        
 
 
-       
 
-       
+
         //if there was no followmouse
         if (rotSpot == -1)
         {
-            // cycle through 0
-
-            if (checkClickSpot - 1 < 0)
-            {
-                firstSpot = nBottom - 1;
-            }
-            else
-                firstSpot = checkClickSpot - 1;
-
-            //check next left one after getting index-1
-            if (spot + 1 == nBottom)
-            {
-                nextSpot = 0;
-            }
-            else
-                nextSpot = checkClickSpot + 1;
 
 
-            //choose a direction
-
-            if (direc == "-")
-
-                thisSpot = firstSpot;
-            else if (direc == "+")
-                thisSpot = nextSpot;
-            else
-                thisSpot = int.Parse(currentSpot.name);
 
 
-            Vector3 lineDir = line.position - wheel.transform.position;
-            Vector3 spotDir = spots[thisSpot].transform.position - wheel.transform.position;
 
-            angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-           // Debug.Log("curr spot " + checkClickSpot + "this angle " + angle + " > " + direc);
+            Debug.Log("X" + angle);
+
+           
         }
         else
         {
             Vector3 lineDir = line.position - wheel.transform.position;
             Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
-           
+
             angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
 
-           // Debug.Log("@" + angle);
+            Debug.Log("@" + angle);
         }
 
         Quaternion from = wheel.transform.rotation;
         Quaternion to = from * Quaternion.Euler(0, 0, angle);
-     
+
         float elapsed = 0.0f;
         while (elapsed < duration)
         {
@@ -487,13 +461,13 @@ public class GameManager : Singleton<GameManager>
 
             yield return null;
         }
-        
+
         Quaternion difRot = wheel.transform.rotation;
-        
+
         if (rotSpot != -1)
-             differ = rotSpot * (360 / nBottom) - difRot.eulerAngles.z;
+            differ = rotSpot * (360 / nBottom) - difRot.eulerAngles.z;
         else
-             differ = int.Parse(currentSpot.name) * (360 / nBottom) - difRot.eulerAngles.z;
+            differ = int.Parse(currentSpot.name) * (360 / nBottom) - difRot.eulerAngles.z;
 
         //Debug.Log("YE " + differ);
         RotationProgress = false;

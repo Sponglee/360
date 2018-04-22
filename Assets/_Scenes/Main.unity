@@ -3308,8 +3308,8 @@ MonoBehaviour:
   RotationProgress: 0
   rotationDuration: 0.2
   followExit: 0
-  follow__Delay: 0.2
-  follow__Angle: 0.5
+  follow__Delay: 2
+  follow__Angle: 15
   dif__Angle: 2
   differ__Angle: 36
 --- !u!4 &1680771747
