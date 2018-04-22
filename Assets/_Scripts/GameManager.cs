@@ -133,8 +133,8 @@ public class GameManager : Singleton<GameManager>
     //spot rotation positions
     private Vector3 clickDirection;
     private float clickAngle;
-    private float upAngle;
-    float checkClickAngle;
+    private float dirAngle;
+    int checkClickSpot;
 
     int rotSpot;
     Vector3 lineDir;
@@ -149,15 +149,15 @@ public class GameManager : Singleton<GameManager>
     bool followExit = false;
     //For clickspawn
     bool cantSpawn = true;
-
-
+    //for direction detection
+    string direc;
 
     /*---------------------
      * */
-    
-    public float follow__Delay = 0.5f;
+
+    public float follow__Delay = 0.2f;
     public float follow__Angle = 5f;
-    public float dif__Angle= 0.03f;
+    public float dif__Angle= 15f;
 
     void Start()
     {
@@ -205,9 +205,6 @@ public class GameManager : Singleton<GameManager>
     {
         //wheel.transform.up line
         GLDebug.DrawLine(wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red, 0, true);
-
-
-
         if (rotSpot != -1)
         {
             // spot sticky line
@@ -216,19 +213,20 @@ public class GameManager : Singleton<GameManager>
         }
 
 
-        
+        //========================
 
         if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp && !randSpawning)
         {
             mouseDown = true;
             cantSpawn = false;
+            checkClickSpot = int.Parse(currentSpot.name);
             //FollowMouse delay
             followCoolDown = Time.time + follow__Delay;
 
             initClick = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            clickAngle = GetClickAngle();
+            clickAngle = GetFirstClickAngle();
            
-            checkClickAngle = clickAngle;
+        
             //Debug.Log("CHECK " + checkClickAngle);
 
 
@@ -238,44 +236,60 @@ public class GameManager : Singleton<GameManager>
 
         }
 
+
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
-         {
+        {
             //initialClick /clickAngle
             GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 0, true);
 
-            //upangle
+            //dirangle
             GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 0, true);
 
 
+            //=============================================
 
 
-            upAngle = GetClickAngle();
+            dirAngle = GetFirstClickAngle();
 
-            
+
+
+
+            //CHecks direction for rotation
+            if (!RotationProgress)
+            {
+                if ((clickAngle - dirAngle) < -dif__Angle)
+                    direc = "-";
+                else if ((clickAngle - dirAngle) > dif__Angle)
+                    direc = "+";
+                else
+                    cantSpawn = false;    
+            }
+          
+                
+
+            //Debug.Log(direc);
+
+
+
 
             // touch resistance (firstClick for smooth rotation after first displacement
-            if (Mathf.Abs(clickAngle - upAngle) < follow__Angle && !RotationProgress && firstClick)
+            if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick)
             {
                 //for click spawn
-                if (Mathf.Abs(clickAngle - upAngle) > dif__Angle)
-                    cantSpawn = true;
+                if (Mathf.Abs(clickAngle - dirAngle) > dif__Angle)
+                    cantSpawn = false;
                 return;
             }
             else
             {
                 cantSpawn = true;
-                if (Time.time<followCoolDown)
-                {
-                    //no closestSpot
-                    rotSpot = -1;
-                }
-                else
-                {
+              
+                    
 
+               
                     firstClick = false;
                     FollowMouse(clickAngle, clickDirection);
-                    
-                }
+               
                   
                 
             }
@@ -291,8 +305,16 @@ public class GameManager : Singleton<GameManager>
               
                 if (mouseDown)
                 {
-                  
-                    StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
+                   
+                    if (int.Parse(currentSpot.name) == checkClickSpot)
+                    {
+                        Debug.Log(" NO MOVE");
+                        //no closestSpot
+                        rotSpot = -1;
+                    }
+
+                    if (cantSpawn && !RotationProgress)
+                        StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
                 
                     firstClick = true;
                     mouseDown = false;
@@ -310,7 +332,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    private float GetClickAngle()
+    private float GetFirstClickAngle()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 10;
@@ -332,7 +354,7 @@ public class GameManager : Singleton<GameManager>
     {
 
         followExit = false;
-        float angle = GetClickAngle();
+        float angle = GetFirstClickAngle();
 
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
         int firstSpot;
@@ -372,27 +394,51 @@ public class GameManager : Singleton<GameManager>
     {
         RotationProgress = true;
         float angle;
+        int thisSpot;
+        int firstSpot;
+        int nextSpot;
+
+
+       
+
+       
         //if there was no followmouse
         if (rotSpot == -1)
         {
-            Vector3 initDir = initClick - wheel.transform.position;
-            Vector3 mouseDir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - wheel.transform.position;
+            // cycle through 0
 
-            float difAngle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(initDir, mouseDir)), Vector3.Dot(initDir, mouseDir)) * Mathf.Rad2Deg;
-
-            if (difAngle > dif__Angle)
-                angle = -360 / nBottom;
-            else if (difAngle < -dif__Angle)
-                angle = 360 / nBottom;
-            else
+            if (checkClickSpot - 1 < 0)
             {
-                RotationProgress = false;
-                angle = 0;
+                firstSpot = nBottom - 1;
             }
-               
+            else
+                firstSpot = checkClickSpot - 1;
 
-           // Debug.Log("angle " + angle);
-           
+            //check next left one after getting index-1
+            if (spot + 1 == nBottom)
+            {
+                nextSpot = 0;
+            }
+            else
+                nextSpot = checkClickSpot + 1;
+
+
+            //choose a direction
+
+            if (direc == "-")
+
+                thisSpot = firstSpot;
+            else if (direc == "+")
+                thisSpot = nextSpot;
+            else
+                thisSpot = int.Parse(currentSpot.name);
+
+
+            Vector3 lineDir = line.position - wheel.transform.position;
+            Vector3 spotDir = spots[thisSpot].transform.position - wheel.transform.position;
+
+            angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
+            Debug.Log("curr spot " + checkClickSpot + "this angle " + angle + " > " + direc);
         }
         else
         {

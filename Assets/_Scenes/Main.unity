@@ -3013,8 +3013,8 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
   rotationDuration: 0.2
-  follow__Delay: 0.5
-  follow__Angle: 5
+  follow__Delay: 0.2
+  follow__Angle: 10
   dif__Angle: 0.03
 --- !u!4 &1680771747
 Transform:
