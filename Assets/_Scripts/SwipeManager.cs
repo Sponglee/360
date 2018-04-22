@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
+
 
 /** Swipe direction */
 public enum SwipeDirection
@@ -15,82 +16,88 @@ public enum SwipeDirection
 
 
 
-public class SwipeManager : Singleton<SwipeManager> {
+public class SwipeManager : Singleton<SwipeManager>
+{
 
 
     public SwipeDirection Direction { set; get; }
 
-  
+
     private Vector3 touchPosition;
-    private Quaternion touchRotation;
+    private Vector3 screenTouch;
+    private Vector3 endTouch;
 
 
     private float swipeResistanceX = 25f;
     private float swipeResistanceY = 25f;
-    private float rotResistance = 0f;
-
-
 
     public bool SwipeC = true;
     public bool swipeValue = false;
 
-    float timer = 0f;
-    private bool startTouch = false;
-    public Text SwipeDirect;
-
-
-    public Transform wheel;
-
-
-
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
 
-         
+        Direction = SwipeDirection.None;
         if (Input.GetMouseButtonDown(0))
         {
-
+            touchPosition = Input.mousePosition;
+            screenTouch = Camera.main.ScreenToViewportPoint(touchPosition);
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 deltaSwipe = touchPosition - Input.mousePosition;
+
+            endTouch = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+
+
+            if (Mathf.Abs(deltaSwipe.x) > swipeResistanceX)
             {
-               // Vector2 deltaSwipe = touchPosition - Input.mousePosition;
-                float deltaRot = Mathf.Abs(wheel.rotation.z*Mathf.Rad2Deg) - Mathf.Abs(touchRotation.z * Mathf.Rad2Deg);
+                if (screenTouch.y >= 0.5)
+                {
+                    Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Right : SwipeDirection.Left;
+                }
+                else
+                    Direction |= (deltaSwipe.x < 0) ? SwipeDirection.Left : SwipeDirection.Right;
+            }
+            else if (Mathf.Abs(deltaSwipe.y) > swipeResistanceY)
+            {
+                if (screenTouch.x >= 0.5)
+                {
+                    Direction |= (deltaSwipe.y < 0) ? SwipeDirection.Left : SwipeDirection.Right;
+                }
+                else
+                    Direction |= (deltaSwipe.y < 0) ? SwipeDirection.Right : SwipeDirection.Left;
+            }
+            else
+            {
 
-            //if (Mathf.Abs(deltaRot) > rotResistance)
-            //    {
-                    
-                        Direction |= (deltaRot < 0) ? SwipeDirection.Right : SwipeDirection.Left;
-                //}
-
-           // Debug.Log("wheel rotation " + touchRotation.z*Mathf.Rad2Deg + "wheel current " + wheel.rotation.z*Mathf.Rad2Deg + "dir " + Direction);
+                Direction |= SwipeDirection.None;
+            }
+            Debug.Log(Direction);
         }
-        
+
     }
-    public bool IsSwiping (SwipeDirection dir)
+    public bool IsSwiping(SwipeDirection dir)
     {
-      
+
         return (Direction & dir) == dir;
     }
 
 
     public void SwipeChange()
     {
-        string swipeArrow;
-        if (swipeValue == true)
-            swipeArrow = "<--";
-        else
-            swipeArrow = "-->";
         swipeValue = !swipeValue;
-        SwipeDirect.text = string.Format("Swipe Direction {0}", swipeArrow);
 
     }
 }
