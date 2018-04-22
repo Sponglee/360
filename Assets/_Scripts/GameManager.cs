@@ -156,9 +156,9 @@ public class GameManager : Singleton<GameManager>
      * */
 
     public float follow__Delay = 0.2f;
-    public float follow__Angle = 5f;
-    public float dif__Angle= 15f;
-    public float differ__Angle=3f;
+    public float follow__Angle = 0.5f;
+    public float dif__Angle= 0.5f;
+    public float differ__Angle=0.1f;
 
     void Start()
     {
@@ -205,11 +205,11 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         //wheel.transform.up line
-        GLDebug.DrawLine(wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red, 0, true);
+        //GLDebug.DrawLine(wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red, 0, true);
         if (rotSpot != -1)
         {
             // spot sticky line
-            GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
+            //GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
           
         }
 
@@ -241,10 +241,10 @@ public class GameManager : Singleton<GameManager>
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !randSpawning && !MenuUp)
         {
             //initialClick /clickAngle
-            GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 0, true);
+            //GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 0, true);
 
             //dirangle
-            GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 0, true);
+            //GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 0, true);
 
 
             //=============================================
@@ -472,7 +472,7 @@ public class GameManager : Singleton<GameManager>
              differ = int.Parse(currentSpot.name) * (360 / nBottom) - difRot.eulerAngles.z;
 
         //Get rid of difference flaw to the left
-        if (Mathf.Abs(differ) > differ__Angle)
+        if (Mathf.Abs(differ) < differ__Angle)
         {
             Debug.Log("YE "+ differ);
             Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
