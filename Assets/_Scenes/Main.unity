@@ -1986,7 +1986,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 877791588}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9e1073994519b64c8323d5f7fa33737, type: 3}
   m_Name: 
@@ -2159,7 +2159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &917458377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3161,11 +3161,13 @@ MonoBehaviour:
   scores: 0
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
+  RotationProgress: 0
   rotationDuration: 0.2
+  followExit: 0
   follow__Delay: 0.2
   follow__Angle: 0.5
   dif__Angle: 0.5
-  differ__Angle: 3
+  differ__Angle: 36
 --- !u!4 &1680771747
 Transform:
   m_ObjectHideFlags: 0
@@ -3529,7 +3531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1868680520
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4214,7 +4216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2126027097
 RectTransform:
   m_ObjectHideFlags: 0

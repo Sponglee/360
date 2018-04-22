@@ -116,7 +116,7 @@ public class GameManager : Singleton<GameManager>
     float rad;
 
     public bool CheckInProgress = false;
-    private bool RotationProgress = false;
+    public bool RotationProgress = false;
     public float rotationDuration = 0.2f;
     private bool noMoves=false;
 
@@ -146,6 +146,7 @@ public class GameManager : Singleton<GameManager>
     Quaternion initRotation;
     Vector3 initClick;
     bool firstClick = true;
+    [SerializeField]
     bool followExit = false;
     //For clickspawn
     bool cantSpawn = true;
@@ -158,7 +159,11 @@ public class GameManager : Singleton<GameManager>
     public float follow__Delay = 0.2f;
     public float follow__Angle = 0.5f;
     public float dif__Angle= 0.5f;
-    public float differ__Angle=0.1f;
+    public float differ__Angle=2f;
+    //for followup
+    float differ = 0;
+
+
 
     void Start()
     {
@@ -213,10 +218,24 @@ public class GameManager : Singleton<GameManager>
           
         }
 
+        //Get rid of difference flaw to the left
+        if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ)>=360-differ__Angle) && differ != 0 && !RotationProgress)
+        {
+            Debug.Log(differ + " : " + int.Parse(currentSpot.name) * 360 / nBottom);
+            Quaternion difRot = wheel.transform.rotation;
+            Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
+            wheel.transform.rotation = finalRot;
+            differ = 0;
+           
+        }
 
+
+
+        // for sticky ray
+        //rotSpot = -1;
         //========================
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp && !randSpawning)
+        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp && !randSpawning && differ==0)
         {
             mouseDown = true;
             cantSpawn = false;
@@ -268,7 +287,7 @@ public class GameManager : Singleton<GameManager>
           
                 
 
-            //Debug.Log(direc);
+            Debug.Log(direc);
 
 
 
@@ -314,7 +333,7 @@ public class GameManager : Singleton<GameManager>
                         rotSpot = -1;
                     }
 
-                    if (cantSpawn && !RotationProgress)
+                    if (cantSpawn)
                         StartCoroutine(Rotate(int.Parse(currentSpot.name), rotationDuration));
                 
                     firstClick = true;
@@ -386,7 +405,7 @@ public class GameManager : Singleton<GameManager>
         rotSpot = ClosestSpot(spotDist);
 
         //Debug.Log(rotSpot);
-        
+        followExit = true;
     }
 
 
@@ -463,7 +482,7 @@ public class GameManager : Singleton<GameManager>
 
             yield return null;
         }
-        float differ;
+        
         Quaternion difRot = wheel.transform.rotation;
         
         if (rotSpot != -1)
@@ -471,18 +490,8 @@ public class GameManager : Singleton<GameManager>
         else
              differ = int.Parse(currentSpot.name) * (360 / nBottom) - difRot.eulerAngles.z;
 
-        //Get rid of difference flaw to the left
-        if (Mathf.Abs(differ) < differ__Angle)
-        {
-            Debug.Log("YE "+ differ);
-            Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
-            wheel.transform.rotation = finalRot;
-        }
-
+        Debug.Log("YE " + differ);
         RotationProgress = false;
-
-        // for sticky ray
-        //rotSpot = -1;
     }
 
 
