@@ -158,6 +158,7 @@ public class GameManager : Singleton<GameManager>
     public float follow__Delay = 0.2f;
     public float follow__Angle = 5f;
     public float dif__Angle= 15f;
+    public float differ__Angle=3f;
 
     void Start()
     {
@@ -308,7 +309,7 @@ public class GameManager : Singleton<GameManager>
                    
                     if (int.Parse(currentSpot.name) == checkClickSpot)
                     {
-                        Debug.Log(" NO MOVE");
+                      //  Debug.Log(" NO MOVE");
                         //no closestSpot
                         rotSpot = -1;
                     }
@@ -438,7 +439,7 @@ public class GameManager : Singleton<GameManager>
             Vector3 spotDir = spots[thisSpot].transform.position - wheel.transform.position;
 
             angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-            Debug.Log("curr spot " + checkClickSpot + "this angle " + angle + " > " + direc);
+           // Debug.Log("curr spot " + checkClickSpot + "this angle " + angle + " > " + direc);
         }
         else
         {
@@ -471,8 +472,9 @@ public class GameManager : Singleton<GameManager>
              differ = int.Parse(currentSpot.name) * (360 / nBottom) - difRot.eulerAngles.z;
 
         //Get rid of difference flaw to the left
-        if (Mathf.Abs(differ) > 0.01)
+        if (Mathf.Abs(differ) > differ__Angle)
         {
+            Debug.Log("YE "+ differ);
             Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
             wheel.transform.rotation = finalRot;
         }
@@ -480,7 +482,7 @@ public class GameManager : Singleton<GameManager>
         RotationProgress = false;
 
         // for sticky ray
-        rotSpot = -1;
+        //rotSpot = -1;
     }
 
 
@@ -1223,5 +1225,10 @@ public class GameManager : Singleton<GameManager>
     public void TweakFollow(string value)
     {
         follow__Angle = float.Parse(value);
+    }
+
+    public void TweakDiffer(string value)
+    {
+        differ__Angle = float.Parse(value);
     }
 }
