@@ -47,7 +47,7 @@ public class GLDebug : MonoBehaviour
 
     private List<Line> linesZOn;
     private List<Line> linesZOff;
-    private float milliseconds;
+   // private float milliseconds;
     public Material materialOn;
 
     void Awake()
@@ -86,7 +86,7 @@ public class GLDebug : MonoBehaviour
             linesZOff = linesZOff.Where(l => !l.DurationElapsed(false)).ToList();
 
             timer.Stop();
-            milliseconds = timer.Elapsed.Ticks / 10000f;
+           // milliseconds = timer.Elapsed.Ticks / 10000f;
         }
     }
 
@@ -130,7 +130,7 @@ public class GLDebug : MonoBehaviour
         GL.End();
 
         timer.Stop();
-        milliseconds = timer.Elapsed.Ticks / 10000f;
+      //  milliseconds = timer.Elapsed.Ticks / 10000f;
     }
 
     private static void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0, bool depthTest = false)

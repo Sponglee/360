@@ -25,7 +25,7 @@ public class SwipeManager : Singleton<SwipeManager>
 
     private Vector3 touchPosition;
     private Vector3 screenTouch;
-    private Vector3 endTouch;
+   
 
 
     private float swipeResistance = 10f;
@@ -57,8 +57,7 @@ public class SwipeManager : Singleton<SwipeManager>
         {
             Vector2 deltaSwipe = touchPosition - Input.mousePosition;
 
-            endTouch = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-
+       
 
 
             if (Mathf.Abs(deltaSwipe.x) > Mathf.Abs(deltaSwipe.y) && Mathf.Abs(deltaSwipe.x)>swipeResistance)
@@ -84,7 +83,7 @@ public class SwipeManager : Singleton<SwipeManager>
 
                 Direction |= SwipeDirection.None;
             }
-            Debug.Log(Direction);
+           // Debug.Log(Direction);
         }
 
     }

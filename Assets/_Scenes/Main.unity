@@ -926,7 +926,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: dif__Angle
+  m_Text: spawn__Angle
 --- !u!222 &377269519
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2792,7 +2792,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1272480182}
-  - component: {fileID: 1272480183}
   - component: {fileID: 1272480184}
   m_Layer: 0
   m_Name: Wheel
@@ -2819,17 +2818,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1272480183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1272480181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0525ab62a944df4f856704161408e61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1272480184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3291,11 +3279,10 @@ MonoBehaviour:
   CheckInProgress: 0
   RotationProgress: 0
   rotationDuration: 0.2
-  followExit: 0
   follow__Delay: 2
-  follow__Angle: 15
-  dif__Angle: 2
-  differ__Angle: 36
+  follow__Angle: 36
+  spawn__Angle: 0.3
+  differ__Angle: 0.3
 --- !u!4 &1680771747
 Transform:
   m_ObjectHideFlags: 0
@@ -4339,7 +4326,7 @@ GameObject:
   - component: {fileID: 2126027099}
   - component: {fileID: 2126027098}
   m_Layer: 5
-  m_Name: dif_Angle
+  m_Name: spawn_Angle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
