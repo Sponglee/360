@@ -451,46 +451,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 93857533}
---- !u!1 &171033387
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 171033389}
-  - component: {fileID: 171033388}
-  m_Layer: 0
-  m_Name: RotateRaycast
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &171033388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 171033387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b04bab12e1df4649837060b40445380, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &171033389
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 171033387}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1272480182}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &212843310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,7 +2774,6 @@ Transform:
   - {fileID: 1692868301}
   - {fileID: 1322843919}
   - {fileID: 912948815}
-  - {fileID: 171033389}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2829,6 +2788,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aac031e791ccea34681265e9a5125994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DoRotate: 0
+  angle: 0
+  turningRate: 30
 --- !u!1 &1287057627
 GameObject:
   m_ObjectHideFlags: 0
@@ -3278,7 +3240,7 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
   RotationProgress: 0
-  rotationDuration: 0.2
+  rotationDuration: 1
   follow__Delay: 2
   follow__Angle: 36
   spawn__Angle: 0.3
@@ -4186,7 +4148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2069156053
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4331,7 +4293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2126027097
 RectTransform:
   m_ObjectHideFlags: 0

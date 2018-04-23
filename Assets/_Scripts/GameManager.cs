@@ -306,15 +306,15 @@ public class GameManager : Singleton<GameManager>
                         //Debug.Log(">>>>" + rotSpot);
                         if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
                         {
-
-                            //wheel.transform.Rotate(Vector3.forward, 360 / nBottom);
+                            //Rotator.Instance.DoRotation(360 / nBottom, int.Parse(currentSpot.name));
+                            
                             StartCoroutine(Rotate(Vector3.forward, 360 / nBottom, rotationDuration));
 
                         }
                         //Turn right
                         else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
                         {
-
+                            //Rotator.Instance.DoRotation(-360 / nBottom, int.Parse(currentSpot.name));
                             StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
                         }
                     }
@@ -431,7 +431,7 @@ public class GameManager : Singleton<GameManager>
         {
 
             wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
+            elapsed += Time.fixedDeltaTime;
 
             yield return null;
         }
@@ -503,7 +503,7 @@ public class GameManager : Singleton<GameManager>
         {
 
             wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
-            elapsed += Time.deltaTime;
+            elapsed += Time.fixedDeltaTime;
 
             yield return null;
         }
