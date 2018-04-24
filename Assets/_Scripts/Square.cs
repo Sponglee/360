@@ -60,9 +60,25 @@ public class Square : MonoBehaviour {
     }
 
 
+    //For column pops 
+    [SerializeField]
+    private bool notTouched = true;
+    
+
+    public bool NotTouched
+    {
+        get
+        {
+            return notTouched;
+        }
+
+        set
+        {
+            notTouched = value;
+        }
+    }
 
     public bool ExpandSpawn { get; set; }
-
 
     [SerializeField]
     private Text SquareText;
@@ -211,11 +227,14 @@ public class Square : MonoBehaviour {
 
         if (other.gameObject.CompareTag("spot"))
         {
-           // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
+            // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
+
+            //for column checkrow
+            
             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+            this.NotTouched = true;
 
-           
         }
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
@@ -241,11 +260,12 @@ public class Square : MonoBehaviour {
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-               // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
+                // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
 
-
+                //for column checkrow
+             
                 GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-
+                this.NotTouched = true;
 
                 //reset Touched bool 
                 StartCoroutine(StopTouch(other.gameObject));

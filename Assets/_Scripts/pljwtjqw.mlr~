@@ -557,30 +557,7 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
-
-
-        Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
-
-
-        //Move all tiles above if nothing pops and there's something ahead
-        int columnIndex = tmpSquare.transform.GetSiblingIndex();
-        if ((columnIndex + 1) < tmpSquare.transform.parent.childCount)
-        {
-            Debug.Log(tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() +  " >> " + tmpSquare.GetComponent<Square>().Score);
-            for (int i = columnIndex+1; i < tmpSquare.transform.parent.childCount; i++)
-            {
-                if (tmpSquare.GetComponent<Square>().NotTouched)
-                {
-                    
-                    tmpSquare.transform.parent.GetChild(i).localPosition += new Vector3(0.5f, 0, 0);
-                    tmpSquare.GetComponent<Square>().NotTouched = false;
-                }
-                
-            }
-        }
-
-
-
+       
         //Debug.Log("ScheckRow"+spotIndex);
         List<GameObject> rowObjs = new List<GameObject>();
 
@@ -771,9 +748,6 @@ public class GameManager : Singleton<GameManager>
                     nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
                     slider.value = (float)(expandMoves - Moves) / expandMoves;
                 }
-
-               
-
             }
         }
         else
@@ -808,7 +782,7 @@ public class GameManager : Singleton<GameManager>
         {
                 Pop(rowObjs, tmpSquares[count]);
                 //yield return new WaitForSeconds(0.2f);
-                StartCoroutine(FurtherPops(tmpSquares[count]));
+                StartCoroutine(FurtherPops(tmpSquares[count], false));
                 count++;
         }
         //Clear pop objs list
@@ -853,12 +827,11 @@ public class GameManager : Singleton<GameManager>
                 }
                 if (rowObj.transform != null && tmpSquare != null)
                 {
-                   
                     rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
                     rowObj.GetComponent<Collider2D>().isTrigger = true;
 
 
-                    StartCoroutine(FurtherPops(rowObj));
+                    StartCoroutine(FurtherPops(rowObj, true));
 
                     //Detach this square from parent
                     rowObj.transform.parent = null;
@@ -868,37 +841,56 @@ public class GameManager : Singleton<GameManager>
         }
     }
     //Merge after pop coroutine
-    public IEnumerator FurtherPops(GameObject tmpSquare)
+    public IEnumerator FurtherPops(GameObject tmpSquare, bool IsAbove)
     {
         IsFurtherPop = true;
 
-        // Add this if there's merge problems (check square ahead same score)
 
+        int furtherIndex = tmpSquare.transform.GetSiblingIndex();
 
-
-        //int furtherIndex = tmpSquare.transform.GetSiblingIndex();
-
-        //if ((furtherIndex + 1) < tmpSquare.transform.parent.childCount)
-        //{
-        //    Debug.Log(tmpSquare.transform.parent.GetChild(furtherIndex + 1).GetComponent<Square>().Score);
-        //    if (tmpSquare.transform.parent.GetChild(furtherIndex + 1).gameObject.GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
-        //    {
-                
-        //        yield return new WaitForSeconds(0.2f);
-        //        if (tmpSquare != null)
-        //        {
-        //                tmpSquare.transform.localPosition += new Vector3(-0.5f, 0, 0);
-        //                yield break;
-        //        }
-        //    }
-        //}
-
-        yield return new WaitForSeconds(0.2f);
-        if (tmpSquare != null)
+        if ((furtherIndex + 1) < tmpSquare.transform.parent.childCount)
         {
-            tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+            if (tmpSquare.transform.parent.GetChild(furtherIndex + 1).gameObject.GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+            {
+                yield return new WaitForSeconds(0.2f);
+                if (tmpSquare != null)
+                {
+                    if (IsAbove)
+                        tmpSquare.transform.localPosition += new Vector3(-0.5f, 0, 0);
+                }
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.2f);
+                if (tmpSquare != null)
+                {
+                    if (IsAbove)
+                        tmpSquare.transform.localPosition += new Vector3(-0.5f, 0, 0);
+                }
+            }
+
         }
         
+        // pop everything above
+        //for (int i = tmpSquare.transform.GetSiblingIndex(); i < tmpSquare.transform.parent.childCount; i++)
+        //{
+        //    if (tmpSquare.transform.parent.GetChild(i) != null)
+        //    {
+        //       // tmpSquare.transform.parent.GetChild(i).localPosition += new Vector3(0.5f, 0, 0);
+        //        yield return new WaitForSeconds(0.2f);
+        //    }
+        //}
+        if (tmpSquare != null)
+        {
+
+            if (IsAbove)
+                tmpSquare.transform.localPosition += new Vector3(-0.5f, 0, 0);
+            else
+                tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+
+        }
+
+
         IsFurtherPop = false;
     }
 
