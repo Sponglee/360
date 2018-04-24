@@ -333,7 +333,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1680771746}
         m_MethodName: OpenMenu
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2247,7 +2247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &917458377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2552,7 +2552,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1680771746}
         m_MethodName: OpenMenu
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2737,7 +2737,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: dif__Sticky
+  m_Text: rotationDuration
 --- !u!222 &1233092954
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2790,7 +2790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DoRotate: 0
   angle: 0
-  turningRate: 30
+  turningRate: 7
 --- !u!1 &1287057627
 GameObject:
   m_ObjectHideFlags: 0
@@ -3240,9 +3240,9 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
   RotationProgress: 0
-  rotationDuration: 1
-  follow__Delay: 2
-  follow__Angle: 36
+  rotationDuration: 0.2
+  follow__Delay: 0.2
+  follow__Angle: 2
   spawn__Angle: 0.3
   differ__Angle: 0.3
 --- !u!4 &1680771747
@@ -3608,7 +3608,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1868680520
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4143,12 +4143,12 @@ GameObject:
   - component: {fileID: 2069156055}
   - component: {fileID: 2069156054}
   m_Layer: 5
-  m_Name: dif_Sticky
+  m_Name: rot_Duration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2069156053
 RectTransform:
   m_ObjectHideFlags: 0

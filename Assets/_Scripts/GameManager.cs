@@ -28,7 +28,6 @@ public class GameManager : Singleton<GameManager>
     
     public int randSpawnCount;
     
-
     public int maxScore;
     [SerializeField]
     public int scoreUpper;
@@ -60,9 +59,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSpawn;
     //next spot to turn green
     public int LastSpot { get; set; }
-    private bool IsFurtherMerge = false;
-
-
+    private bool IsFurtherPop = false;
 
     //All the spots around the wheel
     public List<GameObject> spots;
@@ -91,8 +88,6 @@ public class GameManager : Singleton<GameManager>
     // list of rowObjs to execute(resets each click)
     List<List<GameObject>> popObjs;
 
-
-
     List<RandValues> rands;
     //list of randSpawns
     List<GameObject> randSpawns;
@@ -118,15 +113,9 @@ public class GameManager : Singleton<GameManager>
     public float rotationDuration = 0.2f;
     private bool noMoves=false;
 
-
     //for ui check
     private bool mouseDown = false;
     private bool MenuUp = false;
-
-
-
-
-
 
     //spot rotation positions
     private Vector3 clickDirection;
@@ -138,8 +127,6 @@ public class GameManager : Singleton<GameManager>
     Vector3 lineDir;
     Vector3 spotDir;
 
-    //swipe cooldown resistance
-                                            // float followCoolDown;
     bool rotDigit;
 
   
@@ -147,28 +134,21 @@ public class GameManager : Singleton<GameManager>
  
     //For clickspawn
     bool cantSpawn = true;
-    ////for direction detection
-    //string direc;
 
-    /*---------------------
-     * */
-
-
-        //FollowMouse resistance
+    //FollowMouse resistance
     public float follow__Delay;
     public float follow__Angle;
     //Touch Resistance
     public float spawn__Angle;
-    //FinishRotation
+    //Finish followup rotation
     public float differ__Angle;
-    //for followup
+    //for finish followup
     float differ = 0;
 
 
 
     void Start()
     {
-        
         //Apply all the numbers 
         maxScore = 3;
         expandMoves = 3;
@@ -194,16 +174,12 @@ public class GameManager : Singleton<GameManager>
         //Initialize level (spots)
         GetSpots();
 
-
         //rowObjs = new List<GameObject>();
         popObjs = new List<List<GameObject>>();
-
         tmpSquares = new List<GameObject>();
 
-    
         //for first spwan of 2
         tmpRands = randSpawnCount;
-
     }
 
  
@@ -218,10 +194,6 @@ public class GameManager : Singleton<GameManager>
         //    //GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
 
         //}
-
-
-
-
         ////Debuging lines above
         //===============================================================================================================
 
@@ -230,23 +202,10 @@ public class GameManager : Singleton<GameManager>
             mouseDown = true;
             cantSpawn = false;
             checkClickSpot = int.Parse(currentSpot.name);
-            //FollowMouse delay
-                                                                                   // followCoolDown = Time.time + follow__Delay;
-
-                                                                                   // initClick = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             clickAngle = GetFirstClickAngle();
-           
-        
-            //Debug.Log("CHECK " + checkClickAngle);
-
-
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
-           
-            
-
         }
 
-       
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
             //=================================================================================================================================
@@ -257,117 +216,112 @@ public class GameManager : Singleton<GameManager>
             //    GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 0, true);
             //=================================================================================================================================
 
-
             dirAngle = GetFirstClickAngle();
-
-
-            //Debug.Log(SwipeManager.Instance.Direction);
-
-
-
 
             // touch resistance (firstClick for smooth rotation after first displacement
             if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick)
-            {
-                
+            { 
                 return;
             }
             else
             {
+                //for spawn clicks
                 cantSpawn = true;
-              
-                    
 
-               
                 firstClick = false;
                 if (!randSpawning)
                 {
-                    //Debug.Log("FOLLOW MOUSE" + clickAngle + ":" + dirAngle + ":" + follow__Angle);
                     FollowMouse(clickAngle, clickDirection);
-                   
                 }
             }
-
-
-
         }
-          
-         
 
-            if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
+        if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
+        {
+            // if clicked 
+            if (mouseDown)
             {
-              
-                if (mouseDown)
-                {
                    
-                    if (int.Parse(currentSpot.name) == checkClickSpot)
-                    {
-                        rotSpot = -1;
-                        //Debug.Log(">>>>" + rotSpot);
-                        if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) || Input.GetKeyDown(KeyCode.LeftArrow)) && !RotationProgress)
-                        {
-                            //Rotator.Instance.DoRotation(360 / nBottom, int.Parse(currentSpot.name));
-                            
-                            StartCoroutine(Rotate(Vector3.forward, 360 / nBottom, rotationDuration));
+            if (int.Parse(currentSpot.name) == checkClickSpot)
+            {
+                       
+                //Turn left
+                if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress))
+                {
 
-                        }
-                        //Turn right
-                        else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
-                        {
-                            //Rotator.Instance.DoRotation(-360 / nBottom, int.Parse(currentSpot.name));
-                            StartCoroutine(Rotate(Vector3.forward, -360 / nBottom, rotationDuration));
-                        }
+                    int nextClickSpot;
+                    if (checkClickSpot + 1 == nBottom)
+                    {
+                        nextClickSpot = 0;
                     }
                     else
-                    {
-                    
-                        if (cantSpawn)
-                            {
-                                
-                                StartCoroutine(FollowRotate(rotationDuration));
-                            
-                            }
-                    }
+                        nextClickSpot = checkClickSpot + 1;
+                    //spot to rotate towards
+                    rotSpot = nextClickSpot;
 
-                    firstClick = true;
-                    mouseDown = false;
-
-            }
-
-                if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
-                {
-
-                    ClickSpawn();
-                    cantSpawn = true;
+                    StartCoroutine(FollowRotate(rotationDuration));
                 }
+                //Turn right
+                else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress))
+                {
+                    int firstClickSpot;
+                    if (checkClickSpot - 1 < 0)
+                    {
+                        firstClickSpot = nBottom - 1;
+                        }
+                    else
+                        firstClickSpot = checkClickSpot- 1;
+                    //spot to rotate towards
+                    rotSpot = firstClickSpot;
+
+                    StartCoroutine(FollowRotate(rotationDuration));
+                }
+                else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
+                {
+                    rotSpot = checkClickSpot;
+                    StartCoroutine(FollowRotate(rotationDuration));
+                }
+            }
+            // if moved more than degrees between spots - follow up to closest one
+            else
+            {
+                if (cantSpawn)
+                    StartCoroutine(FollowRotate(rotationDuration));
+            }
+            //disble angle buffer 
+            firstClick = true;
+            mouseDown = false;
+        }
+
+        if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+        { 
+            ClickSpawn();
+            cantSpawn = true;
+        }
 
         }   
 
     }
 
-
+    // Get angle for mousePosition
     private float GetFirstClickAngle()
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 10;
 
         Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-
         Vector3 direction = screenPos - wheel.transform.position;
 
         return Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(wheel.transform.up, direction)), Vector3.Dot(wheel.transform.up, direction)) * Mathf.Rad2Deg;
-
     }
 
    
 
 
-
+    //Turn wheel to mouse position
     private void FollowMouse(float startAngle, Vector3 startDirection)
     {
-
-                                                                                            //followExit = false;
+        //Angle to rotate to
         float angle = GetFirstClickAngle();
 
         wheel.transform.Rotate(Vector3.forward, startAngle - angle);
@@ -395,83 +349,60 @@ public class GameManager : Singleton<GameManager>
         int[] spotDist = { spot, firstSpot, nextSpot };
 
         //check which spot is closer:
-
         rotSpot = ClosestSpot(spotDist);
-
-        //Debug.Log(rotSpot);
-                                                                                                        //followExit = true;
     }
 
 
     ////Smooth rotation coroutine
     IEnumerator FollowRotate(float duration = 0.2f, float angle = 0)
     {
-
-        
-
-
-
+        //To avoid interruptions
+        RotationProgress = true;
 
         //if there was followmouse
         if (rotSpot != -1)
         {
             Vector3 lineDir = line.position - wheel.transform.position;
             Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
-
+            //angle to next spot to rotate to
             angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-
-            //Debug.Log("@" + angle);
         }
 
         Quaternion from = wheel.transform.rotation;
         Quaternion to = from * Quaternion.Euler(0, 0, angle);
 
+        //smooth lerp rotation loop
         float elapsed = 0.0f;
         while (elapsed < duration)
         {
-
             wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
             elapsed += Time.fixedDeltaTime;
 
             yield return null;
         }
 
-
-
         //Finish ROtation differ angle setup
-
         Quaternion difRot = wheel.transform.rotation;
-
-        //if (rotSpot != -1)
-        //    differ = rotSpot * (360 / nBottom) - difRot.eulerAngles.z;
-        //else
-        //{
-            // avoid moving back
-            if (int.Parse(currentSpot.name) != checkClickSpot)
-            {
-                differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
-                //Debug.Log("Dif " + differ + " " + currentSpot.name);
-            }
-        //}
-
+        if (int.Parse(currentSpot.name) != checkClickSpot)
+        {
+            // angle that should be the rotation
+            differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
+        }
 
         //Finish move actual movement (differ in rotate) Get rid of difference flaw to the left
-        if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0/* && int.Parse(currentSpot.name) != checkClickSpot*/)
-        //{
+        if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0)
+        {
             Debug.Log(differ + " : " + int.Parse(currentSpot.name) + " < " + checkClickSpot);
             difRot = wheel.transform.rotation;
             Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
             wheel.transform.rotation = finalRot;
             differ = 0;
-
-        //}
-
-
-        //Debug.Log("YE " + differ);
+        }
         RotationProgress = false;
     }
 
 
+    // Get spot which is closest to line. (cyan debug)    
     private int ClosestSpot(int[] spotDist)
     {
         //Debug.Log(">>"+spotDist.Length);
@@ -489,42 +420,9 @@ public class GameManager : Singleton<GameManager>
         }
         return tMin;
     }
+        
 
-    IEnumerator Rotate(Vector3 axis, float angle, float duration = 0.2f)
-    {
-        //RotationCoolDown = Time.time + duration;
-        RotationProgress = true;
-        Quaternion from = wheel.transform.rotation;
-        Quaternion to = wheel.transform.rotation;
-        to *= Quaternion.Euler(axis * angle);
-
-        float elapsed = 0.0f;
-        while (elapsed < duration)
-        {
-
-            wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
-            elapsed += Time.fixedDeltaTime;
-
-            yield return null;
-        }
-        float differ = Quaternion.Angle(from, to);
-
-        //Get rid of difference flaw to the left
-        if (Mathf.Abs(differ - angle) <= 0.500001f && angle < 0)
-        {
-            to = Quaternion.Euler(axis * angle);
-        }
-        // Get rid of difference flaw to the right
-        else if (Mathf.Abs(differ + angle) <= 0.500001f && angle > 0)
-        {
-            to = Quaternion.Euler(axis * -angle);
-        }
-        wheel.transform.rotation = to;
-
-        RotationProgress = false;
-    }
-
-
+    // Is touching ui
     private bool IsPointerOverUIObject()
     {
         PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
@@ -533,36 +431,33 @@ public class GameManager : Singleton<GameManager>
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         if (results.Count > 0) return results[0].gameObject.CompareTag("ui");
         else return false;
-
     }
 
 
+    //Spawn new square
     private void ClickSpawn()
     {
-
         coolDown = Time.time + 0.5f;
-
-            //spawn a square
-            squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
-            squareSpawn.GetComponent<Square>().Score = next_score;
-            //get score for next turn (non-inclusive)
-            next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
-            nextScore.text = next_score.ToString();
-            squareSpawn.GetComponent<Square>().IsSpawn = true;
-
+        //spawn a square
+        squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
+        squareSpawn.GetComponent<Square>().Score = next_score;
+        //get score for next turn (non-inclusive)
+        next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
+        nextScore.text = next_score.ToString();
+        squareSpawn.GetComponent<Square>().IsSpawn = true;
     }
 
+
+    //Vertical merge
     public void Merge(GameObject first, GameObject second=null)
     {
         StartCoroutine(StopMerge(first,second));
     }
 
 
-
-    //delay for merge
+    //Delay for merge
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
-
         yield return new WaitForSeconds(0.2f);
         Destroy(second);
         //if (first == null)
@@ -585,7 +480,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-
+    //Build circle for spots
     public Vector3 RandomCircle(Vector3 center, float radius, int a)
     {
         //Debug.Log(a);
@@ -597,12 +492,12 @@ public class GameManager : Singleton<GameManager>
         return pos;
     }
 
+
     //Sets up spots for spawns
     public void GetSpots()
     {
         rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
         center = wheel.transform.position;
-
 
         //Spots, spawns and grid for movement
         SpawnSpots(spotPrefab, rad, 1, spots);
@@ -611,19 +506,16 @@ public class GameManager : Singleton<GameManager>
         currentSpot = spots[0];
         currentSpawn = spawns[0];
 
-
         SpawnSpots(gridPrefab, rad + 0.55f, 5, null, grids);
-
     }
 
+    //Get spots, spawns and grid
     private void SpawnSpots(GameObject prefab, float rad, int count, List<GameObject> lists = null, GameObject[,] grids = null)
     {
-
         for (int i = 0; i < nBottom; i++)
         {
             for (int j = 0; j < count; j++)
             {
-
                 int a = 360 / nBottom * i;
                 var pos = RandomCircle(center, rad + 0.9f * j, a);
                 GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
@@ -656,14 +548,10 @@ public class GameManager : Singleton<GameManager>
                 else
                 {
                     lists.Add(tmp);
-
                 }
             }
         }
-
-
     }
-
 
 
     //Checks for 3 in a row
@@ -842,10 +730,12 @@ public class GameManager : Singleton<GameManager>
         {
             
             // expand moves++ if this happened by player
-            if (tmpSquare.GetComponent<Square>().IsSpawn || IsFurtherMerge)
+            if (tmpSquare.GetComponent<Square>().IsSpawn)
             {
 
                 ExpandMoves();
+
+                tmpSquare.GetComponent<Square>().IsSpawn = false;
 
                 if (Moves > expandMoves - 1)
                 {
@@ -877,26 +767,23 @@ public class GameManager : Singleton<GameManager>
                     popObjs.Add(rowObjs);
             }
         }
-
+        //now pop them
         StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
     }
 
-
+    //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
-      
         int count = 0;
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
         
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-              
                 Pop(rowObjs, tmpSquares[count]);
                 //yield return new WaitForSeconds(0.2f);
-                StartCoroutine(FurtherMerge(tmpSquares[count]));
+                StartCoroutine(FurtherPops(tmpSquares[count]));
                 count++;
-            
         }
         //Clear pop objs list
         for (int i = 0; i < popObjs.Count; i++)
@@ -914,7 +801,6 @@ public class GameManager : Singleton<GameManager>
     //Kill all adjacent squares
     public void Pop(List<GameObject> rowObjs, GameObject tmpSquare= null)
     {
-       
         //Keep one that has fallen
         Merge(tmpSquare);
 
@@ -939,45 +825,42 @@ public class GameManager : Singleton<GameManager>
                     }
 
                 }
-              if (rowObj.transform != null && tmpSquare != null)
+                if (rowObj.transform != null && tmpSquare != null)
                 {
                     rowObj.GetComponent<Square>().SquareTmpSquare = tmpSquare.transform;
                     rowObj.GetComponent<Collider2D>().isTrigger = true;
 
-
-                    StartCoroutine(FurtherMerge(rowObj));
+                    StartCoroutine(FurtherPops(rowObj));
                     //Detach this square from parent
                     rowObj.transform.parent = null;
                 }
-                
-
             }
             rowObjs.Clear();
         }
     }
-
-    public IEnumerator FurtherMerge(GameObject tmpSquare)
+    //Merge after pop coroutine
+    public IEnumerator FurtherPops(GameObject tmpSquare)
     {
-            IsFurtherMerge = true;
-            //Debug.Log("START OINK " + Time.deltaTime);
+        IsFurtherPop = true;
 
-            yield return new WaitForSeconds(0.2f);
-            if (tmpSquare != null)
-            {
-                //for (int i = tmpSquare.transform.GetSiblingIndex(); i < tmpSquare.transform.parent.childCount; i++)
-                //{
-                    tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
-                //    Debug.Log(" BOUNCE " + i);
-                //}
-              
-            }
-            //Debug.Log("OINK " + Time.deltaTime);
-
-            IsFurtherMerge = false;
+        yield return new WaitForSeconds(0.2f);
+        // pop everything above
+        //for (int i = tmpSquare.transform.GetSiblingIndex(); i < tmpSquare.transform.parent.childCount; i++)
+        //{
+        //    if (tmpSquare.transform.parent.GetChild(i) != null)
+        //    {
+        //       // tmpSquare.transform.parent.GetChild(i).localPosition += new Vector3(0.5f, 0, 0);
+        //        yield return new WaitForSeconds(0.2f);
+        //    }
+        //}
+        if (tmpSquare != null)
+            tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
+        
+            IsFurtherPop = false;
     }
 
 
-    // update moves
+    //Update moves
     public void ExpandMoves()
     {
         Moves++;
@@ -987,21 +870,14 @@ public class GameManager : Singleton<GameManager>
 
 
 
-
+    //Spawn randoms
     public void Expand()
     {
-      
-         
         //spawn only 2 when upper is 8
-
         if (scoreUpper == 8)
-        {
-            randSpawnCount = tmpRands - 1;
-          
-        }
+            randSpawnCount = tmpRands - 1; 
         else
             randSpawnCount = tmpRands;
-
 
         RandValues tmp = new RandValues();
         rands = new List<RandValues>();
@@ -1014,15 +890,15 @@ public class GameManager : Singleton<GameManager>
         List<int> randList = new List<int>();
         //get free spots
 
-
+        //Add available spots for rand spawns to the list
         foreach(GameObject spot in spots)
         {
-            if (spot.transform.childCount < 5
-                    && spot.name != currentSpot.name)
+            if (spot.transform.childCount < 5 && spot.name != currentSpot.name)
             {
                 randList.Add(int.Parse(spot.name));
             }
         }
+
         //if there's atleast 3 spots to spawn randoms
         if (randList.Count >= randSpawnCount)
         {
@@ -1038,30 +914,22 @@ public class GameManager : Singleton<GameManager>
                     while (ListContains(rands, tmp))
                     {
                         tmp.Rng = randList[Random.Range(0, randList.Count)];
-                       
                         tmp.RandScore = 0;
-
                     }
-                    
                 }
 
+                //Get scores for each randspawn
                 do
                 {
                     tmp.RandScore = (int)Mathf.Pow(2, Random.Range(1, upperPow + 1));
-                   // Debug.Log(" RANDSCORE " + tmp.RandScore);
                 }
                 while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore >= 256);
                 randCheckTmp.Add(tmp.RandScore);
                     
-                   
                 rands.Add(tmp);
-                //Debug.Log(rands[rands.Count - 1].Rng + " " + rands[rands.Count - 1].RandScore);
-
             }
-
-
+            
             StartCoroutine(StopRandom(rands));
-           
         }
         else
         {
@@ -1077,19 +945,14 @@ public class GameManager : Singleton<GameManager>
         foreach (RandValues rand in rands)
         {
             yield return new WaitForSeconds(0.2f);
-            //Debug.Log("========");
             SpawnRandom(rand.Rng, rand.RandScore);
         }
         randSpawning = false;
     }
 
 
-
-
-
-
     //Check if list of classes contains same rng
-    bool ListContains(List<RandValues> list, RandValues check)
+    private bool ListContains(List<RandValues> list, RandValues check)
     {
         foreach (RandValues n in list)
         {
@@ -1105,19 +968,18 @@ public class GameManager : Singleton<GameManager>
 
 
     //Check if list of classes contains same rng
-    bool RandScoreContains(List<RandValues> list, RandValues check)
+    private bool RandScoreContains(List<RandValues> list, RandValues check)
     {
         foreach (RandValues n in list)
         {
             if (n.RandScore == check.Rng)
             {
-
                 return true;
             }
-
         }
         return false;
     }
+
 
     // Spawn randomSquare
     public void SpawnRandom(int rng, int randScore)
@@ -1131,7 +993,6 @@ public class GameManager : Singleton<GameManager>
         randSpawn.transform.SetParent(spots[rng].transform);
         randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
         
-
         //Rotate spawns towards center
         Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
         diff.Normalize();
@@ -1143,56 +1004,64 @@ public class GameManager : Singleton<GameManager>
         {
             randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
         }
-
         randSpawns.Add(randSpawn);
     }
   
 
-
+    //Check if gameOver
     public void GameOver()
     {
         if (currentSpot.transform.childCount == 5)
         {
             //full spot colors red and opens another one
             currentSpot.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
-
         }
-        int reds = 0;
+        
 
+        //foreach (GameObject spot in spots)
+        //{
+        //    if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+        //    {
+        //        if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
+        //        {
+        //            reds++;
+        //        }
+        //    }
+        //    else if (spot.GetComponent<Spot>().Blocked)
+        //    {
+        //        reds++;
+        //    }
+        //}
+        StartCoroutine(StopGameOver());
+    }
+
+
+    //Game over delayed
+    private IEnumerator StopGameOver()
+    {
+        int reds = 0;
+        yield return new WaitForSeconds(0.4f);
         foreach (GameObject spot in spots)
         {
             if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
             {
-                if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
+                if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
                 {
                     reds++;
                 }
-
             }
             else if (spot.GetComponent<Spot>().Blocked)
             {
-
                 reds++;
             }
         }
-
-        StartCoroutine(StopGameOver(reds));
-
-
-    }
-
-
-    private IEnumerator StopGameOver(int reds)
-    {
-        yield return new WaitForSeconds(0.2f);
-        if (reds == spots.Count /* && (next_score != currentSpot.transform.GetChild(currentSpot.transform.childCount - 1).GetComponent<Square>().Score)*/)
+        if (reds == spots.Count)
         {
             noMoves = true;
 
-            yield return new WaitForSeconds(0.4f);
             if (reds == spots.Count)
             {
-                OpenMenu();
+                OpenMenu(true);
                 nextScore.text = "GameOver";
                 menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
             }
@@ -1202,12 +1071,24 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    public void OpenMenu()
+    //Toggle menu
+    public void OpenMenu(bool gameOver=false)
     {
-        ui.SetActive(!ui.activeSelf);
-        menu.SetActive(!menu.activeSelf);
+       
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score : {0}", scores);
-        MenuUp = !MenuUp;
+
+        if (gameOver)
+        {
+            menu.SetActive(true);
+            ui.SetActive(false);
+            menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        }
+        else
+        {
+            menu.SetActive(!menu.activeSelf);
+            ui.SetActive(!ui.activeSelf);
+            MenuUp = !MenuUp;
+        }
     }
 
 
@@ -1215,7 +1096,7 @@ public class GameManager : Singleton<GameManager>
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
+        menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before
@@ -1249,6 +1130,6 @@ public class GameManager : Singleton<GameManager>
 
     public void TweakDiffer(string value)
     {
-        differ__Angle = float.Parse(value);
+        rotationDuration = float.Parse(value);
     }
 }
