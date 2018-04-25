@@ -570,7 +570,7 @@ public class GameManager : Singleton<GameManager>
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
 
-
+        
         Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
@@ -793,13 +793,16 @@ public class GameManager : Singleton<GameManager>
                 {
                     //add only first tmpSquare if there's any in popObjs to pop
                     bool contained = false;
-                    if (checkRowObjs.Contains(tmpSquare))
+                    if (checkRowObjs.Contains(tmpSquare) || tmpSquares.Contains(tmpSquare))
                     {
                         contained = true;
                     }
 
                     if (!contained)
+                    {
                         tmpSquares.Add(tmpSquare);
+                    }
+                       
                 }
 
             }
@@ -883,14 +886,19 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
         IsFurtherPop = true;
-
-            yield return new WaitForSeconds(0.2f);
+        tmpSquare.GetComponent<Square>().PewPriority = true;
+        yield return new WaitForSeconds(0.2f);
             if (tmpSquare != null)
             {
-                
+               
                 Debug.Log("PEW");
-                if(tmpSquare.GetComponent<Collider2D>().isTrigger != true)
-                    tmpSquare.GetComponent<Square>().CheckAround = true;
+            if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
+            {
+                tmpSquare.GetComponent<Square>().PewPriority = false;
+                tmpSquare.GetComponent<Square>().CheckAround = true;
+            }
+
+
             }
             
        

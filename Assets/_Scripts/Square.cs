@@ -50,6 +50,24 @@ public class Square : MonoBehaviour {
             
         }
     }
+    // toggle for further pop first
+    [SerializeField]
+    private bool pewPriority = false;
+    public bool PewPriority
+    {
+        get
+        {
+            return pewPriority;
+        }
+
+        set
+        {
+            pewPriority = value;
+        }
+    }
+
+
+
     public bool IsColliding { get; set; }
     private Transform column;
 
@@ -103,6 +121,19 @@ public class Square : MonoBehaviour {
             isMerging = value;
         }
     }
+    private bool isChecking = false;
+    public bool IsChecking
+    {
+        get
+        {
+            return isChecking;
+        }
+
+        set
+        {
+            isChecking = value;
+        }
+    }
 
     [SerializeField]
     private Text SquareText;
@@ -123,7 +154,7 @@ public class Square : MonoBehaviour {
         }
     }
 
-
+   
 
     Vector2 curPos;
     Vector2 lastPos;
@@ -206,6 +237,10 @@ public class Square : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
+        if (this.pewPriority)
+        {
+            this.IsSpawn = false;
+        }
         //Check if something is moving
         curPos = gameObject.transform.localPosition;
         if (curPos == lastPos)
@@ -227,6 +262,7 @@ public class Square : MonoBehaviour {
                 CheckAround = true;
                 checkGrid = gameObject.transform.GetSiblingIndex();
             }
+           
 
             //Move to needed grid spot
             if (gameObject.transform.GetSiblingIndex() == 5 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
@@ -251,8 +287,13 @@ public class Square : MonoBehaviour {
                         && !GameManager.Instance.SomethingIsMoving)
                     {
                         //Merge started
-                        Debug.Log("ToP");
+                        Debug.Log("Above");
                         GameManager.Instance.MergeInProgress = true;
+                        //for ExtendMoves
+                        if (this.IsSpawn)
+                        {
+                            this.IsSpawn = false;
+                        }
                         MergeCheck = true;
                         GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
 
@@ -268,6 +309,10 @@ public class Square : MonoBehaviour {
                         //Merge started
                         Debug.Log("DowN");
                         GameManager.Instance.MergeInProgress = true;
+                         if (this.IsSpawn)
+                        {
+                            this.IsSpawn = false;
+                        }
                         MergeCheck = true;
                         GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
                       
@@ -279,14 +324,55 @@ public class Square : MonoBehaviour {
                     CheckAround = false;
 
                 //wait for merge to finish - then checkrow
-                if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress)
+                if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress && !pewPriority)
                 {
-                   
-                    GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                    int firstSpot;
+                    int nextSpot;
+
+
+                    //one to the left
+                    if (int.Parse(transform.parent.name) - 1 < 0)
+                    {
+                        firstSpot = GameManager.Instance.nBottom-1;
+                    }
+                    else
+                        firstSpot = int.Parse(transform.parent.name) - 1;
+
+                    //check next left one after getting index-1
+                    if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
+                    {
+                        nextSpot =  0;
+                    }
+                    else
+                        nextSpot = int.Parse(transform.parent.name) + 1;
+
+                    //if there's pewPriority near - don't CheckRow
+                    if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
+                        && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
+
+                        || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
+                        && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
+                    {
+                        StartCoroutine(StopPew());
+                    }
+                    else
+                    {
+                        
+                        GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                     
+                    }
+                       
+                    
                     //Check GameOver
                     GameManager.Instance.GameOver();
                     MakeItGreen();
                 }
+                //else if(GameManager.Instance.SomethingIsMoving)
+                //{
+                //    //if something id
+                //    Debug.Log("REEEEEEEEEEEEEEEEEEEEEE");
+                //    StartCoroutine(StopPew());
+                //}
 
             }
 
@@ -322,6 +408,13 @@ public class Square : MonoBehaviour {
 
     }
 
+
+
+    private IEnumerator StopPew()
+    {
+        yield return new WaitForSeconds(0.21f);
+        checkAround = true;
+    }
 
     //    //Make it green again and drop 256
     private void MakeItGreen()
