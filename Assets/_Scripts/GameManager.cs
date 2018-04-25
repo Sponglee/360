@@ -476,6 +476,7 @@ public class GameManager : Singleton<GameManager>
 
             }
             first.GetComponent<Square>().Touched = false;
+            first.GetComponent<Square>().MergeCheck = false;
         }
     }
 
@@ -562,22 +563,7 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
-        //Move all tiles above if nothing pops and there's something ahead
-        int columnIndex = tmpSquare.transform.GetSiblingIndex();
-        if ((columnIndex + 1) < tmpSquare.transform.parent.childCount)
-        {
-            Debug.Log(tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() +  " >> " + tmpSquare.GetComponent<Square>().Score);
-            for (int i = columnIndex+1; i < tmpSquare.transform.parent.childCount; i++)
-            {
-                if (tmpSquare.GetComponent<Square>().NotTouched)
-                {
-                    
-                    tmpSquare.transform.parent.GetChild(i).localPosition += new Vector3(0.5f, 0, 0);
-                    tmpSquare.GetComponent<Square>().NotTouched = false;
-                }
-                
-            }
-        }
+        
 
 
 
@@ -872,33 +858,20 @@ public class GameManager : Singleton<GameManager>
     {
         IsFurtherPop = true;
 
-        // Add this if there's merge problems (check square ahead same score)
-
-
-
-        //int furtherIndex = tmpSquare.transform.GetSiblingIndex();
-
-        //if ((furtherIndex + 1) < tmpSquare.transform.parent.childCount)
-        //{
-        //    Debug.Log(tmpSquare.transform.parent.GetChild(furtherIndex + 1).GetComponent<Square>().Score);
-        //    if (tmpSquare.transform.parent.GetChild(furtherIndex + 1).gameObject.GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
-        //    {
+            yield return new WaitForSeconds(0.2f);
+            if (tmpSquare != null)
+            {
                 
-        //        yield return new WaitForSeconds(0.2f);
-        //        if (tmpSquare != null)
-        //        {
-        //                tmpSquare.transform.localPosition += new Vector3(-0.5f, 0, 0);
-        //                yield break;
-        //        }
-        //    }
-        //}
+                Debug.Log("PEW");
+                tmpSquare.GetComponent<Square>().checkAround = true;
+            }
+            
+       
 
-        yield return new WaitForSeconds(0.2f);
-        if (tmpSquare != null)
-        {
-            tmpSquare.transform.localPosition += new Vector3(0.5f, 0, 0);
-        }
-        
+       
+       
+
+    
         IsFurtherPop = false;
     }
 

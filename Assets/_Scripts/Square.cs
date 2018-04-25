@@ -6,7 +6,19 @@ using UnityEngine.UI;
 public class Square : MonoBehaviour {
 
     [SerializeField]
-    private float speed;
+    private float speed = 10f;
+    public float Speed
+    {
+        get
+        {
+            return speed;
+        }
+
+        set
+        {
+            speed = value;
+        }
+    }
     public bool IsSpawn = false;
     private int row;
     public int Row
@@ -63,9 +75,7 @@ public class Square : MonoBehaviour {
     //For column pops 
     [SerializeField]
     private bool notTouched = true;
-    
-
-    public bool NotTouched
+    public bool checkAround
     {
         get
         {
@@ -78,17 +88,29 @@ public class Square : MonoBehaviour {
         }
     }
 
+    private int checkGrid;
+
     public bool ExpandSpawn { get; set; }
+
+ 
 
     [SerializeField]
     private Text SquareText;
     [SerializeField]
     private SpriteRenderer SquareColor;
-
-    private void Awake()
+    [SerializeField]
+    private bool mergeCheck=false;
+    public bool MergeCheck
     {
-       
+        get
+        {
+            return mergeCheck;
+        }
 
+        set
+        {
+            mergeCheck = value;
+        }
     }
 
     // Helps ApplyStyle to grab numbers/color
@@ -143,8 +165,6 @@ public class Square : MonoBehaviour {
             gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
-            /******* METHOD PART***/
-
          
             ApplyStyle(this.score);
 
@@ -154,57 +174,95 @@ public class Square : MonoBehaviour {
             gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
-            /******* METHOD PART***/
-
             gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             ApplyStyle(this.score);
         }
 
 
+
+        checkGrid = transform.GetSiblingIndex();
        
-
-
     }
 
     // Update is called once per frame
     void FixedUpdate() {
-        //if Touched - stops 
-        //if(!this.Touched)
-        // {
-        // If it's first and not touched - fall
+
+
+
         if (this.gameObject.transform.parent != null)
         {
+            //If siblingindex changed => check around
+            if (gameObject.transform.GetSiblingIndex() != checkGrid)
+            {
+                checkAround = true;
+                checkGrid = gameObject.transform.GetSiblingIndex();
+            }
+
+            //Move to needed grid spot
             if (gameObject.transform.GetSiblingIndex() == 5 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
             
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, speed * Time.deltaTime);
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, Speed * Time.deltaTime);
             else
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, speed * Time.deltaTime);
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, Speed * Time.deltaTime);
+
+
+
+
+            //Call checkRow or Merge
+            if (checkAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
+            {
+                int mergeIndex = gameObject.transform.GetSiblingIndex();
+                //Check for same square above
+
+                if ((mergeIndex + 1) < gameObject.transform.parent.childCount)
+                {
+                    if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score)
+                    {
+                        //Merge started
+                        MergeCheck = true;
+                        GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
+                        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+                    }
+                }
+                
+                // Check for same square below
+                if ((mergeIndex - 1) >= 0)
+                {
+                    if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score)
+                    {
+                        //Merge started
+                        MergeCheck = true;
+                        GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
+                        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+                    }
+                }
+
+                checkAround = false;
+                //wait for merge to finish - then checkrow
+                if (!MergeCheck)
+                { 
+                    GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                }
+               
+            }
+
+
 
         }
         else if (this.IsTop == true)
         {
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, speed * Time.deltaTime);
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
         else
         {
             if( SquareTmpSquare != null)
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, speed * Time.deltaTime);
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
             else
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, speed * Time.deltaTime);
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
 
-        //}
-        //else
-        //{
-          
-        ////}
-        //if (this.gameObject.transform.parent == null)
-        //{
-            
-
-        //}
-
+      
 
         // Boundary
         if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
@@ -220,96 +278,101 @@ public class Square : MonoBehaviour {
 
     }
 
-    // DOUBT IF NEEDED SEE FIXED UPDATE
-    public void OnCollisionEnter2D(Collision2D other)
-    {
+    //// DOUBT IF NEEDED SEE FIXED UPDATE
+    //public void OnCollisionEnter2D(Collision2D other)
+    //{
        
 
-        if (other.gameObject.CompareTag("spot"))
-        {
-            // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
+    //    if (other.gameObject.CompareTag("spot"))
+    //    {
+    //        // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
+    //        //reset speed back
+    //        this.speed = 10f;
 
-            //for column checkrow
+    //        //for column checkrow
+    //        GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+    //        this.NotTouched = true;
             
-            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-            this.NotTouched = true;
 
-        }
-        //other square
-        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
-        {
-            //make sure checks only one of 2 collisions (one that is not touched
-            other.gameObject.GetComponent<Square>().touched = true;
+    //    }
+    //    //other square
+    //    if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
+    //    {
+    //        //make sure checks only one of 2 collisions (one that is not touched
+    //        other.gameObject.GetComponent<Square>().touched = true;
            
-            if (this.score == other.gameObject.GetComponent<Square>().Score)
-            {
-               // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
-                //if spawned by player and pops - no moves 
-                if (this.IsSpawn)
-                {
-                    this.IsSpawn = false;
-                }
+    //        if (this.score == other.gameObject.GetComponent<Square>().Score)
+    //        {
+    //           // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+    //            //if spawned by player and pops - no moves 
+    //            if (this.IsSpawn)
+    //            {
+    //                this.IsSpawn = false;
+    //            }
 
                 
                 
-                GameManager.Instance.Merge(gameObject, other.gameObject);
-                gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+    //            GameManager.Instance.Merge(gameObject, other.gameObject);
+    //            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
                
 
-            }
-            else if (this.score != other.gameObject.GetComponent<Square>().Score)
-            {
-                // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
+    //        }
+    //        else if (this.score != other.gameObject.GetComponent<Square>().Score)
+    //        {
+    //            // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
 
-                //for column checkrow
-             
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-                this.NotTouched = true;
+    //            //reset speed back
+    //            this.speed = 10f;
 
-                //reset Touched bool 
-                StartCoroutine(StopTouch(other.gameObject));
+    //            //for column checkrow
+    //            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+    //            this.NotTouched = true;
+               
+
+    //            //reset Touched bool 
+    //            StartCoroutine(StopTouch(other.gameObject));
                 
-                //Check GameOver
-                GameManager.Instance.GameOver();
+    //            //Check GameOver
+    //            GameManager.Instance.GameOver();
               
 
 
 
-                //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+    //            //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
 
-            }
+    //        }
 
-            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-            //other.gameObject.GetComponent<Square>().touched = false;
+    //        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+    //        //other.gameObject.GetComponent<Square>().touched = false;
            
-            //Check for boops
+    //        //Check for boops
 
-        }
+    //    }
 
-        //Make it green again
-        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
-        {
+    //    //Make it green again
+    //    if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+    //    {
 
-            if (gameObject.transform.parent.childCount < 5)
-            {
-                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
-                {
-                    //Debug.Log("u can ");
-                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                }
-            }
-        }
+    //        if (gameObject.transform.parent.childCount < 5)
+    //        {
+    //            if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+    //            {
+    //                //Debug.Log("u can ");
+    //                gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+    //            }
+    //        }
+    //    }
 
 
-        if (this.score >= 256)
-        {
-            this.IsTop = true;
+    //    if (this.score >= 256)
+    //    {
+    //        this.IsTop = true;
            
-            this.gameObject.transform.parent = null;
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        }
-    }
+    //        this.gameObject.transform.parent = null;
+    //        gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+    //    }
+    //}
 
 
     private IEnumerator StopTouch(GameObject first)
