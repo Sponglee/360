@@ -3240,7 +3240,7 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   CheckInProgress: 0
   RotationProgress: 0
-  rotationDuration: 0.2
+  rotationDuration: 0.1
   follow__Delay: 0.2
   follow__Angle: 2
   spawn__Angle: 0.3
