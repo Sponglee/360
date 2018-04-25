@@ -108,7 +108,9 @@ public class GameManager : Singleton<GameManager>
     Vector3 center;
     float rad;
 
+    public bool SomethingIsMoving = false;
     public bool CheckInProgress = false;
+    public bool MergeInProgress = false;
     public bool RotationProgress = false;
     public float rotationDuration = 0.2f;
     private bool noMoves=false;
@@ -458,6 +460,10 @@ public class GameManager : Singleton<GameManager>
     //Delay for merge
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
+        //Stop checks while Merging
+        first.GetComponent<Square>().IsMerging = true;
+        //double the score
+        int tmp = first.GetComponent<Square>().Score *= 2;
         yield return new WaitForSeconds(0.2f);
         Destroy(second);
         //if (first == null)
@@ -466,7 +472,10 @@ public class GameManager : Singleton<GameManager>
         //}
         if (first != null)
         {
-            int tmp = first.GetComponent<Square>().Score *= 2;
+
+
+            //update the image
+            first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
             first.GetComponent<Square>().ApplyStyle(tmp);
 
             if (tmp > scoreUpper)
@@ -475,8 +484,10 @@ public class GameManager : Singleton<GameManager>
                 Instance.upper.text = string.Format("upper: {0}", scoreUpper);
 
             }
-            first.GetComponent<Square>().Touched = false;
+            //first.GetComponent<Square>().Touched = false;
             first.GetComponent<Square>().MergeCheck = false;
+            first.GetComponent<Square>().IsMerging = false;
+            MergeInProgress = false;
         }
     }
 
@@ -766,18 +777,33 @@ public class GameManager : Singleton<GameManager>
         {
             //Get rid of the one we keep
             rowObjs.Remove(tmpSquare);
-
-            //add its tmpSquare to list
-            if(!tmpSquares.Contains(tmpSquare))
-            {
-                tmpSquares.Add(tmpSquare);
-            }
            
             //If there's no same rowObj in pop - add
             if (!popObjs.Contains(rowObjs))
             {
                     popObjs.Add(rowObjs);
             }
+
+
+            //add its tmpSquare to list
+            if (!tmpSquares.Contains(tmpSquare))
+            {
+
+                foreach (List<GameObject> checkRowObjs in popObjs)
+                {
+                    //add only first tmpSquare if there's any in popObjs to pop
+                    bool contained = false;
+                    if (checkRowObjs.Contains(tmpSquare))
+                    {
+                        contained = true;
+                    }
+
+                    if (!contained)
+                        tmpSquares.Add(tmpSquare);
+                }
+
+            }
+
         }
         //now pop them
         StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
@@ -863,7 +889,8 @@ public class GameManager : Singleton<GameManager>
             {
                 
                 Debug.Log("PEW");
-                tmpSquare.GetComponent<Square>().checkAround = true;
+                if(tmpSquare.GetComponent<Collider2D>().isTrigger != true)
+                    tmpSquare.GetComponent<Square>().CheckAround = true;
             }
             
        

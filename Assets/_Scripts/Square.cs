@@ -50,14 +50,12 @@ public class Square : MonoBehaviour {
             
         }
     }
-
     public bool IsColliding { get; set; }
-
     private Transform column;
+
+    // for stopping squares that move
     [SerializeField]
     private bool touched = false;
-   
-
     public bool Touched
     {
         get
@@ -70,21 +68,19 @@ public class Square : MonoBehaviour {
             touched = value;
         }
     }
-
-
     //For column pops 
     [SerializeField]
-    private bool notTouched = true;
-    public bool checkAround
+    private bool checkAround = true;
+    public bool CheckAround
     {
         get
         {
-            return notTouched;
+            return checkAround;
         }
 
         set
         {
-            notTouched = value;
+            checkAround = value;
         }
     }
 
@@ -92,7 +88,21 @@ public class Square : MonoBehaviour {
 
     public bool ExpandSpawn { get; set; }
 
- 
+    //for checkRow disable once merged(let it fall first)
+    [SerializeField]
+    private bool isMerging = false;
+    public bool IsMerging
+    {
+        get
+        {
+            return isMerging;
+        }
+
+        set
+        {
+            isMerging = value;
+        }
+    }
 
     [SerializeField]
     private Text SquareText;
@@ -112,6 +122,14 @@ public class Square : MonoBehaviour {
             mergeCheck = value;
         }
     }
+
+
+
+    Vector2 curPos;
+    Vector2 lastPos;
+
+
+
 
     // Helps ApplyStyle to grab numbers/color
     void ApplyStyleFromHolder(int index)
@@ -158,11 +176,11 @@ public class Square : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-      
+        
     
         if (ExpandSpawn)
         {
-            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+           // gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
          
@@ -171,7 +189,7 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
+            //gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
             gameObject.transform.SetParent(GameManager.Instance.currentSpot.transform);
@@ -188,14 +206,25 @@ public class Square : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
+        //Check if something is moving
+        curPos = gameObject.transform.localPosition;
+        if (curPos == lastPos)
+        {
+            GameManager.Instance.SomethingIsMoving = false;
+        }
+        else
+        {
+            GameManager.Instance.SomethingIsMoving = true;
+        }
+        lastPos = curPos;
 
-
+            
         if (this.gameObject.transform.parent != null)
         {
             //If siblingindex changed => check around
             if (gameObject.transform.GetSiblingIndex() != checkGrid)
             {
-                checkAround = true;
+                CheckAround = true;
                 checkGrid = gameObject.transform.GetSiblingIndex();
             }
 
@@ -210,46 +239,61 @@ public class Square : MonoBehaviour {
 
 
             //Call checkRow or Merge
-            if (checkAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
+            if (CheckAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
             {
+            
                 int mergeIndex = gameObject.transform.GetSiblingIndex();
-                //Check for same square above
 
+                //Check for same square above
                 if ((mergeIndex + 1) < gameObject.transform.parent.childCount)
                 {
-                    if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score)
+                    if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score
+                        && !GameManager.Instance.SomethingIsMoving)
                     {
                         //Merge started
+                        Debug.Log("ToP");
+                        GameManager.Instance.MergeInProgress = true;
                         MergeCheck = true;
-                        GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
-                        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+                        GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
+
                     }
                 }
-                
+
                 // Check for same square below
                 if ((mergeIndex - 1) >= 0)
                 {
-                    if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score)
+                    if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score 
+                        && !GameManager.Instance.SomethingIsMoving)
                     {
                         //Merge started
+                        Debug.Log("DowN");
+                        GameManager.Instance.MergeInProgress = true;
                         MergeCheck = true;
                         GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
-                        gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
+                      
                     }
                 }
 
-                checkAround = false;
+                //if something moved - wait with check trigger until it doesnt
+                if(!GameManager.Instance.SomethingIsMoving)
+                    CheckAround = false;
+
                 //wait for merge to finish - then checkrow
-                if (!MergeCheck)
-                { 
+                if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress)
+                {
+                   
                     GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                    //Check GameOver
+                    GameManager.Instance.GameOver();
+                    MakeItGreen();
                 }
-               
+
             }
 
 
 
         }
+        // 256 square to center
         else if (this.IsTop == true)
         {
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
@@ -258,8 +302,8 @@ public class Square : MonoBehaviour {
         {
             if( SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
-            else
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+            //else
+            //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
 
       
@@ -278,10 +322,37 @@ public class Square : MonoBehaviour {
 
     }
 
+
+    //    //Make it green again and drop 256
+    private void MakeItGreen()
+    {
+       
+        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+        {
+
+            if (gameObject.transform.parent.childCount < 5)
+            {
+                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+                {
+                    //Debug.Log("u can ");
+                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                }
+            }
+        }
+
+
+        if (this.score >= 256)
+        {
+            this.IsTop = true;
+
+            this.gameObject.transform.parent = null;
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
+    }
     //// DOUBT IF NEEDED SEE FIXED UPDATE
     //public void OnCollisionEnter2D(Collision2D other)
     //{
-       
+
 
     //    if (other.gameObject.CompareTag("spot"))
     //    {
@@ -293,7 +364,7 @@ public class Square : MonoBehaviour {
     //        //for column checkrow
     //        GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
     //        this.NotTouched = true;
-            
+
 
     //    }
     //    //other square
@@ -301,7 +372,7 @@ public class Square : MonoBehaviour {
     //    {
     //        //make sure checks only one of 2 collisions (one that is not touched
     //        other.gameObject.GetComponent<Square>().touched = true;
-           
+
     //        if (this.score == other.gameObject.GetComponent<Square>().Score)
     //        {
     //           // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
@@ -311,11 +382,11 @@ public class Square : MonoBehaviour {
     //                this.IsSpawn = false;
     //            }
 
-                
-                
+
+
     //            GameManager.Instance.Merge(gameObject, other.gameObject);
     //            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-               
+
 
     //        }
     //        else if (this.score != other.gameObject.GetComponent<Square>().Score)
@@ -328,14 +399,14 @@ public class Square : MonoBehaviour {
     //            //for column checkrow
     //            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
     //            this.NotTouched = true;
-               
+
 
     //            //reset Touched bool 
     //            StartCoroutine(StopTouch(other.gameObject));
-                
+
     //            //Check GameOver
     //            GameManager.Instance.GameOver();
-              
+
 
 
 
@@ -345,7 +416,7 @@ public class Square : MonoBehaviour {
 
     //        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
     //        //other.gameObject.GetComponent<Square>().touched = false;
-           
+
     //        //Check for boops
 
     //    }
@@ -368,7 +439,7 @@ public class Square : MonoBehaviour {
     //    if (this.score >= 256)
     //    {
     //        this.IsTop = true;
-           
+
     //        this.gameObject.transform.parent = null;
     //        gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
     //    }

@@ -3224,7 +3224,7 @@ MonoBehaviour:
   randSpawnCount: 0
   maxScore: 0
   scoreUpper: 0
-  expandMoves: 97
+  expandMoves: 3
   stopDelay: 0.1
   moves: 0
   currentSpot: {fileID: 0}
@@ -3238,7 +3238,9 @@ MonoBehaviour:
   slider: {fileID: 2057602267}
   scores: 0
   ScoreText: {fileID: 212843313}
+  SomethingIsMoving: 0
   CheckInProgress: 0
+  MergeInProgress: 0
   RotationProgress: 0
   rotationDuration: 0.1
   follow__Delay: 0.2
