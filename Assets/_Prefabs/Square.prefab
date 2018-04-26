@@ -39,7 +39,6 @@ GameObject:
   - component: {fileID: 4810313829406844}
   - component: {fileID: 212341414957439470}
   - component: {fileID: 61812630713143364}
-  - component: {fileID: 50681241844705552}
   - component: {fileID: 114245831885718896}
   m_Layer: 0
   m_Name: Square
@@ -80,26 +79,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50681241844705552
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523403489220356}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 0.001
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!61 &61812630713143364
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -173,9 +152,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 0
   centerPrefab: {fileID: 0}
+  pewPriority: 0
   touched: 0
+  checkAround: 1
+  isMerging: 0
   SquareText: {fileID: 114709778573452866}
   SquareColor: {fileID: 212341414957439470}
+  mergeCheck: 0
 --- !u!114 &114498820951125008
 MonoBehaviour:
   m_ObjectHideFlags: 1
