@@ -237,10 +237,14 @@ public class Square : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
+        //for expandMoves
+
         if (this.pewPriority)
         {
             this.IsSpawn = false;
         }
+
+
         //Check if something is moving
         curPos = gameObject.transform.localPosition;
         if (curPos == lastPos)
@@ -265,11 +269,18 @@ public class Square : MonoBehaviour {
            
 
             //Move to needed grid spot
-            if (gameObject.transform.GetSiblingIndex() == 5 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
-            
+            if (gameObject.transform.GetSiblingIndex() == 5 
+                && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
+            {
+                //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, Speed * Time.deltaTime);
+            }
             else
+            {
+                //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, Speed * Time.deltaTime);
+
+            }
 
 
 
@@ -353,7 +364,7 @@ public class Square : MonoBehaviour {
                         || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
                         && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
                     {
-                        StartCoroutine(StopPew());
+                        StartCoroutine(StopCheckAround());
                     }
                     else
                     {
@@ -382,11 +393,13 @@ public class Square : MonoBehaviour {
         // 256 square to center
         else if (this.IsTop == true)
         {
+            
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
         else
         {
-            if( SquareTmpSquare != null)
+            GameManager.Instance.SomethingIsMoving = true;
+            if ( SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
             //else
             //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
@@ -410,9 +423,9 @@ public class Square : MonoBehaviour {
 
 
 
-    private IEnumerator StopPew()
+    private IEnumerator StopCheckAround()
     {
-        yield return new WaitForSeconds(0.21f);
+        yield return new WaitForSeconds(0.3f);
         checkAround = true;
     }
 

@@ -293,17 +293,27 @@ public class GameManager : Singleton<GameManager>
             //disble angle buffer 
             firstClick = true;
             mouseDown = false;
-        }
+            }
 
-        if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
-        { 
-            ClickSpawn();
-            cantSpawn = true;
-        }
+            if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+            { 
+
+                if (SomethingIsMoving || MergeInProgress || CheckInProgress)
+                {
+                    //camera shake?
+                    return;
+                }
+                else
+                {
+                    ClickSpawn();
+                    cantSpawn = true;
+                }
+            }
 
         }   
-
     }
+
+
 
     // Get angle for mousePosition
     private float GetFirstClickAngle()
@@ -569,8 +579,8 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
+        tmpSquare.GetComponent<Square>().PewPriority = true;
 
-        
         Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
@@ -793,10 +803,17 @@ public class GameManager : Singleton<GameManager>
                 {
                     //add only first tmpSquare if there's any in popObjs to pop
                     bool contained = false;
-                    if (checkRowObjs.Contains(tmpSquare) || tmpSquares.Contains(tmpSquare))
+                    if (checkRowObjs.Contains(tmpSquare))
                     {
                         contained = true;
                     }
+
+
+                    foreach(GameObject go in checkRowObjs)
+                    {
+                        Debug.Log(" checkRowObjs: " + go.transform.parent.name);
+                    }
+
 
                     if (!contained)
                     {
@@ -808,20 +825,30 @@ public class GameManager : Singleton<GameManager>
             }
 
         }
+        StartCoroutine(StopRow(tmpSquare));
         //now pop them
         StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
     }
 
+
+
+    //uncheck pew priority
+    private IEnumerator StopRow(GameObject go)
+    {
+        yield return new WaitForSeconds(0.2f);
+        go.GetComponent<Square>().PewPriority = false;
+    }
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
         int count = 0;
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
-        
+       
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
                 Pop(rowObjs, tmpSquares[count]);
+                tmpSquares[count].GetComponent<Square>().PewPriority = false;
                 //yield return new WaitForSeconds(0.2f);
                 StartCoroutine(FurtherPops(tmpSquares[count]));
                 count++;
