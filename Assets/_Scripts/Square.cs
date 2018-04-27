@@ -247,7 +247,7 @@ public class Square : MonoBehaviour {
     void FixedUpdate() {
 
         //Check if something is moving
-        curPos = gameObject.transform.position;
+        curPos = gameObject.transform.localPosition;
         if (curPos == lastPos)
         {
             IsMoving = false;
@@ -262,14 +262,14 @@ public class Square : MonoBehaviour {
 
 
 
-        if (GameManager.Instance.SomethingIsMoving)
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-        }
-        else
-        {
-            ApplyStyle(this.score);
-        }
+        //if (GameManager.Instance.SomethingIsMoving)
+        //{
+        //    gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        //}
+        //else
+        //{
+        //    ApplyStyle(this.score);
+        //}
 
 
 
