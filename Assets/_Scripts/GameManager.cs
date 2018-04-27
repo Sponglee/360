@@ -473,8 +473,9 @@ public class GameManager : Singleton<GameManager>
         //Stop checks while Merging
         first.GetComponent<Square>().IsMerging = true;
         //double the score
-        int tmp = first.GetComponent<Square>().Score *= 2;
+       
         yield return new WaitForSeconds(0.2f);
+        int tmp = first.GetComponent<Square>().Score *= 2;
         Destroy(second);
         //if (first == null)
         //{
@@ -581,7 +582,7 @@ public class GameManager : Singleton<GameManager>
     {
         tmpSquare.GetComponent<Square>().PewPriority = true;
 
-        Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+       // Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
         
@@ -809,10 +810,10 @@ public class GameManager : Singleton<GameManager>
                     }
 
 
-                    foreach(GameObject go in checkRowObjs)
-                    {
-                        Debug.Log(" checkRowObjs: " + go.transform.parent.name);
-                    }
+                    //foreach(GameObject go in checkRowObjs)
+                    //{
+                    //    //Debug.Log(" checkRowObjs: " + go.transform.parent.name);
+                    //}
 
 
                     if (!contained)

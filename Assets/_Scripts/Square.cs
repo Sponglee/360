@@ -65,8 +65,9 @@ public class Square : MonoBehaviour {
             pewPriority = value;
         }
     }
-
-
+    //for simultanious checks
+    [SerializeField]
+    private bool stopped = false;
 
     public bool IsColliding { get; set; }
     private Transform column;
@@ -135,6 +136,9 @@ public class Square : MonoBehaviour {
         }
     }
 
+
+    [SerializeField]
+    private bool IsMoving = false;
     [SerializeField]
     private Text SquareText;
     [SerializeField]
@@ -234,29 +238,58 @@ public class Square : MonoBehaviour {
        
     }
 
+    private void Update()
+    {
+      
+    }
+
     // Update is called once per frame
     void FixedUpdate() {
 
-        //for expandMoves
+        //Check if something is moving
+        curPos = gameObject.transform.position;
+        if (curPos == lastPos)
+        {
+            IsMoving = false;
+            GameManager.Instance.SomethingIsMoving = false;
+        }
+        else
+        {
+            IsMoving = true;
+            GameManager.Instance.SomethingIsMoving = true;
+        }
+        lastPos = curPos;
 
+
+
+        if (GameManager.Instance.SomethingIsMoving)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        else
+        {
+            ApplyStyle(this.score);
+        }
+
+
+
+
+
+        //for expandMoves
         if (this.pewPriority)
         {
             this.IsSpawn = false;
         }
 
-
-        //Check if something is moving
-        curPos = gameObject.transform.localPosition;
-        if (curPos == lastPos)
+        // if this one stopped popping - try again
+        if (stopped)
         {
-            GameManager.Instance.SomethingIsMoving = false;
+            stopped = false;
+            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+            return;
         }
-        else
-        {
-            GameManager.Instance.SomethingIsMoving = true;
-        }
-        lastPos = curPos;
-
+        
+         
             
         if (this.gameObject.transform.parent != null)
         {
@@ -298,7 +331,7 @@ public class Square : MonoBehaviour {
                         && !GameManager.Instance.SomethingIsMoving)
                     {
                         //Merge started
-                        Debug.Log("Above");
+                        //Debug.Log("Above");
                         GameManager.Instance.MergeInProgress = true;
                         //for ExtendMoves
                         if (this.IsSpawn)
@@ -318,7 +351,7 @@ public class Square : MonoBehaviour {
                         && !GameManager.Instance.SomethingIsMoving)
                     {
                         //Merge started
-                        Debug.Log("DowN");
+                        //Debug.Log("DowN");
                         GameManager.Instance.MergeInProgress = true;
                          if (this.IsSpawn)
                         {
@@ -337,46 +370,49 @@ public class Square : MonoBehaviour {
                 //wait for merge to finish - then checkrow
                 if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress && !pewPriority)
                 {
-                    int firstSpot;
-                    int nextSpot;
+                   
+                        int firstSpot;
+                        int nextSpot;
 
 
-                    //one to the left
-                    if (int.Parse(transform.parent.name) - 1 < 0)
-                    {
-                        firstSpot = GameManager.Instance.nBottom-1;
-                    }
-                    else
-                        firstSpot = int.Parse(transform.parent.name) - 1;
+                        //one to the left
+                        if (int.Parse(transform.parent.name) - 1 < 0)
+                        {
+                            firstSpot = GameManager.Instance.nBottom - 1;
+                        }
+                        else
+                            firstSpot = int.Parse(transform.parent.name) - 1;
 
-                    //check next left one after getting index-1
-                    if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
-                    {
-                        nextSpot =  0;
-                    }
-                    else
-                        nextSpot = int.Parse(transform.parent.name) + 1;
+                        //check next left one after getting index-1
+                        if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
+                        {
+                            nextSpot = 0;
+                        }
+                        else
+                            nextSpot = int.Parse(transform.parent.name) + 1;
 
-                    //if there's pewPriority near - don't CheckRow
-                    if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
-                        && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
+                        //if there's pewPriority near - don't CheckRow
+                        if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
+                            && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
 
-                        || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
-                        && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
-                    {
-                        StartCoroutine(StopCheckAround());
-                    }
-                    else
-                    {
-                        
-                        GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-                     
-                    }
-                       
+                            || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
+                            && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
+                        {
+                            StartCoroutine(StopCheckAround());
+                        }
+                        else
+                        {
+
+                            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+
+                        }
+
+
+                        //Check GameOver
+                        GameManager.Instance.GameOver();
+                        MakeItGreen();
                     
-                    //Check GameOver
-                    GameManager.Instance.GameOver();
-                    MakeItGreen();
+                   
                 }
                 //else if(GameManager.Instance.SomethingIsMoving)
                 //{
@@ -401,8 +437,8 @@ public class Square : MonoBehaviour {
             GameManager.Instance.SomethingIsMoving = true;
             if ( SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
-            //else
-            //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+            else
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
 
       
@@ -425,8 +461,11 @@ public class Square : MonoBehaviour {
 
     private IEnumerator StopCheckAround()
     {
-        yield return new WaitForSeconds(0.3f);
-        checkAround = true;
+        Debug.Log("STOP");
+        yield return new WaitForSeconds(0.4f);
+        stopped = true;
+
+
     }
 
     //    //Make it green again and drop 256
