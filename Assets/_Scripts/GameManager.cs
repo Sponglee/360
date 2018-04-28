@@ -463,6 +463,7 @@ public class GameManager : Singleton<GameManager>
     //Vertical merge
     public void Merge(GameObject first, GameObject second=null)
     {
+       
         StartCoroutine(StopMerge(first,second));
     }
 
@@ -491,6 +492,8 @@ public class GameManager : Singleton<GameManager>
 
             if (tmp > scoreUpper)
             {
+                
+                AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
                 Instance.upper.text = string.Format("upper: {0}", scoreUpper);
 
@@ -759,13 +762,13 @@ public class GameManager : Singleton<GameManager>
         // 2 row
         if (rowObjs.Count < 2)
         {
-            
+           
             // expand moves++ if this happened by player
             if (tmpSquare.GetComponent<Square>().IsSpawn)
             {
 
                 ExpandMoves();
-
+                
                 tmpSquare.GetComponent<Square>().IsSpawn = false;
 
                 if (Moves > expandMoves - 1)
@@ -826,6 +829,7 @@ public class GameManager : Singleton<GameManager>
             }
 
         }
+       
         StartCoroutine(StopRow(tmpSquare));
         //now pop them
         StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
@@ -836,18 +840,20 @@ public class GameManager : Singleton<GameManager>
     //uncheck pew priority
     private IEnumerator StopRow(GameObject go)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
         go.GetComponent<Square>().PewPriority = false;
     }
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
+        AudioManager.Instance.PlaySound("bump");
         int count = 0;
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
        
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
+                
                 Pop(rowObjs, tmpSquares[count]);
                 tmpSquares[count].GetComponent<Square>().PewPriority = false;
                 //yield return new WaitForSeconds(0.2f);
@@ -909,6 +915,7 @@ public class GameManager : Singleton<GameManager>
             }
             rowObjs.Clear();
         }
+        
     }
     //Merge after pop coroutine
     public IEnumerator FurtherPops(GameObject tmpSquare)
@@ -1140,6 +1147,7 @@ public class GameManager : Singleton<GameManager>
 
             if (reds == spots.Count)
             {
+                AudioManager.Instance.PlaySound("end");
                 OpenMenu(true);
                 nextScore.text = "GameOver";
                 menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);

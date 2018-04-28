@@ -202,6 +202,9 @@ public class Square : MonoBehaviour {
             case 256:
                 ApplyStyleFromHolder(7);
                 break;
+            case 512:
+                ApplyStyleFromHolder(8);
+                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -340,7 +343,7 @@ public class Square : MonoBehaviour {
                         }
                         MergeCheck = true;
                         GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
-
+                        AudioManager.Instance.PlaySound("stick");
                     }
                 }
 
@@ -359,7 +362,7 @@ public class Square : MonoBehaviour {
                         }
                         MergeCheck = true;
                         GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
-                      
+                        AudioManager.Instance.PlaySound("stick");
                     }
                 }
 
@@ -404,7 +407,7 @@ public class Square : MonoBehaviour {
                         {
 
                             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-
+                            
                         }
 
 
@@ -427,11 +430,11 @@ public class Square : MonoBehaviour {
 
         }
         // 256 square to center
-        else if (this.IsTop == true)
-        {
-            
-            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
-        }
+        //else if (this.IsTop == true)
+        //{
+        //    AudioManager.Instance.PlaySound("256");
+        //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+        //}
         else
         {
             GameManager.Instance.SomethingIsMoving = true;
@@ -441,7 +444,7 @@ public class Square : MonoBehaviour {
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
 
-      
+
 
         // Boundary
         if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)

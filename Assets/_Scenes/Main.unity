@@ -3205,10 +3205,25 @@ MonoBehaviour:
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: 
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0
+  - name: hollow
+    clip: {fileID: 8300000, guid: cbcc82cdf8aa4e247b33a7b9356df99b, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: stick
+    clip: {fileID: 8300000, guid: d6309e8edc0863a489f1d5ed1463c851, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: bump
+    clip: {fileID: 8300000, guid: 36ab3177b11e2f54f9749c0dbc6d5ba1, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: pickup
+    clip: {fileID: 8300000, guid: 4b986bd2666d2f144be53596eb453679, type: 3}
+    volume: 0.7
+    pitch: 1
     randomPitch: 0.1
 --- !u!1 &1692868300
 GameObject:

@@ -24,13 +24,14 @@ public class Sound
         source.clip = clip;
     }
 
-    public void Play()
+    public void Play(bool rotClick = false)
     {
         source.volume = volume;
         source.pitch = pitch * (1 + Random.Range(-randomPitch / 2, randomPitch / 2));
-
-        source.PlayScheduled(0.1f);
-
+        if (rotClick)
+            source.PlayScheduled(0.1f);
+        else
+            source.Play();
         //if(!source.isPlaying)
         //{
         //    source.Play();
@@ -67,7 +68,13 @@ public class AudioManager : Singleton<AudioManager>
         {
             if(sounds[i].name == _name)
             {
-                sounds[i].Play();
+                if (sounds[i].name == "rotationClick")
+                {
+                    Debug.Log("rotclick");
+                    sounds[i].Play(true);
+                }
+                else
+                    sounds[i].Play();
                 
                 return;
             }
