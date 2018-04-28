@@ -94,7 +94,7 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> tmpSquares;
 
     //Toggle while rand are dropping
-    private bool randSpawning = false;
+    public bool randSpawning = false;
     int tmpRands;
 
     // struct to hold randomSpawn values
@@ -1033,6 +1033,8 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator StopRandom(List<RandValues>rands)
     {
         randSpawning = true;
+        AudioManager.Instance.PlaySound("healing");
+        randSpawning = true;
         //spawn all
         foreach (RandValues rand in rands)
         {
@@ -1094,6 +1096,7 @@ public class GameManager : Singleton<GameManager>
         //make spot red if 6th child
         if (randSpawn.transform.parent.childCount == 5)
         {
+            AudioManager.Instance.PlaySound("life");
             randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
         }
         randSpawns.Add(randSpawn);

@@ -14,7 +14,7 @@ public class Sound
     public float pitch = 1f;
 
     [Range(0f, 0.5f)]
-    public float randomPitch = 0.1f;
+    public float randomPitch = 0f; /* 0.1f;*/
 
 
     //get all the clips to the 'pool'
@@ -27,9 +27,11 @@ public class Sound
     public void Play(bool rotClick = false)
     {
         source.volume = volume;
-        source.pitch = pitch * (1 + Random.Range(-randomPitch / 2, randomPitch / 2));
+        source.pitch = pitch /** (1 + Random.Range(-randomPitch / 2, randomPitch / 2))*/;
         if (rotClick)
             source.PlayScheduled(0.1f);
+        else if (GameManager.Instance.randSpawning)
+            source.PlayScheduled(1f);
         else
             source.Play();
         //if(!source.isPlaying)
