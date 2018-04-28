@@ -1391,12 +1391,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 611098956}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -7.04, z: 10}
-  m_LocalScale: {x: 0.78, y: 109.08, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.06453978, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_Father: {fileID: 1287057630}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619613156
 GameObject:
@@ -1465,11 +1465,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 619613156}
   m_LocalRotation: {x: -0, y: -0, z: -0.7070918, w: 0.70712185}
-  m_LocalPosition: {x: 0, y: -7.04, z: 10}
-  m_LocalScale: {x: 0.78, y: 109.08, z: 1}
+  m_LocalPosition: {x: 0, y: -0.06453978, z: 0}
+  m_LocalScale: {x: 0.0071507203, y: 139.84624, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_Father: {fileID: 1287057630}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -89.998}
 --- !u!1 &693700621
 GameObject:
@@ -2787,7 +2787,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 0.78, y: 109.08, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 611098958}
+  - {fileID: 619613158}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3118,6 +3120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1680771747}
   - component: {fileID: 1680771746}
+  - component: {fileID: 1680771748}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3185,6 +3188,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1680771748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1680771745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725f497d71a0c2c43a2c09da66b32727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: rotationClick
+    clip: {fileID: 8300000, guid: 06fd26927da841c43a9b883d0c2e5d59, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: 
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    randomPitch: 0.1
 --- !u!1 &1692868300
 GameObject:
   m_ObjectHideFlags: 0

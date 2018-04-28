@@ -462,7 +462,7 @@ public class Square : MonoBehaviour {
     private IEnumerator StopCheckAround()
     {
         Debug.Log("STOP");
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.2f);
         stopped = true;
 
 

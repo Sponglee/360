@@ -22,6 +22,7 @@ public class Spot : MonoBehaviour {
         {
             
             GameManager.Instance.currentSpot = gameObject;
+            AudioManager.Instance.PlaySound("rotationClick");
             //Debug.Log(GameManager.Instance.currentSpot);
         }
         else if (other.CompareTag("line") && gameObject.CompareTag("spawn"))
