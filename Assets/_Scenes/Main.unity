@@ -3212,8 +3212,8 @@ MonoBehaviour:
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: hollow
-    clip: {fileID: 8300000, guid: cbcc82cdf8aa4e247b33a7b9356df99b, type: 3}
+  - name: swoop
+    clip: {fileID: 8300000, guid: 20f9977cc0c32674689963fca7c0af9f, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
@@ -3233,7 +3233,7 @@ MonoBehaviour:
     pitch: 1
     randomPitch: 0.1
   - name: 256
-    clip: {fileID: 8300000, guid: a9fa5701415463146b9936af5c1aec8a, type: 3}
+    clip: {fileID: 8300000, guid: f7c8148105fed1d4096d2a9b46c2b3ca, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1

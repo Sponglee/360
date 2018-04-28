@@ -492,8 +492,8 @@ public class GameManager : Singleton<GameManager>
 
             if (tmp > scoreUpper && tmp<= 256)
             {
-                
-                AudioManager.Instance.PlaySound("pickup");
+                if (tmp !=256)
+                    AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
                 Instance.upper.text = string.Format("upper: {0}", scoreUpper);
 
@@ -845,7 +845,8 @@ public class GameManager : Singleton<GameManager>
     {
 
         yield return new WaitForSeconds(0.25f);
-        go.GetComponent<Square>().PewPriority = false;
+        if(go !=null)
+            go.GetComponent<Square>().PewPriority = false;
     }
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
@@ -858,7 +859,7 @@ public class GameManager : Singleton<GameManager>
        
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-                
+                AudioManager.Instance.PlaySound("swoop");
                 Pop(rowObjs, tmpSquares[count]);
                 tmpSquares[count].GetComponent<Square>().PewPriority = false;
                 //yield return new WaitForSeconds(0.2f);

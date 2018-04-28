@@ -66,11 +66,10 @@ public class AudioManager : Singleton<AudioManager>
     {
         for (int i = 0; i < sounds.Length; i++)
         {
-            if(sounds[i].name == _name)
+            if (sounds[i].name == _name)
             {
-                if (sounds[i].name == "rotationClick")
+                if (sounds[i].name == "rotationClick" || sounds[i].name == "256")
                 {
-                    Debug.Log("rotclick");
                     sounds[i].Play(true);
                 }
                 else

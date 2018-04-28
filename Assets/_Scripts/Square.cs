@@ -450,7 +450,9 @@ public class Square : MonoBehaviour {
         // 256 square to center
         else if (this.IsTop == true)
         {
+            IsTop = false;
             AudioManager.Instance.PlaySound("256");
+            Debug.Log("YOSH");
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
         else
