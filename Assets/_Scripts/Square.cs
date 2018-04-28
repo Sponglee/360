@@ -28,6 +28,23 @@ public class Square : MonoBehaviour {
     public int Score
     { get { return score; } set { score = value; } }
 
+    // For sounds 
+    [SerializeField]
+    private bool further = false;
+    public bool Further
+    {
+        get
+        {
+            return further;
+        }
+
+        set
+        {
+            further = value;
+        }
+    }
+
+
     [SerializeField]
     private Color32 color;
 
@@ -158,7 +175,7 @@ public class Square : MonoBehaviour {
         }
     }
 
-   
+  
 
     Vector2 curPos;
     Vector2 lastPos;
@@ -202,9 +219,9 @@ public class Square : MonoBehaviour {
             case 256:
                 ApplyStyleFromHolder(7);
                 break;
-            case 512:
-                ApplyStyleFromHolder(8);
-                break;
+            //case 512:
+            //    ApplyStyleFromHolder(8);
+            //    break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -405,7 +422,8 @@ public class Square : MonoBehaviour {
                         }
                         else
                         {
-
+                            
+                               
                             GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
                             
                         }
@@ -430,11 +448,11 @@ public class Square : MonoBehaviour {
 
         }
         // 256 square to center
-        //else if (this.IsTop == true)
-        //{
-        //    AudioManager.Instance.PlaySound("256");
-        //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
-        //}
+        else if (this.IsTop == true)
+        {
+            AudioManager.Instance.PlaySound("256");
+            gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+        }
         else
         {
             GameManager.Instance.SomethingIsMoving = true;
@@ -497,6 +515,13 @@ public class Square : MonoBehaviour {
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         }
     }
+
+
+    //public void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if(collision.gameObject.CompareTag("spot") || (collision.gameObject.CompareTag("square") && !gameObject.CompareTag("square")))
+    //        AudioManager.Instance.PlaySound("bump");
+    //}
     //// DOUBT IF NEEDED SEE FIXED UPDATE
     //public void OnCollisionEnter2D(Collision2D other)
     //{

@@ -1821,6 +1821,13 @@ MonoBehaviour:
   - Number: 256
     SquareColor:
       serializedVersion: 2
+      rgba: 4278321728
+    TextColor:
+      serializedVersion: 2
+      rgba: 4293121113
+  - Number: 512
+    SquareColor:
+      serializedVersion: 2
       rgba: 4278190080
     TextColor:
       serializedVersion: 2
@@ -3217,6 +3224,16 @@ MonoBehaviour:
     randomPitch: 0.1
   - name: bump
     clip: {fileID: 8300000, guid: 36ab3177b11e2f54f9749c0dbc6d5ba1, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: end
+    clip: {fileID: 8300000, guid: 8ccf53f53d656ab4bbb23fdba578e3d9, type: 3}
+    volume: 0.7
+    pitch: 1
+    randomPitch: 0.1
+  - name: 256
+    clip: {fileID: 8300000, guid: a9fa5701415463146b9936af5c1aec8a, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1

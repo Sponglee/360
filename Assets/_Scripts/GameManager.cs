@@ -490,7 +490,7 @@ public class GameManager : Singleton<GameManager>
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
             first.GetComponent<Square>().ApplyStyle(tmp);
 
-            if (tmp > scoreUpper)
+            if (tmp > scoreUpper && tmp<= 256)
             {
                 
                 AudioManager.Instance.PlaySound("pickup");
@@ -585,11 +585,14 @@ public class GameManager : Singleton<GameManager>
     {
         tmpSquare.GetComponent<Square>().PewPriority = true;
 
-       // Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+        // Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
-        
 
+        if (!tmpSquare.GetComponent<Square>().Further)
+            AudioManager.Instance.PlaySound("bump");
+        else
+            tmpSquare.GetComponent<Square>().Further = false;
 
 
         //Debug.Log("ScheckRow"+spotIndex);
@@ -782,13 +785,13 @@ public class GameManager : Singleton<GameManager>
                     nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
                     slider.value = (float)(expandMoves - Moves) / expandMoves;
                 }
-
-               
+                
 
             }
         }
         else
         {
+          
             //Get rid of the one we keep
             rowObjs.Remove(tmpSquare);
            
@@ -840,13 +843,15 @@ public class GameManager : Singleton<GameManager>
     //uncheck pew priority
     private IEnumerator StopRow(GameObject go)
     {
+
         yield return new WaitForSeconds(0.25f);
         go.GetComponent<Square>().PewPriority = false;
     }
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
-        AudioManager.Instance.PlaySound("bump");
+        
+       
         int count = 0;
         //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
         yield return new WaitForSeconds(0.2f);
@@ -926,12 +931,13 @@ public class GameManager : Singleton<GameManager>
             if (tmpSquare != null)
             {
                
-                Debug.Log("PEW");
-            if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
-            {
-                tmpSquare.GetComponent<Square>().PewPriority = false;
-                tmpSquare.GetComponent<Square>().CheckAround = true;
-            }
+                    Debug.Log("PEW");
+                if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
+                {
+                    tmpSquare.GetComponent<Square>().PewPriority = false;
+                    tmpSquare.GetComponent<Square>().CheckAround = true;
+                    tmpSquare.GetComponent<Square>().Further = true;
+                }
 
 
             }
