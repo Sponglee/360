@@ -8,14 +8,10 @@ public class Rotator : Singleton<Rotator> {
     public bool DoRotate = false;
 
     public float angle = 0f;
-    private int spot;
-
-    private float duration = 0.2f;
-    private Vector3 axis = Vector3.forward;
 
 
-
-
+    //private float duration = 0.2f;
+  
 
     private float differ;
 
@@ -27,10 +23,10 @@ public class Rotator : Singleton<Rotator> {
     private Quaternion _targetRotation = Quaternion.identity;
 
     // Update is called once per frame
-    void FixedUpdate ()
-    {
-		if (DoRotate)
-        {
+ //   void FixedUpdate ()
+ //   {
+	//	if (DoRotate)
+ //       {
 
            
 
@@ -38,12 +34,12 @@ public class Rotator : Singleton<Rotator> {
                 
            
             
-        }
-	}
+ //       }
+	//}
 
     public void DoRotation(float rotAngle, int rotSpot)
     {
-        spot = rotSpot;
+
         angle = rotAngle;
         GameManager.Instance.RotationProgress = true;
         _targetRotation *= Quaternion.Euler(0,0,angle);

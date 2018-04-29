@@ -70,7 +70,7 @@ public class Square : MonoBehaviour {
     // toggle for further pop first
     [SerializeField]
     private bool pewPriority = false;
-    public bool PewPriority
+    public bool checkPriority
     {
         get
         {
@@ -82,9 +82,7 @@ public class Square : MonoBehaviour {
             pewPriority = value;
         }
     }
-    //for simultanious checks
-    [SerializeField]
-    private bool stopped = false;
+ 
 
     public bool IsColliding { get; set; }
     private Transform column;
@@ -154,8 +152,8 @@ public class Square : MonoBehaviour {
     }
 
 
-    [SerializeField]
-    private bool IsMoving = false;
+    //[SerializeField]
+    //private bool IsMoving = false;
     [SerializeField]
     private Text SquareText;
     [SerializeField]
@@ -270,12 +268,12 @@ public class Square : MonoBehaviour {
         curPos = gameObject.transform.localPosition;
         if (curPos == lastPos)
         {
-            IsMoving = false;
+            //IsMoving = false;
             GameManager.Instance.SomethingIsMoving = false;
         }
         else
         {
-            IsMoving = true;
+            //IsMoving = true;
             GameManager.Instance.SomethingIsMoving = true;
         }
         lastPos = curPos;
@@ -302,12 +300,12 @@ public class Square : MonoBehaviour {
         }
 
         // if this one stopped popping - try again
-        if (stopped)
-        {
-            stopped = false;
-            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-            return;
-        }
+        //if (stopped)
+        //{
+        //    stopped = false;
+        //    GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+        //    return;
+        //}
         
          
             
@@ -418,7 +416,8 @@ public class Square : MonoBehaviour {
                             || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
                             && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
                         {
-                            StartCoroutine(StopCheckAround());
+                            GameManager.Instance.pewObjs.Push(gameObject);
+                            //StartCoroutine(StopCheckAround());
                         }
                         else
                         {
@@ -486,7 +485,7 @@ public class Square : MonoBehaviour {
     {
         Debug.Log("STOP");
         yield return new WaitForSeconds(0.2f);
-        stopped = true;
+      
 
 
     }
