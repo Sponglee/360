@@ -416,7 +416,9 @@ public class Square : MonoBehaviour {
                             || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
                             && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
                         {
-                            GameManager.Instance.pewObjs.Push(gameObject);
+                            //add to list to pop separately
+                            if (!GameManager.Instance.pewObjs.Contains(gameObject))
+                                GameManager.Instance.pewObjs.Push(gameObject);
                             //StartCoroutine(StopCheckAround());
                         }
                         else

@@ -320,6 +320,7 @@ public class GameManager : Singleton<GameManager>
 
         if (pewObjs.Count>0)
         {
+            Debug.Log("count " + pewObjs.Count);
             StartCoroutine(StopPewPew());
         }
     }
@@ -327,11 +328,15 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator StopPewPew()
     {
+        GameObject tmpPew;
         while (pewObjs.Count>0)
         {
-            GameObject tmpPew = pewObjs.Pop();
-            CheckRow(int.Parse(tmpPew.transform.parent.name), tmpPew.transform.GetSiblingIndex(), tmpPew.GetComponent<Square>().Score, tmpPew);
+            Debug.Log("PEWPEW");
             yield return new WaitForSeconds(0.2f);
+            tmpPew = pewObjs.Pop();
+            
+            CheckRow(int.Parse(tmpPew.transform.parent.name), tmpPew.transform.GetSiblingIndex(), tmpPew.GetComponent<Square>().Score, tmpPew);
+            
         }
        
     }
