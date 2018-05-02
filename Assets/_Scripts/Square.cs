@@ -533,6 +533,12 @@ public class Square : MonoBehaviour {
 
             if (other.gameObject.CompareTag("spot"))
             {
+
+                if (this.IsSpawn)
+                {
+                    this.IsSpawn = false;
+                }
+
                 // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
                 //reset speed back

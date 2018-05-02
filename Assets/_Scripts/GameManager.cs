@@ -503,6 +503,7 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
         //Stop checks while Merging
+        
         first.GetComponent<Square>().IsMerging = true;
         //double the score
         int tmp = first.GetComponent<Square>().Score *= 2;
@@ -820,7 +821,7 @@ public class GameManager : Singleton<GameManager>
                
             }
             //Check what's above
-            if (!tmpSquare.GetComponent<Square>().checkPriority)
+           // if (!tmpSquare.GetComponent<Square>().checkPriority)
                 CheckAbove(spotIndex, squareIndex);
         }
         else
@@ -908,7 +909,7 @@ public class GameManager : Singleton<GameManager>
 
        
 
-        if (spots[index].transform.childCount > squareIndex + 1 && !CheckInProgress)
+        if (spots[index].transform.childCount > squareIndex + 1 )
         {
             for (int i = squareIndex; i < spots[index].transform.childCount; i++)
             {
@@ -921,12 +922,13 @@ public class GameManager : Singleton<GameManager>
                         if (spots[index].transform.GetChild(i+1).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score)
                         {
                             Debug.Log("up " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                            spots[index].transform.GetChild(i).localPosition += new Vector3(0.3f, 0f, 0f);
+                            spots[index].transform.GetChild(i+1).localPosition += new Vector3(+0.3f, 0f, 0f);
+                            Destroy(spots[index].transform.GetChild(i));
                             break;
                         }
                 }
                 //CHECK SCORE to THE LEFT
-                else if (spots[firstIndex].transform.childCount > i)
+                if (spots[firstIndex].transform.childCount > i)
                 {
                         //if its score is the same
                         if (spots[firstIndex].transform.GetChild(i).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score
@@ -940,7 +942,7 @@ public class GameManager : Singleton<GameManager>
                         }
                 }
                 //CHECK SCORE TO the RIGHT
-                else if (spots[nextIndex].transform.childCount > i)
+                if (spots[nextIndex].transform.childCount > i)
                 {
                         //if its score is the same
                         if (spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score
