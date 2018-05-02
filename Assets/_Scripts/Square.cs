@@ -52,7 +52,10 @@ public class Square : MonoBehaviour {
     public Transform centerPrefab;
 
     private bool IsTop = false;
- 
+
+    public bool ColumnPew = false;
+
+
     private Transform squareTmpSquare = null;
     public Transform SquareTmpSquare
     {
@@ -256,27 +259,23 @@ public class Square : MonoBehaviour {
        
     }
 
-    private void Update()
-    {
-      
-    }
 
     // Update is called once per frame
     void FixedUpdate() {
 
-        //Check if something is moving
-        curPos = gameObject.transform.localPosition;
-        if (curPos == lastPos)
-        {
-            //IsMoving = false;
-            GameManager.Instance.SomethingIsMoving = false;
-        }
-        else
-        {
-            //IsMoving = true;
-            GameManager.Instance.SomethingIsMoving = true;
-        }
-        lastPos = curPos;
+        ////Check if something is moving
+        //curPos = gameObject.transform.localPosition;
+        //if (curPos == lastPos)
+        //{
+        //    //IsMoving = false;
+        //    GameManager.Instance.SomethingIsMoving = false;
+        //}
+        //else
+        //{
+        //    //IsMoving = true;
+        //    GameManager.Instance.SomethingIsMoving = true;
+        //}
+        //lastPos = curPos;
 
 
 
@@ -337,107 +336,107 @@ public class Square : MonoBehaviour {
 
 
             //Call checkRow or Merge
-            if (CheckAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
+            //if (CheckAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
+            //{
+
+            //    int mergeIndex = gameObject.transform.GetSiblingIndex();
+
+            //    //Check for same square above
+            //    if ((mergeIndex + 1) < gameObject.transform.parent.childCount)
+            //    {
+            //        if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score
+            //            && !GameManager.Instance.SomethingIsMoving)
+            //        {
+            //            //Merge started
+            //            //Debug.Log("Above");
+            //            GameManager.Instance.MergeInProgress = true;
+            //            //for ExtendMoves
+            //            if (this.IsSpawn)
+            //            {
+            //                this.IsSpawn = false;
+            //            }
+            //            MergeCheck = true;
+            //            GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
+            //            AudioManager.Instance.PlaySound("stick");
+            //        }
+            //    }
+
+            //    // Check for same square below
+            //    if ((mergeIndex - 1) >= 0)
+            //    {
+            //        if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score 
+            //            && !GameManager.Instance.SomethingIsMoving)
+            //        {
+            //            //Merge started
+            //            //Debug.Log("DowN");
+            //            GameManager.Instance.MergeInProgress = true;
+            //             if (this.IsSpawn)
+            //            {
+            //                this.IsSpawn = false;
+            //            }
+            //            MergeCheck = true;
+            //            GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
+            //            AudioManager.Instance.PlaySound("stick");
+            //        }
+            //    }
+
+            //    //if something moved - wait with check trigger until it doesnt
+            //    if(!GameManager.Instance.SomethingIsMoving)
+            //        CheckAround = false;
+
+            //    //wait for merge to finish - then checkrow
+            //    if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress && !pewPriority)
+            //    {
+
+            //            int firstSpot;
+            //            int nextSpot;
+
+
+            //            //one to the left
+            //            if (int.Parse(transform.parent.name) - 1 < 0)
+            //            {
+            //                firstSpot = GameManager.Instance.nBottom - 1;
+            //            }
+            //            else
+            //                firstSpot = int.Parse(transform.parent.name) - 1;
+
+            //            //check next left one after getting index-1
+            //            if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
+            //            {
+            //                nextSpot = 0;
+            //            }
+            //            else
+            //                nextSpot = int.Parse(transform.parent.name) + 1;
+
+            //            //if there's pewPriority near - don't CheckRow
+            //            if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
+            //                && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
+
+            //                || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
+            //                && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
+            //            {
+            //                //add to list to pop separately
+            //                if (!GameManager.Instance.pewObjs.Contains(gameObject))
+            //                    GameManager.Instance.pewObjs.Push(gameObject);
+            //                //StartCoroutine(StopCheckAround());
+            //            }
+            //            else
+            //            {
+
+
+            //                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+
+            //            }
+
+
+            //            //Check GameOver
+            //            GameManager.Instance.GameOver();
+            //            MakeItGreen();
+
+
+            //    }
+            //else if(GameManager.Instance.SomethingIsMoving)
             {
-            
-                int mergeIndex = gameObject.transform.GetSiblingIndex();
-
-                //Check for same square above
-                if ((mergeIndex + 1) < gameObject.transform.parent.childCount)
-                {
-                    if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score
-                        && !GameManager.Instance.SomethingIsMoving)
-                    {
-                        //Merge started
-                        //Debug.Log("Above");
-                        GameManager.Instance.MergeInProgress = true;
-                        //for ExtendMoves
-                        if (this.IsSpawn)
-                        {
-                            this.IsSpawn = false;
-                        }
-                        MergeCheck = true;
-                        GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
-                        AudioManager.Instance.PlaySound("stick");
-                    }
-                }
-
-                // Check for same square below
-                if ((mergeIndex - 1) >= 0)
-                {
-                    if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score 
-                        && !GameManager.Instance.SomethingIsMoving)
-                    {
-                        //Merge started
-                        //Debug.Log("DowN");
-                        GameManager.Instance.MergeInProgress = true;
-                         if (this.IsSpawn)
-                        {
-                            this.IsSpawn = false;
-                        }
-                        MergeCheck = true;
-                        GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
-                        AudioManager.Instance.PlaySound("stick");
-                    }
-                }
-
-                //if something moved - wait with check trigger until it doesnt
-                if(!GameManager.Instance.SomethingIsMoving)
-                    CheckAround = false;
-
-                //wait for merge to finish - then checkrow
-                if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress && !pewPriority)
-                {
-                   
-                        int firstSpot;
-                        int nextSpot;
-
-
-                        //one to the left
-                        if (int.Parse(transform.parent.name) - 1 < 0)
-                        {
-                            firstSpot = GameManager.Instance.nBottom - 1;
-                        }
-                        else
-                            firstSpot = int.Parse(transform.parent.name) - 1;
-
-                        //check next left one after getting index-1
-                        if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
-                        {
-                            nextSpot = 0;
-                        }
-                        else
-                            nextSpot = int.Parse(transform.parent.name) + 1;
-
-                        //if there's pewPriority near - don't CheckRow
-                        if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
-                            && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
-
-                            || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
-                            && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
-                        {
-                            //add to list to pop separately
-                            if (!GameManager.Instance.pewObjs.Contains(gameObject))
-                                GameManager.Instance.pewObjs.Push(gameObject);
-                            //StartCoroutine(StopCheckAround());
-                        }
-                        else
-                        {
-                            
-                               
-                            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-                            
-                        }
-
-
-                        //Check GameOver
-                        GameManager.Instance.GameOver();
-                        MakeItGreen();
-                    
-                   
-                }
-                //else if(GameManager.Instance.SomethingIsMoving)
-                //{
                 //    //if something id
                 //    Debug.Log("REEEEEEEEEEEEEEEEEEEEEE");
                 //    StartCoroutine(StopPew());
@@ -448,7 +447,7 @@ public class Square : MonoBehaviour {
 
 
         }
-        // 256 square to center
+        //256 square to center
         else if (this.IsTop == true)
         {
             IsTop = false;
@@ -458,8 +457,8 @@ public class Square : MonoBehaviour {
         }
         else
         {
-            GameManager.Instance.SomethingIsMoving = true;
-            if ( SquareTmpSquare != null)
+            //GameManager.Instance.SomethingIsMoving = true;
+            if (SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
             else
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
@@ -483,14 +482,14 @@ public class Square : MonoBehaviour {
 
 
 
-    private IEnumerator StopCheckAround()
-    {
-        Debug.Log("STOP");
-        yield return new WaitForSeconds(0.2f);
+    //private IEnumerator StopCheckAround()
+    //{
+    //    Debug.Log("STOP");
+    //    yield return new WaitForSeconds(0.2f);
       
 
 
-    }
+    //}
 
     //    //Make it green again and drop 256
     private void MakeItGreen()
@@ -522,104 +521,106 @@ public class Square : MonoBehaviour {
 
     //public void OnCollisionEnter2D(Collision2D collision)
     //{
-    //    if(collision.gameObject.CompareTag("spot") || (collision.gameObject.CompareTag("square") && !gameObject.CompareTag("square")))
-    //        AudioManager.Instance.PlaySound("bump");
+    //   
     //}
-    //// DOUBT IF NEEDED SEE FIXED UPDATE
-    //public void OnCollisionEnter2D(Collision2D other)
-    //{
+    // DOUBT IF NEEDED SEE FIXED UPDATE
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+
+        if (other.gameObject.CompareTag("spot") || (other.gameObject.CompareTag("square") && !gameObject.CompareTag("square")))
+                  AudioManager.Instance.PlaySound("bump");
 
 
-    //    if (other.gameObject.CompareTag("spot"))
-    //    {
-    //        // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
+            if (other.gameObject.CompareTag("spot"))
+            {
+                // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
-    //        //reset speed back
-    //        this.speed = 10f;
+                //reset speed back
+                this.speed = 10f;
 
-    //        //for column checkrow
-    //        GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-    //        this.NotTouched = true;
-
-
-    //    }
-    //    //other square
-    //    if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
-    //    {
-    //        //make sure checks only one of 2 collisions (one that is not touched
-    //        other.gameObject.GetComponent<Square>().touched = true;
-
-    //        if (this.score == other.gameObject.GetComponent<Square>().Score)
-    //        {
-    //           // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
-    //            //if spawned by player and pops - no moves 
-    //            if (this.IsSpawn)
-    //            {
-    //                this.IsSpawn = false;
-    //            }
+                //for column checkrow
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+               // this.NotTouched = true;
 
 
+            }
+        //other square
+        if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
+        {
+            //make sure checks only one of 2 collisions (one that is not touched
+            other.gameObject.GetComponent<Square>().touched = true;
 
-    //            GameManager.Instance.Merge(gameObject, other.gameObject);
-    //            gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-
-
-    //        }
-    //        else if (this.score != other.gameObject.GetComponent<Square>().Score)
-    //        {
-    //            // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
-
-    //            //reset speed back
-    //            this.speed = 10f;
-
-    //            //for column checkrow
-    //            GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-    //            this.NotTouched = true;
-
-
-    //            //reset Touched bool 
-    //            StartCoroutine(StopTouch(other.gameObject));
-
-    //            //Check GameOver
-    //            GameManager.Instance.GameOver();
+            if (this.score == other.gameObject.GetComponent<Square>().Score)
+            {
+                // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+                //if spawned by player and pops - no moves 
+                if (this.IsSpawn)
+                {
+                    this.IsSpawn = false;
+                }
 
 
 
-
-    //            //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
-
-    //        }
-
-    //        gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-    //        //other.gameObject.GetComponent<Square>().touched = false;
-
-    //        //Check for boops
-
-    //    }
-
-    //    //Make it green again
-    //    if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
-    //    {
-
-    //        if (gameObject.transform.parent.childCount < 5)
-    //        {
-    //            if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
-    //            {
-    //                //Debug.Log("u can ");
-    //                gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-    //            }
-    //        }
-    //    }
+                GameManager.Instance.Merge(gameObject, other.gameObject);
+                //gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
 
 
-    //    if (this.score >= 256)
-    //    {
-    //        this.IsTop = true;
+            }
+            else if (this.score != other.gameObject.GetComponent<Square>().Score)
+            {
+                // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
 
-    //        this.gameObject.transform.parent = null;
-    //        gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-    //    }
-    //}
+                //reset speed back
+                this.speed = 10f;
+
+                //for column checkrow
+                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+              //  this.NotTouched = true;
+
+
+                //reset Touched bool 
+                StartCoroutine(StopTouch(other.gameObject));
+
+                //Check GameOver
+                GameManager.Instance.GameOver();
+
+
+
+
+                //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+
+            }
+
+            gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
+            //other.gameObject.GetComponent<Square>().touched = false;
+
+            //Check for boops
+
+        }
+
+        //Make it green again
+        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+        {
+
+            if (gameObject.transform.parent.childCount < 5)
+            {
+                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+                {
+                    //Debug.Log("u can ");
+                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                }
+            }
+        }
+
+
+        if (this.score >= 256)
+        {
+            this.IsTop = true;
+
+            this.gameObject.transform.parent = null;
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
+    }
 
 
     private IEnumerator StopTouch(GameObject first)
