@@ -168,14 +168,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   IsSpawn: 0
-  score: 16
+  score: 128
   further: 0
   color:
     serializedVersion: 2
     rgba: 0
   centerPrefab: {fileID: 0}
   ColumnPew: 0
-  pewPriority: 0
+  checkPriority: 0
   touched: 0
   checkAround: 1
   isMerging: 0

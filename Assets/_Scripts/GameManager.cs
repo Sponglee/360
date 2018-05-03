@@ -629,7 +629,19 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
-        
+        //If same score above
+        if (spots[spotIndex].transform.childCount >squareIndex + 1)
+        {
+            if (spots[spotIndex].transform.GetChild(squareIndex+1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+            {
+                Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
+                spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(+0.3f, 0f, 0f);
+                // Destroy(spots[index].transform.GetChild(i).gameObject);
+                return;
+            }
+        }
+
+
         tmpSquare.GetComponent<Square>().CheckPriority = true;
         CheckInProgress = true;
         Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
@@ -853,8 +865,10 @@ public class GameManager : Singleton<GameManager>
                
             }
             //Check what's above
-           // if (!tmpSquare.GetComponent<Square>().checkPriority)
-                CheckAbove(spotIndex, squareIndex);
+            // if (!tmpSquare.GetComponent<Square>().checkPriority)
+
+        
+            CheckAbove(spotIndex, squareIndex);
         }
         else
         {
@@ -929,7 +943,19 @@ public class GameManager : Singleton<GameManager>
         {
             
             GameObject tmpObj = checkObjs.Dequeue();
+           
+         
+            if (tmpObj.GetComponent<Square>().Score == 256)
+            {
+                //reset 
+                TurnInProgress = false;
+                furtherScore = 0;
+                furtherSpot = 99;
+                yield break;
+            }
+
             int tmpDist = int.Parse(tmpObj.transform.parent.name);
+            Debug.Log(tmpObj.GetComponent<Square>().Score + " DIST " + tmpDist);
             //If doesnt pop with further and same score - check this one
             if (tmpObj != null/* && !FurtherProgress*/ && furtherScore != tmpObj.GetComponent<Square>().Score 
                     && Mathf.Abs(furtherSpot - tmpDist)>4) /*far enough*/
@@ -1002,16 +1028,7 @@ public class GameManager : Singleton<GameManager>
                     return;
 
                 Debug.Log("ABVE");
-                if (spots[index].transform.childCount>i+1 )
-                {
-                        if (spots[index].transform.GetChild(i+1).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score)
-                        {
-                            Debug.Log("up " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                            spots[index].transform.GetChild(i+1).localPosition += new Vector3(+0.3f, 0f, 0f);
-                           // Destroy(spots[index].transform.GetChild(i).gameObject);
-                            break;
-                        }
-                }
+               
                 ////CHECK SCORE to THE LEFT
                 if (spots[firstIndex].transform.childCount > i)
                 {
@@ -1313,11 +1330,13 @@ public class GameManager : Singleton<GameManager>
 
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
+        
         //make spot red if 6th child
         if (randSpawn.transform.parent.childCount == 5)
         {
             randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
         }
+    
         randSpawns.Add(randSpawn);
     }
   
@@ -1330,27 +1349,60 @@ public class GameManager : Singleton<GameManager>
             //full spot colors red and opens another one
             currentSpot.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
         }
-        
 
-        //foreach (GameObject spot in spots)
-        //{
-        //    if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
-        //    {
-        //        if (spot.transform.GetChild(spot.transform.childCount - 1) != null /*&& spot.transform.GetChild(spot.transform.childCount - 1).GetComponent<Square>().Score != next_score*/)
-        //        {
-        //            reds++;
-        //        }
-        //    }
-        //    else if (spot.GetComponent<Spot>().Blocked)
-        //    {
-        //        reds++;
-        //    }
-        //}
+
+
+        StartCoroutine(StopGameOverShort());
+        //for long game
         StartCoroutine(StopGameOver());
     }
 
 
-    //Game over delayed
+
+
+    //Game over short game
+    private IEnumerator StopGameOverShort()
+    {
+        int reds = 0;
+        yield return new WaitForSeconds(0.4f);
+        foreach (GameObject spot in spots)
+        {
+            if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+            {
+                if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
+                {
+                    reds++;
+
+                }
+            }
+            else if (spot.GetComponent<Spot>().Blocked)
+            {
+                reds++;
+            }
+        }
+        Debug.Log("reds " + reds);
+        if (reds == 1)
+        {
+            noMoves = true;
+            yield return new WaitForSeconds(1f);
+            if (reds == 1)
+            {
+                AudioManager.Instance.PlaySound("end");
+
+                OpenMenu(true);
+                nextScore.text = "GameOver";
+                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+            }
+            else
+                noMoves = false;
+        }
+    }
+
+
+
+
+
+    //Game over long game
     private IEnumerator StopGameOver()
     {
         int reds = 0;
@@ -1371,11 +1423,11 @@ public class GameManager : Singleton<GameManager>
             }
         }
         Debug.Log("reds " + reds);
-        if (reds == 1/*spots.Count*/)
+        if (reds == spots.Count)
         {
             noMoves = true;
-            yield return new WaitForSeconds(0.2f);
-            if (reds == 1/*spots.Count*/)
+            yield return new WaitForSeconds(1f);
+            if (reds == spots.Count)
             {
                 AudioManager.Instance.PlaySound("end");
                 
