@@ -89,17 +89,17 @@ public class Square : MonoBehaviour {
     }
     // toggle for further pop first
     [SerializeField]
-    private bool pewPriority = false;
-    public bool checkPriority
+    private bool checkPriority = false;
+    public bool CheckPriority
     {
         get
         {
-            return pewPriority;
+            return checkPriority;
         }
 
         set
         {
-            pewPriority = value;
+            checkPriority = value;
         }
     }
  
@@ -309,7 +309,7 @@ public class Square : MonoBehaviour {
 
 
         //for expandMoves
-        if (this.pewPriority)
+        if (this.checkPriority)
         {
             this.IsSpawn = false;
         }
@@ -561,7 +561,7 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Push(gameObject);
+                GameManager.Instance.checkObjs.Enqueue(gameObject);
 
                 //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
                // this.NotTouched = true;
@@ -598,7 +598,7 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Push(gameObject);
+                GameManager.Instance.checkObjs.Enqueue(gameObject);
 
                 //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
               //  this.NotTouched = true;

@@ -95,7 +95,7 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> randSpawns;
     List<GameObject> tmpSquares;
     //Checkrow Queue
-    public Stack<GameObject> checkObjs;
+    public Queue<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
     int tmpRands;
@@ -117,7 +117,7 @@ public class GameManager : Singleton<GameManager>
     //For checkrow cornercases (simultaneous pops of same score)
     public bool FurtherProgress = false;
     public int furtherScore=0;
-
+    public int furtherSpot = 99;
 
 
 
@@ -158,7 +158,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        checkObjs = new Stack<GameObject>();
+        checkObjs = new Queue<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
@@ -328,6 +328,7 @@ public class GameManager : Singleton<GameManager>
         //Launch checkrows
         if (checkObjs.Count>0 && !TurnInProgress)
         {
+            Debug.Log(checkObjs.Count);
             //To make it check once
             TurnInProgress = true;
 
@@ -629,7 +630,7 @@ public class GameManager : Singleton<GameManager>
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
         
-        tmpSquare.GetComponent<Square>().checkPriority = true;
+        tmpSquare.GetComponent<Square>().CheckPriority = true;
         CheckInProgress = true;
         Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
@@ -927,28 +928,37 @@ public class GameManager : Singleton<GameManager>
         while (checkObjs.Count >0)
         {
             
-            GameObject tmpObj = checkObjs.Pop();
-
+            GameObject tmpObj = checkObjs.Dequeue();
+            int tmpDist = int.Parse(tmpObj.transform.parent.name);
             //If doesnt pop with further and same score - check this one
-            if (!FurtherProgress && furtherScore != tmpObj.GetComponent<Square>().Score)
+            if (tmpObj != null/* && !FurtherProgress*/ && furtherScore != tmpObj.GetComponent<Square>().Score 
+                    && Mathf.Abs(furtherSpot - tmpDist)>4) /*far enough*/
             {
                 CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
+               
             }
             else
             {
-                furtherScore = 0;
                 TurnInProgress = false;
-                yield break;
+                checkObjs.Enqueue(tmpObj);
+                break;
+
             }
-                
+                //{
+                //    furtherScore = 0;
+                //    TurnInProgress = false;
+                //    yield break;
+                //}
 
-            yield return new WaitForSeconds(0.01f);
 
-            //Continue with pop
-            yield return StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
+                // yield return new WaitForSeconds(0.01f);
+
+                //Continue with pop
+                yield return StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
             //reset 
             TurnInProgress = false;
             furtherScore = 0;
+            furtherSpot = 99;
         }
        
 
@@ -1057,7 +1067,7 @@ public class GameManager : Singleton<GameManager>
         {
                 AudioManager.Instance.PlaySound("swoop");
                 Pop(rowObjs, tmpSquares[count]);
-                tmpSquares[count].GetComponent<Square>().checkPriority = false;
+                tmpSquares[count].GetComponent<Square>().CheckPriority = false;
 
             //yield return new WaitForSeconds(0.2f);
             //tmpSquares.Clear();
@@ -1117,6 +1127,7 @@ public class GameManager : Singleton<GameManager>
 
                     FurtherProgress = true;
                     furtherScore = tmprowObj.GetComponent<Square>().Score;
+                    furtherSpot = int.Parse(tmpSquare.transform.parent.name);
                     StartCoroutine(FurtherPops(tmprowObj));
 
                     //Detach this square from parent
@@ -1145,7 +1156,7 @@ public class GameManager : Singleton<GameManager>
             //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
             //{
-            furthertmpSquare.GetComponent<Square>().checkPriority = false;
+            furthertmpSquare.GetComponent<Square>().CheckPriority = false;
            
             //    tmpSquare.GetComponent<Square>().CheckAround = true;
             //   
