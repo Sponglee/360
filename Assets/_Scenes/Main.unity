@@ -2100,7 +2100,7 @@ GameObject:
   - component: {fileID: 912948816}
   m_Layer: 0
   m_Name: OuterBase
-  m_TagString: Untagged
+  m_TagString: outer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3238,7 +3238,7 @@ MonoBehaviour:
     pitch: 1
     randomPitch: 0.1
   - name: pickup
-    clip: {fileID: 8300000, guid: 4b986bd2666d2f144be53596eb453679, type: 3}
+    clip: {fileID: 0}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1

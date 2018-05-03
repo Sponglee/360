@@ -28,6 +28,23 @@ public class Square : MonoBehaviour {
     public int Score
     { get { return score; } set { score = value; } }
 
+    GameObject desto;
+    public GameObject Desto
+    {
+        get
+        {
+            return desto;
+        }
+
+        set
+        {
+            desto = value;
+        }
+    }
+
+
+
+
     // For sounds 
     [SerializeField]
     private bool further = false;
@@ -176,8 +193,7 @@ public class Square : MonoBehaviour {
         }
     }
 
-  
-
+   
     Vector2 curPos;
     Vector2 lastPos;
 
@@ -308,7 +324,7 @@ public class Square : MonoBehaviour {
         
          
             
-        if (this.gameObject.transform.parent != null)
+        if (!this.gameObject.transform.parent.CompareTag("outer"))
         {
             //If siblingindex changed => check around
             if (gameObject.transform.GetSiblingIndex() != checkGrid)
@@ -495,7 +511,7 @@ public class Square : MonoBehaviour {
     private void MakeItGreen()
     {
        
-        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+        if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
         {
 
             if (gameObject.transform.parent.childCount < 5)
@@ -513,7 +529,7 @@ public class Square : MonoBehaviour {
         {
             this.IsTop = true;
 
-            this.gameObject.transform.parent = null;
+            this.gameObject.transform.parent = gameObject.transform.parent.parent.parent.GetChild(3);
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         }
     }
@@ -534,10 +550,10 @@ public class Square : MonoBehaviour {
             if (other.gameObject.CompareTag("spot"))
             {
 
-                if (this.IsSpawn)
-                {
-                    this.IsSpawn = false;
-                }
+                //if (this.IsSpawn)
+                //{
+                //    this.IsSpawn = false;
+                //}
 
                 // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex());
 
@@ -545,7 +561,9 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                GameManager.Instance.checkObjs.Push(gameObject);
+
+                //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
                // this.NotTouched = true;
 
 
@@ -580,7 +598,9 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
+                GameManager.Instance.checkObjs.Push(gameObject);
+
+                //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
               //  this.NotTouched = true;
 
 
@@ -605,7 +625,7 @@ public class Square : MonoBehaviour {
         }
 
         //Make it green again
-        if (gameObject.transform.parent != null && gameObject.CompareTag("square"))
+        if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
         {
 
             if (gameObject.transform.parent.childCount < 5)
@@ -623,7 +643,7 @@ public class Square : MonoBehaviour {
         {
             this.IsTop = true;
 
-            this.gameObject.transform.parent = null;
+            this.gameObject.transform.parent = gameObject.transform.parent.parent.parent.GetChild(3);
             gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
         }
     }

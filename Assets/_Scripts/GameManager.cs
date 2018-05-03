@@ -59,7 +59,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSpawn;
     //next spot to turn green
     public int LastSpot { get; set; }
-
+    public bool TurnInProgress = false;
 
     public Stack<GameObject> pewObjs;
 
@@ -94,7 +94,8 @@ public class GameManager : Singleton<GameManager>
     //list of randSpawns
     List<GameObject> randSpawns;
     List<GameObject> tmpSquares;
-
+    //Checkrow Queue
+    public Stack<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
     int tmpRands;
@@ -112,6 +113,14 @@ public class GameManager : Singleton<GameManager>
 
     public bool SomethingIsMoving = false;
     public bool CheckInProgress = false;
+
+    //For checkrow cornercases (simultaneous pops of same score)
+    public bool FurtherProgress = false;
+    public int furtherScore=0;
+
+
+
+
     public bool MergeInProgress = false;
     public bool RotationProgress = false;
     public float rotationDuration = 0.2f;
@@ -128,11 +137,7 @@ public class GameManager : Singleton<GameManager>
     int checkClickSpot;
 
     int rotSpot;
-    Vector3 lineDir;
-    Vector3 spotDir;
-
-    bool rotDigit;
-
+    
   
     bool firstClick = true;
  
@@ -153,6 +158,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        checkObjs = new Stack<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
@@ -318,11 +324,15 @@ public class GameManager : Singleton<GameManager>
 
         //=======================================INPUT END ==============================================
 
-        //if (pewObjs.Count>0)
-        //{
-        //    Debug.Log("count " + pewObjs.Count);
-        //    
-        //}
+
+        //Launch checkrows
+        if (checkObjs.Count>0 && !TurnInProgress)
+        {
+            //To make it check once
+            TurnInProgress = true;
+
+            StartCoroutine(Turn());
+        }
     }
 
 
@@ -503,12 +513,14 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator StopMerge(GameObject first, GameObject second=null)
     {
         //Stop checks while Merging
-        
+        if (first == null)
+            yield break;
         first.GetComponent<Square>().IsMerging = true;
         //double the score
         int tmp = first.GetComponent<Square>().Score *= 2;
         yield return new WaitForSeconds(0.2f);
-        first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
+        if (first != null)
+            first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
         Destroy(second);
         //if (first == null)
         //{
@@ -611,6 +623,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    
 
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
@@ -641,8 +654,9 @@ public class GameManager : Singleton<GameManager>
         int nextIndex = 0;
 
         //add placed square to rowOBjs
+      
         rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
+        
         do
         {
             //if there's no start yet
@@ -670,13 +684,15 @@ public class GameManager : Singleton<GameManager>
                 {
                     //if its score is the same
                     if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore 
-                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging)
+                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                       )
                     {
                         //if there's nothing to the left
                         if (spots[firstIndex].transform.childCount < squareIndex + 1)
                         {
                             
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                
                                 //if never set up yet
                                 if (startIndex > nBottom)
                                 {
@@ -704,7 +720,7 @@ public class GameManager : Singleton<GameManager>
                             //else if score is the same and not merging or checkrow
                             else if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore 
                                 && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority)
+                                /*&& !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 startIndex = nBottom + 10;
@@ -751,7 +767,8 @@ public class GameManager : Singleton<GameManager>
                 {
                     //if its score is the same
                     if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore 
-                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging)
+                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                        )
                     {
                         //if there's nothing to the right
                         if (spots[nextIndex].transform.childCount < squareIndex + 1 )
@@ -783,7 +800,7 @@ public class GameManager : Singleton<GameManager>
                             //else if score is the same and not merging or checkrow
                             else if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore 
                                 && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                 && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority)
+                                /* && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
                                 
                             {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
@@ -843,7 +860,7 @@ public class GameManager : Singleton<GameManager>
 
             //Get rid of the one we keep
             rowObjs.Remove(tmpSquare);
-
+            
             //If there's no same rowObj in pop - add
             if (!popObjs.Contains(rowObjs))
             {
@@ -898,52 +915,47 @@ public class GameManager : Singleton<GameManager>
         //StartCoroutine(StopRow(tmpSquare));
         //now pop them
         //StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
-        Turn();
+        
         CheckInProgress = false;
     }
 
-
-
-
-
-    public void Turn()
+    //Checkrow and pop coroutine
+    public IEnumerator Turn()
     {
         List<List<GameObject>> tmppopObjs = popObjs;
-        
+
+        while (checkObjs.Count >0)
+        {
+            
+            GameObject tmpObj = checkObjs.Pop();
+
+            //If doesnt pop with further and same score - check this one
+            if (!FurtherProgress && furtherScore != tmpObj.GetComponent<Square>().Score)
+            {
+                CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
+            }
+            else
+            {
+                furtherScore = 0;
+                TurnInProgress = false;
+                yield break;
+            }
+                
+
+            yield return new WaitForSeconds(0.01f);
+
+            //Continue with pop
+            yield return StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
+            //reset 
+            TurnInProgress = false;
+            furtherScore = 0;
+        }
+       
 
 
-
-
-        StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
+       
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////CHECK FOR EACH IN COLUMN
@@ -986,7 +998,7 @@ public class GameManager : Singleton<GameManager>
                         {
                             Debug.Log("up " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
                             spots[index].transform.GetChild(i+1).localPosition += new Vector3(+0.3f, 0f, 0f);
-                            Destroy(spots[index].transform.GetChild(i).gameObject);
+                           // Destroy(spots[index].transform.GetChild(i).gameObject);
                             break;
                         }
                 }
@@ -1046,7 +1058,9 @@ public class GameManager : Singleton<GameManager>
                 AudioManager.Instance.PlaySound("swoop");
                 Pop(rowObjs, tmpSquares[count]);
                 tmpSquares[count].GetComponent<Square>().checkPriority = false;
-                //yield return new WaitForSeconds(0.2f);
+
+            //yield return new WaitForSeconds(0.2f);
+            //tmpSquares.Clear();
                 StartCoroutine(FurtherPops(tmpSquares[count]));
                 count++;
         }
@@ -1058,9 +1072,9 @@ public class GameManager : Singleton<GameManager>
         }
         for (int i = 0; i < tmpSquares.Count; i++)
         {
-                tmpSquares.RemoveAt(i);
+            tmpSquares.RemoveAt(i);
         }
-      
+
     }
 
 
@@ -1095,17 +1109,18 @@ public class GameManager : Singleton<GameManager>
                     }
 
                 }
-                if (tmprowObj.transform != null && tmpTmpSquare != null)
+                if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare)
                 {
                    
                     tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
                     tmprowObj.GetComponent<Collider2D>().isTrigger = true;
 
-
+                    FurtherProgress = true;
+                    furtherScore = tmprowObj.GetComponent<Square>().Score;
                     StartCoroutine(FurtherPops(tmprowObj));
 
                     //Detach this square from parent
-                    tmprowObj.transform.parent = null;
+                    tmprowObj.transform.parent = tmprowObj.transform.parent.parent.parent.GetChild(3);
                 }
             }
             rowObjs.Clear();
@@ -1115,33 +1130,36 @@ public class GameManager : Singleton<GameManager>
     //Merge after pop coroutine
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
+        GameObject furthertmpSquare = tmpSquare;
         CheckInProgress = true;
        
         yield return new WaitForSeconds(0.2f);
             if (tmpSquare != null)
             {
                 
-                tmpSquare.transform.localPosition += new Vector3(0.3f, 0f, 0f);
+                furthertmpSquare.transform.localPosition += new Vector3(0.3f, 0f, 0f);
                     Debug.Log("PEW");
-                
-            CheckAbove(int.Parse(tmpSquare.transform.parent.name), tmpSquare.transform.GetSiblingIndex());
+
+            CheckInProgress = false;
+            if (tmpSquare !=null)
+            //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
             //{
-            tmpSquare.GetComponent<Square>().checkPriority = false;
-            CheckInProgress = false;
+            furthertmpSquare.GetComponent<Square>().checkPriority = false;
+           
             //    tmpSquare.GetComponent<Square>().CheckAround = true;
             //   
             //}
 
 
             }
-            
-       
 
-       
-       
 
-    
+
+
+        FurtherProgress = false;
+
+
     }
 
 
@@ -1333,6 +1351,7 @@ public class GameManager : Singleton<GameManager>
                 if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
                 {
                     reds++;
+
                 }
             }
             else if (spot.GetComponent<Spot>().Blocked)
@@ -1340,13 +1359,15 @@ public class GameManager : Singleton<GameManager>
                 reds++;
             }
         }
-        if (reds == spots.Count)
+        Debug.Log("reds " + reds);
+        if (reds == 1/*spots.Count*/)
         {
             noMoves = true;
-
-            if (reds == spots.Count)
+            yield return new WaitForSeconds(0.2f);
+            if (reds == 1/*spots.Count*/)
             {
                 AudioManager.Instance.PlaySound("end");
+                
                 OpenMenu(true);
                 nextScore.text = "GameOver";
                 menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
