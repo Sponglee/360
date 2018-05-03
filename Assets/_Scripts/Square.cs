@@ -263,19 +263,19 @@ public class Square : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate() {
 
-        ////Check if something is moving
-        //curPos = gameObject.transform.localPosition;
-        //if (curPos == lastPos)
-        //{
-        //    //IsMoving = false;
-        //    GameManager.Instance.SomethingIsMoving = false;
-        //}
-        //else
-        //{
-        //    //IsMoving = true;
-        //    GameManager.Instance.SomethingIsMoving = true;
-        //}
-        //lastPos = curPos;
+        //Check if something is moving
+        curPos = gameObject.transform.localPosition;
+        if (curPos == lastPos)
+        {
+            //IsMoving = false;
+            GameManager.Instance.SomethingIsMoving = false;
+        }
+        else
+        {
+            //IsMoving = true;
+            GameManager.Instance.SomethingIsMoving = true;
+        }
+        lastPos = curPos;
 
 
 
