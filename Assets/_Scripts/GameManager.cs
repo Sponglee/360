@@ -326,7 +326,7 @@ public class GameManager : Singleton<GameManager>
 
 
         //Launch checkrows
-        if (checkObjs.Count>0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress)
+        if (checkObjs.Count>0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
         {
             Debug.Log("Move count " + checkObjs.Count);
             //To make it check once
@@ -674,11 +674,14 @@ public class GameManager : Singleton<GameManager>
                 Debug.Log("DADADDA");
                 TurnInProgress = false;
                 checkObjs.Enqueue(tmpObj);
-               
-             
-                
+
+
+
                 break;
             }
+
+
+
             //{
             //    furtherScore = 0;
             //    TurnInProgress = false;
@@ -686,7 +689,7 @@ public class GameManager : Singleton<GameManager>
             //}
 
 
-            //yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.01f);
 
             //Continue with pop
             yield return StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
@@ -725,7 +728,7 @@ public class GameManager : Singleton<GameManager>
 
         if (!tmpSquare.GetComponent<Square>().Further)
         {
-            Debug.Log("bump");
+          
             AudioManager.Instance.PlaySound("bump");
         }
 
@@ -1081,24 +1084,11 @@ public class GameManager : Singleton<GameManager>
 
 
     }
-
-    ////uncheck pew priority
-    //private IEnumerator StopRow(GameObject go)
-    //{
-
-    //    yield return new WaitForSeconds(0.25f);
-    //    if(go !=null)
-    //        go.GetComponent<Square>().checkPriority = false;
-    //}
-
-
-
-
+    
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
-        
-       
+ 
         int count = 0;
         
         yield return new WaitForSeconds(0.2f);
@@ -1113,7 +1103,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         tmpSquares[count].GetComponent<Square>().CheckPriority = false;
                         //count++;
-                        
+
                         continue;
                     }
 
@@ -1199,7 +1189,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
         GameObject furthertmpSquare = tmpSquare;
-        CheckInProgress = true;
+       
        
         yield return new WaitForSeconds(0.2f);
             if (tmpSquare != null)
@@ -1208,7 +1198,7 @@ public class GameManager : Singleton<GameManager>
                 furthertmpSquare.transform.localPosition += new Vector3(0.3f, 0f, 0f);
                     //Debug.Log("PEW");
 
-            CheckInProgress = false;
+          
             if (tmpSquare !=null)
             //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
@@ -1382,7 +1372,7 @@ public class GameManager : Singleton<GameManager>
   
 
     //Check if gameOver
-    public void GameOver()
+    public void GameOver(GameObject chk=null)
     {
         if (currentSpot.transform.childCount == 5)
         {
@@ -1395,6 +1385,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(StopGameOverShort());
         //for long game
         StartCoroutine(StopGameOver());
+        //StartCoroutine(StopGameOver());
     }
 
 
@@ -1403,7 +1394,7 @@ public class GameManager : Singleton<GameManager>
     //Game over short game
     private IEnumerator StopGameOverShort()
     {
-        int reds = 0;
+       
         yield return new WaitForSeconds(0.4f);
         foreach (GameObject spot in spots)
         {
@@ -1411,31 +1402,23 @@ public class GameManager : Singleton<GameManager>
             {
                 if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
                 {
-                    reds++;
+                    noMoves = true;
+                    yield return new WaitForSeconds(1f);
+                    if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+                    {
+                        AudioManager.Instance.PlaySound("end");
 
+                        OpenMenu(true);
+                        nextScore.text = "GameOver";
+                        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+                    }
+                    else
+                        noMoves = false;
                 }
             }
-            else if (spot.GetComponent<Spot>().Blocked)
-            {
-                reds++;
-            }
+           
         }
-        Debug.Log("reds " + reds);
-        if (reds == 1)
-        {
-            noMoves = true;
-            yield return new WaitForSeconds(1f);
-            if (reds == 1)
-            {
-                AudioManager.Instance.PlaySound("end");
-
-                OpenMenu(true);
-                nextScore.text = "GameOver";
-                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
-            }
-            else
-                noMoves = false;
-        }
+       
     }
 
 

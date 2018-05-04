@@ -613,7 +613,7 @@ public class Square : MonoBehaviour {
                 StartCoroutine(StopTouch(other.gameObject));
 
                 //Check GameOver
-                GameManager.Instance.GameOver();
+                GameManager.Instance.GameOver(gameObject);
 
 
 
