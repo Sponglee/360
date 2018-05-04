@@ -2099,7 +2099,7 @@ GameObject:
   - component: {fileID: 912948815}
   - component: {fileID: 912948816}
   m_Layer: 0
-  m_Name: OuterBase
+  m_Name: 99
   m_TagString: outer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3164,6 +3164,7 @@ MonoBehaviour:
   moves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}
+  TurnInProgress: 0
   spots: []
   spawns: []
   nBottom: 0
@@ -3175,6 +3176,7 @@ MonoBehaviour:
   ScoreText: {fileID: 212843313}
   SomethingIsMoving: 0
   CheckInProgress: 0
+  FurtherProgress: 0
   MergeInProgress: 0
   RotationProgress: 0
   rotationDuration: 0.1

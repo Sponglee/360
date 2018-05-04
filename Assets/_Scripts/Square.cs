@@ -487,9 +487,14 @@ public class Square : MonoBehaviour {
         {
             Destroy(gameObject);
         }
+        //reached tmpSquare
         else if (squareTmpSquare != null && transform.position == squareTmpSquare.position)
         {
-            Destroy(gameObject);
+            if(GameManager.Instance.checkObjs.Contains(gameObject))
+            {
+                Debug.Log("DADADADA ETO KAVKAZ");
+            }
+                Destroy(gameObject);
         }
 
 
@@ -667,7 +672,7 @@ public class Square : MonoBehaviour {
             GameManager.Instance.scores += this.score;
             GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
             //Debug.Log("destroy this");
-            Destroy(gameObject);
+           // Destroy(gameObject);
         }
         //if (other.gameObject.CompareTag("square") && this.score != other.gameObject.GetComponent<Square>().Score
 
