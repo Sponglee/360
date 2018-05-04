@@ -548,8 +548,8 @@ public class Square : MonoBehaviour {
     public void OnCollisionEnter2D(Collision2D other)
     {
 
-        if (other.gameObject.CompareTag("spot") || (other.gameObject.CompareTag("square") && !gameObject.CompareTag("square")))
-                  AudioManager.Instance.PlaySound("bump");
+        //if (other.gameObject.CompareTag("spot") || (other.gameObject.CompareTag("square") && !gameObject.CompareTag("square")))
+        //          AudioManager.Instance.PlaySound("bump");
 
 
             if (other.gameObject.CompareTag("spot"))
@@ -613,7 +613,7 @@ public class Square : MonoBehaviour {
                 StartCoroutine(StopTouch(other.gameObject));
 
                 //Check GameOver
-                GameManager.Instance.GameOver(gameObject);
+                GameManager.Instance.GameOver(gameObject.transform.parent.gameObject);
 
 
 

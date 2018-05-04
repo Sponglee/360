@@ -1374,17 +1374,22 @@ public class GameManager : Singleton<GameManager>
     //Check if gameOver
     public void GameOver(GameObject chk=null)
     {
-        if (currentSpot.transform.childCount == 5)
+        Debug.Log(" game Over ");
+        if (chk!=null)
         {
-            //full spot colors red and opens another one
-            currentSpot.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            if (chk.transform.childCount == 5)
+            {
+                //full spot colors red and opens another one
+                chk.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            }
+
+
+
+            StartCoroutine(StopGameOverShort(chk));
         }
-
-
-
-        StartCoroutine(StopGameOverShort());
+      
+        
         //for long game
-        StartCoroutine(StopGameOver());
         //StartCoroutine(StopGameOver());
     }
 
@@ -1392,19 +1397,18 @@ public class GameManager : Singleton<GameManager>
 
 
     //Game over short game
-    private IEnumerator StopGameOverShort()
+    private IEnumerator StopGameOverShort(GameObject chk=null)
     {
        
         yield return new WaitForSeconds(0.4f);
-        foreach (GameObject spot in spots)
-        {
-            if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+        
+            if (chk.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !chk.GetComponent<Spot>().Blocked)
             {
-                if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
+                if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
                 {
                     noMoves = true;
                     yield return new WaitForSeconds(1f);
-                    if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+                    if (chk.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !chk.GetComponent<Spot>().Blocked)
                     {
                         AudioManager.Instance.PlaySound("end");
 
@@ -1417,7 +1421,7 @@ public class GameManager : Singleton<GameManager>
                 }
             }
            
-        }
+        
        
     }
 
