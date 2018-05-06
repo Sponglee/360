@@ -95,9 +95,9 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> randSpawns;
     List<GameObject> tmpSquares;
 
-    //Checkrow Queue
+    //Checkrow Stack
    
-    public Queue<GameObject> checkObjs;
+    public Stack<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
     int tmpRands;
@@ -158,7 +158,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        checkObjs = new Queue<GameObject>();
+        checkObjs = new Stack<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
@@ -623,7 +623,7 @@ public class GameManager : Singleton<GameManager>
         while (checkObjs.Count >0)
         {
            
-            GameObject tmpObj = checkObjs.Dequeue();
+            GameObject tmpObj = checkObjs.Pop();
 
             int tmpDist=99;
 
@@ -649,7 +649,7 @@ public class GameManager : Singleton<GameManager>
                         continue;
                     }
                 }
-                else
+                else 
                 {
                     continue;
                 }
@@ -688,7 +688,8 @@ public class GameManager : Singleton<GameManager>
             //If doesnt pop with further and same score - check this one
             if (tmpObj != null)
             {
-                CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
+                if (!tmpObj.transform.parent.CompareTag("outer"))
+                    CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
                
             }
             else
@@ -729,120 +730,131 @@ public class GameManager : Singleton<GameManager>
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
     {
-        //If same score above
-        if (spots[spotIndex].transform.childCount > squareIndex + 1)
+        if (tmpSquare != null)
+
         {
-            if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+            //If same score above
+            if (spots[spotIndex].transform.childCount > squareIndex + 1)
             {
-                Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-                spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(+0.3f, 0f, 0f);
-                // Destroy(spots[index].transform.GetChild(i).gameObject);
-                return;
+                if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+                {
+                    Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
+                    spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(+0.3f, 0f, 0f);
+                    // Destroy(spots[index].transform.GetChild(i).gameObject);
+                    return;
+                }
             }
-        }
 
 
-        tmpSquare.GetComponent<Square>().CheckPriority = true;
-        CheckInProgress = true;
-        //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+            tmpSquare.GetComponent<Square>().CheckPriority = true;
+            CheckInProgress = true;
+            //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
 
-        if (!tmpSquare.GetComponent<Square>().Further)
-        {
-          
-            AudioManager.Instance.PlaySound("bump");
-        }
-
-        else
-            tmpSquare.GetComponent<Square>().Further = false;
-
-
-        //Debug.Log("ScheckRow"+spotIndex);
-        List<GameObject> rowObjs = new List<GameObject>();
-
-        //iterator for list
-        int index = spotIndex;
-        //noMoves = false;
-        //index of start of rowObjs (outside nbottom numbers to be safe)
-        int startIndex = nBottom + 10;
-        int endIndex = nBottom + 11;
-        int firstIndex = 0;
-        int nextIndex = 0;
-
-        //add placed square to rowOBjs
-
-        rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
-        do
-        {
-            //if there's no start yet
-            if (startIndex > nBottom)
+            if (!tmpSquare.GetComponent<Square>().Further)
             {
-                //passing through 0
-                if (index - 1 < 0)
-                {
-                    index = nBottom - 1;
-                }
-                else
-                    index = index - 1;
 
-                //check next left one after getting index-1
-                if (index - 1 < 0)
-                {
-                    firstIndex = nBottom - 1;
-                }
-                else
-                    firstIndex = index - 1;
+                AudioManager.Instance.PlaySound("bump");
+            }
+
+            else
+                tmpSquare.GetComponent<Square>().Further = false;
 
 
-                //if there's square with same squareIndex
-                if (spots[index].transform.childCount > squareIndex)
+            //Debug.Log("ScheckRow"+spotIndex);
+            List<GameObject> rowObjs = new List<GameObject>();
+
+            //iterator for list
+            int index = spotIndex;
+            //noMoves = false;
+            //index of start of rowObjs (outside nbottom numbers to be safe)
+            int startIndex = nBottom + 10;
+            int endIndex = nBottom + 11;
+            int firstIndex = 0;
+            int nextIndex = 0;
+
+            //add placed square to rowOBjs
+
+            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+
+            do
+            {
+                //if there's no start yet
+                if (startIndex > nBottom)
                 {
-                    //if its score is the same
-                    if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
-                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                       )
+                    //passing through 0
+                    if (index - 1 < 0)
                     {
-                        //if there's nothing to the left
-                        if (spots[firstIndex].transform.childCount < squareIndex + 1)
+                        index = nBottom - 1;
+                    }
+                    else
+                        index = index - 1;
+
+                    //check next left one after getting index-1
+                    if (index - 1 < 0)
+                    {
+                        firstIndex = nBottom - 1;
+                    }
+                    else
+                        firstIndex = index - 1;
+
+
+                    //if there's square with same squareIndex
+                    if (spots[index].transform.childCount > squareIndex)
+                    {
+                        //if its score is the same
+                        if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
+                            && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                           )
                         {
-
-                            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-
-                            //if never set up yet
-                            if (startIndex > nBottom)
+                            //if there's nothing to the left
+                            if (spots[firstIndex].transform.childCount < squareIndex + 1)
                             {
-                                // start pf a row
-                                startIndex = index;
-                                index = spotIndex;
-                                continue;
-                            }
 
-                        }
-                        else
-                        {
-                            //or there's not that score
-                            if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
-                            {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+
                                 //if never set up yet
                                 if (startIndex > nBottom)
                                 {
+                                    // start pf a row
                                     startIndex = index;
                                     index = spotIndex;
                                     continue;
                                 }
+
                             }
-                            //else if score is the same and not merging or checkrow
-                            else if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
-                                && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                /*&& !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
+                            else
                             {
-                                rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-                                startIndex = nBottom + 10;
-                                continue;
+                                //or there's not that score
+                                if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
+                                {
+                                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                    //if never set up yet
+                                    if (startIndex > nBottom)
+                                    {
+                                        startIndex = index;
+                                        index = spotIndex;
+                                        continue;
+                                    }
+                                }
+                                //else if score is the same and not merging or checkrow
+                                else if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
+                                    && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                                    /*&& !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
+                                {
+                                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                    startIndex = nBottom + 10;
+                                    continue;
+                                }
                             }
+                        }
+                        else
+                        {
+                            //if score isnt same - move back to spotIndex and continue
+                            startIndex = spotIndex;
+                            index = spotIndex;
+                            continue;
                         }
                     }
                     else
@@ -852,77 +864,76 @@ public class GameManager : Singleton<GameManager>
                         index = spotIndex;
                         continue;
                     }
-                }
-                else
-                {
-                    //if score isnt same - move back to spotIndex and continue
-                    startIndex = spotIndex;
-                    index = spotIndex;
-                    continue;
-                }
 
-            }
-            //if we found left end
-            else if (startIndex < nBottom)
-            {
-                //passing through nBottom (0)
-                if (index + 1 > nBottom - 1)
-                {
-                    index = 0;
                 }
-                else
-                    index = index + 1;
-                //check next one after setting index+1
-                if (index + 1 > nBottom - 1)
+                //if we found left end
+                else if (startIndex < nBottom)
                 {
-                    nextIndex = 0;
-                }
-                else
-                    nextIndex = index + 1;
-                //if there's square with same squareIndex
-                if (spots[index].transform.childCount > squareIndex)
-                {
-                    //if its score is the same
-                    if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
-                        && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                        )
+                    //passing through nBottom (0)
+                    if (index + 1 > nBottom - 1)
                     {
-                        //if there's nothing to the right
-                        if (spots[nextIndex].transform.childCount < squareIndex + 1)
+                        index = 0;
+                    }
+                    else
+                        index = index + 1;
+                    //check next one after setting index+1
+                    if (index + 1 > nBottom - 1)
+                    {
+                        nextIndex = 0;
+                    }
+                    else
+                        nextIndex = index + 1;
+                    //if there's square with same squareIndex
+                    if (spots[index].transform.childCount > squareIndex)
+                    {
+                        //if its score is the same
+                        if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
+                            && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                            )
                         {
-
-                            rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-                            //if never set up yet
-                            if (endIndex > nBottom)
+                            //if there's nothing to the right
+                            if (spots[nextIndex].transform.childCount < squareIndex + 1)
                             {
-                                // start pf a row
-                                endIndex = index;
-                                break;
-                            }
 
-                        }
-                        else
-                        {
-                            //or there's not that score
-                            if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
-                            {
                                 rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                 //if never set up yet
                                 if (endIndex > nBottom)
                                 {
+                                    // start pf a row
                                     endIndex = index;
                                     break;
                                 }
-                            }
-                            //else if score is the same and not merging or checkrow
-                            else if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
-                                && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                /* && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
 
-                            {
-                                rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
-                                continue;
                             }
+                            else
+                            {
+                                //or there's not that score
+                                if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score != checkScore)
+                                {
+                                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                    //if never set up yet
+                                    if (endIndex > nBottom)
+                                    {
+                                        endIndex = index;
+                                        break;
+                                    }
+                                }
+                                //else if score is the same and not merging or checkrow
+                                else if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
+                                    && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
+                                    /* && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
+
+                                {
+                                    rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
+                                    continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //if score isnt same - move back to spotIndex and continue
+                            endIndex = spotIndex;
+                            break;
                         }
                     }
                     else
@@ -932,108 +943,88 @@ public class GameManager : Singleton<GameManager>
                         break;
                     }
                 }
-                else
-                {
-                    //if score isnt same - move back to spotIndex and continue
-                    endIndex = spotIndex;
-                    break;
-                }
             }
-        }
-        while (endIndex > nBottom + 1);
+            while (endIndex > nBottom + 1);
 
-        // 2 row
-        if (rowObjs.Count < 2)
-        {
-
-            // expand moves++ if this happened by player
-            if (tmpSquare.GetComponent<Square>().IsSpawn)
+            // 2 row
+            if (rowObjs.Count < 2)
             {
 
-                ExpandMoves();
-
-                tmpSquare.GetComponent<Square>().IsSpawn = false;
-
-                if (Moves > expandMoves - 1)
+                // expand moves++ if this happened by player
+                if (tmpSquare.GetComponent<Square>().IsSpawn)
                 {
 
-                    Expand();
-                    Moves = 0;
-                    slider.value = 1;
+                    ExpandMoves();
 
-                    //expandMoves += expandMoves/2;
-                    nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
-                    slider.value = (float)(expandMoves - Moves) / expandMoves;
-                }
+                    tmpSquare.GetComponent<Square>().IsSpawn = false;
 
-
-            }
-            //Check what's above
-            // if (!tmpSquare.GetComponent<Square>().checkPriority)
-
-
-            CheckAbove(spotIndex, squareIndex);
-        }
-        else
-        {
-
-            //Get rid of the one we keep
-            rowObjs.Remove(tmpSquare);
-
-            //If there's no same rowObj in pop - add
-            if (!popObjs.Contains(rowObjs))
-            {
-                popObjs.Add(rowObjs);
-            }
-
-
-            //add its tmpSquare to list
-            if (!tmpSquares.Contains(tmpSquare))
-            {
-
-                foreach (List<GameObject> checkRowObjs in popObjs)
-                {
-                    //add only first tmpSquare if there's any in popObjs to pop
-                    bool contained = false;
-                    if (checkRowObjs.Contains(tmpSquare))
+                    if (Moves > expandMoves - 1)
                     {
-                        contained = true;
+
+                        Expand();
+                        Moves = 0;
+                        slider.value = 1;
+
+                        //expandMoves += expandMoves/2;
+                        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+                        slider.value = (float)(expandMoves - Moves) / expandMoves;
                     }
 
 
-                    //foreach(GameObject go in checkRowObjs)
-                    //{
-                    //    //Debug.Log(" checkRowObjs: " + go.transform.parent.name);
-                    //}
+                }
+                //Check what's above
+                // if (!tmpSquare.GetComponent<Square>().checkPriority)
 
 
-                    if (!contained)
+                CheckAbove(spotIndex, squareIndex);
+            }
+            else
+            {
+
+                //Get rid of the one we keep
+                rowObjs.Remove(tmpSquare);
+
+                //If there's no same rowObj in pop - add
+                if (!popObjs.Contains(rowObjs))
+                {
+                    popObjs.Add(rowObjs);
+                }
+
+
+                //add its tmpSquare to list
+                if (!tmpSquares.Contains(tmpSquare))
+                {
+
+                    foreach (List<GameObject> checkRowObjs in popObjs)
                     {
-                        tmpSquares.Add(tmpSquare);
+                        //add only first tmpSquare if there's any in popObjs to pop
+                        bool contained = false;
+                        if (checkRowObjs.Contains(tmpSquare))
+                        {
+                            contained = true;
+                        }
+
+
+                        //foreach(GameObject go in checkRowObjs)
+                        //{
+                        //    //Debug.Log(" checkRowObjs: " + go.transform.parent.name);
+                        //}
+
+
+                        if (!contained)
+                        {
+                            tmpSquares.Add(tmpSquare);
+                        }
+
                     }
 
                 }
 
             }
-
         }
+       
 
 
-
-        //foreach(List<GameObject> po in popObjs)
-        //{
-        //    int count = 0;
-        //    foreach(GameObject go in po)
-        //    {
-        //        Debug.Log(count + " " + go.transform.GetSiblingIndex() + " || " + go.GetComponent<Square>().Score);
-        //    }
-
-        //    count++;
-        //}
-
-        //StartCoroutine(StopRow(tmpSquare));
-        //now pop them
-        //StartCoroutine(StopPop(popObjs, tmpSquares, wheel));
 
         CheckInProgress = false;
     }
@@ -1176,32 +1167,37 @@ public class GameManager : Singleton<GameManager>
                 {
                     scores += rowObj.GetComponent<Square>().Score;
                     ScoreText.text = scores.ToString();
-                }
 
-                if (!tmprowObj.transform.parent.CompareTag("outer"))
-                {
-                    //rowObj.transform.position += new Vector3(0, 0, 10);
-                    if (!tmprowObj.transform.parent.GetComponent<Spot>().Blocked)
+
+
+                    if (!tmprowObj.transform.parent.CompareTag("outer"))
                     {
-                        tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                        //rowObj.transform.position += new Vector3(0, 0, 10);
+                        if (!tmprowObj.transform.parent.GetComponent<Spot>().Blocked)
+                        {
+                            tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                        }
+
                     }
+                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare)
+                    {
 
+                        tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
+                        tmprowObj.GetComponent<Collider2D>().isTrigger = true;
+
+                        FurtherProgress = true;
+                        //furtherScore = tmprowObj.GetComponent<Square>().Score;
+                        //for avoiding double collapses
+
+                        StartCoroutine(FurtherPops(tmprowObj));
+
+                        //Detach this square from parent
+                        tmprowObj.transform.parent = tmprowObj.transform.parent.parent.parent.GetChild(3);
+                    }
                 }
-                if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare)
-                {
-                   
-                    tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
-                    tmprowObj.GetComponent<Collider2D>().isTrigger = true;
+                
 
-                    FurtherProgress = true;
-                    //furtherScore = tmprowObj.GetComponent<Square>().Score;
-                    //for avoiding double collapses
-                  
-                    StartCoroutine(FurtherPops(tmprowObj));
-
-                    //Detach this square from parent
-                    tmprowObj.transform.parent = tmprowObj.transform.parent.parent.parent.GetChild(3);
-                }
+               
             }
             rowObjs.Clear();
         }

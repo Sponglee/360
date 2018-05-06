@@ -566,7 +566,7 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Enqueue(gameObject);
+                GameManager.Instance.checkObjs.Push(gameObject);
 
                 //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
                // this.NotTouched = true;
@@ -603,7 +603,7 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Enqueue(gameObject);
+                GameManager.Instance.checkObjs.Push(gameObject);
 
                 //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
               //  this.NotTouched = true;
