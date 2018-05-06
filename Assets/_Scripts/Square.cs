@@ -672,7 +672,7 @@ public class Square : MonoBehaviour {
             GameManager.Instance.scores += this.score;
             GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
             //Debug.Log("destroy this");
-           // Destroy(gameObject);
+            Destroy(gameObject);
         }
         //if (other.gameObject.CompareTag("square") && this.score != other.gameObject.GetComponent<Square>().Score
 

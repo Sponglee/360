@@ -628,36 +628,58 @@ public class GameManager : Singleton<GameManager>
             int tmpDist=99;
 
 
-            if (checkObjs.Count>0)
+            if (checkObjs.Count>1)
             {
                 
                 GameObject nextObj = checkObjs.Peek();
 
                 //check distance between (including passing through 0)
-                tmpDist= Mathf.Abs(int.Parse(tmpObj.transform.parent.name) - int.Parse(nextObj.transform.parent.name));
+                if (tmpObj != null && nextObj !=null)
+                {
+                    tmpDist = Mathf.Abs(int.Parse(tmpObj.transform.parent.name) - int.Parse(nextObj.transform.parent.name));
+                    if (Mathf.Abs(nBottom - tmpDist) <= tmpDist)
+                        tmpDist = Mathf.Abs(nBottom - tmpDist);
 
-                if (Mathf.Abs(nBottom - tmpDist) <= tmpDist)
-                    tmpDist = Mathf.Abs(nBottom - tmpDist);
+                    // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
 
-               // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
+                    //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
+                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
+                    {
+                        Debug.Log("NEXT");
+                        continue;
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+
+              
+
+               
             }
-
-            //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-            if (tmpDist<=4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
+            else
             {
-                Debug.Log("NEXT");
-                continue;
+                //Debug.Log("DADADDA");
+                //TurnInProgress = false;
+                //// checkObjs.Enqueue(tmpObj);
+
+
+
+                //break;
             }
 
+           
 
 
-            if (tmpObj.GetComponent<Square>().Score == 256)
+
+            if (tmpObj != null && tmpObj.GetComponent<Square>().Score == 256)
             {
                 //reset 
                 TurnInProgress = false;
                 
               
-                yield break;
+                continue;
             }
 
        
@@ -673,7 +695,7 @@ public class GameManager : Singleton<GameManager>
             {
                 Debug.Log("DADADDA");
                 TurnInProgress = false;
-                checkObjs.Enqueue(tmpObj);
+               // checkObjs.Enqueue(tmpObj);
 
 
 
@@ -1385,12 +1407,12 @@ public class GameManager : Singleton<GameManager>
 
 
 
-            StartCoroutine(StopGameOverShort(chk));
+            //StartCoroutine(StopGameOverShort(chk));
         }
-      
-        
+
+
         //for long game
-        //StartCoroutine(StopGameOver());
+        StartCoroutine(StopGameOver());
     }
 
 
