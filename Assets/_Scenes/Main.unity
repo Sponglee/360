@@ -1233,7 +1233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &602672239
 Transform:
   m_ObjectHideFlags: 0
@@ -3172,6 +3172,7 @@ MonoBehaviour:
   upper: {fileID: 1758041954}
   nextShrink: {fileID: 225389364}
   slider: {fileID: 2057602267}
+  FltText: {fileID: 1001251165192770, guid: ab1b896a697a23f4ea2d91ea2a3cb5e2, type: 2}
   scores: 0
   ScoreText: {fileID: 212843313}
   SomethingIsMoving: 0

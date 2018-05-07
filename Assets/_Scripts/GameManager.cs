@@ -70,6 +70,7 @@ public class GameManager : Singleton<GameManager>
 
     //spawn cooldown
     private float coolDown;
+    private float turnTimer;
 
     // number of objects
     public int nBottom;
@@ -80,6 +81,9 @@ public class GameManager : Singleton<GameManager>
     public Text nextShrink;
     public static int next_score;
     public Slider slider;
+
+    //scrolling text
+    public GameObject FltText;
 
     //scores
     public int scores;
@@ -97,7 +101,7 @@ public class GameManager : Singleton<GameManager>
 
     //Checkrow Stack
    
-    public Stack<GameObject> checkObjs;
+    public Queue<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
     int tmpRands;
@@ -143,6 +147,8 @@ public class GameManager : Singleton<GameManager>
  
     //For clickspawn
     bool cantSpawn = true;
+    bool NoClickSpawn = false;
+
 
     //FollowMouse resistance
     public float follow__Delay;
@@ -158,7 +164,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        checkObjs = new Stack<GameObject>();
+        checkObjs = new Queue<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
@@ -216,6 +222,16 @@ public class GameManager : Singleton<GameManager>
             checkClickSpot = int.Parse(currentSpot.name);
             clickAngle = GetFirstClickAngle();
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
+
+            if (SomethingIsMoving || MergeInProgress || CheckInProgress || TurnInProgress)
+            {
+                Debug.Log("NOPE");
+                NoClickSpawn = true;
+                //camera shake?
+                return;
+            }
+            else
+                NoClickSpawn = false;
         }
 
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
@@ -306,17 +322,20 @@ public class GameManager : Singleton<GameManager>
             }
 
             if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
-            { 
+            {
 
-                if (SomethingIsMoving || MergeInProgress || CheckInProgress)
+                if (SomethingIsMoving || MergeInProgress || CheckInProgress || TurnInProgress || NoClickSpawn)
                 {
+                    Debug.Log("NOPE");
                     //camera shake?
                     return;
                 }
                 else
                 {
+                    coolDown = Time.time + 0.5f;
                     ClickSpawn();
                     cantSpawn = true;
+                   
                 }
             }
 
@@ -326,14 +345,25 @@ public class GameManager : Singleton<GameManager>
 
 
         //Launch checkrows
-        if (checkObjs.Count>0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
+        if (checkObjs.Count > 0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
         {
             Debug.Log("Move count " + checkObjs.Count);
             //To make it check once
             TurnInProgress = true;
-
+            turnTimer = Time.deltaTime + 6f;
             StartCoroutine(Turn());
         }
+        else if (checkObjs.Count > 0 && TurnInProgress)
+        {
+
+            if (Time.deltaTime > turnTimer)
+            {
+                Debug.Log("NYETNYETNYET");
+                checkObjs.Clear();
+                TurnInProgress = false;
+            }
+        }
+        
     }
 
     
@@ -475,7 +505,7 @@ public class GameManager : Singleton<GameManager>
     //Spawn new square
     private void ClickSpawn()
     {
-        coolDown = Time.time + 0.5f;
+      
         //spawn a square
         squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
         squareSpawn.GetComponent<Square>().Score = next_score;
@@ -491,7 +521,9 @@ public class GameManager : Singleton<GameManager>
     //Vertical merge
     public void Merge(GameObject first, GameObject second=null)
     {
-       
+        
+
+        
         StartCoroutine(StopMerge(first,second));
     }
 
@@ -506,6 +538,24 @@ public class GameManager : Singleton<GameManager>
         //double the score
         int tmp = first.GetComponent<Square>().Score *= 2;
         yield return new WaitForSeconds(0.2f);
+
+
+
+        //========================Text floating
+        //Get some text out
+        Debug.Log("DING");
+        GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
+        if (second != null)
+            textObj.transform.position = second.transform.position;
+        else
+            textObj.transform.position = first.transform.position;
+        if (first !=null && !first.transform.parent.CompareTag("outer"))
+            textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
+
+        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.ToString();
+
+        //=======================
+
         if (first != null)
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
 
@@ -534,6 +584,10 @@ public class GameManager : Singleton<GameManager>
             first.GetComponent<Square>().MergeCheck = false;
             first.GetComponent<Square>().IsMerging = false;
             MergeInProgress = false;
+
+            //add score
+            scores += first.GetComponent<Square>().Score;
+            ScoreText.text = scores.ToString();
         }
     }
 
@@ -623,12 +677,12 @@ public class GameManager : Singleton<GameManager>
         while (checkObjs.Count >0)
         {
            
-            GameObject tmpObj = checkObjs.Pop();
+            GameObject tmpObj = checkObjs.Dequeue();
 
             int tmpDist=99;
 
 
-            if (checkObjs.Count>1)
+            if (checkObjs.Count>0)
             {
                 
                 GameObject nextObj = checkObjs.Peek();
@@ -645,12 +699,20 @@ public class GameManager : Singleton<GameManager>
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
                     if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
                     {
+                        if(tmpSquares.Contains(tmpObj))
+                        {
+                            tmpSquares.Remove(tmpObj);
+                        }
                         Debug.Log("NEXT");
                         continue;
                     }
                 }
-                else 
+                else
                 {
+                    if (tmpSquares.Contains(tmpObj))
+                    {
+                        tmpSquares.Remove(tmpObj);
+                    }
                     continue;
                 }
 
@@ -1116,7 +1178,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         tmpSquares[count].GetComponent<Square>().CheckPriority = false;
                         //count++;
-
+                        thisPopObjs.Remove(rowObjs);
                         continue;
                     }
 
@@ -1165,8 +1227,7 @@ public class GameManager : Singleton<GameManager>
                 //Update the score
                 if (tmprowObj != null)
                 {
-                    scores += rowObj.GetComponent<Square>().Score;
-                    ScoreText.text = scores.ToString();
+                    
 
 
 
@@ -1179,7 +1240,7 @@ public class GameManager : Singleton<GameManager>
                         }
 
                     }
-                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare)
+                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare && !tmprowObj.transform.parent.CompareTag("outer"))
                     {
 
                         tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
@@ -1402,13 +1463,13 @@ public class GameManager : Singleton<GameManager>
             }
 
 
-
-            //StartCoroutine(StopGameOverShort(chk));
+            // 1 column gameover
+            StartCoroutine(StopGameOverShort(chk));
         }
 
 
         //for long game
-        StartCoroutine(StopGameOver());
+        //StartCoroutine(StopGameOver());
     }
 
 

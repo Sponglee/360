@@ -28,6 +28,7 @@ public class Square : MonoBehaviour {
     public int Score
     { get { return score; } set { score = value; } }
 
+
     GameObject desto;
     public GameObject Desto
     {
@@ -566,7 +567,7 @@ public class Square : MonoBehaviour {
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Push(gameObject);
+                GameManager.Instance.checkObjs.Enqueue(gameObject);
 
                 //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
                // this.NotTouched = true;
@@ -581,51 +582,35 @@ public class Square : MonoBehaviour {
 
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
-                // Debug.Log("SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
+              
                 //if spawned by player and pops - no moves 
                 if (this.IsSpawn)
                 {
                     this.IsSpawn = false;
                 }
 
-
-
+                //GameManager.Instance.scores += score;
+               
                 GameManager.Instance.Merge(gameObject, other.gameObject);
-                //gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
-
-
+                
+               
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                // Debug.Log(" SQUARE " + this.Score + " " + gameObject.transform.parent.name + ":" + gameObject.transform.GetSiblingIndex() );
-
+                
                 //reset speed back
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Push(gameObject);
-
-                //GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-              //  this.NotTouched = true;
-
+                GameManager.Instance.checkObjs.Enqueue(gameObject);
 
                 //reset Touched bool 
                 StartCoroutine(StopTouch(other.gameObject));
 
                 //Check GameOver
                 GameManager.Instance.GameOver(gameObject.transform.parent.gameObject);
-
-
-
-
-                //Debug.Log("!!SCORE : " + gameObject.GetComponent<Square>().Score + " to " + other.gameObject.GetComponent<Square>().Score);
-
             }
-
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
-            //other.gameObject.GetComponent<Square>().touched = false;
-
-            //Check for boops
 
         }
 
@@ -669,8 +654,8 @@ public class Square : MonoBehaviour {
         //Destroy on contact with center
         if (other.CompareTag("center") && gameObject.CompareTag("square"))
         {
-            GameManager.Instance.scores += this.score;
-            GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
+            //GameManager.Instance.scores += this.score;
+            //GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
             //Debug.Log("destroy this");
             Destroy(gameObject);
         }
