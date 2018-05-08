@@ -359,7 +359,7 @@ public class GameManager : Singleton<GameManager>
             if (Time.deltaTime > turnTimer)
             {
                 Debug.Log("NYETNYETNYET");
-                checkObjs.Clear();
+                //checkObjs.Clear();
                 TurnInProgress = false;
             }
         }
@@ -541,14 +541,17 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        //========================Text floating
+        //========================Text floating===================================================
         //Get some text out
         Debug.Log("DING");
-        GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
+        Vector3 fltOffset = new Vector3(0f, 0.5f, 0f);
+        GameObject textObj = Instantiate(FltText, first.transform.position , first.transform.rotation);
+
         if (second != null)
-            textObj.transform.position = second.transform.position;
+            textObj.transform.position = second.transform.position + fltOffset;
         else
-            textObj.transform.position = first.transform.position;
+            textObj.transform.position = first.transform.position + fltOffset;
+
         if (first !=null && !first.transform.parent.CompareTag("outer"))
             textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
 
@@ -699,20 +702,20 @@ public class GameManager : Singleton<GameManager>
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
                     if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
                     {
-                        if(tmpSquares.Contains(tmpObj))
-                        {
-                            tmpSquares.Remove(tmpObj);
-                        }
+                        //if(tmpSquares.Contains(tmpObj))
+                        //{
+                        //    tmpSquares.Remove(tmpObj);
+                        //}
                         Debug.Log("NEXT");
                         continue;
                     }
                 }
                 else
                 {
-                    if (tmpSquares.Contains(tmpObj))
-                    {
-                        tmpSquares.Remove(tmpObj);
-                    }
+                    //if (tmpSquares.Contains(tmpObj))
+                    //{
+                    //    tmpSquares.Remove(tmpObj);
+                    //}
                     continue;
                 }
 
@@ -761,8 +764,8 @@ public class GameManager : Singleton<GameManager>
                // checkObjs.Enqueue(tmpObj);
 
 
-
-                break;
+                //??? break;
+                continue;
             }
 
 
