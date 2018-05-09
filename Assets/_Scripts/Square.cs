@@ -294,36 +294,12 @@ public class Square : MonoBehaviour {
         }
         lastPos = curPos;
 
-
-
-        //if (GameManager.Instance.SomethingIsMoving)
-        //{
-        //    gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-        //}
-        //else
-        //{
-        //    ApplyStyle(this.score);
-        //}
-
-
-
-
-
         //for expandMoves
         if (this.checkPriority)
         {
             this.IsSpawn = false;
         }
 
-        // if this one stopped popping - try again
-        //if (stopped)
-        //{
-        //    stopped = false;
-        //    GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-        //    return;
-        //}
-        
-         
             
         if (!this.gameObject.transform.parent.CompareTag("outer"))
         {
@@ -348,120 +324,6 @@ public class Square : MonoBehaviour {
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, Speed * Time.deltaTime);
 
             }
-
-
-
-
-            //Call checkRow or Merge
-            //if (CheckAround && gameObject.transform.position == GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position)
-            //{
-
-            //    int mergeIndex = gameObject.transform.GetSiblingIndex();
-
-            //    //Check for same square above
-            //    if ((mergeIndex + 1) < gameObject.transform.parent.childCount)
-            //    {
-            //        if (gameObject.transform.parent.GetChild(mergeIndex + 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score
-            //            && !GameManager.Instance.SomethingIsMoving)
-            //        {
-            //            //Merge started
-            //            //Debug.Log("Above");
-            //            GameManager.Instance.MergeInProgress = true;
-            //            //for ExtendMoves
-            //            if (this.IsSpawn)
-            //            {
-            //                this.IsSpawn = false;
-            //            }
-            //            MergeCheck = true;
-            //            GameManager.Instance.Merge(gameObject.transform.parent.GetChild(mergeIndex+1).gameObject, gameObject);
-            //            AudioManager.Instance.PlaySound("stick");
-            //        }
-            //    }
-
-            //    // Check for same square below
-            //    if ((mergeIndex - 1) >= 0)
-            //    {
-            //        if (gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject.GetComponent<Square>().Score == gameObject.GetComponent<Square>().Score 
-            //            && !GameManager.Instance.SomethingIsMoving)
-            //        {
-            //            //Merge started
-            //            //Debug.Log("DowN");
-            //            GameManager.Instance.MergeInProgress = true;
-            //             if (this.IsSpawn)
-            //            {
-            //                this.IsSpawn = false;
-            //            }
-            //            MergeCheck = true;
-            //            GameManager.Instance.Merge(gameObject, gameObject.transform.parent.GetChild(mergeIndex - 1).gameObject);
-            //            AudioManager.Instance.PlaySound("stick");
-            //        }
-            //    }
-
-            //    //if something moved - wait with check trigger until it doesnt
-            //    if(!GameManager.Instance.SomethingIsMoving)
-            //        CheckAround = false;
-
-            //    //wait for merge to finish - then checkrow
-            //    if (!GameManager.Instance.SomethingIsMoving && !IsMerging && !MergeCheck && !GameManager.Instance.MergeInProgress && !GameManager.Instance.CheckInProgress && !pewPriority)
-            //    {
-
-            //            int firstSpot;
-            //            int nextSpot;
-
-
-            //            //one to the left
-            //            if (int.Parse(transform.parent.name) - 1 < 0)
-            //            {
-            //                firstSpot = GameManager.Instance.nBottom - 1;
-            //            }
-            //            else
-            //                firstSpot = int.Parse(transform.parent.name) - 1;
-
-            //            //check next left one after getting index-1
-            //            if (int.Parse(transform.parent.name) + 1 >= GameManager.Instance.nBottom)
-            //            {
-            //                nextSpot = 0;
-            //            }
-            //            else
-            //                nextSpot = int.Parse(transform.parent.name) + 1;
-
-            //            //if there's pewPriority near - don't CheckRow
-            //            if ((GameManager.Instance.spots[nextSpot].transform.childCount > transform.GetSiblingIndex()
-            //                && GameManager.Instance.spots[nextSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority)
-
-            //                || (GameManager.Instance.spots[firstSpot].transform.childCount > transform.GetSiblingIndex()
-            //                && GameManager.Instance.spots[firstSpot].transform.GetChild(transform.GetSiblingIndex()).GetComponent<Square>().pewPriority))
-            //            {
-            //                //add to list to pop separately
-            //                if (!GameManager.Instance.pewObjs.Contains(gameObject))
-            //                    GameManager.Instance.pewObjs.Push(gameObject);
-            //                //StartCoroutine(StopCheckAround());
-            //            }
-            //            else
-            //            {
-
-
-            //                GameManager.Instance.CheckRow(int.Parse(this.gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex(), score, this.gameObject);
-
-            //            }
-
-
-            //            //Check GameOver
-            //            GameManager.Instance.GameOver();
-            //            MakeItGreen();
-
-
-            //    }
-            //else if(GameManager.Instance.SomethingIsMoving)
-            {
-                //    //if something id
-                //    Debug.Log("REEEEEEEEEEEEEEEEEEEEEE");
-                //    StartCoroutine(StopPew());
-                //}
-
-            }
-
-
 
         }
         //256 square to center

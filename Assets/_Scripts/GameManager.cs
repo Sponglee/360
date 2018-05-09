@@ -543,7 +543,7 @@ public class GameManager : Singleton<GameManager>
 
         //========================Text floating===================================================
         //Get some text out
-        Debug.Log("DING");
+       
         Vector3 fltOffset = new Vector3(0f, 0.5f, 0f);
         GameObject textObj = Instantiate(FltText, first.transform.position , first.transform.rotation);
 
@@ -1134,7 +1134,8 @@ public class GameManager : Singleton<GameManager>
                 {
                     //if its score is the same
                     if (spots[firstIndex].transform.GetChild(i).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score
-                            && !spots[firstIndex].transform.GetChild(i).GetComponent<Square>().IsMerging)
+                            && !spots[firstIndex].transform.GetChild(i).GetComponent<Square>().IsMerging
+                                && !spots[firstIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
 
                         //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
@@ -1148,7 +1149,8 @@ public class GameManager : Singleton<GameManager>
                 {
                     //if its score is the same
                     if (spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Score == spots[index].transform.GetChild(i).GetComponent<Square>().Score
-                            && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().IsMerging)
+                            && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().IsMerging
+                                && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
                         //Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
                         spots[index].transform.GetChild(i).localPosition += new Vector3(0.3f, 0f, 0f);
