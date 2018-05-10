@@ -47,11 +47,17 @@ public class GameManager : Singleton<GameManager>
 
         set
         {
-            if (value != tops)
+            if (value != 0)
             {
-                NextShrink.text = string.Format("256: {0}", value);
-                tops = value;
+                topCount.gameObject.SetActive(true);
+                if (value != tops)
+                {
+                    topCount.text = string.Format(" x {0}", value);
+                    tops = value;
+                }
+
             }
+           
            
         }
     }
@@ -109,7 +115,7 @@ public class GameManager : Singleton<GameManager>
     //Next square's score
     public Text nextScore;
     public Text upper;
-    public Text NextShrink;
+    public Text topCount;
     public static int next_score;
     public Slider slider;
 
@@ -212,8 +218,8 @@ public class GameManager : Singleton<GameManager>
        
         scores = 0;
         ScoreText.text = scores.ToString();
-        upper.text = string.Format("Highest: {0}", scoreUpper);
-        //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+        upper.text = string.Format("{0}", scoreUpper);
+        //NextShrink.text = string.Format("{0}", expandMoves - Moves);
         slider.value = (expandMoves - Moves) / expandMoves;
 
 
@@ -607,7 +613,7 @@ public class GameManager : Singleton<GameManager>
                 if (tmp !=256)
                     AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
-                Instance.upper.text = string.Format("upper: {0}", scoreUpper);
+                Instance.upper.text = string.Format("{0}", scoreUpper);
 
             }
             //first.GetComponent<Square>().Touched = false;
@@ -833,7 +839,7 @@ public class GameManager : Singleton<GameManager>
                 if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {
                     Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-                    spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(+0.3f, 0f, 0f);
+                    spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
                     // Destroy(spots[index].transform.GetChild(i).gameObject);
                     return;
                 }
@@ -1168,7 +1174,7 @@ public class GameManager : Singleton<GameManager>
                     {
 
                         //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                        spots[index].transform.GetChild(i).localPosition += new Vector3(0.3f, 0f, 0f);
+                        spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }
@@ -1182,7 +1188,7 @@ public class GameManager : Singleton<GameManager>
                                 && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
                         //Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                        spots[index].transform.GetChild(i).localPosition += new Vector3(0.3f, 0f, 0f);
+                        spots[index].transform.GetChild(i).localPosition += new Vector3( 0f, 0.3f, 0f);
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }

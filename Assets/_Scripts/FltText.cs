@@ -18,7 +18,7 @@ public class FltText : MonoBehaviour {
 		if (timer > 0)
         {
             timer -= Time.deltaTime;
-            transform.localPosition -= new Vector3 (-0.005f,0,0);
+            transform.localPosition -= new Vector3 (0, -0.005f, 0);
             transform.localScale += new Vector3(0.001f, 0.001f, 0);
         }
         else
