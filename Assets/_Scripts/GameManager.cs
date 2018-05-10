@@ -7,7 +7,16 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 
-{ 
+{
+
+
+
+    
+    public Color32 leRed;
+    public Color32 leGreen;
+    public Color32 leYellow;
+
+
     [SerializeField]
     private GameObject ui;
     [SerializeField]
@@ -27,7 +36,26 @@ public class GameManager : Singleton<GameManager>
     GameObject randSpawn = null;
     
     public int randSpawnCount;
-    
+    //for 256 counts
+    private int tops;
+    public int Tops
+    {
+        get
+        {
+            return tops;
+        }
+
+        set
+        {
+            if (value != tops)
+            {
+                NextShrink.text = string.Format("256: {0}", value);
+                tops = value;
+            }
+           
+        }
+    }
+
     public int maxScore;
     [SerializeField]
     public int scoreUpper;
@@ -59,6 +87,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSpawn;
     //next spot to turn green
     public int LastSpot { get; set; }
+
+
+
     public bool TurnInProgress = false;
 
     public Stack<GameObject> pewObjs;
@@ -78,7 +109,7 @@ public class GameManager : Singleton<GameManager>
     //Next square's score
     public Text nextScore;
     public Text upper;
-    public Text nextShrink;
+    public Text NextShrink;
     public static int next_score;
     public Slider slider;
 
@@ -170,6 +201,7 @@ public class GameManager : Singleton<GameManager>
         //Apply all the numbers 
         maxScore = 3;
         expandMoves = 3;
+        Tops = 0;
         // count of randomSpawns 
         randSpawnCount = 3;
         scoreUpper = (int)Mathf.Pow(2, maxScore);
@@ -180,8 +212,8 @@ public class GameManager : Singleton<GameManager>
        
         scores = 0;
         ScoreText.text = scores.ToString();
-        upper.text = string.Format("upper: {0}", scoreUpper);
-        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+        upper.text = string.Format("Highest: {0}", scoreUpper);
+        //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
         slider.value = (expandMoves - Moves) / expandMoves;
 
 
@@ -223,15 +255,7 @@ public class GameManager : Singleton<GameManager>
             clickAngle = GetFirstClickAngle();
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
 
-            if (SomethingIsMoving || MergeInProgress || CheckInProgress || TurnInProgress)
-            {
-                Debug.Log("NOPE");
-                NoClickSpawn = true;
-                //camera shake?
-                return;
-            }
-            else
-                NoClickSpawn = false;
+           
         }
 
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
@@ -264,7 +288,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-        if (Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
+        if (!IsPointerOverUIObject() && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
         {
             // if clicked 
             if (mouseDown)
@@ -321,7 +345,7 @@ public class GameManager : Singleton<GameManager>
             mouseDown = false;
             }
 
-            if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != new Color32(255, 0, 0, 255))
+            if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != leRed)
             {
 
                 if (SomethingIsMoving || MergeInProgress || CheckInProgress || TurnInProgress || NoClickSpawn)
@@ -545,18 +569,21 @@ public class GameManager : Singleton<GameManager>
         //Get some text out
        
         Vector3 fltOffset = new Vector3(0f, 0.5f, 0f);
-        GameObject textObj = Instantiate(FltText, first.transform.position , first.transform.rotation);
+        if (first != null)
+        {
+            GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
 
-        if (second != null)
-            textObj.transform.position = second.transform.position + fltOffset;
-        else
-            textObj.transform.position = first.transform.position + fltOffset;
+            if (second != null)
+                textObj.transform.position = second.transform.position + fltOffset;
+            else
+                textObj.transform.position = first.transform.position + fltOffset;
 
-        if (first !=null && !first.transform.parent.CompareTag("outer"))
-            textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
+            if (first != null && !first.transform.parent.CompareTag("outer"))
+                textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
 
-        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.ToString();
-
+            textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.ToString();
+        }
+            
         //=======================
 
         if (first != null)
@@ -633,7 +660,9 @@ public class GameManager : Singleton<GameManager>
             {
                 int a = 360 / nBottom * i;
                 var pos = RandomCircle(center, rad + 0.9f * j, a);
-                GameObject tmp = Instantiate(prefab, pos, Quaternion.LookRotation(Vector3.back));
+                GameObject tmp = Instantiate(prefab, pos, Quaternion.identity);
+                //tmp.transform.LookAt(new Vector3(0, -7f, 0),Vector3.down);
+                
                 tmp.name = i.ToString();
 
                 int toggle = 0;
@@ -650,10 +679,10 @@ public class GameManager : Singleton<GameManager>
                 {
                     toggle = 2;
                 }
-
+                //rotate to face camera
                 tmp.transform.SetParent(wheel.transform.GetChild(toggle));
                 tmp.transform.LookAt(center, Vector3.right);
-                tmp.transform.Rotate(0, 90, 0);
+                tmp.transform.Rotate(0, 90, -90);
                 if (grids != null)
                 {
                     grids[i, j] = tmp;
@@ -813,7 +842,7 @@ public class GameManager : Singleton<GameManager>
 
             tmpSquare.GetComponent<Square>().CheckPriority = true;
             CheckInProgress = true;
-            //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+            Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
 
@@ -1031,7 +1060,7 @@ public class GameManager : Singleton<GameManager>
                         slider.value = 1;
 
                         //expandMoves += expandMoves/2;
-                        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+                        //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
                         slider.value = (float)(expandMoves - Moves) / expandMoves;
                     }
 
@@ -1241,7 +1270,7 @@ public class GameManager : Singleton<GameManager>
                         //rowObj.transform.position += new Vector3(0, 0, 10);
                         if (!tmprowObj.transform.parent.GetComponent<Spot>().Blocked)
                         {
-                            tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                            tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = leGreen;
                         }
 
                     }
@@ -1279,10 +1308,10 @@ public class GameManager : Singleton<GameManager>
             if (tmpSquare != null)
             {
                 tmpSquare.GetComponent<Square>().Further = true;
-                furthertmpSquare.transform.localPosition += new Vector3(0.3f, 0f, 0f);
-                    //Debug.Log("PEW");
+                furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
+                Debug.Log("PEW");
 
-          
+
             if (tmpSquare !=null)
             //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
@@ -1309,7 +1338,7 @@ public class GameManager : Singleton<GameManager>
     public void ExpandMoves()
     {
         Moves++;
-        nextShrink.text = string.Format("next shrink: {0}", expandMoves - Moves);
+        //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
         slider.value = (float)(expandMoves - Moves) / expandMoves;
     }
 
@@ -1448,7 +1477,7 @@ public class GameManager : Singleton<GameManager>
         //make spot red if 6th child
         if (randSpawn.transform.parent.childCount == 5)
         {
-            randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+            randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = leRed;
         }
     
         randSpawns.Add(randSpawn);
@@ -1464,9 +1493,14 @@ public class GameManager : Singleton<GameManager>
             if (chk.transform.childCount == 5)
             {
                 //full spot colors red and opens another one
-                chk.GetComponent<SpriteRenderer>().color = new Color32(255, 0, 0, 255);
+                chk.GetComponent<SpriteRenderer>().color = leRed;
             }
+            else if (chk.transform.childCount == 4)
+            {
+                //alert of 4 column
 
+                chk.GetComponent<SpriteRenderer>().color = leYellow;
+            }
 
             // 1 column gameover
             StartCoroutine(StopGameOverShort(chk));
@@ -1486,19 +1520,19 @@ public class GameManager : Singleton<GameManager>
        
         yield return new WaitForSeconds(0.4f);
         
-            if (chk.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !chk.GetComponent<Spot>().Blocked)
+            if (chk.GetComponent<SpriteRenderer>().color == leRed && !chk.GetComponent<Spot>().Blocked)
             {
                 if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
                 {
                     noMoves = true;
                     yield return new WaitForSeconds(1f);
-                    if (chk.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !chk.GetComponent<Spot>().Blocked)
+                    if (chk.GetComponent<SpriteRenderer>().color == leRed && !chk.GetComponent<Spot>().Blocked)
                     {
                         AudioManager.Instance.PlaySound("end");
 
                         OpenMenu(true);
                         nextScore.text = "GameOver";
-                        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+                        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
                     }
                     else
                         noMoves = false;
@@ -1520,7 +1554,7 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(0.4f);
         foreach (GameObject spot in spots)
         {
-            if (spot.GetComponent<SpriteRenderer>().color == new Color32(255, 0, 0, 255) && !spot.GetComponent<Spot>().Blocked)
+            if (spot.GetComponent<SpriteRenderer>().color == leRed && !spot.GetComponent<Spot>().Blocked)
             {
                 if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
                 {
@@ -1544,7 +1578,7 @@ public class GameManager : Singleton<GameManager>
                 
                 OpenMenu(true);
                 nextScore.text = "GameOver";
-                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score: {0}", scores);
+                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
             }
             else
                 noMoves = false;
@@ -1556,7 +1590,7 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver=false)
     {
        
-        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("your score : {0}", scores);
+        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
 
         if (gameOver)
         {

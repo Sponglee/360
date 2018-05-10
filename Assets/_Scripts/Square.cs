@@ -376,31 +376,31 @@ public class Square : MonoBehaviour {
     //}
 
     //    //Make it green again and drop 256
-    private void MakeItGreen()
-    {
+    //private void MakeItGreen()
+    //{
        
-        if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
-        {
+    //    if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
+    //    {
 
-            if (gameObject.transform.parent.childCount < 5)
-            {
-                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
-                {
-                    //Debug.Log("u can ");
-                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
-                }
-            }
-        }
+    //        if (gameObject.transform.parent.childCount < 5)
+    //        {
+    //            if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+    //            {
+    //                //Debug.Log("u can ");
+    //                gameObject.transform.parent.GetComponent<SpriteRenderer>().color = leGreen;
+    //            }
+    //        }
+    //    }
 
 
-        if (this.score >= 256)
-        {
-            this.IsTop = true;
-
-            this.gameObject.transform.parent = gameObject.transform.parent.parent.parent.GetChild(3);
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        }
-    }
+    //    if (this.score >= 256)
+    //    {
+    //        this.IsTop = true;
+            
+    //        this.gameObject.transform.parent = gameObject.transform.parent.parent.parent.GetChild(3);
+    //        gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+    //    }
+    //}
 
 
     //public void OnCollisionEnter2D(Collision2D collision)
@@ -480,12 +480,20 @@ public class Square : MonoBehaviour {
         if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
         {
 
-            if (gameObject.transform.parent.childCount < 5)
+            if (gameObject.transform.parent.childCount < 4)
             {
                 if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
                 {
                     //Debug.Log("u can ");
-                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 255, 0, 255);
+                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = GameManager.Instance.leGreen;
+                }
+            }
+            else if (gameObject.transform.parent.childCount == 4)
+            {
+                if (gameObject.transform.parent.GetComponent<Spot>().Blocked == false)
+                {
+                    //Debug.Log("u can ");
+                    gameObject.transform.parent.GetComponent<SpriteRenderer>().color = GameManager.Instance.leYellow;
                 }
             }
         }
@@ -516,8 +524,8 @@ public class Square : MonoBehaviour {
         //Destroy on contact with center
         if (other.CompareTag("center") && gameObject.CompareTag("square"))
         {
-            //GameManager.Instance.scores += this.score;
-            //GameManager.Instance.ScoreText.text = GameManager.Instance.scores.ToString();
+           GameManager.Instance.Tops++;
+           
             //Debug.Log("destroy this");
             Destroy(gameObject);
         }
