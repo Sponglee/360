@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   IsSpawn: 0
-  score: 32
+  score: 64
   further: 0
   color:
     serializedVersion: 2

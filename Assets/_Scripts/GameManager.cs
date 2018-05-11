@@ -753,21 +753,11 @@ public class GameManager : Singleton<GameManager>
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
                     if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
                     {
-                        //if(tmpSquares.Contains(tmpObj))
-                        //{
-                        //    tmpSquares.Remove(tmpObj);
-                        //}
-                        //Debug.Log("NEXT");
                         continue;
                     }
                 }
                 else
                 {
-                    //Debug.Log("continue " + tmpObj.transform.parent.name);
-                    //if (tmpSquares.Contains(tmpObj))
-                    //{
-                    //    tmpSquares.Remove(tmpObj);
-                    //}
                     continue;
                 }
 
@@ -775,27 +765,12 @@ public class GameManager : Singleton<GameManager>
 
                
             }
-            //else
-            //{
-            //    //Debug.Log("DADADDA");
-            //    //TurnInProgress = false;
-            //    //// checkObjs.Enqueue(tmpObj);
 
-
-
-            //    //break;
-            //}
-
-           
-
-
-
-            if (tmpObj != null && tmpObj.GetComponent<Square>().Score == 256)
+            //if square reached 256 - ignore
+            if (tmpObj != null && tmpObj.GetComponent<Square>().Score >= 256)
             {
                 //reset 
                 TurnInProgress = false;
-                
-              
                 continue;
             }
 
@@ -813,22 +788,8 @@ public class GameManager : Singleton<GameManager>
             {
                 //Debug.Log("DADADDA");
                 TurnInProgress = false;
-               // checkObjs.Enqueue(tmpObj);
-
-
-                //??? break;
                 continue;
             }
-
-
-
-            //{
-            //    furtherScore = 0;
-            //    TurnInProgress = false;
-            //    yield break;
-            //}
-
-            //Tur wait forseconds to avoid  bugs
 
             yield return new WaitForSeconds(0.01f);
 
@@ -839,10 +800,6 @@ public class GameManager : Singleton<GameManager>
           
         }
        
-
-
-       
-
     }
 
     //Checks for 3 in a row
@@ -924,7 +881,7 @@ public class GameManager : Singleton<GameManager>
                         //if its score is the same
                         if (spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
                             && !spots[index].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                           )
+                            )
                         {
                             //if there's nothing to the left
                             if (spots[firstIndex].transform.childCount < squareIndex + 1)
@@ -1560,7 +1517,7 @@ public class GameManager : Singleton<GameManager>
 
                         OpenMenu(true);
                         nextScore.text = "GameOver";
-                        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
+                        //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{0}\n Top", scores, scoreUpper);
                     }
                     else
                         noMoves = false;
@@ -1606,7 +1563,7 @@ public class GameManager : Singleton<GameManager>
                 
                 OpenMenu(true);
                 nextScore.text = "GameOver";
-                menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
+                //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{1}\n Top", scores, scoreUpper);
             }
             else
                 noMoves = false;
@@ -1617,8 +1574,13 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver=false)
     {
-       
-        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
+       if (scoreUpper<256)
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n<color=white>{1}</color>\n Top", scores, scoreUpper);
+       else
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n<color=white>256</color> {1}\n Top", scores, topCount.text);
+
+
+
 
         if (gameOver)
         {

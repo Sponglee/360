@@ -331,12 +331,12 @@ public class Square : MonoBehaviour {
         {
             IsTop = false;
             AudioManager.Instance.PlaySound("256");
-            Debug.Log("YOSH");
+            //Debug.Log("YOSH");
             gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
         }
         else
         {
-            Debug.Log("NOT YOSH");
+            //Debug.Log("NOT YOSH");
             //GameManager.Instance.SomethingIsMoving = true;
             if (SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
@@ -442,6 +442,7 @@ public class Square : MonoBehaviour {
         {
             //make sure checks only one of 2 collisions (one that is not touched
             other.gameObject.GetComponent<Square>().touched = true;
+
 
             if (this.score == other.gameObject.GetComponent<Square>().Score)
             {
