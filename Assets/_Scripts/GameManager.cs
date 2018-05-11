@@ -569,6 +569,10 @@ public class GameManager : Singleton<GameManager>
         first.GetComponent<Square>().IsMerging = true;
         //double the score
         int tmp = first.GetComponent<Square>().Score *= 2;
+
+        //avoid 512 and higher
+        if (tmp > 256)
+            tmp = 256;
         yield return new WaitForSeconds(0.2f);
 
 
