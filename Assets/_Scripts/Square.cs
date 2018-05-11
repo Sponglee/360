@@ -336,6 +336,7 @@ public class Square : MonoBehaviour {
         }
         else
         {
+            Debug.Log("NOT YOSH");
             //GameManager.Instance.SomethingIsMoving = true;
             if (SquareTmpSquare != null)
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, squareTmpSquare.position, Speed * Time.deltaTime);
@@ -503,8 +504,7 @@ public class Square : MonoBehaviour {
         {
             this.IsTop = true;
 
-            this.gameObject.transform.parent = gameObject.transform.parent.parent.parent.GetChild(3);
-            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+          
         }
     }
 
