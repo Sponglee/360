@@ -229,7 +229,7 @@ public class GameManager : Singleton<GameManager>
         //Random next score to appear (2^3 max <-----)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
         nextScore.text = next_score.ToString();
-
+        ApplyStyle(next_score);
         //Initialize level (spots)
         GetSpots();
 
@@ -382,7 +382,7 @@ public class GameManager : Singleton<GameManager>
         {
             turnCheckObjs = checkObjs;
             checkObjs = new Queue<GameObject>();
-            //Debug.Log("Move count " + checkObjs.Count);
+            Debug.Log("Move count " + checkObjs.Count + "( " + turnCheckObjs.Count + ")");
             //To make it check once
             TurnInProgress = true;
             turnTimer = Time.deltaTime + 6f;
@@ -537,6 +537,54 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+
+
+
+    // Helps ApplyStyle to grab numbers/color
+    private void ApplyStyleFromHolder(int index)
+    {
+        nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+    }
+    //Gets Values from style script for each square
+    private void ApplyStyle(int num)
+    {
+        switch (num)
+        {
+            case 2:
+                ApplyStyleFromHolder(0);
+                break;
+            case 4:
+                ApplyStyleFromHolder(1);
+                break;
+            case 8:
+                ApplyStyleFromHolder(2);
+                break;
+            case 16:
+                ApplyStyleFromHolder(3);
+                break;
+            case 32:
+                ApplyStyleFromHolder(4);
+                break;
+            case 64:
+                ApplyStyleFromHolder(5);
+                break;
+            case 128:
+                ApplyStyleFromHolder(6);
+                break;
+            case 256:
+                ApplyStyleFromHolder(7);
+                break;
+            //case 512:
+            //    ApplyStyleFromHolder(8);
+            //    break;
+            default:
+                Debug.LogError("Check the number that u pass to ApplyStyle");
+                break;
+        }
+    }
+
+
+
     //Spawn new square
     private void ClickSpawn()
     {
@@ -547,12 +595,89 @@ public class GameManager : Singleton<GameManager>
         //get score for next turn (non-inclusive)
         next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
         nextScore.text = next_score.ToString();
+        ApplyStyle(next_score);
         squareSpawn.GetComponent<Square>().IsSpawn = true;
     }
 
-   
 
-    
+    //Build circle for spots
+    public Vector3 RandomCircle(Vector3 center, float radius, int a)
+    {
+        //Debug.Log(a);
+        float ang = a;
+        Vector3 pos;
+        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+        pos.y = center.y + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+        pos.z = center.z;
+        return pos;
+    }
+
+
+    //Sets up spots for spawns
+    public void GetSpots()
+    {
+        rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
+        center = wheel.transform.position;
+
+        //Spots, spawns and grid for movement
+        SpawnSpots(spotPrefab, rad, 1, spots);
+        SpawnSpots(spawnPrefab, rad + 5.5f, 1, spawns);
+
+        currentSpot = spots[0];
+        currentSpawn = spawns[0];
+
+        SpawnSpots(gridPrefab, rad + 0.55f, 5, null, grids);
+    }
+
+    //Get spots, spawns and grid
+    private void SpawnSpots(GameObject prefab, float rad, int count, List<GameObject> lists = null, GameObject[,] grids = null)
+    {
+        for (int i = 0; i < nBottom; i++)
+        {
+            for (int j = 0; j < count; j++)
+            {
+                int a = 360 / nBottom * i;
+                var pos = RandomCircle(center, rad + 0.9f * j, a);
+                GameObject tmp = Instantiate(prefab, pos, Quaternion.identity);
+                //tmp.transform.LookAt(new Vector3(0, -7f, 0),Vector3.down);
+
+                tmp.name = i.ToString();
+
+                int toggle = 0;
+
+                if (prefab.CompareTag("spot"))
+                {
+                    toggle = 0;
+                }
+                else if (prefab.CompareTag("spawn"))
+                {
+                    toggle = 1;
+                }
+                else if (prefab.CompareTag("grid"))
+                {
+                    toggle = 2;
+                }
+                //rotate to face camera
+                tmp.transform.SetParent(wheel.transform.GetChild(toggle));
+                tmp.transform.LookAt(center, Vector3.right);
+                tmp.transform.Rotate(0, 90, -90);
+                if (grids != null)
+                {
+                    grids[i, j] = tmp;
+                    tmp.transform.SetParent(GameManager.Instance.spawns[i].transform);
+                    tmp.name = (j + 1).ToString();
+                }
+                else
+                {
+                    lists.Add(tmp);
+                }
+            }
+        }
+    }
+
+
+
+
     //Vertical merge
     public void Merge(GameObject first, GameObject second=null)
     {
@@ -583,15 +708,15 @@ public class GameManager : Singleton<GameManager>
         //========================Text floating===================================================
         //Get some text out
        
-        Vector3 fltOffset = new Vector3(0f, 0.5f, 0f);
+        Vector3 fltOffset = new Vector3(0f, 0.1f, 0f);
         if (first != null)
         {
             GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
 
             if (second != null)
-                textObj.transform.position = second.transform.position + fltOffset;
+                textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition+ fltOffset);
             else
-                textObj.transform.position = first.transform.position + fltOffset;
+                textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
 
             if (first != null && !first.transform.parent.CompareTag("outer"))
                 textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
@@ -647,83 +772,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    //Build circle for spots
-    public Vector3 RandomCircle(Vector3 center, float radius, int a)
-    {
-        //Debug.Log(a);
-        float ang = a;
-        Vector3 pos;
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.y = center.y + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        pos.z = center.z;
-        return pos;
-    }
-
-
-    //Sets up spots for spawns
-    public void GetSpots()
-    {
-        rad = wheel.transform.GetChild(0).GetComponent<CircleCollider2D>().radius;
-        center = wheel.transform.position;
-
-        //Spots, spawns and grid for movement
-        SpawnSpots(spotPrefab, rad, 1, spots);
-        SpawnSpots(spawnPrefab, rad + 5.5f, 1, spawns);
-
-        currentSpot = spots[0];
-        currentSpawn = spawns[0];
-
-        SpawnSpots(gridPrefab, rad + 0.55f, 5, null, grids);
-    }
-
-    //Get spots, spawns and grid
-    private void SpawnSpots(GameObject prefab, float rad, int count, List<GameObject> lists = null, GameObject[,] grids = null)
-    {
-        for (int i = 0; i < nBottom; i++)
-        {
-            for (int j = 0; j < count; j++)
-            {
-                int a = 360 / nBottom * i;
-                var pos = RandomCircle(center, rad + 0.9f * j, a);
-                GameObject tmp = Instantiate(prefab, pos, Quaternion.identity);
-                //tmp.transform.LookAt(new Vector3(0, -7f, 0),Vector3.down);
-                
-                tmp.name = i.ToString();
-
-                int toggle = 0;
-
-                if (prefab.CompareTag("spot"))
-                {
-                    toggle = 0;
-                }
-                else if (prefab.CompareTag("spawn"))
-                {
-                    toggle = 1;
-                }
-                else if (prefab.CompareTag("grid"))
-                {
-                    toggle = 2;
-                }
-                //rotate to face camera
-                tmp.transform.SetParent(wheel.transform.GetChild(toggle));
-                tmp.transform.LookAt(center, Vector3.right);
-                tmp.transform.Rotate(0, 90, -90);
-                if (grids != null)
-                {
-                    grids[i, j] = tmp;
-                    tmp.transform.SetParent(GameManager.Instance.spawns[i].transform);
-                    tmp.name = (j + 1).ToString();
-                }
-                else
-                {
-                    lists.Add(tmp);
-                }
-            }
-        }
-    }
-
-    
-
+   
   
     //Checkrow and pop coroutine
     public IEnumerator Turn()
@@ -828,7 +877,7 @@ public class GameManager : Singleton<GameManager>
 
             tmpSquare.GetComponent<Square>().CheckPriority = true;
             CheckInProgress = true;
-            //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+            Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
 
@@ -921,7 +970,7 @@ public class GameManager : Singleton<GameManager>
                                 //else if score is the same and not merging or checkrow
                                 else if (spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
                                     && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                    /*&& !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
+                                    && !spots[firstIndex].transform.GetChild(squareIndex).GetComponent<Square>().Further)
                                 {
                                     rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
                                     startIndex = nBottom + 10;
@@ -1001,7 +1050,7 @@ public class GameManager : Singleton<GameManager>
                                 //else if score is the same and not merging or checkrow
                                 else if (spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score == checkScore
                                     && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().IsMerging
-                                    /* && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().checkPriority*/)
+                                     && !spots[nextIndex].transform.GetChild(squareIndex).GetComponent<Square>().Further)
 
                                 {
                                     rowObjs.Add(spots[index].transform.GetChild(squareIndex).gameObject);
@@ -1296,10 +1345,10 @@ public class GameManager : Singleton<GameManager>
             {
                 tmpSquare.GetComponent<Square>().Further = true;
                 furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
-                //Debug.Log("PEW " + tmpSquare.transform.parent.name);
+                Debug.Log("PEW " + tmpSquare.transform.parent.name);
 
 
-                if (tmpSquare !=null)
+            if (tmpSquare !=null)
                 //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
                 //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
                 //{

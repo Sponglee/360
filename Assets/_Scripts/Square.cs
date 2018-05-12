@@ -205,7 +205,7 @@ public class Square : MonoBehaviour {
     void ApplyStyleFromHolder(int index)
     {
         SquareText.text = SquareStyleHolder.Instance.SquareStyles[index].Number.ToString();
-        SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
+        SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
         SquareColor.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
@@ -329,6 +329,7 @@ public class Square : MonoBehaviour {
         //256 square to center
         else if (this.IsTop == true)
         {
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             IsTop = false;
             AudioManager.Instance.PlaySound("256");
             //Debug.Log("YOSH");

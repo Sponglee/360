@@ -10,7 +10,7 @@ public class FltText : MonoBehaviour {
     {
         
         {
-            timer = 1f;
+            timer = Random.Range(1f,1.2f);
         }
     }
     // Update is called once per frame
