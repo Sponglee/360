@@ -139,7 +139,7 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> tmpSquares;
 
     //Checkrow Stack
-   
+    public Queue<GameObject> turnCheckObjs;
     public Queue<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
@@ -203,6 +203,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        turnCheckObjs = new Queue<GameObject>();
         checkObjs = new Queue<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
@@ -379,6 +380,8 @@ public class GameManager : Singleton<GameManager>
         //Launch checkrows
         if (checkObjs.Count > 0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
         {
+            turnCheckObjs = checkObjs;
+            checkObjs = new Queue<GameObject>();
             //Debug.Log("Move count " + checkObjs.Count);
             //To make it check once
             TurnInProgress = true;
@@ -728,18 +731,18 @@ public class GameManager : Singleton<GameManager>
        // List<List<GameObject>> tmppopObjs = popObjs;
 
         //if there's something in the queue
-        while (checkObjs.Count >0)
+        while (turnCheckObjs.Count >0)
         {
            
-            GameObject tmpObj = checkObjs.Dequeue();
+            GameObject tmpObj = turnCheckObjs.Dequeue();
 
             int tmpDist=99;
 
 
-            if (checkObjs.Count>0)
+            if (turnCheckObjs.Count>0)
             {
                 
-                GameObject nextObj = checkObjs.Peek();
+                GameObject nextObj = turnCheckObjs.Peek();
 
                 //check distance between (including passing through 0)
                 if (tmpObj != null && nextObj !=null)
@@ -751,7 +754,9 @@ public class GameManager : Singleton<GameManager>
                     // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == checkObjs.Peek().GetComponent<Square>().Score)
+                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                        && tmpObj.transform.GetSiblingIndex() > 0
+                        && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
                     {
                         continue;
                     }
@@ -1255,7 +1260,8 @@ public class GameManager : Singleton<GameManager>
                         }
 
                     }
-                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare && !tmprowObj.transform.parent.CompareTag("outer"))
+                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare 
+                        && !tmprowObj.transform.parent.CompareTag("outer") )
                     {
 
                         tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
