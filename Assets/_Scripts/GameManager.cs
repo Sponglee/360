@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Advertisements;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -205,6 +206,12 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
+        //Initialize the ad
+
+        Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
+
+
+
         turnCheckObjs = new Queue<GameObject>();
         checkObjs = new Queue<GameObject>();
         //objects that were stopped
@@ -1671,9 +1678,9 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver=false)
     {
        if (scoreUpper<256)
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n<color=white>{1}</color>\n Top", scores, scoreUpper);
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n\n<color=white>{1}</color>\n Top", scores, scoreUpper);
        else
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n<color=white>256</color> {1}\n Top", scores, topCount.text);
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n\n<color=white>256</color> {1}\n Top", scores, topCount.text);
 
 
 
