@@ -1678,9 +1678,15 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver=false)
     {
        if (scoreUpper<256)
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n\n<color=white>{1}</color>\n Top", scores, scoreUpper);
+        {
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
+            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>{0}</color>\n", scoreUpper.ToString());
+        }
        else
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n\n<color=white>256</color> {1}\n Top", scores, topCount.text);
+        {
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
+            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>256</color>{0}\n", topCount.text);
+        }
 
 
 

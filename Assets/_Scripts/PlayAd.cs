@@ -19,10 +19,10 @@ public class PlayAd : MonoBehaviour {
         switch (result)
         {
             case ShowResult.Finished:
-                Debug.Log("Player Gains +5 gems");
+                CoinManager.Instance.Coins+=5;
                 break;
             case ShowResult.Skipped:
-                Debug.Log("Didn't watch whole ad");
+                CoinManager.Instance.Coins += 2;
                 break;
             case ShowResult.Failed:
                 Debug.Log("Failed");
