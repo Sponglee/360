@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class uiSquare : MonoBehaviour {
+public class UISquare : Singleton<UISquare> {
 
 
-
-   
 
     [SerializeField]
     private Text SquareText;
@@ -26,7 +24,7 @@ public class uiSquare : MonoBehaviour {
     }
 
     //Gets Values from style script for each square
-    public void ApplyStyle(int num)
+    public void ApplyUiStyle(int num)
     {
         switch (num)
         {
@@ -66,13 +64,14 @@ public class uiSquare : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        ApplyUiStyle(GameManager.Instance.scoreUpper);
         Debug.Log(GameManager.Instance.scoreUpper);
         
     }
 	
 	// Update is called once per frame
 	void Update () {
-        ApplyStyle(GameManager.Instance.scoreUpper);
+        
        
 
     }

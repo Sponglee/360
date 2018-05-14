@@ -25,11 +25,13 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     public GameObject wheel;
     [SerializeField]
+    public GameObject uiSquarePrefab;
     public GameObject centerPref;
     public GameObject squarePrefab;
     public GameObject spotPrefab;
     public GameObject spawnPrefab;
     public GameObject gridPrefab;
+   
     public Transform line;
 
     //prefab for controlling movement while falling
@@ -54,7 +56,7 @@ public class GameManager : Singleton<GameManager>
                 topCount.gameObject.SetActive(true);
                 if (value != tops)
                 {
-                    topCount.text = string.Format(" x {0}", value);
+                    topCount.text = string.Format(" x{0}", value);
                     tops = value;
                 }
 
@@ -758,7 +760,9 @@ public class GameManager : Singleton<GameManager>
                     AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
                 Instance.upper.text = string.Format("{0}", scoreUpper);
-
+                uiSquarePrefab.SetActive(true);
+                UISquare.Instance.ApplyUiStyle(scoreUpper);
+              
             }
             //first.GetComponent<Square>().Touched = false;
             first.GetComponent<Square>().MergeCheck = false;
@@ -803,12 +807,14 @@ public class GameManager : Singleton<GameManager>
                     // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                    if (tmpDist <= 2 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
-                        && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
+                        && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score
+                        && nextObj.GetComponent<Square>().Further)
                     {
                         continue;
                     }
+                    
                 }
                 else
                 {
@@ -868,7 +874,10 @@ public class GameManager : Singleton<GameManager>
                 if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {
                     //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-                    spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
+
+                    Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, tmpSquare);
+
+                    //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
                     // Destroy(spots[index].transform.GetChild(i).gameObject);
                     return;
                 }
@@ -1203,7 +1212,10 @@ public class GameManager : Singleton<GameManager>
                     {
 
                         //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                        spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
+                       
+                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
+                        //spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
+
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }
@@ -1217,7 +1229,10 @@ public class GameManager : Singleton<GameManager>
                                 && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
                         //Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                        spots[index].transform.GetChild(i).localPosition += new Vector3( 0f, 0.3f, 0f);
+
+                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
+                        //spots[index].transform.GetChild(i).localPosition += new Vector3( 0f, 0.3f, 0f);
+
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }
@@ -1338,14 +1353,40 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
         GameObject furthertmpSquare = tmpSquare;
-       
-       
+        //if something below -> move on
+        if (tmpSquare.transform.GetSiblingIndex() > 0)
+        {
+            if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+            {
+                if (tmpSquare.GetComponent<Square>().IsMerging)
+                    Debug.Log("SOMETHING BELOW");
+                else
+                    checkObjs.Enqueue(tmpSquare);
+            }
+            else
+                checkObjs.Enqueue(tmpSquare);
+        }
+        else
+            checkObjs.Enqueue(tmpSquare);
+
+        //else if (tmpSquare.GetComponent<Square>().Further)
+        //    checkObjs.Enqueue(tmpSquare);
+
         yield return new WaitForSeconds(0.2f);
             if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
             {
                 tmpSquare.GetComponent<Square>().Further = true;
-                furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
-                Debug.Log("PEW " + tmpSquare.transform.parent.name);
+                if (tmpSquare.transform.GetSiblingIndex()>0)
+                {
+                    //if one below is same score - merge
+                    if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
+                    {
+                        Merge(tmpSquare, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
+                        //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
+                        Debug.Log("PEW " + tmpSquare.transform.parent.name);
+                    }
+                }
+               
 
 
             if (tmpSquare !=null)
