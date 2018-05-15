@@ -10,7 +10,7 @@ public class GameManager : Singleton<GameManager>
 
 {
 
-
+    public Animator centerAnim;
 
     
     public Color32 leRed;
@@ -351,13 +351,20 @@ public class GameManager : Singleton<GameManager>
                     rotSpot = checkClickSpot;
                     StartCoroutine(FollowRotate(rotationDuration));
                 }
-            }
+                    //centerAnim.SetTrigger("tilt");
+                }
             // if moved more than degrees between spots - follow up to closest one
             else
             {
                 if (cantSpawn)
-                    StartCoroutine(FollowRotate(rotationDuration));
+                    {
+                       
+                        StartCoroutine(FollowRotate(rotationDuration));
+                    }
+                    
             }
+
+           
             //disble angle buffer 
             firstClick = true;
             mouseDown = false;
@@ -1680,7 +1687,7 @@ public class GameManager : Singleton<GameManager>
        if (scoreUpper<256)
         {
             menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
-            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>{0}</color>\n", scoreUpper.ToString());
+            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>{0}   </color>\n", scoreUpper.ToString());
         }
        else
         {
