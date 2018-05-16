@@ -695,25 +695,38 @@ public class GameManager : Singleton<GameManager>
 
 
     //Vertical merge
-    public void Merge(GameObject first, GameObject second=null)
+    public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null)
     {
-        
+        int fltScore;
+        if (rowObjs != null)
+        {
+            Debug.Log(rowObjs.Count);
+             fltScore = rowObjs.Count+1;
+        }
+        else
+        {
+            fltScore = 2;
+        }
 
-        
-        StartCoroutine(StopMerge(first,second));
+
+        StartCoroutine(StopMerge(first, fltScore, second));
     }
 
 
     //Delay for merge
-    private IEnumerator StopMerge(GameObject first, GameObject second=null)
+    private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null)
     {
         //Stop checks while Merging
         if (first == null)
             yield break;
         first.GetComponent<Square>().IsMerging = true;
-        //double the score
-        int tmp = first.GetComponent<Square>().Score *= 2;
 
+        //for text
+        int tmpScore = fltScore * first.GetComponent<Square>().Score;
+
+        //double the score
+        int tmp = first.GetComponent<Square>().Score *=  2;
+        
         //avoid 512 and higher
         if (tmp > 256)
             tmp = 256;
@@ -737,7 +750,8 @@ public class GameManager : Singleton<GameManager>
             if (first != null && !first.transform.parent.CompareTag("outer"))
                 textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
 
-            textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.ToString();
+            // flt text text
+            textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmpScore.ToString();
         }
             
         //=======================
@@ -889,7 +903,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
 
-                    Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, tmpSquare);
+                    Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
 
                     //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
                     // Destroy(spots[index].transform.GetChild(i).gameObject);
@@ -1098,7 +1112,7 @@ public class GameManager : Singleton<GameManager>
             }
             while (endIndex > nBottom + 1);
 
-            // 2 row
+            // nothing close row
             if (rowObjs.Count < 2)
             {
 
@@ -1142,6 +1156,8 @@ public class GameManager : Singleton<GameManager>
                     popObjs.Add(rowObjs);
                 }
 
+                //how many there's
+                int fltScore = popObjs.Count;
 
                 //add its tmpSquare to list
                 if (!tmpSquares.Contains(tmpSquare))
@@ -1313,7 +1329,7 @@ public class GameManager : Singleton<GameManager>
         //get a private tmpSquare ref
         GameObject tmpTmpSquare = tmpSquare;
         //Keep one that has fallen
-        Merge(tmpTmpSquare);
+        Merge(tmpTmpSquare, rowObjs);
 
         // Move others
         if (rowObjs.Count != 0)
@@ -1395,7 +1411,7 @@ public class GameManager : Singleton<GameManager>
                     //if one below is same score - merge
                     if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
                     {
-                        Merge(tmpSquare, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
+                        Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
                         //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
                         Debug.Log("PEW " + tmpSquare.transform.parent.name);
                     }
@@ -1620,7 +1636,7 @@ public class GameManager : Singleton<GameManager>
                 if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
                 {
                     noMoves = true;
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(2f);
                     if (chk.GetComponent<SpriteRenderer>().color == leRed && !chk.GetComponent<Spot>().Blocked)
                     {
                         AudioManager.Instance.PlaySound("end");
@@ -1697,12 +1713,15 @@ public class GameManager : Singleton<GameManager>
 
 
 
-
+       //if it is GAME OVER
         if (gameOver)
         {
             menu.SetActive(true);
             ui.SetActive(false);
             menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            //Cooldown for replay
+            StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
+            
         }
         else
         {
@@ -1731,7 +1750,19 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+    private IEnumerator ContinueTime(GameObject button)
+    {
+        float contTimer = 5f;
 
+        while(contTimer>0)
+        {
+            contTimer -= 0.01f;
+            button.GetComponentInChildren<Slider>().value -= 0.002f;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        button.SetActive(false);
+    }
 
 
     public void TweakAngle(string value)

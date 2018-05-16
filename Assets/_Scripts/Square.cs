@@ -456,7 +456,7 @@ public class Square : MonoBehaviour {
 
                 //GameManager.Instance.scores += score;
                
-                GameManager.Instance.Merge(gameObject, other.gameObject);
+                GameManager.Instance.Merge(gameObject, null, other.gameObject);
                 
                
             }
