@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Spot : MonoBehaviour {
 
-    //blocked for expanding
-    private bool blocked;
-    public bool Blocked    {get{return blocked;}set{blocked = value;}}
-
+ 
 
     // Use this for initialization
     void Start () {
-        blocked = false;
+       
 	}
 	
 

@@ -39,7 +39,13 @@ public class GameManager : Singleton<GameManager>
     GameObject squareSpawn = null;
     //for random expand spawns
     GameObject randSpawn = null;
-    
+
+    public bool GameOverBool = false;
+
+    //after gameover
+    [SerializeField]
+    private bool endGameCheck;
+
     public int randSpawnCount;
     //for 256 counts
     private int tops;
@@ -233,7 +239,7 @@ public class GameManager : Singleton<GameManager>
         upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
         slider.value = (expandMoves - Moves) / expandMoves;
-
+        endGameCheck = false;
 
         //Random next score to appear (2^3 max <-----)
         next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
@@ -273,7 +279,17 @@ public class GameManager : Singleton<GameManager>
             clickAngle = GetFirstClickAngle();
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
 
-           
+
+            //Continue check
+            if (endGameCheck)
+            {
+                foreach (GameObject spot in spots)
+                {
+                    if (spot.transform.childCount != 0)
+                        return;
+                }
+                SomethingIsMoving = false;
+            }
         }
 
         if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
@@ -1348,10 +1364,9 @@ public class GameManager : Singleton<GameManager>
                     if (!tmprowObj.transform.parent.CompareTag("outer"))
                     {
                         //rowObj.transform.position += new Vector3(0, 0, 10);
-                        if (!tmprowObj.transform.parent.GetComponent<Spot>().Blocked)
-                        {
+                     
                             tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = leGreen;
-                        }
+                        
 
                     }
                     if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare 
@@ -1631,18 +1646,18 @@ public class GameManager : Singleton<GameManager>
        
         yield return new WaitForSeconds(0.4f);
         
-            if (chk.GetComponent<SpriteRenderer>().color == leRed && !chk.GetComponent<Spot>().Blocked)
+            if (chk.GetComponent<SpriteRenderer>().color == leRed)
             {
                 if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
                 {
                     noMoves = true;
                     yield return new WaitForSeconds(2f);
-                    if (chk.GetComponent<SpriteRenderer>().color == leRed && !chk.GetComponent<Spot>().Blocked)
+                    if (chk.GetComponent<SpriteRenderer>().color == leRed)
                     {
                         AudioManager.Instance.PlaySound("end");
-
+                        GameOverBool = true;
                         OpenMenu(true);
-                        nextScore.text = "GameOver";
+                        nextScore.text = "GAMEOVER";
                         //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{0}\n Top", scores, scoreUpper);
                     }
                     else
@@ -1665,7 +1680,7 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(0.4f);
         foreach (GameObject spot in spots)
         {
-            if (spot.GetComponent<SpriteRenderer>().color == leRed && !spot.GetComponent<Spot>().Blocked)
+            if (spot.GetComponent<SpriteRenderer>().color == leRed)
             {
                 if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
                 {
@@ -1673,10 +1688,7 @@ public class GameManager : Singleton<GameManager>
 
                 }
             }
-            else if (spot.GetComponent<Spot>().Blocked)
-            {
-                reds++;
-            }
+          
         }
         //Debug.Log("reds " + reds);
         if (reds == spots.Count)
@@ -1703,18 +1715,21 @@ public class GameManager : Singleton<GameManager>
        if (scoreUpper<256)
         {
             menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
-            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>{0}   </color>\n", scoreUpper.ToString());
+            menu.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
         }
        else
         {
             menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
-            menu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = string.Format("<color=white>256</color>{0}\n", topCount.text);
+            menu.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>256</color>");
+
+            menu.transform.GetChild(0).GetChild(2).GetChild(1).gameObject.SetActive(true);
+            menu.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<Text>().text = string.Format("x{0}",topCount.text);
         }
 
 
 
        //if it is GAME OVER
-        if (gameOver)
+        if (gameOver && !endGameCheck)
         {
             menu.SetActive(true);
             ui.SetActive(false);
@@ -1752,18 +1767,51 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator ContinueTime(GameObject button)
     {
-        float contTimer = 5f;
-
-        while(contTimer>0)
+        if (noMoves == true)
         {
-            contTimer -= 0.01f;
-            button.GetComponentInChildren<Slider>().value -= 0.002f;
-            yield return new WaitForSeconds(0.01f);
-        }
+            button.GetComponentInChildren<Slider>().value = 1;
+            float contTimer = 10f;
+            button.GetComponent<Animation>().Play();
+            while (contTimer > 0)
+            {
+                if (noMoves == false)
+                    yield break;
+                
+                contTimer -= 0.01f;
+                button.GetComponentInChildren<Slider>().value -= 0.001f;
+                yield return new WaitForSeconds(0.01f);
+            }
 
-        button.SetActive(false);
+            button.SetActive(false);
+        }
+        else yield break;
+        
     }
 
+
+
+    //Button functions
+
+    public void Continue()
+    {
+        OpenMenu();
+        GameOverBool = false;
+        noMoves = false;
+        MenuUp = false;
+        //hide button
+        menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        menu.transform.GetChild(0).GetChild(0).gameObject.GetComponentInChildren<Slider>().value = 1;
+        nextScore.text = next_score.ToString();
+        foreach(GameObject spot in spots)
+        {
+            if (spot.transform.childCount == 5)
+            {
+                spot.transform.DetachChildren();
+                spot.GetComponent<SpriteRenderer>().color = leGreen;
+            }
+        }
+        endGameCheck = true;
+    }
 
     public void TweakAngle(string value)
     {

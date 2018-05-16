@@ -19,7 +19,7 @@ public class UISquare : Singleton<UISquare> {
     void ApplyStyleFromHolder(int index)
     {
         SquareText.text = SquareStyleHolder.Instance.SquareStyles[index].Number.ToString();
-        SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
+        //SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
         SquareColor.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
 
