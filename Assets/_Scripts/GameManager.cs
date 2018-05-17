@@ -788,7 +788,7 @@ public class GameManager : Singleton<GameManager>
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
             if (first.GetComponent<Square>().Score == 256)
             {
-                first.transform.parent = first.transform.parent.parent.parent.GetChild(3);
+                first.transform.parent = wheel.transform.GetChild(3);
                 first.GetComponent<BoxCollider2D>().isTrigger = true;
             }
 
@@ -935,8 +935,11 @@ public class GameManager : Singleton<GameManager>
                 if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {
                     //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-
-                    Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
+                    if (!spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
+                    {
+                        //Debug.Log("MRG");
+                        Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
+                    }
 
                     //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
                     // Destroy(spots[index].transform.GetChild(i).gameObject);
@@ -1362,6 +1365,8 @@ public class GameManager : Singleton<GameManager>
         //get a private tmpSquare ref
         GameObject tmpTmpSquare = tmpSquare;
         //Keep one that has fallen
+
+        //Debug.Log("MRG");
         Merge(tmpTmpSquare, rowObjs);
 
         // Move others
@@ -1444,7 +1449,8 @@ public class GameManager : Singleton<GameManager>
                     if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
                     {
                         Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
-                        //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
+                        //Debug.Log("MRG BLW");    
+                    //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
                         //Debug.Log("PEW " + tmpSquare.transform.parent.name);
                     }
                 }

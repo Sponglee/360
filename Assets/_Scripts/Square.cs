@@ -328,9 +328,11 @@ public class Square : MonoBehaviour
         if (CheckCoolDown)
         {
                 StartCoroutine(StopLeft());
-                CheckCoolDown = false;
+                
         }
            
+
+
             //=========================BUG PART ENDS===============
 
             //Check if something is moving
@@ -431,6 +433,8 @@ public class Square : MonoBehaviour
         {
             GameManager.Instance.checkObjs.Enqueue(gameObject);
         }
+        else
+            CheckCoolDown = false;
     }
 
     private bool CheckLeftRight()
@@ -521,7 +525,7 @@ public class Square : MonoBehaviour
                 }
 
                 GameManager.Instance.Merge(gameObject, null, other.gameObject);
-
+                //Debug.Log("MRG");
 
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
