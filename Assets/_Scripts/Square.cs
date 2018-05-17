@@ -44,8 +44,20 @@ public class Square : MonoBehaviour
         }
     }
 
+    //Bool to avoid double x2 merge scores
+    private bool doublingPriority = false;
+    public bool DoublingPriority
+    {
+        get
+        {
+            return doublingPriority;
+        }
 
-
+        set
+        {
+            doublingPriority = value;
+        }
+    }
 
     // For sounds 
     [SerializeField]
@@ -89,6 +101,24 @@ public class Square : MonoBehaviour
 
         }
     }
+    //Bool for bug fixing (check later)
+    [SerializeField]
+    private bool checkCoolDown;
+    public bool CheckCoolDown
+    {
+        get
+        {
+            return checkCoolDown;
+        }
+
+        set
+        {
+            checkCoolDown = value;
+        }
+    }
+
+    private float checkTimer;
+
     // toggle for further pop first
     [SerializeField]
     private bool checkPriority = false;
@@ -195,9 +225,11 @@ public class Square : MonoBehaviour
         }
     }
 
+   
 
     Vector2 curPos;
     Vector2 lastPos;
+
 
 
 
@@ -252,6 +284,7 @@ public class Square : MonoBehaviour
     {
 
 
+        checkTimer = 4f;
 
         if (ExpandSpawn)
         {
@@ -282,9 +315,26 @@ public class Square : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //count if nothing is moving
 
-        //Check if something is moving
-        curPos = gameObject.transform.localPosition;
+
+
+
+
+
+
+
+
+        if (CheckCoolDown)
+        {
+                StartCoroutine(StopLeft());
+                CheckCoolDown = false;
+        }
+           
+            //=========================BUG PART ENDS===============
+
+            //Check if something is moving
+            curPos = gameObject.transform.localPosition;
         if (curPos == lastPos && gameObject.transform.parent != null)
         {
             //IsMoving = false;
@@ -364,7 +414,7 @@ public class Square : MonoBehaviour
         {
             if (GameManager.Instance.checkObjs.Contains(gameObject))
             {
-                Debug.Log("DADADADA ETO KAVKAZ");
+                //Debug.Log("reached TMPSQR " + squareTmpSquare.transform.parent.name);
             }
             Destroy(gameObject);
         }
@@ -374,18 +424,85 @@ public class Square : MonoBehaviour
     }
 
 
+    private IEnumerator StopLeft()
+    {
+        yield return new WaitForSeconds(4f);
+        if (CheckLeftRight())
+        {
+            GameManager.Instance.checkObjs.Enqueue(gameObject);
+        }
+    }
+
+    private bool CheckLeftRight()
+    {
+        //checkaround
+       
+            //if there's no start yet
+            int index = int.Parse(gameObject.transform.parent.name);
+            int firstIndex;
+            int nextIndex;
+
+            //check next left one after getting index-1
+            if (index - 1 < 0)
+            {
+                firstIndex = GameManager.Instance.nBottom - 1;
+            }
+            else
+                firstIndex = index - 1;
+
+            //check next one after setting index+1
+            if (index + 1 > GameManager.Instance.nBottom - 1)
+            {
+                nextIndex = 0;
+            }
+            else
+                nextIndex = index + 1;
+
+
+
+            //Check if left or right is available and == score
+            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+            {
+                if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
+                {
+                    Debug.Log("STAWP");
+                    //Check again
+                    return true;
+                }
+            }
+            else if (GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+            {
+                if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
+                {
+                    Debug.Log("STAWP");
+                    //Check again
+                    return true;
+                }
+            }
+        return false;
+    }
+
+
+
+
+
+
+
     // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
 
         if (other.gameObject.CompareTag("spot"))
         {
-
+            //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
             //reset speed back
             this.speed = 10f;
 
             //for column checkrow
             GameManager.Instance.checkObjs.Enqueue(gameObject);
+            
+
+
         }
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
@@ -409,12 +526,13 @@ public class Square : MonoBehaviour
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-
+                //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
                 //reset speed back
                 this.speed = 10f;
 
                 //for column checkrow
                 GameManager.Instance.checkObjs.Enqueue(gameObject);
+             
 
                 //reset Touched bool 
                 StartCoroutine(StopTouch(other.gameObject));

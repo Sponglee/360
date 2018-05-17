@@ -161,9 +161,10 @@ MonoBehaviour:
     rgba: 0
   centerPrefab: {fileID: 0}
   ColumnPew: 0
-  checkPriority: 1
+  checkCoolDown: 0
+  checkPriority: 0
   touched: 0
-  checkAround: 1
+  checkAround: 0
   isMerging: 0
   SquareText: {fileID: 114551330194805478}
   SquareColor: {fileID: 212341414957439470}
@@ -221,20 +222,20 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 7
+  m_Text: 128
 --- !u!114 &114847913719043664
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1617734126905178}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 0.5, y: 0.5}
+  m_EffectDistance: {x: 0.1, y: 0.1}
   m_UseGraphicAlpha: 1
 --- !u!212 &212341414957439470
 SpriteRenderer:

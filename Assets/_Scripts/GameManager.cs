@@ -409,12 +409,12 @@ public class GameManager : Singleton<GameManager>
         //=======================================INPUT END ==============================================
 
 
-        //Launch checkrows
+        //TURN Launch checkrows
         if (checkObjs.Count > 0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
         {
             turnCheckObjs = checkObjs;
             checkObjs = new Queue<GameObject>();
-            Debug.Log("Move count " + checkObjs.Count + "( " + turnCheckObjs.Count + ")");
+            //Debug.Log("Move count " + checkObjs.Count + "( " + turnCheckObjs.Count + ")");
             //To make it check once
             TurnInProgress = true;
             turnTimer = Time.deltaTime + 6f;
@@ -623,12 +623,14 @@ public class GameManager : Singleton<GameManager>
       
         //spawn a square
         squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
+        squareSpawn.GetComponent<Square>().IsSpawn = true;
+        //Debug.Log(squareSpawn.GetComponent<Square>().IsSpawn);
         squareSpawn.GetComponent<Square>().Score = next_score;
         //get score for next turn (non-inclusive)
         next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
         nextScore.text = next_score.ToString();
         ApplyStyle(next_score);
-        squareSpawn.GetComponent<Square>().IsSpawn = true;
+       
     }
 
 
@@ -716,7 +718,7 @@ public class GameManager : Singleton<GameManager>
         int fltScore;
         if (rowObjs != null)
         {
-            Debug.Log(rowObjs.Count);
+            //Debug.Log(rowObjs.Count);
              fltScore = rowObjs.Count+1;
         }
         else
@@ -732,6 +734,7 @@ public class GameManager : Singleton<GameManager>
     //Delay for merge
     private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null)
     {
+        int tmp;
         //Stop checks while Merging
         if (first == null)
             yield break;
@@ -741,13 +744,21 @@ public class GameManager : Singleton<GameManager>
         int tmpScore = fltScore * first.GetComponent<Square>().Score;
 
         //double the score
-        int tmp = first.GetComponent<Square>().Score *=  2;
-        
-        //avoid 512 and higher
-        if (tmp > 256)
-            tmp = 256;
-        yield return new WaitForSeconds(0.2f);
+        if (!first.GetComponent<Square>().DoublingPriority)
+        {
+            tmp = first.GetComponent<Square>().Score *= 2;
+            first.GetComponent<Square>().DoublingPriority = true;
+            //avoid 512 and higher
+            if (tmp > 256)
+                tmp = 256;
+        }
+        else
+            tmp = 0;
 
+
+       
+        yield return new WaitForSeconds(0.2f);
+      
 
 
         //========================Text floating===================================================
@@ -816,7 +827,10 @@ public class GameManager : Singleton<GameManager>
             //add score
             scores += first.GetComponent<Square>().Score;
             ScoreText.text = scores.ToString();
+
+            first.GetComponent<Square>().DoublingPriority = false;
         }
+
     }
 
 
@@ -851,17 +865,20 @@ public class GameManager : Singleton<GameManager>
                     // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                    if (tmpDist <= 2 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
                         && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score
                         && nextObj.GetComponent<Square>().Further)
                     {
+                        tmpObj.GetComponent<Square>().CheckCoolDown = true;
                         continue;
                     }
                     
                 }
                 else
                 {
+                    if(tmpObj != null)
+                        tmpObj.GetComponent<Square>().CheckCoolDown = true;
                     continue;
                 }
 
@@ -890,7 +907,7 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                //Debug.Log("DADADDA");
+                Debug.Log("DADADDA");
                 TurnInProgress = false;
                 continue;
             }
@@ -930,7 +947,7 @@ public class GameManager : Singleton<GameManager>
 
             tmpSquare.GetComponent<Square>().CheckPriority = true;
             CheckInProgress = true;
-            Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
+            //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
 
 
 
@@ -1258,7 +1275,7 @@ public class GameManager : Singleton<GameManager>
                     {
 
                         //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
-                       
+
                         checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         //spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
 
@@ -1428,7 +1445,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
                         //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
-                        Debug.Log("PEW " + tmpSquare.transform.parent.name);
+                        //Debug.Log("PEW " + tmpSquare.transform.parent.name);
                     }
                 }
                
@@ -1714,21 +1731,24 @@ public class GameManager : Singleton<GameManager>
     {
        if (scoreUpper<256)
         {
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
+            //Score TExt
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
             menu.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
         }
        else
         {
-            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", scores);
+            //Score Text
+            menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
             menu.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>256</color>");
 
+            //topText
             menu.transform.GetChild(0).GetChild(2).GetChild(1).gameObject.SetActive(true);
             menu.transform.GetChild(0).GetChild(2).GetChild(1).GetComponent<Text>().text = string.Format("x{0}",topCount.text);
         }
 
 
 
-       //if it is GAME OVER
+       //if it is GAME OVER (endGameCheck for cooldown continue)
         if (gameOver && !endGameCheck)
         {
             menu.SetActive(true);
@@ -1738,10 +1758,14 @@ public class GameManager : Singleton<GameManager>
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
             
         }
+        //If just Open menu mid game
         else
         {
+            
+        
             menu.SetActive(!menu.activeSelf);
             ui.SetActive(!ui.activeSelf);
+            
             MenuUp = !MenuUp;
         }
     }
@@ -1801,8 +1825,11 @@ public class GameManager : Singleton<GameManager>
         //hide button
         menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         menu.transform.GetChild(0).GetChild(0).gameObject.GetComponentInChildren<Slider>().value = 1;
+        //Hide Continue for 2nd run
+        menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         nextScore.text = next_score.ToString();
-        foreach(GameObject spot in spots)
+
+        foreach (GameObject spot in spots)
         {
             if (spot.transform.childCount == 5)
             {
