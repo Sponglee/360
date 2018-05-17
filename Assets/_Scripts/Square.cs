@@ -328,7 +328,7 @@ public class Square : MonoBehaviour
         if (CheckCoolDown)
         {
                 StartCoroutine(StopLeft());
-                
+                checkCoolDown = false;
         }
            
 
@@ -433,8 +433,8 @@ public class Square : MonoBehaviour
         {
             GameManager.Instance.checkObjs.Enqueue(gameObject);
         }
-        else
-            CheckCoolDown = false;
+        //else
+        //    CheckCoolDown = false;
     }
 
     private bool CheckLeftRight()
