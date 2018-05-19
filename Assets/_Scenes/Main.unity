@@ -1821,6 +1821,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 407895572dceee14f814fe080a556dcc, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &427707285 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4622039746108696, guid: 5b010fda60047bc469b056b1a5c61daf,
+    type: 2}
+  m_PrefabInternal: {fileID: 355506795}
 --- !u!1 &463781361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2923,7 +2928,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -150
   m_Sprite: {fileID: 21300000, guid: 8a6edc9948d9790478fae78dd6b5a780, type: 3}
-  m_Color: {r: 0.9294118, g: 0.82745105, b: 0.6901961, a: 1}
+  m_Color: {r: 1, g: 0.828, b: 0.7352941, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4206,11 +4211,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224500886953417792, guid: 20f41ded9e2bab045801201d6511f13e,
     type: 2}
   m_PrefabInternal: {fileID: 997833113}
---- !u!4 &1134566709 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4919682791573036, guid: 5b010fda60047bc469b056b1a5c61daf,
-    type: 2}
-  m_PrefabInternal: {fileID: 355506795}
 --- !u!1001 &1140692911
 Prefab:
   m_ObjectHideFlags: 0
@@ -4671,7 +4671,7 @@ Transform:
   - {fileID: 1692868301}
   - {fileID: 1322843919}
   - {fileID: 912948815}
-  - {fileID: 1134566709}
+  - {fileID: 427707285}
   - {fileID: 1745631304}
   - {fileID: 842795636}
   - {fileID: 1293745319}
