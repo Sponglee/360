@@ -576,6 +576,7 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
     private void ApplyStyle(int num)
@@ -877,7 +878,7 @@ public class GameManager : Singleton<GameManager>
                 }
                 else
                 {
-                    if(tmpObj != null)
+                    if (tmpObj != null)
                         tmpObj.GetComponent<Square>().CheckCoolDown = true;
                     continue;
                 }

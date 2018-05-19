@@ -103,7 +103,7 @@ public class Square : MonoBehaviour
     }
     //Bool for bug fixing (check later)
     [SerializeField]
-    private bool checkCoolDown;
+    private bool checkCoolDown=false;
     public bool CheckCoolDown
     {
         get
@@ -325,10 +325,11 @@ public class Square : MonoBehaviour
 
 
 
-        if (CheckCoolDown)
+        if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
         {
-                StartCoroutine(StopLeft());
-                checkCoolDown = false;
+            checkCoolDown = false;
+            StartCoroutine(StopLeft());
+                
         }
            
 
@@ -428,13 +429,14 @@ public class Square : MonoBehaviour
 
     private IEnumerator StopLeft()
     {
-        yield return new WaitForSeconds(4f);
-        if (CheckLeftRight())
+        yield return new WaitForSeconds(3f);
+        if (gameObject.transform.parent != null && CheckLeftRight())
         {
             GameManager.Instance.checkObjs.Enqueue(gameObject);
+            checkCoolDown = true;
         }
-        //else
-        //    CheckCoolDown = false;
+        else
+            CheckCoolDown = false;
     }
 
     private bool CheckLeftRight()
@@ -465,7 +467,7 @@ public class Square : MonoBehaviour
 
 
             //Check if left or right is available and == score
-            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() && !gameObject.transform.parent.CompareTag("outer"))
             {
                 if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
@@ -474,7 +476,7 @@ public class Square : MonoBehaviour
                     return true;
                 }
             }
-            else if (GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+            else if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
             {
                 if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
