@@ -240,6 +240,7 @@ public class Square : MonoBehaviour
         SquareText.text = SquareStyleHolder.Instance.SquareStyles[index].Number.ToString();
         SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
         SquareColor.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        SquareText.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
     }
     //Gets Values from style script for each square
     public void ApplyStyle(int num)
@@ -327,6 +328,7 @@ public class Square : MonoBehaviour
 
         if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
         {
+            Debug.Log("STAWP");
             checkCoolDown = false;
             StartCoroutine(StopLeft());
                 
@@ -471,7 +473,7 @@ public class Square : MonoBehaviour
             {
                 if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                    Debug.Log("STAWP");
+                   
                     //Check again
                     return true;
                 }
@@ -480,7 +482,7 @@ public class Square : MonoBehaviour
             {
                 if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                    Debug.Log("STAWP");
+                   
                     //Check again
                     return true;
                 }

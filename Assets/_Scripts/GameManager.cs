@@ -128,7 +128,7 @@ public class GameManager : Singleton<GameManager>
     public Text upper;
     public Text topCount;
     public static int next_score;
-    public Slider slider;
+    public Image slider;
 
     //scrolling text
     public GameObject FltText;
@@ -238,7 +238,7 @@ public class GameManager : Singleton<GameManager>
         ScoreText.text = scores.ToString();
         upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
-        slider.value = (expandMoves - Moves) / expandMoves;
+        slider.fillAmount = (expandMoves  - Moves*1.5f) / expandMoves;
         endGameCheck = false;
 
         //Random next score to appear (2^3 max <-----)
@@ -1166,11 +1166,11 @@ public class GameManager : Singleton<GameManager>
 
                         Expand();
                         Moves = 0;
-                        slider.value = 1;
+                        slider.fillAmount = 1;
 
                         //expandMoves += expandMoves/2;
                         //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-                        slider.value = (float)(expandMoves - Moves) / expandMoves;
+                        slider.fillAmount = (float)(expandMoves - Moves*1.5f) / expandMoves;
                     }
 
 
@@ -1489,7 +1489,7 @@ public class GameManager : Singleton<GameManager>
     {
         Moves++;
         //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-        slider.value = (float)(expandMoves - Moves) / expandMoves;
+        slider.fillAmount = (float)(expandMoves - Moves*1.5f) / expandMoves;
     }
 
 
