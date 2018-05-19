@@ -60,7 +60,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (value != 0)
             {
-                topCount.gameObject.SetActive(true);
+                //topCount.gameObject.SetActive(true);
                 if (value != tops)
                 {
                     topCount.text = string.Format(" x{0}", value);
@@ -816,7 +816,7 @@ public class GameManager : Singleton<GameManager>
                     AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
                 Instance.upper.text = string.Format("{0}", scoreUpper);
-                uiSquarePrefab.SetActive(true);
+                //uiSquarePrefab.SetActive(true);
                 UISquare.Instance.ApplyUiStyle(scoreUpper);
               
             }
