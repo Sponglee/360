@@ -238,7 +238,7 @@ public class GameManager : Singleton<GameManager>
         ScoreText.text = scores.ToString();
         upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
-        slider.fillAmount = (expandMoves  - Moves*1.5f) / expandMoves;
+        slider.fillAmount = (expandMoves  - Moves) / expandMoves;
         endGameCheck = false;
 
         //Random next score to appear (2^3 max <-----)
@@ -621,7 +621,7 @@ public class GameManager : Singleton<GameManager>
     //Spawn new square
     private void ClickSpawn()
     {
-      
+        //squareSpawn.GetComponent<Rigidbody2D>().
         //spawn a square
         squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
         squareSpawn.GetComponent<Square>().IsSpawn = true;
@@ -1165,12 +1165,13 @@ public class GameManager : Singleton<GameManager>
                     {
 
                         Expand();
-                        Moves = 0;
-                        slider.fillAmount = 1;
+                        
+
+                        StartCoroutine(FillStop());
 
                         //expandMoves += expandMoves/2;
                         //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-                        slider.fillAmount = (float)(expandMoves - Moves*1.5f) / expandMoves;
+                        slider.fillAmount = (float)(expandMoves - Moves) / expandMoves;
                     }
 
 
@@ -1234,6 +1235,12 @@ public class GameManager : Singleton<GameManager>
         CheckInProgress = false;
     }
 
+    private IEnumerator FillStop()
+    {
+        yield return new WaitForSeconds(1f);
+        Moves = 0;
+        slider.fillAmount = 1;
+    }
     //////////////////////////////////////////////////////////////////////////////////////CHECK FOR EACH IN COLUMN
     private void CheckAbove(int spotIndex, int squareIndex)
     {
@@ -1489,7 +1496,7 @@ public class GameManager : Singleton<GameManager>
     {
         Moves++;
         //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-        slider.fillAmount = (float)(expandMoves - Moves*1.5f) / expandMoves;
+        slider.fillAmount = (float)(expandMoves - Moves) / expandMoves;
     }
 
 
