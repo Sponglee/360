@@ -20,11 +20,14 @@ public class ThemeStyle
     public GameObject backPref;
     public GameObject buttonPref;
     public GameObject fltTextPref;
-    public GameObject styleHolerPref;
+    public GameObject styleHolderPref;
 
     public Color32 yellowPref;
     public Color32 redPref;
     public Font fontPref;
+
+    public GameObject menuPref;
+    public GameObject uiPref;
  
   
 }

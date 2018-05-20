@@ -18,7 +18,9 @@ public class CoinManager : Singleton<CoinManager> {
 
     // Use this for initialization
     void Start () {
-       
+
+        coinText = GameManager.Instance.ui.transform.GetChild(3).gameObject.GetComponent<Text>();
+        menuCoinText = GameManager.Instance.menu.transform.GetChild(3).gameObject.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
