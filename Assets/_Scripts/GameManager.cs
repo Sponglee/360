@@ -24,16 +24,23 @@ public class GameManager : Singleton<GameManager>
     private GameObject menu;
 
     [SerializeField]
-    public GameObject wheel;
-    [SerializeField]
-    public GameObject uiSquarePrefab;
+    public GameObject wheelPrefab;
     public GameObject centerPref;
     public GameObject squarePrefab;
     public GameObject spotPrefab;
     public GameObject spawnPrefab;
     public GameObject gridPrefab;
-   
+    public GameObject backPrefab;
+    public GameObject styleHolderPrefab;
+    public Font fontPrefab;
+
     public Transform line;
+
+
+
+    [SerializeField]
+    public GameObject uiSquarePrefab;
+
 
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
@@ -102,10 +109,11 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSpot;
     // spawn point
     public GameObject currentSpawn;
-    //next spot to turn green
-    public int LastSpot { get; set; }
 
-
+    //Changable objects (for ApplyTheme)
+    public int themeIndex;
+    public GameObject wheel;
+    public GameObject backGround;
 
     public bool TurnInProgress = false;
 
@@ -209,6 +217,50 @@ public class GameManager : Singleton<GameManager>
     float differ = 0;
 
 
+    //------------------------------------------------STYLE----------------------------------------------------------------------
+    // Helps ApplyStyle to grab numbers/color
+    void ApplyThemeFromHolder(int index)
+    {
+        wheelPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].wheelPref;
+        centerPref = ThemeStyleHolder.Instance.ThemeStyles[index].wheelPref.transform.GetChild(5).gameObject;
+        squarePrefab = ThemeStyleHolder.Instance.ThemeStyles[index].squarePref;
+        spotPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].spotPref;
+        backPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].backPref;
+
+        FltText = ThemeStyleHolder.Instance.ThemeStyles[index].fltTextPref;
+
+        styleHolderPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].styleHolerPref;
+        fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
+        
+
+    }
+
+    //Gets Values from style script for each square
+    public void ApplyTheme(int num)
+    {
+        switch (num)
+        {
+            case 0:
+                ApplyThemeFromHolder(0);
+                break;
+            case 1:
+                ApplyThemeFromHolder(1);
+                break;
+            default:
+                Debug.LogError("Check the number that u pass to ApplyStyle");
+                break;
+        }
+    }
+
+
+    //---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
     void Start()
     {
@@ -216,7 +268,18 @@ public class GameManager : Singleton<GameManager>
 
         Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
 
+        //===========================================Initialize theme==============================================================
+        ApplyTheme(themeIndex);
+        wheel = Instantiate(wheelPrefab, new Vector3(0, -7f, 11f), Quaternion.identity);
+        backGround = Instantiate(backPrefab);
 
+        slider = wheel.transform.GetChild(6).GetChild(0).GetComponent<Image>();
+
+        nextScore.font = fontPrefab;
+        ScoreText.font = fontPrefab;
+
+        Instantiate(styleHolderPrefab);
+        //==========================================================================================================================
 
         turnCheckObjs = new Queue<GameObject>();
         checkObjs = new Queue<GameObject>();
@@ -1854,6 +1917,31 @@ public class GameManager : Singleton<GameManager>
         endGameCheck = true;
     }
 
+
+
+
+
+
+    public void ChangeTheme(int index)
+    {
+        themeIndex = index;
+
+        Restart();
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public void TweakAngle(string value)
     {
         spawn__Angle = float.Parse(value);
@@ -1873,4 +1961,8 @@ public class GameManager : Singleton<GameManager>
     {
         rotationDuration = float.Parse(value);
     }
+
+
+
+
 }

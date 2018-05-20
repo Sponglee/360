@@ -175,6 +175,7 @@ MonoBehaviour:
     rgba: 0
   centerPrefab: {fileID: 0}
   ColumnPew: 0
+  checkCoolDown: 0
   checkPriority: 0
   touched: 0
   checkAround: 1

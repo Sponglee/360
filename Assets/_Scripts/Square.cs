@@ -284,7 +284,9 @@ public class Square : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //Apply theme
 
+        SquareText.font = GameManager.Instance.fontPrefab;
 
         checkTimer = 4f;
 
