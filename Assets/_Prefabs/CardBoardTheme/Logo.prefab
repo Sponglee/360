@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
+  m_EffectDistance: {x: 8, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!222 &222681234347639652
 CanvasRenderer:

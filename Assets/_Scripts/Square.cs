@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Square : MonoBehaviour
 {
+   
 
     [SerializeField]
     private float speed = 10f;
@@ -317,14 +318,10 @@ public class Square : MonoBehaviour
     void FixedUpdate()
     {
         //count if nothing is moving
+       
+        
 
-
-
-
-
-
-
-
+   
 
         if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
         {
