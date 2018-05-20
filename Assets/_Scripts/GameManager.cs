@@ -143,7 +143,8 @@ public class GameManager : Singleton<GameManager>
 
     //scores
     public int scores;
-    public Text ScoreText;
+    public Text scoreText;
+    public Text logoText;
 
     //// Obj list for pop checkrow
     //List<GameObject> rowObjs;
@@ -227,9 +228,15 @@ public class GameManager : Singleton<GameManager>
         spotPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].spotPref;
         backPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].backPref;
 
+        gridPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].gridPref;
+        spawnPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].spawnPref;
+
         FltText = ThemeStyleHolder.Instance.ThemeStyles[index].fltTextPref;
 
         styleHolderPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].styleHolerPref;
+
+        leYellow = ThemeStyleHolder.Instance.ThemeStyles[index].yellowPref;
+        leRed = ThemeStyleHolder.Instance.ThemeStyles[index].redPref;
         fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
         
 
@@ -276,7 +283,9 @@ public class GameManager : Singleton<GameManager>
         slider = wheel.transform.GetChild(6).GetChild(0).GetComponent<Image>();
 
         nextScore.font = fontPrefab;
-        ScoreText.font = fontPrefab;
+        scoreText.font = fontPrefab;
+        logoText.font = fontPrefab;
+        
 
         Instantiate(styleHolderPrefab);
         //==========================================================================================================================
@@ -298,7 +307,7 @@ public class GameManager : Singleton<GameManager>
         grids = new GameObject[nBottom, 5];
        
         scores = 0;
-        ScoreText.text = scores.ToString();
+        scoreText.text = scores.ToString();
         upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
         slider.fillAmount = (expandMoves  - Moves) / expandMoves;
@@ -890,7 +899,7 @@ public class GameManager : Singleton<GameManager>
 
             //add score
             scores += first.GetComponent<Square>().Score;
-            ScoreText.text = scores.ToString();
+            scoreText.text = scores.ToString();
 
             first.GetComponent<Square>().DoublingPriority = false;
         }
