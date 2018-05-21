@@ -648,8 +648,8 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4278650761
     fontPref: {fileID: 12800000, guid: c62eb169bacbe4b4ca8d7a555f54f55b, type: 3}
-    menuPref: {fileID: 1390697947386658, guid: 0d922e9d5159577479e2e15c7a4e0241, type: 2}
-    uiPref: {fileID: 1757548442489750, guid: 7b7fb4ccb06aefc459cdfdb5ed2ef421, type: 2}
+    menuPref: {fileID: 1390697947386658, guid: d6f9b415f0eacfe49a53ea8aea59f1f4, type: 2}
+    uiPref: {fileID: 1757548442489750, guid: bb08d4a9ed5326b40a4ab884ae5832c3, type: 2}
   - wheelPref: {fileID: 1222991058251880, guid: 25305ae3b516f524f91aa4b28216596b,
       type: 2}
     squarePref: {fileID: 1523403489220356, guid: ed21a2dedcc09cf4a98a179245881f26,
@@ -667,13 +667,13 @@ MonoBehaviour:
       type: 2}
     yellowPref:
       serializedVersion: 2
-      rgba: 4287949062
+      rgba: 4278253360
     redPref:
       serializedVersion: 2
       rgba: 4285929155
     fontPref: {fileID: 12800000, guid: 335a6d1cc24f6a0419b8ef506975e68d, type: 3}
-    menuPref: {fileID: 1390697947386658, guid: 0d922e9d5159577479e2e15c7a4e0241, type: 2}
-    uiPref: {fileID: 1757548442489750, guid: 7b7fb4ccb06aefc459cdfdb5ed2ef421, type: 2}
+    menuPref: {fileID: 1390697947386658, guid: df0c4e28da8fdba41be7e8339ac9af30, type: 2}
+    uiPref: {fileID: 1757548442489750, guid: 34d83a23d15a2c449af93a80322c8350, type: 2}
 --- !u!4 &1381546255
 Transform:
   m_ObjectHideFlags: 0
@@ -876,7 +876,7 @@ MonoBehaviour:
     rgba: 4278650761
   leGreen:
     serializedVersion: 2
-    rgba: 11522796
+    rgba: 16777215
   leYellow:
     serializedVersion: 2
     rgba: 4288082943
@@ -906,7 +906,7 @@ MonoBehaviour:
   moves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}
-  themeIndex: 0
+  themeIndex: 1
   wheel: {fileID: 0}
   backGround: {fileID: 0}
   TurnInProgress: 0
