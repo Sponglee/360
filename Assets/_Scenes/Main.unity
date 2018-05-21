@@ -906,7 +906,7 @@ MonoBehaviour:
   moves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}
-  themeIndex: 1
+  themeIndex: 0
   wheel: {fileID: 0}
   backGround: {fileID: 0}
   TurnInProgress: 0
