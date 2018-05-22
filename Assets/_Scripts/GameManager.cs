@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager>
                 //topCount.gameObject.SetActive(true);
                 if (value != tops)
                 {
-                    topCount.text = string.Format(" x{0}", value);
+                    //topCount.text = string.Format(" x{0}", value);
                     tops = value;
                 }
 
@@ -836,9 +836,9 @@ public class GameManager : Singleton<GameManager>
 
         //for text
         int tmpScore = fltScore * first.GetComponent<Square>().Score;
-
+        
         //double the score
-        if (!first.GetComponent<Square>().DoublingPriority)
+        if (first !=null && !first.GetComponent<Square>().DoublingPriority)
         {
             tmp = first.GetComponent<Square>().Score *= 2;
             first.GetComponent<Square>().DoublingPriority = true;

@@ -325,13 +325,13 @@ public class Square : MonoBehaviour
 
    
 
-        if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
-        {
-            Debug.Log("STAWP");
-            checkCoolDown = false;
-            StartCoroutine(StopLeft());
+        //if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
+        //{
+        //    Debug.Log("STAWP");
+        //    checkCoolDown = false;
+        //    StartCoroutine(StopLeft());
                 
-        }
+        //}
            
 
 
@@ -434,7 +434,7 @@ public class Square : MonoBehaviour
         if (gameObject.transform.parent != null && CheckLeftRight())
         {
             GameManager.Instance.checkObjs.Enqueue(gameObject);
-            checkCoolDown = true;
+            //checkCoolDown = true;
         }
         else
             CheckCoolDown = false;
@@ -506,8 +506,12 @@ public class Square : MonoBehaviour
             this.speed = 10f;
 
             //for column checkrow
-            GameManager.Instance.checkObjs.Enqueue(gameObject);
-            
+            if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
+            {
+                GameManager.Instance.checkObjs.Enqueue(gameObject);
+               
+            }
+
 
 
         }
@@ -538,8 +542,12 @@ public class Square : MonoBehaviour
                 this.speed = 10f;
 
                 //for column checkrow
-                GameManager.Instance.checkObjs.Enqueue(gameObject);
-             
+                if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
+                {
+                    GameManager.Instance.checkObjs.Enqueue(gameObject);
+                    //checkCoolDown = true;
+                }
+
 
                 //reset Touched bool 
                 StartCoroutine(StopTouch(other.gameObject));
