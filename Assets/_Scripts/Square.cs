@@ -319,7 +319,14 @@ public class Square : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //count if nothing is moving
+        
+        //0 score bug fix
+
+        if (int.Parse(SquareText.text) == 0)
+        {
+            SquareText.text = this.score.ToString();
+
+        }
        
         
 
