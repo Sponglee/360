@@ -810,10 +810,12 @@ public class GameManager : Singleton<GameManager>
     public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null)
     {
         int fltScore;
+
+        //Check if vertical merge or horizontal merge
         if (rowObjs != null)
         {
             //Debug.Log(rowObjs.Count);
-             fltScore = rowObjs.Count+1;
+             fltScore = rowObjs.Count;
         }
         else
         {
@@ -829,14 +831,17 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null)
     {
         int tmp;
+        int tmpScore;
         //Stop checks while Merging
         if (first == null)
             yield break;
         first.GetComponent<Square>().IsMerging = true;
 
-        //for text
-        int tmpScore = fltScore * first.GetComponent<Square>().Score;
-        
+        //for float text
+        if (second == null)
+            tmpScore = (fltScore +1)* first.GetComponent<Square>().Score;
+        else
+            tmpScore = (fltScore) * first.GetComponent<Square>().Score;
         //double the score
         if (first !=null && !first.GetComponent<Square>().DoublingPriority)
         {
@@ -858,11 +863,12 @@ public class GameManager : Singleton<GameManager>
         //========================Text floating===================================================
         //Get some text out
        
-        Vector3 fltOffset = new Vector3(0f, 0.1f, 0f);
+        Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
         if (first != null)
         {
             GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
-
+     
+             
             if (second != null)
                 textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition+ fltOffset);
             else
@@ -874,11 +880,13 @@ public class GameManager : Singleton<GameManager>
             // flt text text
             textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmpScore.ToString();
         }
+       
             
         //=======================
 
         if (first != null)
         {
+            //update the square score
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
             if (first.GetComponent<Square>().Score == 256)
             {
@@ -918,8 +926,9 @@ public class GameManager : Singleton<GameManager>
             first.GetComponent<Square>().IsMerging = false;
             MergeInProgress = false;
 
-            //add score
-            scores += first.GetComponent<Square>().Score;
+            //add score of tmpsSquare
+           
+            scores += tmpScore;
             scoreText.text = scores.ToString();
 
             first.GetComponent<Square>().DoublingPriority = false;
@@ -961,18 +970,18 @@ public class GameManager : Singleton<GameManager>
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
                     if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
-                        && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score
                         && nextObj.GetComponent<Square>().Further)
                     {
-                        tmpObj.GetComponent<Square>().CheckCoolDown = true;
-                        continue;
+                        if (tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
+                            //tmpObj.GetComponent<Square>().CheckCoolDown = true;
+                            continue;
                     }
                     
                 }
                 else
                 {
-                    if (tmpObj != null)
-                        tmpObj.GetComponent<Square>().CheckCoolDown = true;
+                    //if (tmpObj != null)
+                    //    tmpObj.GetComponent<Square>().CheckCoolDown = true;
                     continue;
                 }
 
@@ -1051,7 +1060,7 @@ public class GameManager : Singleton<GameManager>
             if (!tmpSquare.GetComponent<Square>().Further)
             {
 
-                AudioManager.Instance.PlaySound("bump");
+                //AudioManager.Instance.PlaySound("bump");
             }
 
             else
@@ -1380,9 +1389,9 @@ public class GameManager : Singleton<GameManager>
 
                         //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
 
-                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
+                        //checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         //spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
-
+                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }
@@ -1521,9 +1530,11 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
         GameObject furthertmpSquare = tmpSquare;
+
         //if something below -> move on
         if (tmpSquare.transform.GetSiblingIndex() > 0)
         {
+            //if same score below
             if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
             {
                 if (tmpSquare.GetComponent<Square>().IsMerging)
@@ -1551,7 +1562,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
                         //Debug.Log("MRG BLW");    
-                    //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
+                        //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
                         //Debug.Log("PEW " + tmpSquare.transform.parent.name);
                     }
                 }
@@ -1564,9 +1575,9 @@ public class GameManager : Singleton<GameManager>
                 //{
                     furthertmpSquare.GetComponent<Square>().CheckPriority = false;
 
-            //    tmpSquare.GetComponent<Square>().CheckAround = true;
-            //   
-            //}
+                //    tmpSquare.GetComponent<Square>().CheckAround = true;
+                //   
+                //}
              
 
             }
