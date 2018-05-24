@@ -1755,6 +1755,8 @@ public class GameManager : Singleton<GameManager>
             {
                 //full spot colors red and opens another one
                 chk.GetComponent<SpriteRenderer>().color = leRed;
+                // 1 column gameover
+                StartCoroutine(StopGameOverShort(chk));
             }
             else if (chk.transform.childCount == 4)
             {
@@ -1763,8 +1765,7 @@ public class GameManager : Singleton<GameManager>
                 chk.GetComponent<SpriteRenderer>().color = leYellow;
             }
 
-            // 1 column gameover
-            StartCoroutine(StopGameOverShort(chk));
+           
         }
 
 
