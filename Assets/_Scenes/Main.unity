@@ -301,6 +301,114 @@ Transform:
   m_Father: {fileID: 1287057630}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -89.998}
+--- !u!1001 &776723076
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224174025632170236, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+        type: 2}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
+      propertyPath: m_Name
+      value: MenuCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &877791588
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,8 +756,10 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4278650761
     fontPref: {fileID: 12800000, guid: c62eb169bacbe4b4ca8d7a555f54f55b, type: 3}
-    menuPref: {fileID: 1390697947386658, guid: d6f9b415f0eacfe49a53ea8aea59f1f4, type: 2}
     uiPref: {fileID: 1757548442489750, guid: bb08d4a9ed5326b40a4ab884ae5832c3, type: 2}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3182089174
   - wheelPref: {fileID: 1222991058251880, guid: 25305ae3b516f524f91aa4b28216596b,
       type: 2}
     squarePref: {fileID: 1523403489220356, guid: ed21a2dedcc09cf4a98a179245881f26,
@@ -672,8 +782,10 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4285929155
     fontPref: {fileID: 12800000, guid: 335a6d1cc24f6a0419b8ef506975e68d, type: 3}
-    menuPref: {fileID: 1390697947386658, guid: df0c4e28da8fdba41be7e8339ac9af30, type: 2}
     uiPref: {fileID: 1757548442489750, guid: 34d83a23d15a2c449af93a80322c8350, type: 2}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3176242192
 --- !u!4 &1381546255
 Transform:
   m_ObjectHideFlags: 0
@@ -687,6 +799,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1511568266 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+    type: 2}
+  m_PrefabInternal: {fileID: 776723076}
 --- !u!1 &1620244928
 GameObject:
   m_ObjectHideFlags: 0
@@ -882,8 +999,7 @@ MonoBehaviour:
     rgba: 4288082943
   ui: {fileID: 0}
   uiPrefab: {fileID: 0}
-  menu: {fileID: 0}
-  menuPrefab: {fileID: 0}
+  menu: {fileID: 1511568266}
   wheelPrefab: {fileID: 0}
   centerPref: {fileID: 0}
   squarePrefab: {fileID: 0}
@@ -919,7 +1035,9 @@ MonoBehaviour:
   slider: {fileID: 0}
   FltText: {fileID: 0}
   scores: 0
+  highscores: 0
   scoreText: {fileID: 0}
+  highScoreText: {fileID: 0}
   SomethingIsMoving: 0
   CheckInProgress: 0
   FurtherProgress: 0

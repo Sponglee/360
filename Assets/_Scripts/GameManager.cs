@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject uiPrefab;
     [SerializeField]
     public GameObject menu;
-    public GameObject menuPrefab;
+
 
     [SerializeField]
     public GameObject wheelPrefab;
@@ -145,8 +145,9 @@ public class GameManager : Singleton<GameManager>
 
     //scores
     public int scores;
+    public int highscores;
     public Text scoreText;
-    
+    public Text highScoreText;
 
     //// Obj list for pop checkrow
     //List<GameObject> rowObjs;
@@ -241,7 +242,10 @@ public class GameManager : Singleton<GameManager>
         leRed = ThemeStyleHolder.Instance.ThemeStyles[index].redPref;
         fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
 
-        menuPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+       
+        menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
 
     }
@@ -270,6 +274,37 @@ public class GameManager : Singleton<GameManager>
 
 
 
+    private void Awake()
+    {
+        themeIndex = PlayerPrefs.GetInt("Theme", 0);
+    }
+
+
+    public void InitializeTheme()
+    {
+        ApplyTheme(themeIndex);
+
+
+        ui = Instantiate(uiPrefab);
+
+        wheel = Instantiate(wheelPrefab, new Vector3(0, -7f, 11f), Quaternion.identity);
+        backGround = Instantiate(backPrefab);
+
+        slider = wheel.transform.GetChild(6).GetChild(0).GetComponent<Image>();
+
+        nextScore = ui.transform.GetChild(1).gameObject.GetComponent<Text>();
+        scoreText = ui.transform.GetChild(2).gameObject.GetComponent<Text>();
+        highScoreText = ui.transform.GetChild(4).gameObject.GetComponent<Text>();
+
+
+        Instantiate(styleHolderPrefab);
+
+        foreach (Transform child in wheel.transform) if (child.CompareTag("square"))
+            {
+                ApplyStyle(child.GetComponent<Square>().Score);
+            }
+    }
+
 
 
 
@@ -280,35 +315,7 @@ public class GameManager : Singleton<GameManager>
         Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
 
         //===========================================Initialize theme==============================================================
-        ApplyTheme(themeIndex);
-
-        menu = Instantiate(menuPrefab);
-        ui = Instantiate(uiPrefab);
-
-        wheel = Instantiate(wheelPrefab, new Vector3(0, -7f, 11f), Quaternion.identity);
-        backGround = Instantiate(backPrefab);
-
-        slider = wheel.transform.GetChild(6).GetChild(0).GetComponent<Image>();
-
-        nextScore = ui.transform.GetChild(1).gameObject.GetComponent<Text>();
-        scoreText = ui.transform.GetChild(2).gameObject.GetComponent<Text>();
-    
-        
-
-        Instantiate(styleHolderPrefab);
-
-
-
-
-
-
-
-
-
-
-
-
-
+        InitializeTheme();
         //==========================================================================================================================
 
         turnCheckObjs = new Queue<GameObject>();
@@ -326,10 +333,14 @@ public class GameManager : Singleton<GameManager>
         spots = new List<GameObject>();
         spawns = new List<GameObject>();
         grids = new GameObject[nBottom, 5];
-       
+
         scores = 0;
+        highscores = PlayerPrefs.GetInt("Highscore", 0);
+        highScoreText.gameObject.SetActive(true);
+        highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
-                                                                                //upper.text = string.Format("{0}", scoreUpper);
+                                                            
+        //upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
         slider.fillAmount = (expandMoves  - Moves) / expandMoves;
         endGameCheck = false;
@@ -918,7 +929,7 @@ public class GameManager : Singleton<GameManager>
                 scoreUpper *= 2;
                                                                                             //Instance.upper.text = string.Format("{0}", scoreUpper);
                 //uiSquarePrefab.SetActive(true);
-                UISquare.Instance.ApplyUiStyle(scoreUpper);
+                //UISquare.Instance.ApplyUiStyle(scoreUpper);
               
             }
             //first.GetComponent<Square>().Touched = false;
@@ -929,6 +940,13 @@ public class GameManager : Singleton<GameManager>
             //add score of tmpsSquare
            
             scores += tmpScore;
+
+            if (scores>= highscores)
+            {
+                highscores = scores;
+                highScoreText.gameObject.SetActive(false);
+                PlayerPrefs.SetInt("Highscore", scores);
+            }
             scoreText.text = scores.ToString();
 
             first.GetComponent<Square>().DoublingPriority = false;
@@ -1856,24 +1874,25 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver=false)
     {
-       if (scoreUpper<256)
+        //scoreText
+        menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
+        menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", highscores);
+        if (scoreUpper<256)
         {
-            //scoreText
-            menu.transform.GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
+  
             //upperText
-            menu.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
+            menu.transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
         }
        else
         {
-            //Score Text
-            menu.transform.GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore", scores);
+           
             //upperText
-            menu.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>256</color>");
+            //menu.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>256</color>");
 
             //topCount
-            menu.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.SetActive(true);
+            //menu.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.SetActive(true);
             //topCount
-            menu.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = string.Format("x{0}",topCount.text);
+            //menu.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = string.Format("x{0}",topCount.text);
         }
 
 
@@ -1882,10 +1901,10 @@ public class GameManager : Singleton<GameManager>
         if (gameOver && !endGameCheck)
         {
             menu.SetActive(true);
-            ui.SetActive(false);
+            ui.SetActive(!menu.gameObject.activeSelf);
 
             //GameOver
-            menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
             
@@ -1896,7 +1915,7 @@ public class GameManager : Singleton<GameManager>
             
         
             menu.SetActive(!menu.activeSelf);
-            ui.SetActive(!ui.activeSelf);
+            ui.SetActive(!menu.activeSelf);
             
             MenuUp = !MenuUp;
         }
@@ -1907,7 +1926,7 @@ public class GameManager : Singleton<GameManager>
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before
@@ -1980,8 +1999,8 @@ public class GameManager : Singleton<GameManager>
     public void ChangeTheme(int index)
     {
         themeIndex = index;
-
-        Restart();
+        PlayerPrefs.SetInt("Theme", themeIndex);
+        InitializeTheme();
 
 
     }
