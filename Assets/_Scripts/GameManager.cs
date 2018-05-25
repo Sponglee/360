@@ -244,8 +244,19 @@ public class GameManager : Singleton<GameManager>
 
        
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        //right menu
         menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+
+        //shop menu
+        menu.transform.GetChild(0).GetChild(8).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(8).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+
+        //Options menu
+        menu.transform.GetChild(0).GetChild(7).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(7).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+
+        // Set a ui
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
 
     }
@@ -299,10 +310,10 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(styleHolderPrefab);
 
-        foreach (Transform child in wheel.transform) if (child.CompareTag("square"))
-            {
-                ApplyStyle(child.GetComponent<Square>().Score);
-            }
+        //foreach (Transform child in wheel.transform) if (child.CompareTag("square"))
+        //    {
+        //        ApplyStyle(child.GetComponent<Square>().Score);
+        //    }
     }
 
 
@@ -2000,7 +2011,8 @@ public class GameManager : Singleton<GameManager>
     {
         themeIndex = index;
         PlayerPrefs.SetInt("Theme", themeIndex);
-        InitializeTheme();
+        Restart();
+        //InitializeTheme();
 
 
     }

@@ -22,9 +22,9 @@ public class FunctionHandler : MonoBehaviour {
     }
 
 
-    public void ChangeThemeHandler(int index)
+    public void ChangeThemeHandler(GameObject index)
     {
-        GameManager.Instance.ChangeTheme(index);
+        GameManager.Instance.ChangeTheme(index.transform.GetSiblingIndex());
     }
 
 

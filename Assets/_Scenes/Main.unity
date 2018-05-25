@@ -301,7 +301,7 @@ Transform:
   m_Father: {fileID: 1287057630}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -89.998}
---- !u!1001 &776723076
+--- !u!1001 &741482995
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -401,10 +401,6 @@ Prefab:
     - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
       propertyPath: m_Name
       value: MenuCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
@@ -803,7 +799,7 @@ Transform:
 GameObject:
   m_PrefabParentObject: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2,
     type: 2}
-  m_PrefabInternal: {fileID: 776723076}
+  m_PrefabInternal: {fileID: 741482995}
 --- !u!1 &1620244928
 GameObject:
   m_ObjectHideFlags: 0
