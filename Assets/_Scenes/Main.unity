@@ -398,20 +398,26 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 114014036831973762, guid: ee3cf387fd0cd714a8b381ce0239eea2,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2040681086}
+=======
+>>>>>>> parent of 082a8f7... 25.05.18
     - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
       propertyPath: m_Name
       value: MenuCanvas
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 114498041806531330, guid: ee3cf387fd0cd714a8b381ce0239eea2,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1680771746}
+=======
+>>>>>>> parent of 082a8f7... 25.05.18
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
   m_IsPrefabParent: 0
@@ -792,58 +798,6 @@ MonoBehaviour:
     menuPref:
       serializedVersion: 2
       rgba: 3176242192
-  - wheelPref: {fileID: 1222991058251880, guid: 135bf584c25b196438eba9a3c35ad5b7,
-      type: 2}
-    squarePref: {fileID: 1523403489220356, guid: ac91ab887f38b5b408bbf3612776d057,
-      type: 2}
-    spotPref: {fileID: 1679439421920422, guid: 6621509479be559498e9743407846c59, type: 2}
-    gridPref: {fileID: 1679439421920422, guid: 8e6cfa662072f4041a35857aa6acd0ae, type: 2}
-    spawnPref: {fileID: 1679439421920422, guid: b725691d83de3cd469a24d67be0eea15,
-      type: 2}
-    backPref: {fileID: 1197368308167822, guid: 410f6f11f2bb11a46a65c7a483cdfbf0, type: 2}
-    buttonPref: {fileID: 1962807343019972, guid: 1a7ac09701fac3c4a86e9702bf3045d7,
-      type: 2}
-    fltTextPref: {fileID: 1001251165192770, guid: c4fa3fad9d3dfd1439bbab13c5e2c5f1,
-      type: 2}
-    styleHolderPref: {fileID: 1192564838605412, guid: 2749efc02ffb1434f8187b0147ae1428,
-      type: 2}
-    yellowPref:
-      serializedVersion: 2
-      rgba: 4294967295
-    redPref:
-      serializedVersion: 2
-      rgba: 4278190275
-    fontPref: {fileID: 12800000, guid: 335a6d1cc24f6a0419b8ef506975e68d, type: 3}
-    uiPref: {fileID: 1757548442489750, guid: a79ed5600c1faf941ac1fbcc1c530475, type: 2}
-    menuPref:
-      serializedVersion: 2
-      rgba: 3179512707
-  - wheelPref: {fileID: 1222991058251880, guid: fde0cc14c92e2ec4489a057a778d1627,
-      type: 2}
-    squarePref: {fileID: 1523403489220356, guid: 42f20f984f258c74ebc5d097897179bf,
-      type: 2}
-    spotPref: {fileID: 1679439421920422, guid: dc35572b7eea62046aff06c2ddd16c71, type: 2}
-    gridPref: {fileID: 1679439421920422, guid: 27c2c21288fcbe84ba3e6f39a802570e, type: 2}
-    spawnPref: {fileID: 1679439421920422, guid: 32fdf991a1ba3314591b370f26c6a963,
-      type: 2}
-    backPref: {fileID: 1197368308167822, guid: 0761fa9ef13d5ad4a8cf1ce394f498ea, type: 2}
-    buttonPref: {fileID: 1962807343019972, guid: f63a18b55c92dd74b9e2b8184dff6f8f,
-      type: 2}
-    fltTextPref: {fileID: 1001251165192770, guid: eae02cf92038b1e4b90a81affcd1d67a,
-      type: 2}
-    styleHolderPref: {fileID: 1192564838605412, guid: f035e33897eba6f48b06f16e53a64208,
-      type: 2}
-    yellowPref:
-      serializedVersion: 2
-      rgba: 4278242303
-    redPref:
-      serializedVersion: 2
-      rgba: 4278190335
-    fontPref: {fileID: 12800000, guid: 335a6d1cc24f6a0419b8ef506975e68d, type: 3}
-    uiPref: {fileID: 1757548442489750, guid: 8af26834e957f4042b077c770d33e7f3, type: 2}
-    menuPref:
-      serializedVersion: 2
-      rgba: 3179512707
 --- !u!4 &1381546255
 Transform:
   m_ObjectHideFlags: 0
@@ -1091,7 +1045,6 @@ MonoBehaviour:
   upper: {fileID: 0}
   topCount: {fileID: 0}
   slider: {fileID: 0}
-  sliderFill: 0
   FltText: {fileID: 0}
   scores: 0
   highscores: 0

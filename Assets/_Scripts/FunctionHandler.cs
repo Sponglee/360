@@ -90,7 +90,7 @@ public class FunctionHandler : MonoBehaviour {
 
     public void BackFromLocal(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(900, localMenu, true));
+        StartCoroutine(StopMenu(600, localMenu, true));
 
     }
 
@@ -103,7 +103,7 @@ public class FunctionHandler : MonoBehaviour {
 
     public void BackFromShop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(-1050, localMenu, false));
+        StartCoroutine(StopMenu(-750, localMenu, false));
 
     }
 }

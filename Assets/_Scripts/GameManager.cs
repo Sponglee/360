@@ -139,9 +139,6 @@ public class GameManager : Singleton<GameManager>
     public Text topCount;
     public static int next_score;
     public Image slider;
-    public float sliderFill;
-
-
 
     //scrolling text
     public GameObject FltText;
@@ -276,18 +273,6 @@ public class GameManager : Singleton<GameManager>
             case 1:
                 ApplyThemeFromHolder(1);
                 break;
-            case 2:
-                ApplyThemeFromHolder(2);
-                break;
-            case 3:
-                ApplyThemeFromHolder(3);
-                break;
-            case 4:
-                ApplyThemeFromHolder(4);
-                break;
-            case 5:
-                ApplyThemeFromHolder(5);
-                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -408,6 +393,7 @@ public class GameManager : Singleton<GameManager>
                                                             
         //upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
+<<<<<<< HEAD
         sliderFill = (expandMoves  - Moves) / expandMoves;
 
         //Gradually change slider fillAmount
@@ -417,6 +403,9 @@ public class GameManager : Singleton<GameManager>
 
 
         //for final gameover
+=======
+        slider.fillAmount = (expandMoves  - Moves) / expandMoves;
+>>>>>>> parent of 082a8f7... 25.05.18
         endGameCheck = false;
 
         //Random next score to appear (2^3 max <-----)
@@ -435,24 +424,6 @@ public class GameManager : Singleton<GameManager>
     }
 
  
-    private IEnumerator SliderStop()
-    {
-        float timeOfTravel = 1; //time after object reach a target place 
-        float currentTime = 0; // actual floting time 
-        float normalizedValue;
-
-        while (currentTime <= timeOfTravel)
-        {
-            currentTime += Time.deltaTime;
-            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-
-            slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
-            yield return null;
-        }
-    }
-
-
-
 
     void Update()
     {
@@ -1349,7 +1320,7 @@ public class GameManager : Singleton<GameManager>
 
                         //expandMoves += expandMoves/2;
                         //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-                        sliderFill = (float)(expandMoves - Moves) / expandMoves;
+                        slider.fillAmount = (float)(expandMoves - Moves) / expandMoves;
                     }
 
 
@@ -1419,9 +1390,6 @@ public class GameManager : Singleton<GameManager>
         Moves = 0;
         slider.fillAmount = 1;
     }
-
-
-
     //////////////////////////////////////////////////////////////////////////////////////CHECK FOR EACH IN COLUMN
     private void CheckAbove(int spotIndex, int squareIndex)
     {
@@ -1681,8 +1649,7 @@ public class GameManager : Singleton<GameManager>
     {
         Moves++;
         //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-        sliderFill = (float)(expandMoves - Moves) / expandMoves;
-        StartCoroutine(SliderStop());
+        slider.fillAmount = (float)(expandMoves - Moves) / expandMoves;
     }
 
 
@@ -1969,7 +1936,7 @@ public class GameManager : Singleton<GameManager>
             ui.SetActive(!menu.gameObject.activeSelf);
 
             //GameOver
-            menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
 
