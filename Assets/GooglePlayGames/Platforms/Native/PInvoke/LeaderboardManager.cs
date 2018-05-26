@@ -157,7 +157,7 @@ namespace GooglePlayGames.Native.PInvoke
             // now fetch the summary of the leaderboard.
 
             C.LeaderboardManager_FetchScoreSummary(mServices.AsHandle(),
-                Types.DataSource.CACHE_OR_NETWORK,
+                Types.DataSource.NETWORK_ONLY,
                 token.LeaderboardId,
                 (Types.LeaderboardTimeSpan)token.TimeSpan,
                 (Types.LeaderboardCollection)token.Collection,
