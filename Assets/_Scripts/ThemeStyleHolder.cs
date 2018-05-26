@@ -26,11 +26,10 @@ public class ThemeStyle
     public Color32 redPref;
     public Font fontPref;
 
-   
+    public GameObject menuPref;
     public GameObject uiPref;
-
-    public Color32 menuPref;
-
+ 
+  
 }
 
 

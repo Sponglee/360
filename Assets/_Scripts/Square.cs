@@ -103,20 +103,20 @@ public class Square : MonoBehaviour
         }
     }
     //Bool for bug fixing (check later)
-    //[SerializeField]
-    //private bool checkCoolDown=false;
-    //public bool CheckCoolDown
-    //{
-    //    get
-    //    {
-    //        return checkCoolDown;
-    //    }
+    [SerializeField]
+    private bool checkCoolDown=false;
+    public bool CheckCoolDown
+    {
+        get
+        {
+            return checkCoolDown;
+        }
 
-    //    set
-    //    {
-    //        checkCoolDown = value;
-    //    }
-    //}
+        set
+        {
+            checkCoolDown = value;
+        }
+    }
 
     private float checkTimer;
 
@@ -155,7 +155,22 @@ public class Square : MonoBehaviour
             touched = value;
         }
     }
-   
+    //For column pops 
+    [SerializeField]
+    private bool checkAround = true;
+    public bool CheckAround
+    {
+        get
+        {
+            return checkAround;
+        }
+
+        set
+        {
+            checkAround = value;
+        }
+    }
+
     private int checkGrid;
 
     public bool ExpandSpawn { get; set; }
@@ -352,12 +367,12 @@ public class Square : MonoBehaviour
 
         if (this.gameObject.transform.parent != null && !this.gameObject.transform.parent.CompareTag("outer"))
         {
-            ////If siblingindex changed => check around
-            //if (gameObject.transform.GetSiblingIndex() != checkGrid)
-            //{
-            //    CheckAround = true;
-            //    checkGrid = gameObject.transform.GetSiblingIndex();
-            //}
+            //If siblingindex changed => check around
+            if (gameObject.transform.GetSiblingIndex() != checkGrid)
+            {
+                CheckAround = true;
+                checkGrid = gameObject.transform.GetSiblingIndex();
+            }
 
 
             //Move to needed grid spot
@@ -428,8 +443,8 @@ public class Square : MonoBehaviour
             GameManager.Instance.checkObjs.Enqueue(gameObject);
             //checkCoolDown = true;
         }
-        //else
-        //    CheckCoolDown = false;
+        else
+            CheckCoolDown = false;
     }
 
     private bool CheckLeftRight()
@@ -501,8 +516,7 @@ public class Square : MonoBehaviour
             if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
             {
                 GameManager.Instance.checkObjs.Enqueue(gameObject);
-                Debug.Log("spot " + this.Score);
-                AudioManager.Instance.PlaySound("bump");
+               
             }
 
 
@@ -538,8 +552,6 @@ public class Square : MonoBehaviour
                 if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
                 {
                     GameManager.Instance.checkObjs.Enqueue(gameObject);
-                    Debug.Log("spot");
-                    AudioManager.Instance.PlaySound("bump");
                     //checkCoolDown = true;
                 }
 
