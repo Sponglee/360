@@ -501,7 +501,7 @@ public class Square : MonoBehaviour
             if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
             {
                 GameManager.Instance.checkObjs.Enqueue(gameObject);
-                //Debug.Log("spot " + this.Score);
+                Debug.Log("spot " + this.Score);
                 AudioManager.Instance.PlaySound("bump");
             }
 
@@ -538,7 +538,7 @@ public class Square : MonoBehaviour
                 if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
                 {
                     GameManager.Instance.checkObjs.Enqueue(gameObject);
-                    //Debug.Log("spot");
+                    Debug.Log("spot");
                     AudioManager.Instance.PlaySound("bump");
                     //checkCoolDown = true;
                 }

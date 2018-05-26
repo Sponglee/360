@@ -58,7 +58,7 @@ namespace GooglePlayGames.Native.PInvoke
             foreach(string id in userIds)
             {
                 C.PlayerManager_Fetch(mGameServices.AsHandle(),
-                    Types.DataSource.NETWORK_ONLY,
+                    Types.DataSource.CACHE_OR_NETWORK,
                     id,
                     InternalFetchCallback,
                     Callbacks.ToIntPtr<FetchResponse>(

@@ -22,14 +22,9 @@
 ///
 
 
-public static class Threesixty
+public static class GPGSIds
 {
-        public const string achievement_test5 = "CgkI0Pn3xd8EEAIQBQ"; // <GPGSID>
-        public const string leaderboard_leaderboards = "CgkI0Pn3xd8EEAIQBg"; // <GPGSID>
         public const string achievement_yay = "CgkI0Pn3xd8EEAIQAA"; // <GPGSID>
-        public const string achievement_test2 = "CgkI0Pn3xd8EEAIQAg"; // <GPGSID>
-        public const string achievement_test3 = "CgkI0Pn3xd8EEAIQAw"; // <GPGSID>
-        public const string achievement_test4 = "CgkI0Pn3xd8EEAIQBA"; // <GPGSID>
 
 }
 

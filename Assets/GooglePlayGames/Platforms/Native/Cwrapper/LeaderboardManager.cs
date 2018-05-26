@@ -1,5 +1,3 @@
-
-
 // <copyright file="LeaderboardManager.cs" company="Google Inc.">
 // Copyright (C) 2014 Google Inc.
 //
