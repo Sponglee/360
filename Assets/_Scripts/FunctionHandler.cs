@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FunctionHandler : MonoBehaviour {
 
@@ -24,10 +25,26 @@ public class FunctionHandler : MonoBehaviour {
 
     public void ChangeThemeHandler(GameObject index)
     {
-        GameManager.Instance.ChangeTheme(index.transform.GetSiblingIndex());
+        int themeIndex = index.transform.GetSiblingIndex();
+        PlayerPrefs.SetInt("Theme", themeIndex);
+
+        NewGame();
+        //InitializeTheme();
     }
 
 
+
+    //Restarts game
+    public void MenuRestart()
+    {
+        NewGame();
+    }
+
+    //Quit
+    public void MenuQuit()
+    {
+        Application.Quit();
+    }
 
 
 
@@ -90,7 +107,7 @@ public class FunctionHandler : MonoBehaviour {
 
     public void BackFromLocal(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(900, localMenu, true));
+        StartCoroutine(StopMenu(1900, localMenu, true));
 
     }
 
@@ -103,7 +120,24 @@ public class FunctionHandler : MonoBehaviour {
 
     public void BackFromShop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(-1050, localMenu, false));
+        StartCoroutine(StopMenu(-2050, localMenu, false));
 
     }
+
+    public void NewGame()
+    {
+        SceneManager.LoadScene("main");
+       // SceneManager.UnloadScene("title");
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("title");
+        //SceneManager.UnloadScene("main");
+    }
+
+
+
+
+
 }

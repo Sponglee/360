@@ -30,9 +30,10 @@ public class CoinManager : Singleton<CoinManager> {
     // Use this for initialization
     void Start () {
         coins = PlayerPrefs.GetInt("Coin", 0);
-
-        coinText = GameManager.Instance.ui.transform.GetChild(3).gameObject.GetComponent<Text>();
-        menuCoinText = GameManager.Instance.menu.transform.GetChild(0).GetChild(3).gameObject.GetComponent<Text>();
+        if (coinText == null)
+            coinText = GameManager.Instance.ui.transform.GetChild(3).gameObject.GetComponent<Text>();
+        if(menuCoinText == null)
+            menuCoinText= GameManager.Instance.menu.transform.GetChild(0).GetChild(3).gameObject.GetComponent<Text>();
 	}
 	
 	// Update is called once per frame

@@ -262,7 +262,7 @@ public class GameManager : Singleton<GameManager>
 
         // Set a ui
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
-
+        line.transform.GetChild(0).GetComponent<SpriteRenderer>().color = ThemeStyleHolder.Instance.ThemeStyles[index].linePref;
     }
 
     //Gets Values from style script for each square
@@ -432,6 +432,7 @@ public class GameManager : Singleton<GameManager>
 
         //for first spwan of 2
         tmpRands = randSpawnCount;
+        menu.SetActive(false);
     }
 
  

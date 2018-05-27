@@ -18,7 +18,6 @@ public class ThemeStyle
     public GameObject spawnPref;
 
     public GameObject backPref;
-    public GameObject buttonPref;
     public GameObject fltTextPref;
     public GameObject styleHolderPref;
 
@@ -30,6 +29,7 @@ public class ThemeStyle
     public GameObject uiPref;
 
     public Color32 menuPref;
+    public Color32 linePref;
 
 }
 
