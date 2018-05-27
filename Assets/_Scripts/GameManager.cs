@@ -1934,6 +1934,7 @@ public class GameManager : Singleton<GameManager>
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
         menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", highscores);
         if (scoreUpper<256)
+<<<<<<< HEAD
         {
   
             //upperText
@@ -1945,6 +1946,15 @@ public class GameManager : Singleton<GameManager>
             //PlayGamesScript.AddScoreToLeaderBoard(Threesixty.leaderboard_leaderboards, scores);
             //UIScript.Instance.UpdatePointsText();
 =======
+=======
+        {
+  
+            //upperText
+            menu.transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
+        }
+       else
+        {
+>>>>>>> parent of 53cd75f... 26.05.18
            
             //upperText
             //menu.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>256</color>");
@@ -1953,6 +1963,9 @@ public class GameManager : Singleton<GameManager>
             //menu.transform.GetChild(0).GetChild(1).GetChild(1).gameObject.SetActive(true);
             //topCount
             //menu.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Text>().text = string.Format("x{0}",topCount.text);
+<<<<<<< HEAD
+>>>>>>> parent of 53cd75f... 26.05.18
+=======
 >>>>>>> parent of 53cd75f... 26.05.18
         }
 

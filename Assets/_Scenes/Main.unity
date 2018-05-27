@@ -403,7 +403,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
 <<<<<<< HEAD
+<<<<<<< HEAD
       objectReference: {fileID: 0}
+=======
+      objectReference: {fileID: 1680771746}
+>>>>>>> parent of 53cd75f... 26.05.18
 =======
       objectReference: {fileID: 1680771746}
 >>>>>>> parent of 53cd75f... 26.05.18
@@ -411,6 +415,7 @@ Prefab:
       propertyPath: m_Name
       value: MenuCanvas
       objectReference: {fileID: 0}
+<<<<<<< HEAD
 <<<<<<< HEAD
     - target: {fileID: 114498041806531330, guid: ee3cf387fd0cd714a8b381ce0239eea2,
         type: 2}
@@ -540,6 +545,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.x
       value: 256
+=======
+    - target: {fileID: 1052234889810210, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
+      propertyPath: m_TagString
+      value: ui
+>>>>>>> parent of 53cd75f... 26.05.18
 =======
     - target: {fileID: 1052234889810210, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
       propertyPath: m_TagString
@@ -1225,6 +1235,9 @@ MonoBehaviour:
   follow__Angle: 2
   spawn__Angle: 0.3
   differ__Angle: 0.3
+<<<<<<< HEAD
+>>>>>>> parent of 53cd75f... 26.05.18
+=======
 >>>>>>> parent of 53cd75f... 26.05.18
 --- !u!4 &1680771747
 Transform:
