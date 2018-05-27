@@ -14,6 +14,8 @@ TagManager:
   - spawn
   - grid
   - ui
+  - drill
+  - bomb
   layers:
   - Default
   - TransparentFX

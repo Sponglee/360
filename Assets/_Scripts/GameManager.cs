@@ -1665,10 +1665,10 @@ public class GameManager : Singleton<GameManager>
 
 
             if (tmpSquare !=null)
-                //CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
-                //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
-                //{
-                    furthertmpSquare.GetComponent<Square>().CheckPriority = false;
+                CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
+            //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
+            //{
+            furthertmpSquare.GetComponent<Square>().CheckPriority = false;
 
                 //    tmpSquare.GetComponent<Square>().CheckAround = true;
                 //   

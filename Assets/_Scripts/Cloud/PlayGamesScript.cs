@@ -7,12 +7,12 @@ public class PlayGamesScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        //Enabling Google services
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.Activate();
+        ////Enabling Google services
+        //PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
+        //PlayGamesPlatform.InitializeInstance(config);
+        //PlayGamesPlatform.Activate();
 
-        SignIn();
+        //SignIn();
 	}
 	
 
