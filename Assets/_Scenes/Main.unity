@@ -398,15 +398,20 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114014036831973762, guid: ee3cf387fd0cd714a8b381ce0239eea2,
+    - target: {fileID: 114498041806531330, guid: ee3cf387fd0cd714a8b381ce0239eea2,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+<<<<<<< HEAD
       objectReference: {fileID: 0}
+=======
+      objectReference: {fileID: 1680771746}
+>>>>>>> parent of 53cd75f... 26.05.18
     - target: {fileID: 1390697947386658, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
       propertyPath: m_Name
       value: MenuCanvas
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 114498041806531330, guid: ee3cf387fd0cd714a8b381ce0239eea2,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -535,6 +540,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.x
       value: 256
+=======
+    - target: {fileID: 1052234889810210, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
+      propertyPath: m_TagString
+      value: ui
+>>>>>>> parent of 53cd75f... 26.05.18
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ee3cf387fd0cd714a8b381ce0239eea2, type: 2}
@@ -1202,12 +1212,20 @@ MonoBehaviour:
   FurtherProgress: 0
   MergeInProgress: 0
   RotationProgress: 0
+<<<<<<< HEAD
   rotationDuration: 0.2
   follow__Delay: 0
   follow__Angle: 0
   spawn__Angle: 0
   differ__Angle: 0
   gameOverInProgress: 0
+=======
+  rotationDuration: 0.1
+  follow__Delay: 0.2
+  follow__Angle: 2
+  spawn__Angle: 0.3
+  differ__Angle: 0.3
+>>>>>>> parent of 53cd75f... 26.05.18
 --- !u!4 &1680771747
 Transform:
   m_ObjectHideFlags: 0
