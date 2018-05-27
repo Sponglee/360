@@ -460,24 +460,28 @@ public class Square : MonoBehaviour
 
 
             //Check if left or right is available and == score
-            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() && !gameObject.transform.parent.CompareTag("outer"))
+            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() 
+            && !gameObject.transform.parent.CompareTag("outer"))
             {
+                Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index  + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
                 if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                   
+                    Debug.Log("RIGHT");
                     //Check again
                     return true;
                 }
             }
-            else if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+             if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
             {
-                if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
+            Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
+            if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                   
+                    Debug.Log("LEFT"); 
                     //Check again
                     return true;
                 }
             }
+
         return false;
     }
 
@@ -500,8 +504,24 @@ public class Square : MonoBehaviour
             //for column checkrow
             if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
             {
-                GameManager.Instance.checkObjs.Enqueue(gameObject);
-                //Debug.Log("spot " + this.Score);
+                if (CheckLeftRight())
+                {
+                 
+                    GameManager.Instance.checkObjs.Enqueue(gameObject);
+                    Debug.Log("DA" + GameManager.Instance.checkObjs.Count);
+                }
+                else
+                {
+                    Debug.Log("spot " + this.Score);
+                    if (this.IsSpawn)
+                    {
+                        GameManager.Instance.ExpandMoves();
+                        GameManager.Instance.ResetExpand(gameObject);
+                    }
+
+                }
+            
+               
                 AudioManager.Instance.PlaySound("bump");
             }
 
@@ -537,8 +557,21 @@ public class Square : MonoBehaviour
                 //for column checkrow
                 if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
                 {
-                    GameManager.Instance.checkObjs.Enqueue(gameObject);
-                    //Debug.Log("spot");
+                    if (CheckLeftRight())
+                    {
+                        Debug.Log("DA");
+                        GameManager.Instance.checkObjs.Enqueue(gameObject);
+                    }
+                    else
+                    {
+                        if (this.IsSpawn)
+                        {
+                            GameManager.Instance.ExpandMoves();
+                            GameManager.Instance.ResetExpand(gameObject);
+                        }
+                    }
+
+                    Debug.Log("spot " + this.Score);
                     AudioManager.Instance.PlaySound("bump");
                     //checkCoolDown = true;
                 }

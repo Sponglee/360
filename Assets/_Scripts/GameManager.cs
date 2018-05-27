@@ -451,7 +451,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-
+ 
 
 
     void Update()
@@ -802,7 +802,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    #endregion /Input
+  
 
 
     //=======================================INPUT END ==============================================
@@ -874,6 +874,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
+    #endregion /Input
 
     //Vertical merge
     public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null)
@@ -1041,24 +1042,29 @@ public class GameManager : Singleton<GameManager>
                     if (Mathf.Abs(nBottom - tmpDist) <= tmpDist)
                         tmpDist = Mathf.Abs(nBottom - tmpDist);
 
-                    // Debug.Log("TMP: (" + tmpObj.transform.parent.name +  ", " +  nextObj.transform.parent.name + ")"  + tmpDist);
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
                     if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
                         && nextObj.GetComponent<Square>().Further)
                     {
-                        if (tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
-                            //tmpObj.GetComponent<Square>().CheckCoolDown = true;
-                            continue;
+                        if (tmpObj != null && tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex()-1) != null)
+                        {
+                            if (!tmpObj.transform.parent.CompareTag("outer"))
+                            {
+                                if (tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
+                                    //tmpObj.GetComponent<Square>().CheckCoolDown = true;
+                                    continue;
+                            }
+                        }
+                            
+                           
                     }
                     
                 }
                 else
                 {
-                    //if (tmpObj != null)
-                    //    tmpObj.GetComponent<Square>().CheckCoolDown = true;
-                    continue;
+                   continue;
                 }
 
               
@@ -1101,6 +1107,35 @@ public class GameManager : Singleton<GameManager>
         }
        
     }
+
+    //Reset Expand Moves
+    public void ResetExpand(GameObject tmpSquare)
+    {
+        // expand moves++ if this happened by player
+        if (tmpSquare.GetComponent<Square>().IsSpawn)
+        {
+
+            //ExpandMoves();
+
+            tmpSquare.GetComponent<Square>().IsSpawn = false;
+
+            if (Moves > expandMoves - 1)
+            {
+
+                Expand();
+
+
+                StartCoroutine(FillStop());
+
+                //expandMoves += expandMoves/2;
+                //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+                sliderFill = (float)(expandMoves - Moves) / expandMoves;
+            }
+
+
+        }
+    }
+
 
     //Checks for 3 in a row
     public void CheckRow(int spotIndex, int squareIndex, int checkScore, GameObject tmpSquare)
@@ -1331,29 +1366,7 @@ public class GameManager : Singleton<GameManager>
             if (rowObjs.Count < 2)
             {
 
-                // expand moves++ if this happened by player
-                if (tmpSquare.GetComponent<Square>().IsSpawn)
-                {
-
-                    ExpandMoves();
-
-                    tmpSquare.GetComponent<Square>().IsSpawn = false;
-
-                    if (Moves > expandMoves - 1)
-                    {
-
-                        Expand();
-                        
-
-                        StartCoroutine(FillStop());
-
-                        //expandMoves += expandMoves/2;
-                        //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-                        sliderFill = (float)(expandMoves - Moves) / expandMoves;
-                    }
-
-
-                }
+               
                 //Check what's above
                 // if (!tmpSquare.GetComponent<Square>().checkPriority)
 
