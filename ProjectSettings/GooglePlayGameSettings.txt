@@ -1,0 +1,9 @@
+lastUpgrade=00950
+proj.pluginVersion=0.9.50
+proj.AppId=163086990544
+proj.classDir=Assets
+proj.ConstantsClassName=Threesixty
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--%0d%0aGoogle+Play+game+services+IDs.%0d%0aSave+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.%0d%0a--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--+app_id+--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e163086990544%3c%2fstring%3e%0d%0a++%3c%21--+package_name+--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.Ace.threesixty%3c%2fstring%3e%0d%0a++%3c%21--+achievement+yay+--%3e%0d%0a++%3cstring+name%3d%22achievement_yay%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQAA%3c%2fstring%3e%0d%0a++%3c%21--+achievement+test2+--%3e%0d%0a++%3cstring+name%3d%22achievement_test2%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQAg%3c%2fstring%3e%0d%0a++%3c%21--+achievement+test3+--%3e%0d%0a++%3cstring+name%3d%22achievement_test3%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQAw%3c%2fstring%3e%0d%0a++%3c%21--+achievement+test4+--%3e%0d%0a++%3cstring+name%3d%22achievement_test4%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQBA%3c%2fstring%3e%0d%0a++%3c%21--+achievement+test5+--%3e%0d%0a++%3cstring+name%3d%22achievement_test5%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQBQ%3c%2fstring%3e%0d%0a++%3c%21--+leaderboard+leaderboards+--%3e%0d%0a++%3cstring+name%3d%22leaderboard_leaderboards%22+translatable%3d%22false%22%3eCgkI0Pn3xd8EEAIQBg%3c%2fstring%3e%0d%0a%3c%2fresources%3e%0d%0a
+and.ClientId=163086990544-4d5gatg713iddek9t11n11vqr925drbs.apps.googleusercontent.com
+android.SetupDone=true
+and.BundleId=com.Ace.threesixty
