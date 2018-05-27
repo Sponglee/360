@@ -1958,7 +1958,7 @@ public class GameManager : Singleton<GameManager>
 
         if (gameOver)
         {
-            PlayGamesScript.AddScoreToLeaderBoard(Threesixty.leaderboard_leaderboards, scores);
+            //PlayGamesScript.AddScoreToLeaderBoard(Threesixty.leaderboard_leaderboards, scores);
             //UIScript.Instance.UpdatePointsText();
         }
 
