@@ -1212,6 +1212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb384111f044bef4eb208245acf4c866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionPref: {fileID: 1859494013673282, guid: 0b27606751fc54146b5e8975a058f2f5,
+    type: 2}
   centerAnim: {fileID: 0}
   leRed:
     serializedVersion: 2

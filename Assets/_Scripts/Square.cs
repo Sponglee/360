@@ -521,11 +521,12 @@ public class Square : MonoBehaviour
                 {
                  
                     GameManager.Instance.checkObjs.Enqueue(gameObject);
-                    Debug.Log("DA" + GameManager.Instance.checkObjs.Count);
+                    //Debug.Log("DA" + GameManager.Instance.checkObjs.Count);
                 }
                 else
                 {
-                    Debug.Log("spot " + this.Score);
+                    GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
+                    //Debug.Log("spot " + this.Score);
                     if (this.IsSpawn)
                     {
                         GameManager.Instance.ExpandMoves();
@@ -574,9 +575,11 @@ public class Square : MonoBehaviour
                     {
                         Debug.Log("DA");
                         GameManager.Instance.checkObjs.Enqueue(gameObject);
+
                     }
                     else
                     {
+                        GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
                         if (this.IsSpawn)
                         {
                             GameManager.Instance.ExpandMoves();
@@ -663,6 +666,9 @@ public class Square : MonoBehaviour
 
     private IEnumerator StopConsumable (GameObject other, GameObject gameObject = null)
     {
+        Instantiate(GameManager.Instance.explosionPref, other.transform);
+
+
         yield return new WaitForSeconds(0.4f);
 
         if (gameObject != null && gameObject.CompareTag("drill"))

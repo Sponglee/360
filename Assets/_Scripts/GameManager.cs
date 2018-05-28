@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 
 {
+    public GameObject explosionPref;
 
     public Animator centerAnim;
 
@@ -1372,7 +1373,7 @@ public class GameManager : Singleton<GameManager>
                 // if (!tmpSquare.GetComponent<Square>().checkPriority)
 
 
-                CheckAbove(spotIndex, squareIndex);
+               
             }
             else
             {
@@ -1437,8 +1438,9 @@ public class GameManager : Singleton<GameManager>
 
 
     //////////////////////////////////////////////////////////////////////////////////////CHECK FOR EACH IN COLUMN
-    private void CheckAbove(int spotIndex, int squareIndex)
+    public void CheckAbove(int spotIndex, int squareIndex)
     {
+       
         //if there's no start yet
         int index = spotIndex;
         int firstIndex;
@@ -1464,6 +1466,7 @@ public class GameManager : Singleton<GameManager>
 
         if (spots[index].transform.childCount > squareIndex + 1 )
         {
+            Debug.Log("CHECK ABOVE");
             for (int i = squareIndex; i < spots[index].transform.childCount; i++)
             {
                 if (spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew)
