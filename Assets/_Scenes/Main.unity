@@ -138,7 +138,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 36471405}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -1142,7 +1142,7 @@ MonoBehaviour:
   moves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}
-  themeIndex: 1
+  themeIndex: 0
   wheel: {fileID: 0}
   backGround: {fileID: 0}
   TurnInProgress: 0

@@ -902,6 +902,7 @@ public class GameManager : Singleton<GameManager>
     //Delay for merge
     private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null)
     {
+        AudioManager.Instance.PlaySound("swoop");
         int tmp;
         int tmpScore;
         //Stop checks while Merging
@@ -929,12 +930,12 @@ public class GameManager : Singleton<GameManager>
 
        
         yield return new WaitForSeconds(0.2f);
-      
+     
 
 
         //========================Text floating===================================================
         //Get some text out
-       
+
         Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
         if (first != null)
         {
@@ -1527,7 +1528,7 @@ public class GameManager : Singleton<GameManager>
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
             //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
-                AudioManager.Instance.PlaySound("swoop");
+                //AudioManager.Instance.PlaySound("swoop");
                 if(tmpSquares.Count>count && tmpSquares[count] !=null)
                 {
                     if (tmpSquares[count].transform.parent.CompareTag("outer"))
@@ -1658,6 +1659,7 @@ public class GameManager : Singleton<GameManager>
                     //if one below is same score - merge
                     if (!tmpSquare.transform.parent.CompareTag("outer") && tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
                     {
+                       
                         Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
                         //Debug.Log("MRG BLW");    
                         //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);

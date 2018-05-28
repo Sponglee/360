@@ -50,7 +50,10 @@ public class FunctionHandler : MonoBehaviour {
 
 
 
+    public void ClampShop(Transform container)
+    {
 
+    }
 
 
     public void LocalMenu(GameObject localMenu)
