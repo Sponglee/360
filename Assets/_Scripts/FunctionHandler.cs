@@ -28,7 +28,7 @@ public class FunctionHandler : MonoBehaviour {
         int themeIndex = index.transform.GetSiblingIndex();
         PlayerPrefs.SetInt("Theme", themeIndex);
 
-        NewGame();
+        MainMenu();
         //InitializeTheme();
     }
 

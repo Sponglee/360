@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 4330151462732782}
   - component: {fileID: 95276447960558904}
   m_Layer: 0
-  m_Name: menuWheel
+  m_Name: titleWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4413,6 +4413,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 0
   centerPrefab: {fileID: 0}
+  IsTop: 0
   ColumnPew: 0
   checkPriority: 1
   touched: 0
