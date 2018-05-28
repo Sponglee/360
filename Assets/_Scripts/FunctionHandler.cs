@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -126,6 +127,7 @@ public class FunctionHandler : MonoBehaviour {
 
     public void NewGame()
     {
+        FadeOut();
         SceneManager.LoadScene("main");
        // SceneManager.UnloadScene("title");
     }
@@ -139,5 +141,30 @@ public class FunctionHandler : MonoBehaviour {
 
 
 
+
+
+
+    //Fade In functions
+
+
+    public void FadeIn(CanvasGroup fadeGroup)
+    {
+        //FadeIn
+        if (Time.time < 3f)
+            fadeGroup.alpha = 1 - Time.time;
+    }
+
+    public void FadeOut()
+    {
+        CanvasGroup fadeGroup = FindObjectOfType<CanvasGroup>();
+        //FadeOut
+        if (Time.time > 0)
+        {
+            if (fadeGroup.alpha >= 1)
+            {
+                //SceneManager.LoadScene(String.Format("{0}",scene));
+            }
+        }
+    }
 
 }
