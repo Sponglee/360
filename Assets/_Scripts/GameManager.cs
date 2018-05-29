@@ -250,16 +250,16 @@ public class GameManager : Singleton<GameManager>
        
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         //right menu
-        menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
-        menu.transform.GetChild(0).GetChild(7).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+        menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
         //shop menu
         menu.transform.GetChild(0).GetChild(8).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         menu.transform.GetChild(0).GetChild(8).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
         //Options menu
-        menu.transform.GetChild(0).GetChild(7).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
-        menu.transform.GetChild(0).GetChild(7).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+        menu.transform.GetChild(0).GetChild(7).GetChild(0).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(7).GetChild(0).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
         // Set a ui
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
@@ -1977,7 +1977,7 @@ public class GameManager : Singleton<GameManager>
 
         if (gameOver)
         {
-            PlayGamesScript.AddScoreToLeaderBoard(Threesixty.leaderboard_leaderboards, scores);
+            //PlayGamesScript.AddScoreToLeaderBoard(Threesixty.leaderboard_leaderboards, scores);
             //UIScript.Instance.UpdatePointsText();
         }
 

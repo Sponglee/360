@@ -1,5 +1,4 @@
-﻿using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+﻿
 using UnityEngine;
 
 public class PlayGamesScript : MonoBehaviour {
@@ -31,7 +30,7 @@ public class PlayGamesScript : MonoBehaviour {
 
     public static void IncrementAchievement (string id, int stepsToIncrement)
     {
-        PlayGamesPlatform.Instance.IncrementAchievement(id, stepsToIncrement, success => { });
+        //PlayGamesPlatform.Instance.IncrementAchievement(id, stepsToIncrement, success => { });
     }
 
     public static void ShowAchievementsUI()
