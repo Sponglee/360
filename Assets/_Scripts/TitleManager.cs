@@ -29,12 +29,12 @@ public class TitleManager : MonoBehaviour {
 
 
         //Options menu
-        menu.transform.GetChild(0).GetChild(6).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
-        menu.transform.GetChild(0).GetChild(6).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+        menu.transform.GetChild(0).GetChild(6).GetChild(0).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(6).GetChild(0).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
         //right menu
-        menu.transform.GetChild(0).GetChild(6).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
-        menu.transform.GetChild(0).GetChild(6).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+        menu.transform.GetChild(0).GetChild(6).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(6).GetChild(0).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
         //shop menu
         menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;

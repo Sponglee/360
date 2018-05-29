@@ -28,7 +28,7 @@ public class CoinManager : Singleton<CoinManager> {
     
 
     // Use this for initialization
-    void Start () {
+    void Awake() {
 
         
         //persistant coin manager
