@@ -476,20 +476,20 @@ public class Square : MonoBehaviour
             if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() 
             && !gameObject.transform.parent.CompareTag("outer"))
             {
-                Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index  + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
+                //Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index  + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
                 if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                    Debug.Log("RIGHT");
+                    //Debug.Log("RIGHT");
                     //Check again
                     return true;
                 }
             }
              if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
             {
-            Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
+            //Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
             if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                    Debug.Log("LEFT"); 
+                    //Debug.Log("LEFT"); 
                     //Check again
                     return true;
                 }
@@ -510,7 +510,7 @@ public class Square : MonoBehaviour
 
         if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("square"))
         {
-            //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
+            Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
             //reset speed back
             this.speed = 10f;
 
@@ -526,7 +526,7 @@ public class Square : MonoBehaviour
                 else
                 {
                     GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
-                    //Debug.Log("spot " + this.Score);
+                    Debug.Log("above spot " + this.Score);
                     if (this.IsSpawn)
                     {
                         GameManager.Instance.ExpandMoves();
@@ -545,6 +545,7 @@ public class Square : MonoBehaviour
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
         {
+
             //make sure checks only one of 2 collisions (one that is not touched
             other.gameObject.GetComponent<Square>().touched = true;
 
@@ -564,7 +565,7 @@ public class Square : MonoBehaviour
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
+                Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
                 //reset speed back
                 this.speed = 10f;
 
@@ -573,13 +574,14 @@ public class Square : MonoBehaviour
                 {
                     if (CheckLeftRight())
                     {
-                        Debug.Log("DA");
+                        //Debug.Log("DA");
                         GameManager.Instance.checkObjs.Enqueue(gameObject);
 
                     }
                     else
                     {
                         GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
+                        Debug.Log("above square " + this.score);
                         if (this.IsSpawn)
                         {
                             GameManager.Instance.ExpandMoves();

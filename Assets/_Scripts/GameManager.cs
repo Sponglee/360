@@ -1047,7 +1047,7 @@ public class GameManager : Singleton<GameManager>
 
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                    if (tmpDist <= 4 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                    if (tmpDist <= 5 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
                         && nextObj.GetComponent<Square>().Further)
                     {
@@ -1095,7 +1095,7 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                Debug.Log("DADADDA");
+                //Debug.Log("DADADDA");
                 TurnInProgress = false;
                 continue;
             }
@@ -1146,23 +1146,23 @@ public class GameManager : Singleton<GameManager>
         if (tmpSquare != null)
 
         {
-            //If same score above
-            if (spots[spotIndex].transform.childCount > squareIndex + 1)
-            {
-                if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
-                {
-                    //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-                    if (!spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
-                    {
-                        //Debug.Log("MRG");
-                        Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
-                    }
+            ////If same score above
+            //if (spots[spotIndex].transform.childCount > squareIndex + 1)
+            //{
+            //    if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+            //    {
+            //        //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
+            //        if (!spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
+            //        {
+            //            //Debug.Log("MRG");
+            //            Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
+            //        }
 
-                    //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
-                    // Destroy(spots[index].transform.GetChild(i).gameObject);
-                    return;
-                }
-            }
+            //        //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
+            //        // Destroy(spots[index].transform.GetChild(i).gameObject);
+            //        return;
+            //    }
+            //}
 
 
             tmpSquare.GetComponent<Square>().CheckPriority = true;
@@ -1468,13 +1468,30 @@ public class GameManager : Singleton<GameManager>
         if (spots[index].transform.childCount > squareIndex + 1 )
         {
             Debug.Log("CHECK ABOVE");
+            //If same score above
+            if (spots[index].transform.childCount > squareIndex + 1)
+            {
+                if (spots[index].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+                {
+                    //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
+                    if (!spots[index].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
+                    {
+                        //Debug.Log("MRG");
+                        Merge(spots[index].transform.GetChild(squareIndex + 1).gameObject, null, spots[index].transform.GetChild(squareIndex).gameObject);
+                    }
+
+                    //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
+                    // Destroy(spots[index].transform.GetChild(i).gameObject);
+                    return;
+                }
+            }
+            
             for (int i = squareIndex; i < spots[index].transform.childCount; i++)
             {
                 if (spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew)
                     return;
 
-                //Debug.Log("ABVE");
-
+               
                 ////CHECK SCORE to THE LEFT
                 if (spots[firstIndex].transform.childCount > i)
                 {
@@ -1510,6 +1527,7 @@ public class GameManager : Singleton<GameManager>
                         break;
                     }
                 }
+
             }
 
         }
@@ -1637,7 +1655,10 @@ public class GameManager : Singleton<GameManager>
             if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
             {
                 if (tmpSquare.GetComponent<Square>().IsMerging)
-                    Debug.Log("SOMETHING BELOW");
+                {
+                    Debug.Log("SOMETHING BELOW " + tmpSquare.transform.parent.name);
+                }
+
                 else
                     checkObjs.Enqueue(tmpSquare);
             }
@@ -1671,6 +1692,7 @@ public class GameManager : Singleton<GameManager>
 
             if (tmpSquare !=null)
                 CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
+            
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
             //{
             furthertmpSquare.GetComponent<Square>().CheckPriority = false;
