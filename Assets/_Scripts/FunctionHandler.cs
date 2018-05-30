@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FunctionHandler : MonoBehaviour {
 
+    
 	
     public void OpenMenuHandler()
     {
@@ -20,16 +22,69 @@ public class FunctionHandler : MonoBehaviour {
 
     public void ContinueHandler()
     {
-        GameManager.Instance.Continue();
+        if (CoinManager.Instance.Coins >= CoinManager.Instance.contCost)
+        {
+            CoinManager.Instance.Coins -= CoinManager.Instance.contCost;
+            GameManager.Instance.Continue();
+        }
+        else
+        {
+            CoinManager.Instance.ShowAd();
+        }
+       
     }
 
+
+
+    public void ShowAdHandler()
+    {
+        CoinManager.Instance.ShowAd();
+    }
+
+
+
+
+
+
+    //THEME CHANGER
 
     public void ChangeThemeHandler(GameObject index)
     {
         int themeIndex = index.transform.GetSiblingIndex();
-        PlayerPrefs.SetInt("Theme", themeIndex);
+        //Check if skin is in availability (bit flag)
+        if ((CoinManager.Instance.SkinAvailability & 1 << themeIndex) == 1 << themeIndex)
+        {
+            
 
-        MainMenu();
+            PlayerPrefs.SetInt("Theme", themeIndex);
+            MainMenu();
+
+        }
+        else
+        {
+            int cost = int.Parse(index.transform.GetChild(0).GetComponentInChildren<Text>().text);
+            if(CoinManager.Instance.Coins >= cost)
+            {
+                CoinManager.Instance.Coins -= cost;
+
+                //bitshift index for memorizing unlocks
+                CoinManager.Instance.SkinAvailability += 1 << themeIndex;
+               
+                PlayerPrefs.SetInt("Theme", themeIndex);
+                MainMenu();
+            }
+
+            else
+            {
+                Debug.Log("YOU DONT HAVE THE SKIN. BUY IT? " + cost);
+            }
+        }
+
+
+
+
+
+
         //InitializeTheme();
     }
 
@@ -45,14 +100,6 @@ public class FunctionHandler : MonoBehaviour {
     public void MenuQuit()
     {
         Application.Quit();
-    }
-
-
-
-
-    public void ClampShop(Transform container)
-    {
-
     }
 
 

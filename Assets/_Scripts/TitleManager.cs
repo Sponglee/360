@@ -7,6 +7,10 @@ public class TitleManager : MonoBehaviour {
     public int themeIndex;
     public Text highScoreText;
 
+    public Text shopCurrencyText;
+
+   
+
     public Transform RotatorPref;
     public GameObject styleHolderPrefab;
     public GameObject menu;
@@ -81,6 +85,8 @@ public class TitleManager : MonoBehaviour {
 
     private void Awake()
     {
+        CoinManager.Instance.shopCoinText = shopCurrencyText;
+        shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 0).ToString();
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
     }
 

@@ -1,14 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.Advertisements;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CoinManager : Singleton<CoinManager> {
 
 
+    //For editor convenience, pls ignore
+    public GameObject fadeCanvas;
+
+    //Refference for shop currency info
+    public Text shopCoinText;
+        
+    public int fullAdWatch;
+    public int partAdWatch;
+    //Theme unlocks
+    private int skinAvailability;
+    public int SkinAvailability
+    {
+        get
+        {
+            return skinAvailability;
+        }
+
+        set
+        {
+            skinAvailability = value;
+            PlayerPrefs.SetInt("SkinAvailability", CoinManager.Instance.skinAvailability);
+        }
+    }
+
+
     //Currency
     [SerializeField]
     private int coins;
+    public int contCost;
     public int Coins
     {   get
         {
@@ -17,20 +42,34 @@ public class CoinManager : Singleton<CoinManager> {
         }
         set
         {
+           
             coins = value;
             coinText.text = coins.ToString();
             PlayerPrefs.SetInt("Coin", coins);
+            if (shopCoinText !=null)
+            {
+                //Update coins for the shop aswell
+                shopCoinText.text = coins.ToString();
+            }
+            
         }
     }
 
-
+  
     public Text coinText;
     
 
     // Use this for initialization
     void Awake() {
 
+        //For editor usage, pls ignore
+        fadeCanvas.SetActive(true);
         
+        
+        
+        
+        //Check what skins are available
+        SkinAvailability = PlayerPrefs.GetInt("SkinAvailability", 1);
         //persistant coin manager
         DontDestroyOnLoad(gameObject);
 
@@ -38,6 +77,47 @@ public class CoinManager : Singleton<CoinManager> {
         coinText.text = coins.ToString();
         
 	}
-	
+
+    //Open up an ad
+    public void ShowAd()
+    {
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show("rewardedVideo", new ShowOptions() { resultCallback = HandleAdResult });
+            Time.timeScale = 0;
+        }
+
+    }
+
+    //Recieve result from watching
+    private void HandleAdResult(ShowResult result)
+    {
+
+        switch (result)
+        {
+            case ShowResult.Finished:
+                {
+                    CoinManager.Instance.Coins += fullAdWatch;
+                    Time.timeScale = 1;
+                    break;
+                }
+            case ShowResult.Skipped:
+                {
+                    CoinManager.Instance.Coins += partAdWatch;
+                    Time.timeScale = 1;
+                    break;
+                }
+            case ShowResult.Failed:
+                {
+                    Time.timeScale = 1;
+                    Debug.Log("Failed");
+                    break;
+
+                }
+
+        }
+
+    }
+
 
 }
