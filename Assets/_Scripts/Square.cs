@@ -314,56 +314,36 @@ public class Square : MonoBehaviour
 
         }
        
+       
         
 
-   
-
-        //if (gameObject.transform.parent != null && CheckLeftRight() && checkCoolDown)
-        //{
-        //    Debug.Log("STAWP");
-        //    checkCoolDown = false;
-        //    StartCoroutine(StopLeft());
-                
-        //}
-           
-
-
-            //=========================BUG PART ENDS===============
-
-            //Check if something is moving
-            if (gameObject.CompareTag("square"))
+        //Check if something is moving
+        if (gameObject.CompareTag("square"))
+        {
+            curPos = gameObject.transform.localPosition;
+            if (curPos == lastPos && gameObject.transform.parent != null)
             {
-                curPos = gameObject.transform.localPosition;
-                if (curPos == lastPos && gameObject.transform.parent != null)
-                {
-                    //IsMoving = false;
-                    GameManager.Instance.SomethingIsMoving = false;
-                }
-                else
-                {
-                    //IsMoving = true;
-                    GameManager.Instance.SomethingIsMoving = true;
-                }
-                lastPos = curPos;
-
-                //for expandMoves
-                if (this.checkPriority)
-                {
-                    this.IsSpawn = false;
-                }
+                //IsMoving = false;
+                GameManager.Instance.SomethingIsMoving = false;
             }
+            else
+            {
+                //IsMoving = true;
+                GameManager.Instance.SomethingIsMoving = true;
+            }
+            lastPos = curPos;
+
+            //for expandMoves
+            if (this.checkPriority)
+            {
+                this.IsSpawn = false;
+            }
+        }
           
 
         if (this.gameObject.transform.parent != null && !this.gameObject.transform.parent.CompareTag("outer"))
         {
-            ////If siblingindex changed => check around
-            //if (gameObject.transform.GetSiblingIndex() != checkGrid)
-            //{
-            //    CheckAround = true;
-            //    checkGrid = gameObject.transform.GetSiblingIndex();
-            //}
-
-           
+          
             //Move to needed grid spot
             if (gameObject.transform.GetSiblingIndex() == 5
                 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
@@ -382,12 +362,12 @@ public class Square : MonoBehaviour
         //256 square to center
         else if (this.IsTop == true )
         {
-            if (!gameObject.CompareTag("square"))
-            {
-                Debug.Log("HERE");
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.currentSpot.transform.position, Speed * Time.deltaTime);
-            }
-            else
+            //if (!gameObject.CompareTag("square"))
+            //{
+            //    Debug.Log("HERE");
+            //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.currentSpot.transform.position, Speed * Time.deltaTime);
+            //}
+            //else
             {
                 gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
                 IsTop = false;
@@ -504,10 +484,92 @@ public class Square : MonoBehaviour
 
 
 
+
+
+
+
+    private IEnumerator StopConsumable(GameObject other, GameObject gameObject = null, int spot = 0, int squareIndex = 0)
+    {
+      
+        //Destoy bomb
+       
+
+        if (gameObject != null && gameObject.CompareTag("drill"))
+        {
+            Instantiate(GameManager.Instance.explosionPref, other.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(0.2f);
+
+        }
+        if (gameObject != null && other.CompareTag("bomb"))
+        {
+            Instantiate(GameManager.Instance.explosionPref, other.transform.position, Quaternion.identity);
+            gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.2f);
+
+            Destroy(other.gameObject);
+            //if there's no start yet
+            int index = spot;
+            int firstIndex;
+            int nextIndex;
+
+            //check next left one after getting index-1
+            if (index - 1 < 0)
+            {
+                firstIndex = GameManager.Instance.nBottom - 1;
+            }
+            else
+                firstIndex = index - 1;
+
+            //check next one after setting index+1
+            if (index + 1 > GameManager.Instance.nBottom - 1)
+            {
+                nextIndex = 0;
+            }
+            else
+                nextIndex = index + 1;
+
+            if (GameManager.Instance.spots[firstIndex].transform.childCount > squareIndex)
+            {
+                GameObject firstTmp = GameManager.Instance.spots[firstIndex].transform.GetChild(squareIndex).gameObject;
+                Instantiate(GameManager.Instance.explosionPref, firstTmp.transform.position, Quaternion.identity);
+                Destroy(firstTmp);
+            }
+            if (GameManager.Instance.spots[nextIndex].transform.childCount > squareIndex)
+            {
+                GameObject nextTmp = GameManager.Instance.spots[nextIndex].transform.GetChild(squareIndex).gameObject;
+                Instantiate(GameManager.Instance.explosionPref, nextTmp.transform.position, Quaternion.identity);
+                Destroy(nextTmp);
+            }
+
+            Destroy(gameObject);
+        }
+
+
+        GameManager.Instance.SomethingIsMoving = false;
+    }
+
+
+
+
     // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
+        //Powerup interaction
+        if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("drill"))
+        {
+            GameManager.Instance.Merge(gameObject, null, other.gameObject);
+            StartCoroutine(StopConsumable(other.gameObject, gameObject));
+        }
+        else if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("bomb"))
+        {
+            //GameManager.Instance.Merge(gameObject, null, other.gameObject);
+            StartCoroutine(StopConsumable(gameObject, other.gameObject, int.Parse(GameManager.Instance.currentSpot.name), other.gameObject.transform.GetSiblingIndex()));
+           
+        }
 
+
+
+        
         if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("square"))
         {
             Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
@@ -545,7 +607,7 @@ public class Square : MonoBehaviour
         //other square
         if (other.gameObject.CompareTag("square") && gameObject.CompareTag("square") && !this.touched /*&& gameObject.transform.GetSiblingIndex() > other.gameObject.transform.GetSiblingIndex()*/)
         {
-
+           
             //make sure checks only one of 2 collisions (one that is not touched
             other.gameObject.GetComponent<Square>().touched = true;
 
@@ -641,7 +703,7 @@ public class Square : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D other)
     {
         //Destroy on contact with center
-        if (other.CompareTag("center") && (gameObject.CompareTag("square")))
+        if (other.CompareTag("center") /*&& (gameObject.CompareTag("square")*/)
         {
             if (this.score == 256)
                 GameManager.Instance.Tops++;
@@ -651,75 +713,9 @@ public class Square : MonoBehaviour
         }
 
 
-        if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("drill"))
-        {
-
-            StartCoroutine(StopConsumable(other.gameObject, gameObject));
-        }
-        else if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("bomb"))
-        {
-         
-            StartCoroutine(StopConsumable(gameObject));
-
-        }
+       
 
 
-    }
-
-    private IEnumerator StopConsumable (GameObject other, GameObject gameObject = null)
-    {
-        Instantiate(GameManager.Instance.explosionPref, other.transform);
-
-
-        yield return new WaitForSeconds(0.4f);
-
-        if (gameObject != null && gameObject.CompareTag("drill"))
-        {
-
-            other.transform.DetachChildren();
-            other.GetComponent<SpriteRenderer>().color = GameManager.Instance.leGreen;
-
-        }
-        else if(other.CompareTag("bomb"))
-        {
-            //if there's no start yet
-            int index = int.Parse(GameManager.Instance.currentSpot.name);
-            int firstIndex;
-            int nextIndex;
-
-            //check next left one after getting index-1
-            if (index - 1 < 0)
-            {
-                firstIndex = GameManager.Instance.nBottom - 1;
-            }
-            else
-                firstIndex = index - 1;
-
-            //check next one after setting index+1
-            if (index + 1 > GameManager.Instance.nBottom - 1)
-            {
-                nextIndex = 0;
-            }
-            else
-                nextIndex = index + 1;
-
-            GameManager.Instance.spots[firstIndex].transform.DetachChildren();
-            GameManager.Instance.spots[index].transform.DetachChildren();
-            GameManager.Instance.spots[nextIndex].transform.DetachChildren();
-
-            GameManager.Instance.spots[firstIndex].GetComponent<SpriteRenderer>().color = GameManager.Instance.leGreen;
-            GameManager.Instance.spots[index].GetComponent<SpriteRenderer>().color = GameManager.Instance.leGreen;
-            GameManager.Instance.spots[nextIndex].GetComponent<SpriteRenderer>().color = GameManager.Instance.leGreen;
-        }
-        //Debug.Log("destroy this");
-
-        if (gameObject = null)
-            Destroy(other);
-        else
-            Destroy(gameObject);
-
-            
-        GameManager.Instance.SomethingIsMoving = false;
     }
 
 

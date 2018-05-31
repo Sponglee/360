@@ -957,7 +957,7 @@ public class GameManager : Singleton<GameManager>
             
         //=======================
 
-        if (first != null)
+        if (first != null && first.CompareTag("square"))
         {
             //update the square score
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
@@ -976,7 +976,7 @@ public class GameManager : Singleton<GameManager>
         //{
         //    //yield break;
         //}
-        if (first != null)
+        if (first != null && first.CompareTag("square"))
         {
 
 
@@ -1047,7 +1047,7 @@ public class GameManager : Singleton<GameManager>
 
 
                     //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                    if (tmpDist <= 5 && tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                    if (/*tmpDist <= 5 &&*/ tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
                         && tmpObj.transform.GetSiblingIndex() > 0
                         && nextObj.GetComponent<Square>().Further)
                     {

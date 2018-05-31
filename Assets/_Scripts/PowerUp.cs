@@ -29,16 +29,45 @@ public class PowerUp : MonoBehaviour
 
         if (CoinManager.Instance.Coins >= pCost)
         {
-            CoinManager.Instance.Coins -= pCost;
+           
 
             switch (index)
             {
+                //BOMB
                 case 0:
-                    Instantiate(powerUpPref);
+                    {
+                        if (GameManager.Instance.currentSpot.transform.childCount>0)
+                        {
+                            CoinManager.Instance.Coins -= pCost;
+                            GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
+                            tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
+                        }
+                        else
+                        {
+                            Debug.Log("NOPE");
+                        }
+
+                    }
+                    
                     break;
+                //DRILL
                 case 1:
-                    Instantiate(powerUpPref);
+                    {
+                        if (GameManager.Instance.currentSpot.transform.childCount > 0)
+                        {
+                            CoinManager.Instance.Coins -= pCost;
+                            GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
+                            tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
+
+                        }
+                        else
+                        {
+                            Debug.Log("NOPE");
+                        }
+                    }
+
                     break;
+                //SELECT
                 case 2:
                     SelectSquare();
                     break;
