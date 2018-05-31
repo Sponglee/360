@@ -377,9 +377,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        //Initialize the ad
-
-        Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
+       
 
         //===========================================Initialize theme==============================================================
         InitializeTheme();
@@ -619,7 +617,7 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log("Move count " + checkObjs.Count + "( " + turnCheckObjs.Count + ")");
             //To make it check once
             TurnInProgress = true;
-            turnTimer = Time.deltaTime + 6f;
+            turnTimer = Time.deltaTime + 3f;
             StartCoroutine(Turn());
         }
         else if (checkObjs.Count > 0 && TurnInProgress)
@@ -630,6 +628,8 @@ public class GameManager : Singleton<GameManager>
                 //Debug.Log("NYETNYETNYET");
                 //checkObjs.Clear();
                 TurnInProgress = false;
+                FurtherProgress = false;
+                MergeInProgress = false;
             }
         }
 

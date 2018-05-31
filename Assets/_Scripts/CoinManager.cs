@@ -62,6 +62,9 @@ public class CoinManager : Singleton<CoinManager> {
     // Use this for initialization
     void Awake() {
 
+        //Initialize the ad
+
+        Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
         //For editor usage, pls ignore
         fadeCanvas.SetActive(true);
         
