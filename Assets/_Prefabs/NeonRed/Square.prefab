@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212872592568414828}
   m_Layer: 0
   m_Name: Color
-  m_TagString: Untagged
+  m_TagString: square
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114104148147039062}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: square
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 114393342747085370}
   m_Layer: 5
   m_Name: Text
-  m_TagString: Untagged
+  m_TagString: square
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -191,6 +191,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4280427042
   centerPrefab: {fileID: 0}
+  IsTop: 0
   ColumnPew: 0
   checkPriority: 0
   touched: 0
@@ -410,7 +411,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 142.83, y: 130.75}
+  m_SizeDelta: {x: 87.92, y: 75.84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224752283683213790
 RectTransform:

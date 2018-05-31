@@ -1,28 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.UI;
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
+    //select toggle color change
+    private bool selectionUI = false;
+    public bool SelectionUI
+    {
+        get
+        {
+            return selectionUI;
+        }
+
+        set
+        {
+            selectionUI = value;
+            //Switch color on valuechange
+            if(selectionUI)
+                gameObject.GetComponent<Image>().color = new Color32(156,87,71,246);
+            else
+            {
+                //count cost of selectSquare
+                if(GameManager.Instance.SquareDestroyed)
+                {
+                    CoinManager.Instance.Coins -= pCost;
+                    GameManager.Instance.SquareDestroyed = false;
+                }
+                gameObject.GetComponent<Image>().color = new Color32(255,255,255,246);
+            }
+        }
+    }
+
 
     [SerializeField]
     private int pCost;
 
     public GameObject powerUpPref;
 
-    // Use this for initialization
-    void Start()
-    {
 
+    private void Update()
+    {
+        //Deselect when gamemanager bool is false
+        if(selectionUI==true)
+        {
+            SelectionUI = GameManager.Instance.SelectPowerUp;
+        }
     }
 
+
+    //Square power up
     public void SelectSquare()
     {
-        Debug.Log("SELECT");
+        SelectionUI = true;
+        GameManager.Instance.SelectPowerUp = true;  
+
+    }
+
+    public void DeselectSquare()
+    {
+        SelectionUI = false;
+        GameManager.Instance.SelectPowerUp = false;
+
     }
 
 
 
+
+
+    //Click handler
     public void PowerUpPressed()
     {
         int index = gameObject.transform.GetSiblingIndex();
@@ -69,7 +114,12 @@ public class PowerUp : MonoBehaviour
                     break;
                 //SELECT
                 case 2:
-                    SelectSquare();
+                    {
+                        if (!SelectionUI)
+                            SelectSquare();
+                        else
+                            DeselectSquare();
+                    }
                     break;
                 default:
                     break;

@@ -52,6 +52,12 @@ public class GameManager : Singleton<GameManager>
 
     public bool GameOverBool = false;
 
+    // PowerUP cs
+    public bool SelectPowerUp = false;
+    //Keep track of select powerup usage
+    public bool SquareDestroyed = false;
+
+
     //after gameover
     [SerializeField]
     private bool endGameCheck;
@@ -470,9 +476,30 @@ public class GameManager : Singleton<GameManager>
 
         #region Input
 
+        if(IsPointerOverUIObject("square") && SelectPowerUp && Input.GetMouseButtonUp(0))
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            if (results.Count > 0)
+            { 
+                //Get rid of selected square
+                SelectPowerUp = false;
+                Instantiate(explosionPref, results[0].gameObject.transform.position, Quaternion.identity);
+                foreach (RaycastResult result in results)
+                {
+                    //Check if parent is square too
+                    if (result.gameObject.transform.parent.CompareTag("square"))
+                        Destroy(result.gameObject.transform.parent.gameObject);
+                    Destroy(result.gameObject);
+                    SquareDestroyed = true;
+                }
+            }
+        }
+      
 
-
-        if (!IsPointerOverUIObject() && Input.GetMouseButtonDown(0) && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonDown(0) && !MenuUp)
         {
             mouseDown = true;
             cantSpawn = false;
@@ -493,7 +520,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
             //=================================================================================================================================
             //    //initialClick /clickAngle
@@ -523,7 +550,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-        if (!IsPointerOverUIObject() && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
         {
             // if clicked 
             if (mouseDown)
@@ -759,14 +786,16 @@ public class GameManager : Singleton<GameManager>
 
 
     // Is touching ui
-    private bool IsPointerOverUIObject()
+    private bool IsPointerOverUIObject(string obj)
     {
         PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
         eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        if (results.Count > 0) return results[0].gameObject.CompareTag("ui");
-        else return false;
+        if (results.Count > 0)
+            return results[0].gameObject.CompareTag(obj);
+        else
+            return false;
     }
 
 

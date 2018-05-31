@@ -362,12 +362,12 @@ public class Square : MonoBehaviour
         //256 square to center
         else if (this.IsTop == true )
         {
-            //if (!gameObject.CompareTag("square"))
-            //{
-            //    Debug.Log("HERE");
-            //    gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.currentSpot.transform.position, Speed * Time.deltaTime);
-            //}
-            //else
+            if (!gameObject.CompareTag("square"))
+            {
+                Debug.Log("HERE");
+                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+            }
+            else
             {
                 gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
                 IsTop = false;
@@ -502,8 +502,9 @@ public class Square : MonoBehaviour
         }
         if (gameObject != null && other.CompareTag("bomb"))
         {
+           
             Instantiate(GameManager.Instance.explosionPref, other.transform.position, Quaternion.identity);
-            gameObject.SetActive(false);
+            
             yield return new WaitForSeconds(0.2f);
 
             Destroy(other.gameObject);
@@ -554,7 +555,12 @@ public class Square : MonoBehaviour
     // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
-        //Powerup interaction
+
+        //Power up collisions
+        #region Powerup interaction
+
+
+
         if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("drill"))
         {
             GameManager.Instance.Merge(gameObject, null, other.gameObject);
@@ -562,14 +568,30 @@ public class Square : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("bomb"))
         {
-            //GameManager.Instance.Merge(gameObject, null, other.gameObject);
+            GameManager.Instance.Merge(gameObject, null, null);
+            
             StartCoroutine(StopConsumable(gameObject, other.gameObject, int.Parse(GameManager.Instance.currentSpot.name), other.gameObject.transform.GetSiblingIndex()));
            
         }
 
+       //Move past spot
+        if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("drill"))
+        {
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            gameObject.transform.SetParent(null);
+            this.IsTop = true;
+        }
+        else if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("bomb"))
+        {
+            gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            gameObject.transform.SetParent(null);
+            this.IsTop = true;
+        }
 
 
-        
+        #endregion
+
+
         if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("square"))
         {
             Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
