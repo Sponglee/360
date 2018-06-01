@@ -2701,6 +2701,98 @@ MonoBehaviour:
     linePref:
       serializedVersion: 2
       rgba: 503316480
+  - wheelPref: {fileID: 1286126233613036, guid: da45694c51a6f5a4c96ea3a7c72217e7,
+      type: 2}
+    squarePref: {fileID: 0}
+    spotPref: {fileID: 0}
+    gridPref: {fileID: 0}
+    spawnPref: {fileID: 0}
+    backPref: {fileID: 1197368308167822, guid: 0761fa9ef13d5ad4a8cf1ce394f498ea, type: 2}
+    fltTextPref: {fileID: 0}
+    styleHolderPref: {fileID: 0}
+    yellowPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    redPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    fontPref: {fileID: 0}
+    uiPref: {fileID: 0}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3172209805
+    linePref:
+      serializedVersion: 2
+      rgba: 503316480
+  - wheelPref: {fileID: 1286126233613036, guid: da45694c51a6f5a4c96ea3a7c72217e7,
+      type: 2}
+    squarePref: {fileID: 0}
+    spotPref: {fileID: 0}
+    gridPref: {fileID: 0}
+    spawnPref: {fileID: 0}
+    backPref: {fileID: 1197368308167822, guid: 0761fa9ef13d5ad4a8cf1ce394f498ea, type: 2}
+    fltTextPref: {fileID: 0}
+    styleHolderPref: {fileID: 0}
+    yellowPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    redPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    fontPref: {fileID: 0}
+    uiPref: {fileID: 0}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3172209805
+    linePref:
+      serializedVersion: 2
+      rgba: 503316480
+  - wheelPref: {fileID: 1286126233613036, guid: da45694c51a6f5a4c96ea3a7c72217e7,
+      type: 2}
+    squarePref: {fileID: 0}
+    spotPref: {fileID: 0}
+    gridPref: {fileID: 0}
+    spawnPref: {fileID: 0}
+    backPref: {fileID: 1197368308167822, guid: 0761fa9ef13d5ad4a8cf1ce394f498ea, type: 2}
+    fltTextPref: {fileID: 0}
+    styleHolderPref: {fileID: 0}
+    yellowPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    redPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    fontPref: {fileID: 0}
+    uiPref: {fileID: 0}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3172209805
+    linePref:
+      serializedVersion: 2
+      rgba: 503316480
+  - wheelPref: {fileID: 1286126233613036, guid: da45694c51a6f5a4c96ea3a7c72217e7,
+      type: 2}
+    squarePref: {fileID: 0}
+    spotPref: {fileID: 0}
+    gridPref: {fileID: 0}
+    spawnPref: {fileID: 0}
+    backPref: {fileID: 1197368308167822, guid: 0761fa9ef13d5ad4a8cf1ce394f498ea, type: 2}
+    fltTextPref: {fileID: 0}
+    styleHolderPref: {fileID: 0}
+    yellowPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    redPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    fontPref: {fileID: 0}
+    uiPref: {fileID: 0}
+    menuPref:
+      serializedVersion: 2
+      rgba: 3172209805
+    linePref:
+      serializedVersion: 2
+      rgba: 503316480
 --- !u!4 &606636043
 Transform:
   m_ObjectHideFlags: 0
@@ -3034,7 +3126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1601485959109364, guid: adb3f656090f6ab498ebff76e9070af7, type: 2}
       propertyPath: m_Name
-      value: ShopButtonPrefab (3)
+      value: Red
       objectReference: {fileID: 0}
     - target: {fileID: 114390920986716924, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -3398,7 +3490,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1601485959109364, guid: adb3f656090f6ab498ebff76e9070af7, type: 2}
       propertyPath: m_Name
-      value: ShopButtonPrefab (1)
+      value: Green
       objectReference: {fileID: 0}
     - target: {fileID: 114390920986716924, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -4875,7 +4967,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1601485959109364, guid: adb3f656090f6ab498ebff76e9070af7, type: 2}
       propertyPath: m_Name
-      value: ShopButtonPrefab (2)
+      value: White
       objectReference: {fileID: 0}
     - target: {fileID: 114390920986716924, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -8535,7 +8627,7 @@ GameObject:
   - component: {fileID: 2084181845}
   - component: {fileID: 2084181844}
   m_Layer: 5
-  m_Name: ShopButtonPrefab
+  m_Name: cardBOard
   m_TagString: ui
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

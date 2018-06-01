@@ -63,7 +63,7 @@ public class CoinManager : Singleton<CoinManager> {
     void Awake() {
 
         //Initialize the ad and skins
-        PlayerPrefs.SetInt("SkinAvailability", CoinManager.Instance.skinAvailability);
+        
         Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
         //For editor usage, pls ignore
         fadeCanvas.SetActive(true);
@@ -72,7 +72,7 @@ public class CoinManager : Singleton<CoinManager> {
         
         
         //Check what skins are available
-        SkinAvailability = PlayerPrefs.GetInt("SkinAvailability", 1);
+        SkinAvailability = PlayerPrefs.GetInt("SkinAvailability", 0);
         //persistant coin manager
         DontDestroyOnLoad(gameObject);
 

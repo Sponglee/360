@@ -1498,11 +1498,8 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("CHECK ABOVE");
             //If same score above
-<<<<<<< HEAD
             if (spots[index].transform.childCount > squareIndex+1 )
-=======
-            if (spots[index].transform.childCount > squareIndex + 1)
->>>>>>> parent of 9cc5f3d... 31.05.18
+
             {
                 if (spots[index].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {
@@ -2025,7 +2022,7 @@ public class GameManager : Singleton<GameManager>
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
-        menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\n HIGHSCORE", highscores);
+        menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\nHIGHSCORE", highscores);
  
         //upperText
         menu.transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
