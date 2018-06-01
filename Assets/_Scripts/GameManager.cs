@@ -37,8 +37,10 @@ public class GameManager : Singleton<GameManager>
     public GameObject styleHolderPrefab;
     public Font fontPrefab;
 
-    public Transform line;
+    //Clickprefab 256
+    public GameObject coinPrefab;
 
+    public Transform line;
 
 
     [SerializeField]
@@ -152,6 +154,7 @@ public class GameManager : Singleton<GameManager>
 
     //scrolling text
     public GameObject FltText;
+    public GameObject coinFltText;
 
     //scores
     public int scores;
@@ -476,6 +479,7 @@ public class GameManager : Singleton<GameManager>
 
         #region Input
 
+        // Track hammer click powerup
         if(IsPointerOverUIObject("square") && SelectPowerUp && Input.GetMouseButtonUp(0))
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
@@ -497,8 +501,41 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
-      
 
+        //track 256 coin touches
+        if (IsPointerOverUIObject("256") && Input.GetMouseButtonUp(0))
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            if (results.Count > 0)
+            {
+                //Get rid of selected square
+                SelectPowerUp = false;
+
+
+                //Grab ZE COIN
+                Instantiate(explosionPref, results[0].gameObject.transform.position, Quaternion.identity);
+                GameObject txtObj = Instantiate(coinFltText, results[0].gameObject.transform.position, Quaternion.identity);
+               
+                txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
+                
+                foreach (RaycastResult result in results)
+                {
+                    //Check if parent is square too
+                    if (result.gameObject.transform.parent.CompareTag("256"))
+                        Destroy(result.gameObject.transform.parent.gameObject);
+
+                    Destroy(result.gameObject);
+
+                }
+
+                CoinManager.Instance.Coins += 1;
+            }
+        }
+
+        //Track clickSpawn clicks
         if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonDown(0) && !MenuUp)
         {
             mouseDown = true;
@@ -520,7 +557,8 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
+        //FOR CLICKS
+        if (!IsPointerOverUIObject("ui") && !IsPointerOverUIObject("256") && !SelectPowerUp && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
             //=================================================================================================================================
             //    //initialClick /clickAngle
@@ -908,7 +946,7 @@ public class GameManager : Singleton<GameManager>
     #endregion /Input
 
     //Vertical merge
-    public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null)
+    public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null, bool IsPowerUp = false)
     {
         int fltScore;
 
@@ -924,14 +962,22 @@ public class GameManager : Singleton<GameManager>
         }
 
 
-        StartCoroutine(StopMerge(first, fltScore, second));
+        StartCoroutine(StopMerge(first, fltScore, second,IsPowerUp));
     }
 
 
     //Delay for merge
-    private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null)
+    private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null, bool IsPowerUp=false)
     {
-        AudioManager.Instance.PlaySound("swoop");
+        //Play sound if not powerup
+        if(!IsPowerUp)
+            AudioManager.Instance.PlaySound("swoop");
+        else
+        {
+
+        }
+
+
         int tmp;
         int tmpScore;
         //Stop checks while Merging
@@ -961,42 +1007,60 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(0.2f);
      
 
-
-        //========================Text floating===================================================
-        //Get some text out
-
-        Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
-        if (first != null)
+        if (!IsPowerUp)
         {
-            GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
-     
-             
-            if (second != null)
-                textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition+ fltOffset);
+            //========================Text floating===================================================
+            //Get some text out
+
+            Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
+            if (first != null)
+            {
+                GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
+
+                //instantiate it at 2nd square pos
+                if (second != null)
+                    textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
+                //if horisontal - instantiate it at 1st square pos
+                else
+                    textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
+
+                //if not moving
+                if (first != null && !first.transform.parent.CompareTag("outer"))
+                    textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
+
+                // flt text text
+                textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmpScore.ToString();
+            }
             else
-                textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
+            {
+                GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
 
-            if (first != null && !first.transform.parent.CompareTag("outer"))
-                textObj.transform.SetParent(wheel.transform.GetChild(1).GetChild(int.Parse(first.transform.parent.name)));
+                if (second != null)
+                {
+                    textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
+                    textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmpScore.ToString();
+                }
+            }
 
-            // flt text text
-            textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmpScore.ToString();
+            //=======================
+
         }
-       
-            
-        //=======================
+
 
         if (first != null && first.CompareTag("square"))
         {
             //update the square score
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
+
             if (first.GetComponent<Square>().Score == 256)
             {
-                first.transform.parent = wheel.transform.GetChild(3);
-                first.GetComponent<BoxCollider2D>().isTrigger = true;
+                //TELL SQUARE THAT IT'S 256
+                first.GetComponent<Square>().IsTop = true;
+
+                //        Instantiate(coinPrefab, first.transform.position, Quaternion.identity, first.transform.parent);
+                //        Destroy(first);
+
             }
-
-
         }
 
 
@@ -1005,7 +1069,7 @@ public class GameManager : Singleton<GameManager>
         //{
         //    //yield break;
         //}
-        if (first != null && first.CompareTag("square"))
+        if (first != null && (first.CompareTag("square") || first.CompareTag("256")))
         {
 
 
@@ -1043,6 +1107,12 @@ public class GameManager : Singleton<GameManager>
             first.GetComponent<Square>().DoublingPriority = false;
         }
 
+        // Tell square that it is 256
+        if (first.GetComponent<Square>().Score >= 256)
+        {
+
+            first.GetComponent<Square>().IsTop = true;
+        }
     }
 
 
@@ -1175,25 +1245,7 @@ public class GameManager : Singleton<GameManager>
         if (tmpSquare != null)
 
         {
-            ////If same score above
-            //if (spots[spotIndex].transform.childCount > squareIndex + 1)
-            //{
-            //    if (spots[spotIndex].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score)
-            //    {
-            //        //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-            //        if (!spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
-            //        {
-            //            //Debug.Log("MRG");
-            //            Merge(spots[spotIndex].transform.GetChild(squareIndex + 1).gameObject, null, tmpSquare);
-            //        }
-
-            //        //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
-            //        // Destroy(spots[index].transform.GetChild(i).gameObject);
-            //        return;
-            //    }
-            //}
-
-
+           
             tmpSquare.GetComponent<Square>().CheckPriority = true;
             CheckInProgress = true;
             //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
@@ -1725,7 +1777,7 @@ public class GameManager : Singleton<GameManager>
             
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
             //{
-            furthertmpSquare.GetComponent<Square>().CheckPriority = false;
+                furthertmpSquare.GetComponent<Square>().CheckPriority = false;
 
                 //    tmpSquare.GetComponent<Square>().CheckAround = true;
                 //   
@@ -1734,12 +1786,7 @@ public class GameManager : Singleton<GameManager>
 
             }
 
-            //Drop if 256
-            if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score == 256)
-            {
-                //tmpSquare.transform.parent = tmpSquare.transform.parent.parent.parent.GetChild(3);
-                tmpSquare.GetComponent<Collider2D>().isTrigger = true;
-            }
+       
 
         FurtherProgress = false;
 

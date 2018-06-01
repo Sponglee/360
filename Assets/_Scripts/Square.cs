@@ -84,7 +84,20 @@ public class Square : MonoBehaviour
     public Transform centerPrefab;
 
     [SerializeField]
-    private bool IsTop = false;
+
+    private bool isTop = false;
+    public bool IsTop
+    {
+        get
+        {
+            return isTop;
+        }
+
+        set
+        {
+            isTop = value;
+        }
+    }
 
     public bool ColumnPew = false;
 
@@ -341,11 +354,11 @@ public class Square : MonoBehaviour
                 this.IsSpawn = false;
             }
         }
-          
 
-        if (this.gameObject.transform.parent != null && !this.gameObject.transform.parent.CompareTag("outer"))
+        //Move through grid
+        if (!this.IsTop && this.gameObject.transform.parent != null && !this.gameObject.transform.parent.CompareTag("outer"))
         {
-          
+
             //Move to needed grid spot
             if (gameObject.transform.GetSiblingIndex() == 5
                 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
@@ -362,7 +375,7 @@ public class Square : MonoBehaviour
 
         }
         //256 square to center
-        else if (this.IsTop == true )
+        else if (this.IsTop == true)
         {
             if (!gameObject.CompareTag("square"))
             {
@@ -371,11 +384,18 @@ public class Square : MonoBehaviour
             }
             else
             {
-                gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-                IsTop = false;
-                AudioManager.Instance.PlaySound("256");
-                //Debug.Log("YOSH");
-                gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
+
+                
+                    //SPAWN COIN HERE
+                    Debug.Log("NO HERE");
+                    Instantiate(GameManager.Instance.coinPrefab, gameObject.transform.position, Quaternion.identity, gameObject.transform.parent);
+                    IsTop = false;
+                    AudioManager.Instance.PlaySound("256");
+                    Destroy(gameObject);
+               
+
+
+
             }
            
         }
@@ -561,16 +581,16 @@ public class Square : MonoBehaviour
         //Power up collisions
         #region Powerup interaction
 
-
+     
 
         if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("drill"))
         {
-            GameManager.Instance.Merge(gameObject, null, other.gameObject);
+            GameManager.Instance.Merge(gameObject, null, other.gameObject,true);
             StartCoroutine(StopConsumable(other.gameObject, gameObject));
         }
         else if (other.gameObject.CompareTag("square") && this.gameObject.CompareTag("bomb"))
         {
-            GameManager.Instance.Merge(gameObject, null, null);
+            GameManager.Instance.Merge(gameObject, null, null,true);
             
             StartCoroutine(StopConsumable(gameObject, other.gameObject, int.Parse(GameManager.Instance.currentSpot.name), other.gameObject.transform.GetSiblingIndex()));
            
@@ -648,6 +668,7 @@ public class Square : MonoBehaviour
                 GameManager.Instance.Merge(gameObject, null, other.gameObject);
                 //Debug.Log("MRG");
 
+
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
@@ -686,6 +707,10 @@ public class Square : MonoBehaviour
 
                 //Check GameOver
                 GameManager.Instance.GameOver(gameObject.transform.parent.gameObject);
+
+
+
+
             }
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
 
@@ -705,12 +730,9 @@ public class Square : MonoBehaviour
             }
         }
 
-      
 
-        if (this.score >= 256)
-        {
-            this.IsTop = true;
-        }
+
+      
     }
 
 
