@@ -9,16 +9,14 @@ public class BurstControl : MonoBehaviour {
     [SerializeField]
     private float turnDelay = 4f;
 
-    private float turnTimer;
+    
 
-    private void Start()
-    {
-
-        turnTimer = Time.deltaTime + turnDelay;
-    }
+ 
     // Update is called once per frame
     void Update () {
-        if (Time.deltaTime > turnTimer)
+        turnDelay -= Time.deltaTime;
+
+        if (turnDelay <= 0.0f)
         {
             Destroy(gameObject);
         }
