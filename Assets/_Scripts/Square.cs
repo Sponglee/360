@@ -103,22 +103,21 @@ public class Square : MonoBehaviour
 
         }
     }
+    //Bool for bug fixing (check later)
+    //[SerializeField]
+    //private bool checkCoolDown=false;
+    //public bool CheckCoolDown
+    //{
+    //    get
+    //    {
+    //        return checkCoolDown;
+    //    }
 
-    //For tmpSquare leftover bug
-    private float checkCoolDown;
-    public float CheckCoolDown
-    {
-        get
-        {
-            return checkCoolDown;
-        }
-
-        set
-        {
-            checkCoolDown = value;
-        }
-    }
-
+    //    set
+    //    {
+    //        checkCoolDown = value;
+    //    }
+    //}
 
     private float checkTimer;
 
@@ -158,9 +157,8 @@ public class Square : MonoBehaviour
         }
     }
 
-    //Sorting order
-    [SerializeField]
-    private SpriteRenderer squareOrder;
+    ////Sorting order
+    //private SpriteRenderer squareOrder;
 
 
     private int checkGrid;
@@ -219,6 +217,7 @@ public class Square : MonoBehaviour
     }
 
    
+
     Vector2 curPos;
     Vector2 lastPos;
 
@@ -272,7 +271,9 @@ public class Square : MonoBehaviour
         }
     }
 
-    private void Start()
+  
+    // Use this for initialization
+    void Start()
     {
         //Apply theme
 
@@ -289,7 +290,7 @@ public class Square : MonoBehaviour
             ApplyStyle(this.score);
 
         }
-        else if (!ExpandSpawn && gameObject.CompareTag("square"))
+        else if(!ExpandSpawn && gameObject.CompareTag("square"))
         {
             //gameObject.GetComponent<Rigidbody2D>().gravityScale = 0f;
             gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = score.ToString();
@@ -298,25 +299,19 @@ public class Square : MonoBehaviour
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             ApplyStyle(this.score);
         }
-        //SORT sprite (inspector) if there's canvas 
-        if(squareOrder !=null)
-            squareOrder.sortingOrder = gameObject.transform.GetSiblingIndex();
 
 
+
+       
     }
-
-
 
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        ////SORT sprite (inspector)
-        //if (squareOrder != null)
-        //    squareOrder.sortingOrder = gameObject.transform.GetSiblingIndex();
-
+        
         //0 score bug fix
+
         if (int.Parse(SquareText.text) == 0)
         {
             SquareText.text = this.score.ToString();
@@ -404,11 +399,6 @@ public class Square : MonoBehaviour
                 
             }
 
-            //if (Time.deltaTime> CheckCoolDown)
-            //{
-            //    Destroy(gameObject);
-            //}
-
         }
 
 
@@ -423,12 +413,14 @@ public class Square : MonoBehaviour
         {
             if (GameManager.Instance.checkObjs.Contains(gameObject))
             {
-                ////Debug.Log("reached TMPSQR " + squareTmpSquare.transform.parent.name);
+                //Debug.Log("reached TMPSQR " + squareTmpSquare.transform.parent.name);
             }
             Destroy(gameObject);
         }
 
 
+        ////SORT sprite (inspector)
+        //squareOrder.sortingOrder = gameObject.transform.GetSiblingIndex();
     }
 
 
