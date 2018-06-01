@@ -53,7 +53,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b02ea84b8aa404d9a427e8b90bd913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particle: {fileID: 0}
   turnDelay: 4
 --- !u!198 &198833316533248330
 ParticleSystem:
@@ -3424,7 +3423,7 @@ ParticleSystemRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1859494013673282}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -3451,7 +3450,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_RenderMode: 3
   m_SortMode: 0
   m_MinParticleSize: 0

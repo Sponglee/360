@@ -87,7 +87,7 @@ public class TitleManager : MonoBehaviour {
     {
         CoinManager.Instance.shopCoinText = shopCurrencyText;
         shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 0).ToString();
-        themeIndex = PlayerPrefs.GetInt("Theme", 4);
+        themeIndex = PlayerPrefs.GetInt("Theme", 0);
     }
 
 

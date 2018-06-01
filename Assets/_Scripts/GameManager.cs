@@ -307,7 +307,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        themeIndex = PlayerPrefs.GetInt("Theme", 4);
+        themeIndex = PlayerPrefs.GetInt("Theme", 0);
     }
 
 
@@ -337,7 +337,7 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
-        //nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
     private void ApplyStyle(int num)
@@ -1498,7 +1498,11 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("CHECK ABOVE");
             //If same score above
+<<<<<<< HEAD
             if (spots[index].transform.childCount > squareIndex+1 )
+=======
+            if (spots[index].transform.childCount > squareIndex + 1)
+>>>>>>> parent of 9cc5f3d... 31.05.18
             {
                 if (spots[index].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {

@@ -156,11 +156,15 @@ public class Square : MonoBehaviour
             touched = value;
         }
     }
+<<<<<<< HEAD
 
     ////Sorting order
     //private SpriteRenderer squareOrder;
 
 
+=======
+   
+>>>>>>> parent of 9cc5f3d... 31.05.18
     private int checkGrid;
 
     public bool ExpandSpawn { get; set; }
@@ -271,7 +275,10 @@ public class Square : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
   
+=======
+>>>>>>> parent of 9cc5f3d... 31.05.18
     // Use this for initialization
     void Start()
     {
@@ -299,10 +306,18 @@ public class Square : MonoBehaviour
             gameObject.name = gameObject.transform.GetSiblingIndex().ToString();
             ApplyStyle(this.score);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 9cc5f3d... 31.05.18
 
 
+        checkGrid = transform.GetSiblingIndex();
 
+<<<<<<< HEAD
        
+=======
+>>>>>>> parent of 9cc5f3d... 31.05.18
     }
 
 
@@ -354,14 +369,12 @@ public class Square : MonoBehaviour
             {
                 //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, Speed * Time.deltaTime);
-
-
             }
             else
             {
                 //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, Speed * Time.deltaTime);
-                
+
             }
 
         }
@@ -372,7 +385,6 @@ public class Square : MonoBehaviour
             {
                 Debug.Log("HERE");
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
-         
             }
             else
             {
@@ -381,13 +393,11 @@ public class Square : MonoBehaviour
                 AudioManager.Instance.PlaySound("256");
                 //Debug.Log("YOSH");
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
-      
             }
            
         }
         else
         {
-            
             Debug.Log("NOT YOSH");
             //GameManager.Instance.SomethingIsMoving = true;
             if (SquareTmpSquare != null)
@@ -398,7 +408,10 @@ public class Square : MonoBehaviour
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
                 
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 9cc5f3d... 31.05.18
         }
 
 
@@ -419,8 +432,12 @@ public class Square : MonoBehaviour
         }
 
 
+<<<<<<< HEAD
         ////SORT sprite (inspector)
         //squareOrder.sortingOrder = gameObject.transform.GetSiblingIndex();
+=======
+
+>>>>>>> parent of 9cc5f3d... 31.05.18
     }
 
 
