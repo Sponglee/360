@@ -307,7 +307,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        themeIndex = PlayerPrefs.GetInt("Theme", 0);
+        themeIndex = PlayerPrefs.GetInt("Theme", 4);
     }
 
 
@@ -337,7 +337,7 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
-        nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        //nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
     private void ApplyStyle(int num)
@@ -1084,9 +1084,14 @@ public class GameManager : Singleton<GameManager>
                         {
                             if (!tmpObj.transform.parent.CompareTag("outer"))
                             {
+
                                 if (tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
                                     //tmpObj.GetComponent<Square>().CheckCoolDown = true;
                                     continue;
+                            }
+                            else
+                            {
+                                tmpObj.GetComponent<Square>().CheckCoolDown = Time.deltaTime + 2f;
                             }
                         }
                             
@@ -1498,7 +1503,7 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("CHECK ABOVE");
             //If same score above
-            if (spots[index].transform.childCount > squareIndex + 1)
+            if (spots[index].transform.childCount > squareIndex+1)
             {
                 if (spots[index].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score)
                 {

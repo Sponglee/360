@@ -23,7 +23,7 @@ public class ThemeButtonUpdater : MonoBehaviour {
             gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
         }
 
-        if (PlayerPrefs.GetInt("Theme",0) == gameObject.transform.GetSiblingIndex())
+        if (PlayerPrefs.GetInt("Theme",4) == gameObject.transform.GetSiblingIndex())
         {
             gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 100);
         }
