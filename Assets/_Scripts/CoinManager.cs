@@ -76,7 +76,7 @@ public class CoinManager : Singleton<CoinManager> {
         //persistant coin manager
         DontDestroyOnLoad(gameObject);
 
-        coins = PlayerPrefs.GetInt("Coin", 0);
+        coins = PlayerPrefs.GetInt("Coin", 60);
         coinText.text = coins.ToString();
         
 	}
