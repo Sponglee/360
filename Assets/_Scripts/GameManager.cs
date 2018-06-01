@@ -310,7 +310,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        themeIndex = PlayerPrefs.GetInt("Theme", 0);
+        themeIndex = PlayerPrefs.GetInt("Theme",0);
     }
 
 
@@ -340,7 +340,7 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
-        nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        //nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
     private void ApplyStyle(int num)

@@ -241,7 +241,7 @@ public class Square : MonoBehaviour
         SquareText.color = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
         if(SquareColor != null)
             SquareColor.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
-        SquareText.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
+        //SquareText.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].TextColor;
     }
     //Gets Values from style script for each square
     public void ApplyStyle(int num)

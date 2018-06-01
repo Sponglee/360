@@ -217,4 +217,20 @@ public class FunctionHandler : MonoBehaviour {
         }
     }
 
+
+
+
+
+
+    //********************DEBUG FUNCTIONS ------******************************
+    public void DeleteAll()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+    
+    public void MoreCoins()
+    {
+        CoinManager.Instance.Coins += 10;
+        
+    }
 }
