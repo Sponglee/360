@@ -157,7 +157,7 @@ public class GameManager : Singleton<GameManager>
     public Image slider;
     public float sliderFill;
 
-
+    public Image nextRound;
 
     //scrolling text
     public GameObject FltText;
@@ -344,6 +344,8 @@ public class GameManager : Singleton<GameManager>
         scoreText = ui.transform.GetChild(2).gameObject.GetComponent<Text>();
         highScoreText = ui.transform.GetChild(4).gameObject.GetComponent<Text>();
 
+        nextRound = ui.transform.GetChild(3).gameObject.GetComponent<Image>();
+
 
         Instantiate(styleHolderPrefab);
 
@@ -354,6 +356,7 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
+        nextRound.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor; ;
         //nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
@@ -478,28 +481,28 @@ public class GameManager : Singleton<GameManager>
 
 
     //Time EXPAND
-    private void FixedUpdate()
-    {
-        fMoves += 0.01f;
+    //private void FixedUpdate()
+    //{
+    //    fMoves += 0.01f;
 
-        //while (currentTime <= timeOfTravel)
-        //{
-            sliderFill = (float)(expandMoves - fMoves) / expandMoves;
-            currentTime += Time.deltaTime;
-            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-            slider.fillAmount = sliderFill;
-            //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
+    //    //while (currentTime <= timeOfTravel)
+    //    //{
+    //        sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+    //        currentTime += Time.deltaTime;
+    //        normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+    //        slider.fillAmount = sliderFill;
+    //        //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
-        //}
+    //    //}
 
 
-        if (fMoves > expandMoves)
-        {
+    //    if (fMoves > expandMoves)
+    //    {
             
-            fMoves = 0;
-            ResetExpand();
-        }
-    }
+    //        fMoves = 0;
+    //        ResetExpand();
+    //    }
+    //}
 
     void Update()
     {
@@ -1252,12 +1255,12 @@ public class GameManager : Singleton<GameManager>
     public void ResetExpand()
     {
 
-            
-
-                Expand();
 
 
-                StartCoroutine(FillStop());
+        Expand();
+
+
+        StartCoroutine(FillStop());
 
                 //expandMoves += expandMoves/2;
                 //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
