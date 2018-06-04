@@ -55,9 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4810313829406844}
   - component: {fileID: 212341414957439470}
-  - component: {fileID: 61812630713143364}
-  - component: {fileID: 114245831885718896}
-  - component: {fileID: 50797005771300026}
+  - component: {fileID: 114500365598300636}
   m_Layer: 0
   m_Name: coinPref
   m_TagString: 256
@@ -129,51 +127,6 @@ Transform:
   m_Father: {fileID: 4810313829406844}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!50 &50797005771300026
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523403489220356}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 4.69
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!61 &61812630713143364
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523403489220356}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.024, y: 1.024}
-    newSize: {x: 0.9677419, y: 0.9677419}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.94}
-  m_EdgeRadius: 0
 --- !u!114 &114104148147039062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -217,33 +170,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114245831885718896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1523403489220356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2be9fdb9a3e28b458872ceaa5a161aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  IsSpawn: 0
-  score: 99
-  further: 0
-  color:
-    serializedVersion: 2
-    rgba: 4294967295
-  centerPrefab: {fileID: 0}
-  isTop: 0
-  ColumnPew: 0
-  checkPriority: 0
-  touched: 0
-  isMerging: 0
-  SquareText: {fileID: 114271065674680940}
-  SquareColor: {fileID: 212341414957439470}
-  mergeCheck: 0
 --- !u!114 &114259125215448050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -312,6 +238,19 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114500365598300636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1523403489220356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53b02ea84b8aa404d9a427e8b90bd913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particle: {fileID: 0}
+  turnDelay: 4
 --- !u!114 &114617367854865642
 MonoBehaviour:
   m_ObjectHideFlags: 1

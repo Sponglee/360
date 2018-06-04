@@ -7700,7 +7700,7 @@ MonoBehaviour:
       rgba: 2537636162
   - wheelPref: {fileID: 1788055908502668, guid: 7c0ac1af7ef423d4283e1c44b4cfdcf0,
       type: 2}
-    squarePref: {fileID: 1379266986706278, guid: 985b44f08987d1b47ba31e4e9a15288e,
+    squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
       type: 2}
     spotPref: {fileID: 1679439421920422, guid: 055f7c54f7ecbe148b7a8b0d4b93abd8, type: 2}
     gridPref: {fileID: 1679439421920422, guid: 784c28be4a463e74cb0a5b33be5b04c1, type: 2}
@@ -9982,9 +9982,10 @@ MonoBehaviour:
   randSpawnCount: 0
   maxScore: 0
   scoreUpper: 0
-  expandMoves: 3
+  expandMoves: 10
   stopDelay: 0.1
   moves: 0
+  fMoves: 0
   currentSpot: {fileID: 0}
   currentSpawn: {fileID: 0}
   themeIndex: 0

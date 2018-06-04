@@ -116,6 +116,13 @@ public class GameManager : Singleton<GameManager>
             moves = value;
         }
     }
+
+    // for TIME EXPAND
+    public float fMoves = 0f;
+
+
+
+
     //Vertical transform of top spot
     public GameObject currentSpot;
     // spawn point
@@ -234,6 +241,13 @@ public class GameManager : Singleton<GameManager>
     float differ = 0;
     public bool gameOverInProgress=false;
 
+
+
+
+    //TIME EXPAND
+    float timeOfTravel = 1; //time after object reach a target place 
+    float currentTime = 0; // actual floting time 
+    float normalizedValue;
 
     #region Styles
     // Helps ApplyStyle to grab numbers/color
@@ -398,7 +412,7 @@ public class GameManager : Singleton<GameManager>
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
         maxScore = 3;
-        expandMoves = 3;
+        expandMoves = 10;
         Tops = 0;
         // count of randomSpawns 
         randSpawnCount = 3;
@@ -418,8 +432,8 @@ public class GameManager : Singleton<GameManager>
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
         sliderFill = (expandMoves  - Moves) / expandMoves;
 
-        //Gradually change slider fillAmount
-        StartCoroutine(SliderStop());
+        ////Gradually change slider fillAmount
+        //StartCoroutine(SliderStop());
 
 
 
@@ -443,25 +457,49 @@ public class GameManager : Singleton<GameManager>
         menu.SetActive(false);
     }
 
- 
-    private IEnumerator SliderStop()
-    {
-        float timeOfTravel = 1; //time after object reach a target place 
-        float currentTime = 0; // actual floting time 
-        float normalizedValue;
 
-        while (currentTime <= timeOfTravel)
-        {
+    //////private IEnumerator SliderStop()
+    //////{
+    ////////float timeOfTravel = 1; //time after object reach a target place 
+    ////////float currentTime = 0; // actual floting time 
+    ////////float normalizedValue;
+
+    ////////while (currentTime <= timeOfTravel)
+    ////////{
+    ////////    currentTime += Time.deltaTime;
+    ////////    normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+
+    ////////    slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
+    ////////    yield return null;
+    ////////}
+    //////}
+
+
+
+
+    //Time EXPAND
+    private void FixedUpdate()
+    {
+        fMoves += 0.01f;
+
+        //while (currentTime <= timeOfTravel)
+        //{
+            sliderFill = (float)(expandMoves - fMoves) / expandMoves;
             currentTime += Time.deltaTime;
             normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+            slider.fillAmount = sliderFill;
+            //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
-            slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
-            yield return null;
+        //}
+
+
+        if (fMoves > expandMoves)
+        {
+            
+            fMoves = 0;
+            ResetExpand();
         }
     }
-
- 
-
 
     void Update()
     {
@@ -523,9 +561,9 @@ public class GameManager : Singleton<GameManager>
                 
                 foreach (RaycastResult result in results)
                 {
-                    //Check if parent is square too
-                    if (result.gameObject.transform.parent.CompareTag("256"))
-                        Destroy(result.gameObject.transform.parent.gameObject);
+                    ////Check if parent is square too
+                    //if (result.gameObject.transform.parent.CompareTag("256"))
+                    //    Destroy(result.gameObject.transform.parent.gameObject);
 
                     Destroy(result.gameObject);
 
@@ -1210,19 +1248,11 @@ public class GameManager : Singleton<GameManager>
        
     }
 
-    //Reset Expand Moves
-    public void ResetExpand(GameObject tmpSquare)
+    //Reset Expand Moves  (TIME EXPAND)
+    public void ResetExpand()
     {
-        // expand moves++ if this happened by player
-        if (tmpSquare.GetComponent<Square>().IsSpawn)
-        {
 
-            //ExpandMoves();
-
-            tmpSquare.GetComponent<Square>().IsSpawn = false;
-
-            if (Moves > expandMoves - 1)
-            {
+            
 
                 Expand();
 
@@ -1232,11 +1262,37 @@ public class GameManager : Singleton<GameManager>
                 //expandMoves += expandMoves/2;
                 //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
                 sliderFill = (float)(expandMoves - Moves) / expandMoves;
-            }
+          
 
 
-        }
     }
+    //////////Reset Expand Moves
+    ////////public void ResetExpand(GameObject tmpSquare)
+    ////////{
+    ////////    // expand moves++ if this happened by player
+    ////////    if (tmpSquare.GetComponent<Square>().IsSpawn)
+    ////////    {
+
+    ////////        //ExpandMoves();
+
+    ////////        tmpSquare.GetComponent<Square>().IsSpawn = false;
+
+    ////////        if (Moves > expandMoves - 1)
+    ////////        {
+
+    ////////            Expand();
+
+
+    ////////            StartCoroutine(FillStop());
+
+    ////////            //expandMoves += expandMoves/2;
+    ////////            //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+    ////////            sliderFill = (float)(expandMoves - Moves) / expandMoves;
+    ////////        }
+
+
+    ////////    }
+    ////////}
 
 
     //Checks for 3 in a row
@@ -1513,8 +1569,9 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator FillStop()
     {
         yield return new WaitForSeconds(1f);
-        Moves = 0;
-        slider.fillAmount = 1;
+        //Moves = 1;
+        //fMoves = 0;
+        //slider.fillAmount = 1;
     }
 
 
@@ -1794,14 +1851,15 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    //Update moves
-    public void ExpandMoves()
-    {
-        Moves++;
-        //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-        sliderFill = (float)(expandMoves - Moves) / expandMoves;
-        StartCoroutine(SliderStop());
-    }
+    ////Update moves
+    //public void ExpandMoves()
+    //{
+    //    //Moves++;
+    //    //sliderFill = (float)(expandMoves - Moves) / expandMoves;
+
+    //    //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+    //    StartCoroutine(SliderStop());
+    //}
 
 
 
@@ -1984,7 +2042,6 @@ public class GameManager : Singleton<GameManager>
     //Game over short game
     private IEnumerator StopGameOverShort(GameObject chk=null)
     {
-       
 
         yield return new WaitForSeconds(0.4f);
         
@@ -2022,6 +2079,7 @@ public class GameManager : Singleton<GameManager>
     //Game over long game
     private IEnumerator StopGameOver()
     {
+
         int reds = 0;
         yield return new WaitForSeconds(0.4f);
         foreach (GameObject spot in spots)
@@ -2066,7 +2124,14 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver=false)
     {
-
+        if (Time.timeScale == 1 && !gameOver)
+        {
+            Time.timeScale = 0;
+        }
+        else if (Time.timeScale == 0 && !gameOver)
+            Time.timeScale = 1;
+        else if (gameOver)
+            Time.timeScale = 1;
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
         menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\nHIGHSCORE", highscores);
@@ -2134,6 +2199,7 @@ public class GameManager : Singleton<GameManager>
             button.GetComponent<Animation>().Play();
             while (contTimer > 0)
             {
+                
                 if (noMoves == false)
                     yield break;
                 
