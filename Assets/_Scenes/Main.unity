@@ -9994,6 +9994,8 @@ MonoBehaviour:
   TurnInProgress: 0
   spots: []
   spawns: []
+  turnDelay: 0.5
+  turnCoolDown: 0
   nBottom: 0
   nextScore: {fileID: 0}
   upper: {fileID: 0}
@@ -10045,12 +10047,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: rotationClick
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 06fd26927da841c43a9b883d0c2e5d59, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
   - name: swoop
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: cbcc82cdf8aa4e247b33a7b9356df99b, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
@@ -10070,7 +10072,7 @@ MonoBehaviour:
     pitch: 1
     randomPitch: 0.1
   - name: 256
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 20f9977cc0c32674689963fca7c0af9f, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1

@@ -1031,11 +1031,14 @@ public class GameManager : Singleton<GameManager>
             yield break;
         first.GetComponent<Square>().IsMerging = true;
 
-        //for float text
+
+        //for float text positioning and s core
         if (second == null)
             tmpScore = (fltScore +1)* first.GetComponent<Square>().Score;
         else
             tmpScore = (fltScore) * first.GetComponent<Square>().Score;
+
+
         //double the score
         if (first !=null && !first.GetComponent<Square>().DoublingPriority)
         {
@@ -1056,9 +1059,9 @@ public class GameManager : Singleton<GameManager>
         if (!IsPowerUp)
         {
             //========================Text floating===================================================
-            //Get some text out
 
             Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
+            //Get some text out
             if (first != null)
             {
                 GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
@@ -1068,7 +1071,17 @@ public class GameManager : Singleton<GameManager>
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
                 //if horisontal - instantiate it at 1st square pos
                 else
+                {
+                    // if horizontal AND more than 2
+                    if (fltScore > 1)
+                    {
+
+                        AudioManager.Instance.PlaySound("256");
+                        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = Color.red;
+                        textObj.transform.localScale *= 2;
+                    }
                     textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
+                }
 
                 //if not moving
                 if (first != null && !first.transform.parent.CompareTag("outer"))
@@ -1080,7 +1093,13 @@ public class GameManager : Singleton<GameManager>
             else
             {
                 GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
+                     // if horizontal AND more than 2
+                    //if (fltScore > 1)
+                    //{
 
+                    //    AudioManager.Instance.PlaySound("256");
+                    //    textObj.GetComponent<Text>().color = Color.black;
+                    //}
                 if (second != null)
                 {
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
@@ -1687,14 +1706,15 @@ public class GameManager : Singleton<GameManager>
     {
  
         int count = 0;
-        
-        yield return new WaitForSeconds(0.2f);
-        
+
+      
+
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
+            yield return new WaitForSeconds(0.2f);
             //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
-                //AudioManager.Instance.PlaySound("swoop");
-                if(tmpSquares.Count>count && tmpSquares[count] !=null)
+            //AudioManager.Instance.PlaySound("swoop");
+            if (tmpSquares.Count>count && tmpSquares[count] !=null)
                 {
                     if (tmpSquares[count].transform.parent.CompareTag("outer"))
                     {
@@ -1703,7 +1723,7 @@ public class GameManager : Singleton<GameManager>
                         thisPopObjs.Remove(rowObjs);
                         continue;
                     }
-
+                    
                     Pop(rowObjs, tmpSquares[count]);
                     tmpSquares[count].GetComponent<Square>().CheckPriority = false;
 
@@ -1734,6 +1754,7 @@ public class GameManager : Singleton<GameManager>
     //Kill all adjacent squares
     public void Pop(List<GameObject> rowObjs, GameObject tmpSquare= null)
     {
+       
         //get a private tmpSquare ref
         GameObject tmpTmpSquare = tmpSquare;
         //Keep one that has fallen
@@ -1794,7 +1815,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FurtherPops(GameObject tmpSquare)
     {
         GameObject furthertmpSquare = tmpSquare;
-
+        yield return new WaitForSeconds(0.2f);
         //if something below -> move on
         if (tmpSquare.transform.GetSiblingIndex() > 0)
         {
@@ -1818,7 +1839,7 @@ public class GameManager : Singleton<GameManager>
         //else if (tmpSquare.GetComponent<Square>().Further)
         //    checkObjs.Enqueue(tmpSquare);
 
-        yield return new WaitForSeconds(0.2f);
+       
             if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
             {
                 tmpSquare.GetComponent<Square>().Further = true;
@@ -2139,7 +2160,7 @@ public class GameManager : Singleton<GameManager>
         else if (Time.timeScale == 0 && !gameOver)
             Time.timeScale = 1;
         else if (gameOver)
-            Time.timeScale = 1;
+            Time.timeScale = 0;
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
         menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\nHIGHSCORE", highscores);
