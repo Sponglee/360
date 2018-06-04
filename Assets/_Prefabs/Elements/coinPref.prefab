@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particle: {fileID: 0}
-  turnDelay: 4
+  turnDelay: 1
 --- !u!114 &114617367854865642
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -144,7 +144,11 @@ public class GameManager : Singleton<GameManager>
 
     //spawn cooldown
     private float coolDown;
-    private float turnTimer;
+
+    //for turn
+    public float turnDelay=0.5f;
+    public float turnCoolDown;
+
 
     // number of objects
     public int nBottom;
@@ -207,7 +211,7 @@ public class GameManager : Singleton<GameManager>
 
     public bool MergeInProgress = false;
     public bool RotationProgress = false;
-    public float rotationDuration = 0.2f;
+    public float rotationDuration = 0.1f;
     private bool noMoves=false;
 
     //for ui check
@@ -481,28 +485,28 @@ public class GameManager : Singleton<GameManager>
 
 
     //Time EXPAND
-    //private void FixedUpdate()
-    //{
-    //    fMoves += 0.01f;
+    private void FixedUpdate()
+    {
+        fMoves += 0.01f;
+        turnCoolDown -= Time.deltaTime;
+        //while (currentTime <= timeOfTravel)
+        //{
+        sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+        currentTime += Time.deltaTime;
+        normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+        slider.fillAmount = sliderFill;
+        //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
-    //    //while (currentTime <= timeOfTravel)
-    //    //{
-    //        sliderFill = (float)(expandMoves - fMoves) / expandMoves;
-    //        currentTime += Time.deltaTime;
-    //        normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-    //        slider.fillAmount = sliderFill;
-    //        //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
-
-    //    //}
+        //}
 
 
-    //    if (fMoves > expandMoves)
-    //    {
-            
-    //        fMoves = 0;
-    //        ResetExpand();
-    //    }
-    //}
+        if (fMoves > expandMoves)
+        {
+
+            fMoves = 0;
+            ResetExpand();
+        }
+    }
 
     void Update()
     {
@@ -716,28 +720,29 @@ public class GameManager : Singleton<GameManager>
 
 
         //TURN Launch checkrows
-        if (checkObjs.Count > 0 && !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress)
+        if (checkObjs.Count > 0  && turnCoolDown < 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
         {
+            turnCoolDown = turnDelay;
             turnCheckObjs = checkObjs;
             checkObjs = new Queue<GameObject>();
             //Debug.Log("Move count " + checkObjs.Count + "( " + turnCheckObjs.Count + ")");
             //To make it check once
             TurnInProgress = true;
-            turnTimer = Time.deltaTime + 3f;
+            //turnDelay = Time.deltaTime + 3f;
             StartCoroutine(Turn());
         }
-        else if (checkObjs.Count > 0 && TurnInProgress)
-        {
+        //else if (checkObjs.Count > 0 && TurnInProgress)
+        //{
 
-            if (Time.deltaTime > turnTimer)
-            {
-                //Debug.Log("NYETNYETNYET");
-                //checkObjs.Clear();
-                TurnInProgress = false;
-                FurtherProgress = false;
-                MergeInProgress = false;
-            }
-        }
+        //    if (Time.deltaTime > turnTimer)
+        //    {
+        //        //Debug.Log("NYETNYETNYET");
+        //        //checkObjs.Clear();
+        //        TurnInProgress = false;
+        //        FurtherProgress = false;
+        //        MergeInProgress = false;
+        //    }
+        //}
 
     }
 

@@ -7673,7 +7673,7 @@ MonoBehaviour:
   ThemeStyles:
   - wheelPref: {fileID: 1222991058251880, guid: 350cf70835279b54cb75924a3987584b,
       type: 2}
-    squarePref: {fileID: 1379266986706278, guid: 985b44f08987d1b47ba31e4e9a15288e,
+    squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
       type: 2}
     spotPref: {fileID: 1679439421920422, guid: 055f7c54f7ecbe148b7a8b0d4b93abd8, type: 2}
     gridPref: {fileID: 1679439421920422, guid: 784c28be4a463e74cb0a5b33be5b04c1, type: 2}
@@ -7690,7 +7690,7 @@ MonoBehaviour:
     redPref:
       serializedVersion: 2
       rgba: 4278650761
-    fontPref: {fileID: 0}
+    fontPref: {fileID: 12800000, guid: 94b96e525903257439cf91bd14373da3, type: 3}
     uiPref: {fileID: 1757548442489750, guid: 9e16b151b0df754438f02b484df5cedf, type: 2}
     menuPref:
       serializedVersion: 2
