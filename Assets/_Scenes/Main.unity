@@ -9947,9 +9947,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb384111f044bef4eb208245acf4c866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPref: {fileID: 1859494013673282, guid: 0b27606751fc54146b5e8975a058f2f5,
-    type: 2}
-  centerAnim: {fileID: 0}
+  drillPref: {fileID: 1891680571949018, guid: 8176d02f2bca7f7489bce4f7638f2dd7, type: 2}
+  bombPref: {fileID: 1713321670649478, guid: 36f08b2ff4cb995439287dd76fb4dfd4, type: 2}
+  hammerPref: {fileID: 1062401853458444, guid: 59237d89e4e180a4584fdc96fadff387, type: 2}
+  swoopPref: {fileID: 1489942528371122, guid: 4b3a3df59e0c4f74db931d20aadf4d83, type: 2}
+  pizzazPref: {fileID: 1969572029437134, guid: ab35bec7923ceb6448f12c3487eb3501, type: 2}
   leRed:
     serializedVersion: 2
     rgba: 4278650761
@@ -9972,7 +9974,7 @@ MonoBehaviour:
   backPrefab: {fileID: 0}
   styleHolderPrefab: {fileID: 0}
   fontPrefab: {fileID: 0}
-  coinPrefab: {fileID: 1523403489220356, guid: a1be45c366e71e54d9781d01c32f7e0e, type: 2}
+  coinPrefab: {fileID: 1571523138882710, guid: 57046ce4ef664f24bbe17596cf69f7e7, type: 2}
   line: {fileID: 1287057630}
   uiSquarePrefab: {fileID: 0}
   GameOverBool: 0
@@ -10003,7 +10005,7 @@ MonoBehaviour:
   slider: {fileID: 0}
   sliderFill: 0
   nextRound: {fileID: 0}
-  FltText: {fileID: 0}
+  FltText: {fileID: 1001251165192770, guid: 95b23eec89192724e8d83d052331a0bd, type: 2}
   coinFltText: {fileID: 1001251165192770, guid: e45a474fe0dbf784db6259e1dbabfe82,
     type: 2}
   scores: 0

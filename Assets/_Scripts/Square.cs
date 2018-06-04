@@ -518,14 +518,14 @@ public class Square : MonoBehaviour
 
         if (gameObject != null && gameObject.CompareTag("drill"))
         {
-            Instantiate(GameManager.Instance.explosionPref, other.transform.position, Quaternion.identity);
+            Instantiate(GameManager.Instance.drillPref, other.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.2f);
 
         }
         if (gameObject != null && other.CompareTag("bomb"))
         {
            
-            Instantiate(GameManager.Instance.explosionPref, other.transform.position, Quaternion.identity);
+            Instantiate(GameManager.Instance.bombPref, other.transform.position, Quaternion.identity);
             
             yield return new WaitForSeconds(0.2f);
 
@@ -554,13 +554,13 @@ public class Square : MonoBehaviour
             if (GameManager.Instance.spots[firstIndex].transform.childCount > squareIndex)
             {
                 GameObject firstTmp = GameManager.Instance.spots[firstIndex].transform.GetChild(squareIndex).gameObject;
-                Instantiate(GameManager.Instance.explosionPref, firstTmp.transform.position, Quaternion.identity);
+                Instantiate(GameManager.Instance.bombPref, firstTmp.transform.position, Quaternion.identity);
                 Destroy(firstTmp);
             }
             if (GameManager.Instance.spots[nextIndex].transform.childCount > squareIndex)
             {
                 GameObject nextTmp = GameManager.Instance.spots[nextIndex].transform.GetChild(squareIndex).gameObject;
-                Instantiate(GameManager.Instance.explosionPref, nextTmp.transform.position, Quaternion.identity);
+                Instantiate(GameManager.Instance.bombPref, nextTmp.transform.position, Quaternion.identity);
                 Destroy(nextTmp);
             }
 

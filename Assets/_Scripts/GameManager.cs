@@ -9,10 +9,11 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 
 {
-    public GameObject explosionPref;
-
-    public Animator centerAnim;
-
+    public GameObject drillPref;
+    public GameObject bombPref;
+    public GameObject hammerPref;
+    public GameObject swoopPref;
+    public GameObject pizzazPref;
     
     public Color32 leRed;
     public Color32 leGreen;
@@ -535,7 +536,7 @@ public class GameManager : Singleton<GameManager>
             { 
                 //Get rid of selected square
                 SelectPowerUp = false;
-                Instantiate(explosionPref, results[0].gameObject.transform.position, Quaternion.identity);
+                Instantiate(hammerPref, results[0].gameObject.transform.position, Quaternion.identity);
                 foreach (RaycastResult result in results)
                 {
                     //Check if parent is square too
@@ -561,7 +562,7 @@ public class GameManager : Singleton<GameManager>
 
 
                 //Grab ZE COIN
-                Instantiate(explosionPref, results[0].gameObject.transform.position, Quaternion.identity);
+                Instantiate(coinPrefab, results[0].gameObject.transform.position, Quaternion.identity);
                 GameObject txtObj = Instantiate(coinFltText, results[0].gameObject.transform.position, Quaternion.identity);
                
                 txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
@@ -1075,9 +1076,10 @@ public class GameManager : Singleton<GameManager>
                     // if horizontal AND more than 2
                     if (fltScore > 1)
                     {
+                        Instantiate(pizzazPref, first.transform.position, Quaternion.identity);
 
                         AudioManager.Instance.PlaySound("256");
-                        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = Color.red;
+                        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = Color.cyan;
                         textObj.transform.localScale *= 2;
                     }
                     textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
@@ -1128,7 +1130,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-
+        Instantiate(swoopPref, first.transform.position, Quaternion.identity);
         Destroy(second);
         //if (first == null)
         //{
@@ -1790,7 +1792,7 @@ public class GameManager : Singleton<GameManager>
 
                         tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
                         tmprowObj.GetComponent<Collider2D>().isTrigger = true;
-
+                        
                         FurtherProgress = true;
                         //furtherScore = tmprowObj.GetComponent<Square>().Score;
                         //for avoiding double collapses
@@ -1817,7 +1819,7 @@ public class GameManager : Singleton<GameManager>
         GameObject furthertmpSquare = tmpSquare;
         yield return new WaitForSeconds(0.2f);
         //if something below -> move on
-        if (tmpSquare.transform.GetSiblingIndex() > 0)
+        if (tmpSquare != null && tmpSquare.transform.GetSiblingIndex() > 0)
         {
             //if same score below
             if (tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
