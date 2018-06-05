@@ -488,25 +488,29 @@ public class GameManager : Singleton<GameManager>
     //Time EXPAND
     private void FixedUpdate()
     {
-        fMoves += 0.01f;
-        turnCoolDown -= Time.deltaTime;
-        //while (currentTime <= timeOfTravel)
-        //{
-        sliderFill = (float)(expandMoves - fMoves) / expandMoves;
-        currentTime += Time.deltaTime;
-        normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-        slider.fillAmount = sliderFill;
-        //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
-
-        //}
-
-
-        if (fMoves > expandMoves)
+        if (!MenuUp)
         {
+            fMoves += 0.01f;
+            turnCoolDown -= Time.deltaTime;
+            //while (currentTime <= timeOfTravel)
+            //{
+            sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+            currentTime += Time.deltaTime;
+            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+            slider.fillAmount = sliderFill;
+            //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
-            fMoves = 0;
-            ResetExpand();
+            //}
+            if (fMoves > expandMoves)
+            {
+
+                fMoves = 0;
+                ResetExpand();
+            }
         }
+
+
+       
     }
 
     void Update()
@@ -563,6 +567,7 @@ public class GameManager : Singleton<GameManager>
 
                 //Grab ZE COIN
                 Instantiate(coinPrefab, results[0].gameObject.transform.position, Quaternion.identity);
+
                 GameObject txtObj = Instantiate(coinFltText, results[0].gameObject.transform.position, Quaternion.identity);
                
                 txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
@@ -1067,7 +1072,7 @@ public class GameManager : Singleton<GameManager>
             {
                 GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
 
-                //instantiate it at 2nd square pos
+                //if vertical - at second
                 if (second != null)
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
                 //if horisontal - instantiate it at 1st square pos
@@ -1076,13 +1081,20 @@ public class GameManager : Singleton<GameManager>
                     // if horizontal AND more than 2
                     if (fltScore > 1)
                     {
-                        Instantiate(pizzazPref, first.transform.position, Quaternion.identity);
+                        GameObject pizzaz = Instantiate(pizzazPref, first.transform.position, Quaternion.identity);
 
                         AudioManager.Instance.PlaySound("256");
+
+
+                        //move to pizzaz location
+                        textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition - fltOffset);
+
                         textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().color = Color.cyan;
                         textObj.transform.localScale *= 2;
                     }
-                    textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
+                    //if just 2
+                    else
+                        textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
                 }
 
                 //if not moving
@@ -1095,13 +1107,7 @@ public class GameManager : Singleton<GameManager>
             else
             {
                 GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
-                     // if horizontal AND more than 2
-                    //if (fltScore > 1)
-                    //{
-
-                    //    AudioManager.Instance.PlaySound("256");
-                    //    textObj.GetComponent<Text>().color = Color.black;
-                    //}
+                   
                 if (second != null)
                 {
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
@@ -2155,14 +2161,15 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver=false)
     {
-        if (Time.timeScale == 1 && !gameOver)
-        {
-            Time.timeScale = 0;
-        }
-        else if (Time.timeScale == 0 && !gameOver)
-            Time.timeScale = 1;
-        else if (gameOver)
-            Time.timeScale = 0;
+        //if (Time.timeScale == 1 && !gameOver)
+        //{
+        //    Time.timeScale = 0;
+        //}
+        //else if (Time.timeScale == 0 && !gameOver)
+        //    Time.timeScale = 1;
+        //else if (gameOver)
+        //    Time.timeScale = 0;
+
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
         menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\nHIGHSCORE", highscores);

@@ -136,7 +136,7 @@ public class FunctionHandler : MonoBehaviour {
             {
                 currentTime += Time.deltaTime;
                 normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-                Debug.Log("runnin");
+                Debug.Log("runnin +  " + timeOfTravel + "  :  " + currentTime);
                 tmpMenu.transform.position = Vector3.Lerp(tmpMenu.transform.position, tmpMenu.transform.parent.position, normalizedValue);
                 yield return null;  
             }
@@ -212,7 +212,7 @@ public class FunctionHandler : MonoBehaviour {
         {
             if (fadeGroup.alpha >= 1)
             {
-                //SceneManager.LoadScene(String.Format("{0}",scene));
+                //SceneManager.LoadScene(String.Format("{0}", scene));
             }
         }
     }
