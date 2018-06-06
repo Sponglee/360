@@ -2863,7 +2863,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 482354142}
-        m_MethodName: NewGame
+        m_MethodName: Restart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3530,7 +3530,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -1486.7142
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -3540,7 +3540,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 228.94284
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -4274,7 +4274,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -916.0285
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -4284,7 +4284,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 228.94284
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -6164,7 +6164,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -1201.3713
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
@@ -6174,7 +6174,7 @@ Prefab:
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 228.94284
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224432013254611738, guid: adb3f656090f6ab498ebff76e9070af7,
         type: 2}

@@ -2360,13 +2360,20 @@ public class GameManager : Singleton<GameManager>
        
         currentBoard = serializer.LoadGameBinary();
 
-        foreach(Piece p in currentBoard.pieces)
+        if (currentBoard.pieces != null)
         {
-            Debug.Log(p.score);
+            foreach (Piece p in currentBoard.pieces)
+            {
+                Debug.Log(p.score);
+            }
         }
+        
     }
 
-
+    public void NewGame()
+    {
+        serializer.CreateNewGame();
+    }
 
 
     public void TweakAngle(string value)

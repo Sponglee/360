@@ -93,7 +93,7 @@ public class FunctionHandler : MonoBehaviour {
     //Restarts game
     public void MenuRestart()
     {
-        NewGame();
+        Restart();
     }
 
     //Quit
@@ -175,7 +175,7 @@ public class FunctionHandler : MonoBehaviour {
 
     }
 
-    public void NewGame()
+    public void Restart()
     {
         FadeOut();
         SceneManager.LoadScene("main");

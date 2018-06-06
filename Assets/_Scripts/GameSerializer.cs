@@ -105,6 +105,18 @@ public class GameSerializer
        
     }
 
-    
+    public void CreateNewGame()
+    {
+        string filePath = GetSaveLocationBinary();
+
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+
+            Debug.Log("DELETED");
+        }
+
+    }
 
 }
