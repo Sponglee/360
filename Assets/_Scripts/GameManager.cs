@@ -2243,7 +2243,7 @@ public class GameManager : Singleton<GameManager>
     //Restarts game
     public void Restart()
     {
-       
+        serializer.CreateNewGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         OpenMenu();

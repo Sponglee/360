@@ -185,7 +185,8 @@ public class FunctionHandler : MonoBehaviour {
 
     public void MainMenu()
     {
-        GameManager.Instance.SaveGame();
+        if(GameManager.Instance != null)
+            GameManager.Instance.SaveGame();
 
         SceneManager.LoadScene("title");
         //SceneManager.UnloadScene("main");
@@ -229,6 +230,7 @@ public class FunctionHandler : MonoBehaviour {
     public void DeleteAll()
     {
         PlayerPrefs.DeleteAll();
+        
     }
     
     public void MoreCoins()
