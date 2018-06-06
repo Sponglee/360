@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Advertisements;
+
+//using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,6 +29,10 @@ public class GameManager : Singleton<GameManager>
     public GameObject uiPrefab;
     [SerializeField]
     public GameObject menu;
+
+    //Keep track of spawns for save
+    Board currentBoard;
+    public GameSerializer serializer;
 
 
     [SerializeField]
@@ -361,7 +369,9 @@ public class GameManager : Singleton<GameManager>
     private void ApplyStyleFromHolder(int index)
     {
         nextScore.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
-        nextRound.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor; ;
+        //nextRound.color = SquareStyleHolder.Instance.SquareStyles[index].SquareColor; 
+
+
         //nextScore.GetComponent<Outline>().effectColor = SquareStyleHolder.Instance.SquareStyles[index].SquareColor;
     }
     //Gets Values from style script for each square
@@ -413,6 +423,17 @@ public class GameManager : Singleton<GameManager>
         //===========================================Initialize theme==============================================================
         InitializeTheme();
         //==========================================================================================================================
+
+
+        //for saving board of scores
+
+
+
+        //currentBoard = new Board();
+        //currentBoard.pieces = new List<Piece>();
+
+        serializer = new GameSerializer();
+
 
         turnCheckObjs = new Queue<GameObject>();
         checkObjs = new Queue<GameObject>();
@@ -907,6 +928,8 @@ public class GameManager : Singleton<GameManager>
         nextScore.text = next_score.ToString();
         ApplyStyle(next_score);
 
+        
+        
     }
 
 
@@ -1715,11 +1738,11 @@ public class GameManager : Singleton<GameManager>
  
         int count = 0;
 
-      
+        yield return new WaitForSeconds(0.2f);
 
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-            yield return new WaitForSeconds(0.2f);
+           
             //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
             //AudioManager.Instance.PlaySound("swoop");
             if (tmpSquares.Count>count && tmpSquares[count] !=null)
@@ -1740,7 +1763,7 @@ public class GameManager : Singleton<GameManager>
                     StartCoroutine(FurtherPops(tmpSquares[count]));
                     count++;
                 }
-                        
+            //yield return new WaitForSeconds(0.2f);
         }
 
 
@@ -1749,7 +1772,10 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < popObjs.Count; i++)
         {
             if (popObjs[i].Count == 0)
+            {
+
                 popObjs.RemoveAt(i);
+            }
         }
         for (int i = 0; i < tmpSquares.Count; i++)
         {
@@ -2018,6 +2044,10 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log("SPAWN");
         //spawn a square at random spot with random score
         randSpawn = Instantiate(squarePrefab, spawns[rng].transform.position, Quaternion.identity);
+
+
+
+
         randSpawn.GetComponent<Square>().ExpandSpawn = true;
         randSpawn.GetComponent<Square>().Score = randScore;
         randSpawn.transform.SetParent(spots[rng].transform);
@@ -2036,6 +2066,9 @@ public class GameManager : Singleton<GameManager>
             randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = leRed;
         }
     
+
+        
+
         randSpawns.Add(randSpawn);
     }
   
@@ -2290,6 +2323,52 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+   
+
+    public void SaveGame()
+    {
+        currentBoard = new Board();
+        currentBoard.pieces = new List<Piece>();
+
+        for (int i = 0; i < wheel.transform.GetChild(0).childCount; i++)
+        {
+            for (int j = 0; j < wheel.transform.GetChild(0).GetChild(i).childCount; j++)
+            {
+                Piece spawnPiece = new Piece();
+                GameObject tmp = wheel.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+
+                spawnPiece.score = tmp.GetComponent<Square>().Score;
+                spawnPiece.position.x = int.Parse(tmp.transform.parent.name);
+                spawnPiece.position.y = tmp.transform.GetSiblingIndex();
+
+                currentBoard.pieces.Add(spawnPiece);
+                
+            }
+
+        }
+
+
+     
+        serializer.SaveGameBinary(currentBoard);
+
+      
+
+    }
+
+    public void LoadGame()
+    {
+       
+        currentBoard = serializer.LoadGameBinary();
+
+        foreach(Piece p in currentBoard.pieces)
+        {
+            Debug.Log(p.score);
+        }
+    }
+
+
+
+
     public void TweakAngle(string value)
     {
         spawn__Angle = float.Parse(value);
@@ -2314,3 +2393,6 @@ public class GameManager : Singleton<GameManager>
 
 
 }
+
+
+

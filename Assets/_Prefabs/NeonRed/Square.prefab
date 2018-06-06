@@ -197,7 +197,7 @@ MonoBehaviour:
   touched: 0
   isMerging: 0
   SquareText: {fileID: 114551330194805478}
-  SquareColor: {fileID: 212872592568414828}
+  SquareColor: {fileID: 0}
   mergeCheck: 0
 --- !u!114 &114393342747085370
 MonoBehaviour:
