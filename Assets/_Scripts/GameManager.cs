@@ -61,7 +61,9 @@ public class GameManager : Singleton<GameManager>
     //for random expand spawns
     GameObject randSpawn = null;
 
+    //check if it's game over
     public bool GameOverBool = false;
+
 
     // PowerUP cs
     public bool SelectPowerUp = false;
@@ -338,6 +340,7 @@ public class GameManager : Singleton<GameManager>
     private void Awake()
     {
         themeIndex = PlayerPrefs.GetInt("Theme",0);
+
     }
 
 
@@ -362,7 +365,7 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(styleHolderPrefab);
 
-     
+   
     }
 
     // Helps ApplyStyle to grab numbers/color
@@ -484,6 +487,11 @@ public class GameManager : Singleton<GameManager>
         //for first spwan of 2
         tmpRands = randSpawnCount;
         menu.SetActive(false);
+
+
+
+       
+            LoadGame();
     }
 
 
@@ -2194,14 +2202,8 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver=false)
     {
-        //if (Time.timeScale == 1 && !gameOver)
-        //{
-        //    Time.timeScale = 0;
-        //}
-        //else if (Time.timeScale == 0 && !gameOver)
-        //    Time.timeScale = 1;
-        //else if (gameOver)
-        //    Time.timeScale = 0;
+       
+       
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
@@ -2226,12 +2228,7 @@ public class GameManager : Singleton<GameManager>
             menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
-
-
-
-            
         }
-        
         //If just Open menu mid game
         else 
         {
@@ -2246,6 +2243,7 @@ public class GameManager : Singleton<GameManager>
     //Restarts game
     public void Restart()
     {
+       
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         OpenMenu();
@@ -2257,6 +2255,7 @@ public class GameManager : Singleton<GameManager>
     //Quit
     public void Quit()
     {
+        SaveGame();
         Application.Quit();
     }
 
@@ -2329,6 +2328,10 @@ public class GameManager : Singleton<GameManager>
     {
         currentBoard = new Board();
         currentBoard.pieces = new List<Piece>();
+        currentBoard.highscore = new int();
+
+        currentBoard.highscore = scores;
+       
 
         for (int i = 0; i < wheel.transform.GetChild(0).childCount; i++)
         {
@@ -2347,9 +2350,12 @@ public class GameManager : Singleton<GameManager>
 
         }
 
+        if(!gameOverInProgress)
+        {
+            serializer.SaveGameBinary(currentBoard);
 
+        }
      
-        serializer.SaveGameBinary(currentBoard);
 
       
 
@@ -2360,12 +2366,40 @@ public class GameManager : Singleton<GameManager>
        
         currentBoard = serializer.LoadGameBinary();
 
+        
+        //Update last score
+        scores = currentBoard.highscore;
+        scoreText.text = scores.ToString();
+
         if (currentBoard.pieces != null)
         {
-            foreach (Piece p in currentBoard.pieces)
+            foreach(Piece p in currentBoard.pieces)
             {
-                Debug.Log(p.score);
+                int lScore = p.score;
+                int lSpot = (int)p.position.x;
+                int lIndex = (int)p.position.y;
+
+                Debug.Log(p.position);
+                GameObject lSpawn = Instantiate(squarePrefab, spawns[lSpot].transform.GetChild(lIndex).position, Quaternion.identity);
+
+
+
+
+                lSpawn.GetComponent<Square>().ExpandSpawn = true;
+                lSpawn.GetComponent<Square>().Score = lScore;
+                lSpawn.transform.SetParent(spots[lSpot].transform);
+                lSpawn.name = lSpawn.transform.GetSiblingIndex().ToString();
+
+                //Rotate spawns towards center
+                Vector3 diff = lSpawn.transform.parent.position - lSpawn.transform.position;
+                diff.Normalize();
+
+                float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+                lSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
+
+
             }
+
         }
         
     }

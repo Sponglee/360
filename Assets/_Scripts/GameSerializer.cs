@@ -26,12 +26,14 @@ public class GameSerializer
                 {
                     //READ THE HEAD
                     string head = new string(r.ReadChars(4));
+                    
                     if (!head.Equals("BASE"))
                     {
                         Debug.Log("NEW GAME");
                         GameManager.Instance.Restart();
                         return null;
                     }
+                    int highscore = r.ReadInt32();
                     int numRecords = r.ReadInt32();
 
                     Board board = new Board();
@@ -50,6 +52,8 @@ public class GameSerializer
                         board.pieces.Add(piece);
 
                     }
+                    //Return highscore
+                    board.highscore = highscore;
                     return board;
                 }
             }
@@ -86,8 +90,11 @@ public class GameSerializer
             using (BinaryWriter w = new BinaryWriter(s))
             {
                 //Write out a header  (8 bytes header)
+                // highscore aswell
                 w.Write("BASE".ToCharArray());
+                w.Write(board.highscore);
                 w.Write(board.pieces.Count);
+                
 
                 //Body  (each record is 12 bytes long)
                 //  Score (integer) 4

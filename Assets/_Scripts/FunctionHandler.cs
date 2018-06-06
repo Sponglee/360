@@ -177,6 +177,7 @@ public class FunctionHandler : MonoBehaviour {
 
     public void Restart()
     {
+       
         FadeOut();
         SceneManager.LoadScene("main");
        // SceneManager.UnloadScene("title");
@@ -184,6 +185,8 @@ public class FunctionHandler : MonoBehaviour {
 
     public void MainMenu()
     {
+        GameManager.Instance.SaveGame();
+
         SceneManager.LoadScene("title");
         //SceneManager.UnloadScene("main");
     }
