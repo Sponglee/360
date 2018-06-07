@@ -1242,45 +1242,34 @@ public class GameManager : Singleton<GameManager>
                 //Check what's next
                 GameObject nextObj = turnCheckObjs.Peek();
 
+
                 ////check distance between (including passing through 0)
-
-                //if (tmpObj != null && nextObj !=null)
-                //{
-                //    //tmpDist = Mathf.Abs(int.Parse(tmpObj.transform.parent.name) - int.Parse(nextObj.transform.parent.name));
-                //    //if (Mathf.Abs(nBottom - tmpDist) <= tmpDist)
-                //    //    tmpDist = Mathf.Abs(nBottom - tmpDist);
-
+                if (tmpObj != null && nextObj != null)
+                {
+                    //tmpDist = Mathf.Abs(int.Parse(tmpObj.transform.parent.name) - int.Parse(nextObj.transform.parent.name));
+                    //if (Mathf.Abs(nBottom - tmpDist) <= tmpDist)
+                    //    tmpDist = Mathf.Abs(nBottom - tmpDist);
 
 
-                //    //if next checkObj is same score and closer than 4 = ignore this tmpObj, grab next one
-                //    if (/*tmpDist <= 5 &&*/ tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
-                //        && tmpObj.transform.GetSiblingIndex() >= 0
-                //        && nextObj.GetComponent<Square>().Further)
-                //    {
-                //        if (tmpObj != null /*&& tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex()-1) != null*/)
-                //        {
-                //            if (!tmpObj.transform.parent.CompareTag("outer"))
-                //            {
-                //                Debug.Log("A CONTINUE");
-                //                //if (tmpObj.transform.parent.GetChild(tmpObj.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpObj.GetComponent<Square>().Score)
-                //                    //tmpObj.GetComponent<Square>().CheckCoolDown = true;
-                //                    continue;
-                //            }
-                //        }
-                            
-                           
-                //    }
-                    
-                //}
+
+                    //if next checkObj is furthering - let it be first (continue to next)
+                    if (tmpObj.GetComponent<Square>().Score == turnCheckObjs.Peek().GetComponent<Square>().Score
+                       && nextObj.GetComponent<Square>().Further)
+                    {
+                        Debug.Log("FURTHER ALERT");
+                                continue;
+                    }
+
+                }
                 //else
                 //{
                 //    Debug.Log("B CONTINUE");
                 //    continue;
                 //}
 
-              
 
-               
+
+
             }
 
             //if square reached 256 - ignore
@@ -1672,7 +1661,7 @@ public class GameManager : Singleton<GameManager>
         else
             nextIndex = index + 1;
 
-       
+        Debug.Log(" I : " + index + " n " + nextIndex + " F " + firstIndex);
 
         if (spots[index].transform.childCount > squareIndex + 1 )
         {
@@ -1906,7 +1895,7 @@ public class GameManager : Singleton<GameManager>
                
 
 
-            if (tmpSquare !=null)
+            if (tmpSquare != null && !tmpSquare.transform.parent.CompareTag("outer"))
                 CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
             
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
