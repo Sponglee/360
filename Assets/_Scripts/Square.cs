@@ -5,7 +5,21 @@ using UnityEngine.UI;
 
 public class Square : MonoBehaviour
 {
-   
+    //index for multiple rowObjs
+    private int rowObjIndex;
+    public int RowObjIndex
+    {
+        get
+        {
+            return rowObjIndex;
+        }
+
+        set
+        {
+            rowObjIndex = value;
+        }
+    }
+
 
     [SerializeField]
     private float speed = 10f;
@@ -225,7 +239,7 @@ public class Square : MonoBehaviour
         }
     }
 
-   
+    
 
     Vector2 curPos;
     Vector2 lastPos;
@@ -285,8 +299,9 @@ public class Square : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //Default index for turn
+        rowObjIndex = 99;
         //Apply theme
-
         SquareText.font = GameManager.Instance.fontPrefab;
 
         checkTimer = 4f;

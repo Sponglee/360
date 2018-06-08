@@ -177,7 +177,10 @@ public class FunctionHandler : MonoBehaviour {
 
     public void Restart()
     {
-       
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.NewGame();
+        }
         FadeOut();
         SceneManager.LoadScene("main");
        // SceneManager.UnloadScene("title");
@@ -186,7 +189,12 @@ public class FunctionHandler : MonoBehaviour {
     public void MainMenu()
     {
         if(GameManager.Instance != null)
-            GameManager.Instance.SaveGame();
+        {
+            if (!GameManager.Instance.GameOverBool)
+                GameManager.Instance.SaveGame();
+            else
+                GameManager.Instance.NewGame();
+        }
 
         SceneManager.LoadScene("title");
         //SceneManager.UnloadScene("main");
