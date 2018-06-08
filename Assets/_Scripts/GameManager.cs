@@ -759,6 +759,7 @@ public class GameManager : Singleton<GameManager>
         //TURN Launch checkrows
         if (checkObjs.Count > 0  && turnCoolDown < 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
         {
+           
             turnCoolDown = turnDelay;
             turnCheckObjs = checkObjs;
 
@@ -1228,8 +1229,9 @@ public class GameManager : Singleton<GameManager>
     //Checkrow and pop coroutine
     public IEnumerator Turn()
     {
+        checkRowIndex = 0;
         // List<List<GameObject>> tmppopObjs = popObjs;
-        
+        Debug.Log(" TURN " + checkRowIndex);
         //if there's something in the queue
         while (turnCheckObjs.Count >0)
         {
@@ -1259,7 +1261,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         //If it's close enough and same score and nextobj is further and same index
                         if (tmpDist <= 3 && tmpObj.GetComponent<Square>().Score == chObject.GetComponent<Square>().Score
-                      && chObject.GetComponent<Square>().Further && tmpObj.GetComponent<Square>().RowObjIndex == chObject.GetComponent<Square>().RowObjIndex)
+                      && chObject.GetComponent<Square>().Further /*&& tmpObj.GetComponent<Square>().RowObjIndex == chObject.GetComponent<Square>().RowObjIndex*/)
                         {
                            tmpObj = chObject;
                            continue;
@@ -1298,7 +1300,7 @@ public class GameManager : Singleton<GameManager>
             //reset 
             TurnInProgress = false;
             //Reset checkRowIndex for next Turn;
-            checkRowIndex = 0;
+            checkRowIndex++;
         }
        
     }
@@ -1627,7 +1629,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        checkRowIndex++;
+       
         CheckInProgress = false;
     }
 
@@ -1703,7 +1705,7 @@ public class GameManager : Singleton<GameManager>
                                 && !spots[firstIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
 
-                        Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
+                        //Debug.Log("left " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
 
                         //checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         //spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
@@ -1720,7 +1722,7 @@ public class GameManager : Singleton<GameManager>
                             && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().IsMerging
                                 && !spots[nextIndex].transform.GetChild(i).GetComponent<Square>().Further)
                     {
-                        Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
+                        //Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
 
                         checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         //spots[index].transform.GetChild(i).localPosition += new Vector3( 0f, 0.3f, 0f);
@@ -1883,7 +1885,7 @@ public class GameManager : Singleton<GameManager>
             if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
             {
                 tmpSquare.GetComponent<Square>().Further = true;
-                Debug.Log("FURTHER");
+                //Debug.Log("FURTHER");
                 if (tmpSquare.transform.GetSiblingIndex()>0)
                 {
                     //if one below is same score - merge
@@ -2379,7 +2381,7 @@ public class GameManager : Singleton<GameManager>
                 int lSpot = (int)p.position.x;
                 int lIndex = (int)p.position.y;
 
-                Debug.Log(p.position);
+                //Debug.Log(p.position);
                 GameObject lSpawn = Instantiate(squarePrefab, spawns[lSpot].transform.GetChild(lIndex).position, Quaternion.identity);
 
 

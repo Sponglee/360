@@ -493,20 +493,20 @@ public class Square : MonoBehaviour
             if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() 
             && !gameObject.transform.parent.CompareTag("outer"))
             {
-            Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
+            //Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
             if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                Debug.Log("RIGHT");
+                //Debug.Log("RIGHT");
                 //Check again
                 return true;
                 }
             }
              if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
             {
-            Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
+            //Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
             if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
                 {
-                Debug.Log("LEFT");
+                //Debug.Log("LEFT");
                 //Check again
                 return true;
                 }
@@ -642,12 +642,12 @@ public class Square : MonoBehaviour
                 {
                  
                     GameManager.Instance.checkObjs.Enqueue(gameObject);
-                    Debug.Log("DA " + this.score);
+                    //Debug.Log("DA " + this.score);
                 }
                 else
                 {
                     GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
-                    Debug.Log("above spot " + this.Score);
+                    //Debug.Log("above spot " + this.Score);
                     if (this.IsSpawn)
                     {
                         //GameManager.Instance.ExpandMoves();
@@ -698,13 +698,13 @@ public class Square : MonoBehaviour
                     if (CheckLeftRight())
                     {
                         GameManager.Instance.checkObjs.Enqueue(gameObject);
-                        Debug.Log("DA " + this.score);
+                        //Debug.Log("DA " + this.score);
 
                     }
                     else
                     {
                         GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
-                        Debug.Log("above square " + this.score);
+                        //Debug.Log("above square " + this.score);
                         if (this.IsSpawn)
                         {
                             //GameManager.Instance.ExpandMoves();
