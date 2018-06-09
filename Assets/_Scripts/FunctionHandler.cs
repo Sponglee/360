@@ -88,7 +88,12 @@ public class FunctionHandler : MonoBehaviour {
         //InitializeTheme();
     }
 
-
+    //Watch tutorial again
+    public void TutorialAgain()
+    {
+        PlayerPrefs.SetInt("TutorialStep", 0);
+        Restart();
+    }
 
     //Restarts game
     public void MenuRestart()

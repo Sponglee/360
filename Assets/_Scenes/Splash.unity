@@ -632,7 +632,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 271
+  m_Text: 10
 --- !u!222 &1233839619
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -779,7 +779,7 @@ MonoBehaviour:
   shopCoinText: {fileID: 0}
   fullAdWatch: 10
   partAdWatch: 5
-  coins: 0
+  coins: 10
   contCost: 10
   coinText: {fileID: 1233839618}
 --- !u!224 &1626248506

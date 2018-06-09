@@ -122,5 +122,6 @@ public class TitleManager : MonoBehaviour {
         InitializeTheme();
     }
 
+   
 
 }

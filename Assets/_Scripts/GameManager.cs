@@ -493,9 +493,13 @@ public class GameManager : Singleton<GameManager>
         menu.SetActive(false);
 
 
-
+        if (tutorialManager.tutorialStep == 0)
+        {
+            LoadGame("turoialgame.dat");
+        }
+        else
+         LoadGame("threesixty.dat");
        
-            LoadGame();
     }
 
 
@@ -583,6 +587,15 @@ public class GameManager : Singleton<GameManager>
                     SquareDestroyed = true;
                 }
             }
+
+            //********************TUTORIAL*********
+            if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+            {
+          
+                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                CoinManager.Instance.Coins += 2;
+            }
+            //*****************************
         }
 
         //track 256 coin touches
@@ -2409,10 +2422,10 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public void LoadGame()
+    public void LoadGame(string fileName)
     {
        
-        currentBoard = serializer.LoadGameBinary();
+        currentBoard = serializer.LoadGameBinary(fileName);
 
         
         //Update last score
@@ -2457,6 +2470,35 @@ public class GameManager : Singleton<GameManager>
         serializer.CreateNewGame();
     }
 
+    //public void TUTORIALSAVER()
+    //{
+    //    currentBoard = new Board();
+    //    currentBoard.pieces = new List<Piece>();
+    //    currentBoard.highscore = new int();
+
+    //    currentBoard.highscore = scores;
+
+
+    //    for (int i = 0; i < wheel.transform.GetChild(0).childCount; i++)
+    //    {
+    //        for (int j = 0; j < wheel.transform.GetChild(0).GetChild(i).childCount; j++)
+    //        {
+    //            Piece spawnPiece = new Piece();
+    //            GameObject tmp = wheel.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+
+    //            spawnPiece.score = tmp.GetComponent<Square>().Score;
+    //            spawnPiece.position.x = int.Parse(tmp.transform.parent.name);
+    //            spawnPiece.position.y = tmp.transform.GetSiblingIndex();
+
+    //            currentBoard.pieces.Add(spawnPiece);
+
+    //        }
+
+    //    }
+
+      
+    //    serializer.TutorialGameBinary(currentBoard);
+    //}
 
     public void TweakAngle(string value)
     {

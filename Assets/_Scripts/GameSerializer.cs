@@ -7,17 +7,17 @@ using UnityEngine;
 [Serializable]
 public class GameSerializer
 {
-    string GetSaveLocationBinary()
+    string GetSaveLocationBinary(string fileName)
     {
         string folder = Application.persistentDataPath;
-        string file = "threesixty.dat";
+        string file = fileName;
         string fullPath = Path.Combine(folder, file);
         return fullPath;
     }
 
-    public Board LoadGameBinary()
+    public Board LoadGameBinary(string fileName)
     {
-        string filePath = GetSaveLocationBinary();
+        string filePath = GetSaveLocationBinary(fileName);
         if (File.Exists(filePath))
         {
             using (Stream s = File.OpenRead(filePath))
@@ -74,7 +74,7 @@ public class GameSerializer
       
 
 
-        string filePath = GetSaveLocationBinary();
+        string filePath = GetSaveLocationBinary("threesixty.dat");
 
 
         if (File.Exists(filePath))
@@ -114,7 +114,7 @@ public class GameSerializer
 
     public void CreateNewGame()
     {
-        string filePath = GetSaveLocationBinary();
+        string filePath = GetSaveLocationBinary("threesixty.dat");
 
 
         if (File.Exists(filePath))
@@ -126,4 +126,51 @@ public class GameSerializer
 
     }
 
+
+    //public void TutorialGameBinary(Board board)
+    //{
+
+    //    //  Filetype (4*char)
+    //    //  Number of items (integer)
+    //    //
+
+
+
+    //    string filePath = GetSaveLocationBinary("turoialgame.dat");
+
+
+    //    if (File.Exists(filePath))
+    //    {
+    //        File.Delete(filePath);
+
+    //        Debug.Log("TUTORIAL");
+    //    }
+
+
+    //    using (Stream s = File.OpenWrite(filePath))
+    //    {
+    //        using (BinaryWriter w = new BinaryWriter(s))
+    //        {
+    //            //Write out a header  (8 bytes header)
+    //            // highscore aswell
+    //            w.Write("BASE".ToCharArray());
+    //            w.Write(board.highscore);
+    //            w.Write(board.pieces.Count);
+
+
+    //            //Body  (each record is 12 bytes long)
+    //            //  Score (integer) 4
+    //            //  spot    (integer)  4
+    //            //  index   (integer)  4
+    //            foreach (Piece p in board.pieces)
+    //            {
+    //                w.Write(p.score);
+    //                w.Write(p.position.x);
+    //                w.Write(p.position.y);
+    //            }
+    //        }
+    //    }
+
+
+    //}
 }

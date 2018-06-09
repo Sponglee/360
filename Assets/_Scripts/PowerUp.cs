@@ -51,6 +51,7 @@ public class PowerUp : MonoBehaviour
     //Square power up
     public void SelectSquare()
     {
+       
         SelectionUI = true;
         GameManager.Instance.SelectPowerUp = true;  
 
@@ -78,14 +79,27 @@ public class PowerUp : MonoBehaviour
 
             switch (index)
             {
-                //BOMB
+                //DRILL
                 case 0:
                     {
                         if (GameManager.Instance.currentSpot.transform.childCount>0)
                         {
+
+                            Debug.Log("NO ROTATION");
+                            //********************TUTORIAL*********
+                            if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+                            {
+                                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                                GameManager.Instance.tutorialManager.button.SetActive(true);
+                                CoinManager.Instance.Coins += 5;
+                            }
+                            //*****************************
+
+
                             CoinManager.Instance.Coins -= pCost;
                             GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
                             tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
+
                         }
                         else
                         {
@@ -95,15 +109,25 @@ public class PowerUp : MonoBehaviour
                     }
                     
                     break;
-                //DRILL
+                //BOMB
                 case 1:
                     {
                         if (GameManager.Instance.currentSpot.transform.childCount > 0)
                         {
+                           
+
                             CoinManager.Instance.Coins -= pCost;
                             GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
                             tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
 
+                                Debug.Log("DRILL NO ROTATION");
+                            //********************TUTORIAL*********
+                            if (GameManager.Instance.tutorialManager.tutorialStep == 4)
+                            {
+                                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                                CoinManager.Instance.Coins += 3;
+                            }
+                            //*****************************
                         }
                         else
                         {
