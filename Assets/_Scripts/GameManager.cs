@@ -13,6 +13,8 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 
 {
+    public TutorialManager tutorialManager;
+
     public GameObject drillPref;
     public GameObject bombPref;
     public GameObject hammerPref;
@@ -675,62 +677,78 @@ public class GameManager : Singleton<GameManager>
             // if clicked 
             if (mouseDown)
             {
-                   
-            if (int.Parse(currentSpot.name) == checkClickSpot)
-            {
+               
+                  
+
+                if (int.Parse(currentSpot.name) == checkClickSpot)
+                {
                        
-                //Turn left
-                if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress))
-                {
-
-                    int nextClickSpot;
-                    if (checkClickSpot + 1 == nBottom)
+                    //Turn left
+                    if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress))
                     {
-                        nextClickSpot = 0;
-                    }
-                    else
-                        nextClickSpot = checkClickSpot + 1;
-                    //spot to rotate towards
-                    rotSpot = nextClickSpot;
 
-                    StartCoroutine(FollowRotate(rotationDuration));
-                }
-                //Turn right
-                else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress))
-                {
-                    int firstClickSpot;
-                    if (checkClickSpot - 1 < 0)
-                    {
-                        firstClickSpot = nBottom - 1;
+                        int nextClickSpot;
+                        if (checkClickSpot + 1 == nBottom)
+                        {
+                            nextClickSpot = 0;
                         }
-                    else
-                        firstClickSpot = checkClickSpot- 1;
-                    //spot to rotate towards
-                    rotSpot = firstClickSpot;
+                        else
+                            nextClickSpot = checkClickSpot + 1;
+                        //spot to rotate towards
+                        rotSpot = nextClickSpot;
 
-                    StartCoroutine(FollowRotate(rotationDuration));
-                }
-                else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
-                {
-                    rotSpot = checkClickSpot;
-                    StartCoroutine(FollowRotate(rotationDuration));
-                }
-                    //centerAnim.SetTrigger("tilt");
-                }
-            // if moved more than degrees between spots - follow up to closest one
-            else
-            {
-                if (cantSpawn)
-                    {
-                       
                         StartCoroutine(FollowRotate(rotationDuration));
                     }
-                    
-            }
+                    //Turn right
+                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress))
+                    {
+                        int firstClickSpot;
+                        if (checkClickSpot - 1 < 0)
+                        {
+                            firstClickSpot = nBottom - 1;
+                            }
+                        else
+                            firstClickSpot = checkClickSpot- 1;
+                        //spot to rotate towards
+                        rotSpot = firstClickSpot;
 
-           
-            //disble angle buffer 
-            firstClick = true;
+                        StartCoroutine(FollowRotate(rotationDuration));
+                    }
+                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
+                    {
+                        rotSpot = checkClickSpot;
+                        StartCoroutine(FollowRotate(rotationDuration));
+                    }
+                    //centerAnim.SetTrigger("tilt");
+
+
+
+                    //********************TUTORIAL*********
+                    if (tutorialManager.tutorialStep == 1)
+                    {
+                        Debug.Log("NO ROTATION");
+                        tutorialManager.tutorialTrigger.Invoke();
+
+                    }
+                    //*****************************
+
+
+                }
+                // if moved more than degrees between spots - follow up to closest one
+                else
+                {
+                    if (cantSpawn)
+                        {
+                       
+                            StartCoroutine(FollowRotate(rotationDuration));
+                        }
+
+
+                }
+
+
+                //disble angle buffer 
+                firstClick = true;
             mouseDown = false;
             }
 
@@ -751,6 +769,9 @@ public class GameManager : Singleton<GameManager>
                    
                 }
             }
+
+
+           
 
         }
 
@@ -836,6 +857,9 @@ public class GameManager : Singleton<GameManager>
 
         //check which spot is closer:
         rotSpot = ClosestSpot(spotDist);
+
+       
+
     }
 
 
@@ -885,6 +909,8 @@ public class GameManager : Singleton<GameManager>
             differ = 0;
         }
         RotationProgress = false;
+
+        
     }
 
 
@@ -909,7 +935,7 @@ public class GameManager : Singleton<GameManager>
 
 
     // Is touching ui
-    private bool IsPointerOverUIObject(string obj)
+    public bool IsPointerOverUIObject(string obj)
     {
         PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
         eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -929,6 +955,17 @@ public class GameManager : Singleton<GameManager>
     //Spawn new square
     private void ClickSpawn()
     {
+        //********************TUTORIAL*********
+
+        if (tutorialManager.tutorialStep == 0)
+        {
+            tutorialManager.tutorialTrigger.Invoke();
+            
+        }
+
+        //*****************************
+
+
         //squareSpawn.GetComponent<Rigidbody2D>().
         //spawn a square
         squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
@@ -1050,6 +1087,15 @@ public class GameManager : Singleton<GameManager>
 
 
         StartCoroutine(StopMerge(first, fltScore, second,IsPowerUp));
+
+        //********************TUTORIAL*********
+        if (tutorialManager.tutorialStep == 2)
+        {
+            Debug.Log("NO ROTATION");
+            tutorialManager.tutorialTrigger.Invoke();
+
+        }
+        //*****************************
     }
 
 
