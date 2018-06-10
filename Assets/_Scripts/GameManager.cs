@@ -53,6 +53,9 @@ public class GameManager : Singleton<GameManager>
 
     public Transform line;
 
+    [SerializeField]
+    private Slider volumeSlider;
+
 
     [SerializeField]
     public GameObject uiSquarePrefab;
@@ -188,6 +191,7 @@ public class GameManager : Singleton<GameManager>
 
     //scores
     public int scores;
+    public bool highscoreSoundBool= false;
     public int highscores;
     public Text scoreText;
     public Text highScoreText;
@@ -352,6 +356,8 @@ public class GameManager : Singleton<GameManager>
         {
             NewGame();
         }
+
+        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
     }
 
 
@@ -648,12 +654,6 @@ public class GameManager : Singleton<GameManager>
            
             //PREPARE FOR BOMB TUTORIAL
             #region passing0
-
-
-
-            //*****************************************************
-
-
 
             //if there's no start yet
             List<int> tutSpawns = new List<int>();
@@ -1326,10 +1326,8 @@ public class GameManager : Singleton<GameManager>
     //Delay for merge
     private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null, bool IsPowerUp=false)
     {
-        //Play sound if not powerup
-        if(!IsPowerUp)
-            AudioManager.Instance.PlaySound("merge");
-        else if (first.transform.parent != null)
+        //Play sound if powerup
+        if (IsPowerUp && first.transform.parent != null)
         {
             AudioManager.Instance.PlaySound("powerup");
         }
@@ -1379,10 +1377,14 @@ public class GameManager : Singleton<GameManager>
 
                 //if vertical - at second
                 if (second != null)
+                {
+                    AudioManager.Instance.PlaySound("merge");
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
+                }
                 //if horisontal - instantiate it at 1st square pos
                 else
                 {
+                    
                     // if horizontal AND more than 2
                     if (fltScore > 1)
                     {
@@ -1399,7 +1401,10 @@ public class GameManager : Singleton<GameManager>
                     }
                     //if just 2
                     else
+                    {
+                        AudioManager.Instance.PlaySound("swoop");
                         textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition + fltOffset);
+                    }
                 }
 
                 //if not moving
@@ -1476,10 +1481,23 @@ public class GameManager : Singleton<GameManager>
 
             if (scores>= highscores)
             {
+                
                 highscores = scores;
                 highScoreText.gameObject.SetActive(false);
                 PlayerPrefs.SetInt("Highscore", scores);
+                if (!highscoreSoundBool)
+                {
+                    highscoreSoundBool = true;
+                    AudioManager.Instance.PlaySound("highscore");
+
+                }
             }
+            else
+            {
+                highscoreSoundBool = false;
+            }
+
+
             scoreText.text = scores.ToString();
 
             first.GetComponent<Square>().DoublingPriority = false;
@@ -2021,7 +2039,7 @@ public class GameManager : Singleton<GameManager>
         {
            
             //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
-            //AudioManager.Instance.PlaySound("swoop");
+           
             if (tmpSquares.Count>count && tmpSquares[count] !=null)
                 {
                     if (tmpSquares[count].transform.parent.CompareTag("outer"))

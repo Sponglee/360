@@ -235,7 +235,10 @@ public class FunctionHandler : MonoBehaviour {
         }
     }
 
-
+    public void VolumeHandler(float value)
+    {
+        AudioManager.Instance.VolumeChange(value);
+    }
 
 
 
@@ -252,4 +255,7 @@ public class FunctionHandler : MonoBehaviour {
         CoinManager.Instance.Coins += 10;
         
     }
+
+
+
 }

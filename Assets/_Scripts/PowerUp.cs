@@ -83,7 +83,7 @@ public class PowerUp : MonoBehaviour
                 //DRILL
                 case 2:
                     {
-                        if (GameManager.Instance.currentSpot.transform.childCount>0)
+                        if (GameManager.Instance.currentSpot.transform.childCount>0 && GameManager.Instance.currentSpot.transform.childCount < 5)
                         {
 
                             Debug.Log("NO ROTATION");
@@ -113,7 +113,7 @@ public class PowerUp : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("NOPE");
+                            AudioManager.Instance.PlaySound("stop");
                         }
 
                     }
@@ -122,7 +122,7 @@ public class PowerUp : MonoBehaviour
                 //BOMB
                 case 1:
                     {
-                        if (GameManager.Instance.currentSpot.transform.childCount > 0)
+                        if (GameManager.Instance.currentSpot.transform.childCount > 0 && GameManager.Instance.currentSpot.transform.childCount < 5)
                         {
                            
 
@@ -146,12 +146,13 @@ public class PowerUp : MonoBehaviour
                                 CoinManager.Instance.Coins += 3;
                                 StartCoroutine(StopTutDrill());
                             }
+
                             //*****************************
 
                         }
                         else
                         {
-                            Debug.Log("NOPE");
+                            AudioManager.Instance.PlaySound("stop");
                         }
                     }
 

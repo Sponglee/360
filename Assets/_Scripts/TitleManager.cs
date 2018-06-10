@@ -17,6 +17,8 @@ public class TitleManager : MonoBehaviour {
     public GameObject wheelPrefab;
     public GameObject backPrefab;
 
+    [SerializeField]
+    private Slider volumeSlider;
 
     // Helps ApplyStyle to grab numbers/color
 
@@ -88,6 +90,9 @@ public class TitleManager : MonoBehaviour {
         CoinManager.Instance.shopCoinText = shopCurrencyText;
         shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 60).ToString();
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
+
+        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
+        
     }
 
 
@@ -123,5 +128,6 @@ public class TitleManager : MonoBehaviour {
     }
 
    
+ 
 
 }

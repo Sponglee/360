@@ -55,6 +55,9 @@ public class AudioManager : Singleton<AudioManager>
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
+
+
         for (int i = 0; i < sounds.Length; i++)
         {
             GameObject _go = new GameObject("Sound_" + i + "_" + sounds[i].name);
@@ -89,4 +92,14 @@ public class AudioManager : Singleton<AudioManager>
     }
 
 
+
+
+    public void VolumeChange (float value)
+    {
+        PlayerPrefs.SetFloat("Volume", value);
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            sounds[i].volume = value;
+        }
+    }
 }
