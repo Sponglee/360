@@ -2758,9 +2758,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1324280719049744}
-  m_LocalRotation: {x: -0, y: -0, z: -0.5230808, w: -0.8522831}
-  m_LocalPosition: {x: 0, y: 0, z: 1.1829}
-  m_LocalScale: {x: 0.62002546, y: 0.62002546, z: 0.62002546}
+  m_LocalRotation: {x: 0, y: 0, z: 0.2848213, w: 0.9585807}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.36519757, y: 0.3651976, z: 0.36519754}
   m_Children:
   - {fileID: 4976793003135334}
   - {fileID: 4466671626026070}
@@ -4413,7 +4413,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 0
   centerPrefab: {fileID: 0}
-  IsTop: 0
+  isTop: 0
   ColumnPew: 0
   checkPriority: 1
   touched: 0

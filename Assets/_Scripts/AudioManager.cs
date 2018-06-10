@@ -24,11 +24,13 @@ public class Sound
         source.clip = clip;
     }
 
-    public void Play(bool rotClick = false)
+    public void Play(bool rotClick = false, bool powUp = false)
     {
         source.volume = volume;
         source.pitch = pitch * (1 + Random.Range(-randomPitch / 2, randomPitch / 2));
         if (rotClick)
+            source.PlayScheduled(0.1f);
+        if (powUp)
             source.PlayScheduled(0.1f);
         else
             source.Play();
@@ -72,6 +74,10 @@ public class AudioManager : Singleton<AudioManager>
                 {
                     sounds[i].Play(true);
                 }
+                else if (sounds[i].name == "powerup")
+                {
+                    sounds[i].Play(true);
+                }
                 else
                     sounds[i].Play();
                 
@@ -79,7 +85,7 @@ public class AudioManager : Singleton<AudioManager>
             }
         }
         //no sounds with that name
-        Debug.Log("AudioManager: no sounds like that");
+        Debug.Log("AudioManager: no sounds like that " + _name);
     }
 
 

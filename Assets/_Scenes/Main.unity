@@ -9909,22 +9909,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: rotationClick
-    clip: {fileID: 8300000, guid: 06fd26927da841c43a9b883d0c2e5d59, type: 3}
+    clip: {fileID: 8300000, guid: 3e873e7f3dd2d7848a3c5c87fcdfb5da, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: swoop
+  - name: merge
     clip: {fileID: 8300000, guid: cbcc82cdf8aa4e247b33a7b9356df99b, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: stick
-    clip: {fileID: 0}
+  - name: powerup
+    clip: {fileID: 8300000, guid: efbaa3f326f58e844abd6b747d43de25, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: bump
-    clip: {fileID: 0}
+  - name: 256
+    clip: {fileID: 8300000, guid: 778348845073e56479f76d0e528fcf8a, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
@@ -9933,13 +9933,13 @@ MonoBehaviour:
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: 256
+  - name: swoop
     clip: {fileID: 8300000, guid: 20f9977cc0c32674689963fca7c0af9f, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1
-  - name: pickup
-    clip: {fileID: 0}
+  - name: lightning
+    clip: {fileID: 8300000, guid: 778348845073e56479f76d0e528fcf8a, type: 3}
     volume: 0.7
     pitch: 1
     randomPitch: 0.1

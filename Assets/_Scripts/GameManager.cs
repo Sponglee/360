@@ -645,7 +645,7 @@ public class GameManager : Singleton<GameManager>
 
                 GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                 CoinManager.Instance.Coins += 2;
-            }
+           
             //PREPARE FOR BOMB TUTORIAL
             #region passing0
 
@@ -685,8 +685,10 @@ public class GameManager : Singleton<GameManager>
 
                 #endregion
                 StartCoroutine(StopTutBomb(tutSpawns,tutScores));
+
+            }
             //*****************************
-            
+
         }
         
 
@@ -1326,12 +1328,12 @@ public class GameManager : Singleton<GameManager>
     {
         //Play sound if not powerup
         if(!IsPowerUp)
-            AudioManager.Instance.PlaySound("swoop");
-        else
+            AudioManager.Instance.PlaySound("merge");
+        else if (first.transform.parent != null)
         {
-
+            AudioManager.Instance.PlaySound("powerup");
         }
-
+        
 
         int tmp;
         int tmpScore;
@@ -1386,7 +1388,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         GameObject pizzaz = Instantiate(pizzazPref, first.transform.position, Quaternion.identity);
 
-                        AudioManager.Instance.PlaySound("256");
+                        AudioManager.Instance.PlaySound("lightning");
 
 
                         //move to pizzaz location
@@ -1421,7 +1423,7 @@ public class GameManager : Singleton<GameManager>
             //=======================
 
         }
-
+       
 
         if (first != null && first.CompareTag("square"))
         {

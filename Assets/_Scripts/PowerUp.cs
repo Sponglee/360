@@ -156,7 +156,7 @@ public class PowerUp : MonoBehaviour
                     }
 
                     break;
-                //SELECT
+                //HAMMER
                 case 0:
                     {
                         if (!SelectionUI)

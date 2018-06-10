@@ -367,7 +367,7 @@ public class Square : MonoBehaviour
             if (this.checkPriority)
             {
                 this.IsSpawn = false;
-            }
+            } 
         }
 
         //Move through grid
@@ -394,6 +394,7 @@ public class Square : MonoBehaviour
         {
             if (!gameObject.CompareTag("square"))
             {
+                AudioManager.Instance.PlaySound("256");
                 //Debug.Log("HERE");
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
             }
@@ -592,7 +593,7 @@ public class Square : MonoBehaviour
     // DOUBT IF NEEDED SEE FIXED UPDATE
     public void OnCollisionEnter2D(Collision2D other)
     {
-
+      
         //Power up collisions
         #region Powerup interaction
 
@@ -733,7 +734,7 @@ public class Square : MonoBehaviour
         }
 
         //Make it green again
-        if (!gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
+        if (gameObject != null && gameObject.transform.parent != null && !gameObject.transform.parent.CompareTag("outer") && gameObject.CompareTag("square"))
         {
 
             if (gameObject.transform.parent.childCount < 4)
