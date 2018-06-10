@@ -1,5 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
+using System.Collections;
 
 public class PowerUp : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class PowerUp : MonoBehaviour
     //Square power up
     public void SelectSquare()
     {
-       
+        GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", false);
         SelectionUI = true;
         GameManager.Instance.SelectPowerUp = true;  
 
@@ -80,18 +81,27 @@ public class PowerUp : MonoBehaviour
             switch (index)
             {
                 //DRILL
-                case 0:
+                case 2:
                     {
                         if (GameManager.Instance.currentSpot.transform.childCount>0)
                         {
 
                             Debug.Log("NO ROTATION");
-                            //********************TUTORIAL*********
+
+
+                        
+                            //********************TUTORIAL*********DRILL
                             if (GameManager.Instance.tutorialManager.tutorialStep == 5)
                             {
+                              
+                                
+                                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", false);
+
+
                                 GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                                GameManager.Instance.tutorialManager.button.SetActive(true);
                                 CoinManager.Instance.Coins += 5;
+                                GameManager.Instance.tutorialManager.button.SetActive(true);
+                                StartCoroutine(StopCloseTut());
                             }
                             //*****************************
 
@@ -121,13 +131,23 @@ public class PowerUp : MonoBehaviour
                             tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
 
                                 Debug.Log("DRILL NO ROTATION");
-                            //********************TUTORIAL*********
+
+
+                           
+                            //********************TUTORIAL*********BOMB
                             if (GameManager.Instance.tutorialManager.tutorialStep == 4)
                             {
+                                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", false);
+                                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
+
+
+
                                 GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                                 CoinManager.Instance.Coins += 3;
+                                StartCoroutine(StopTutDrill());
                             }
                             //*****************************
+
                         }
                         else
                         {
@@ -137,7 +157,7 @@ public class PowerUp : MonoBehaviour
 
                     break;
                 //SELECT
-                case 2:
+                case 0:
                     {
                         if (!SelectionUI)
                             SelectSquare();
@@ -156,7 +176,35 @@ public class PowerUp : MonoBehaviour
         }
     }
 
+    //Coroutine to fill squares for the Drill tutorial
+    public IEnumerator StopTutDrill()
+    {
+        yield return new WaitForSeconds(1f);
+        //PREPEARE FOR DRILL TUTORIAL
+        int tutScore = 2;
 
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject tutSpawn;
+
+            if (GameManager.Instance.currentSpot.transform.childCount < 4)
+            {
+                tutSpawn = Instantiate(GameManager.Instance.squarePrefab, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity, GameManager.Instance.currentSpawn.transform);
+                tutSpawn.GetComponent<Square>().Score = tutScore;
+                yield return new WaitForSeconds(0.2f);
+                
+            }
+            tutScore *= 2;
+        }
+    }
+
+    //Close tutorial cooldown
+    public IEnumerator StopCloseTut()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.tutorialManager.tutorialCanvas.gameObject.SetActive(false);
+
+    }
 }
 
 

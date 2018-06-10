@@ -17,6 +17,7 @@ public class TutorialManager : Singleton<TutorialManager> {
 
     public string[] tutorialText;
 
+    public Animator[] powerUpAnim;
 
 	// Use this for initialization
 	void Start () {
@@ -47,4 +48,24 @@ public class TutorialManager : Singleton<TutorialManager> {
       
 
     }
+
+    public void CloseTutorial()
+    {
+        tutorialCanvas.gameObject.SetActive(false);
+    }
+
+    //public void PowerUpHighlight(Animator anim)
+    //{
+    //    StartCoroutine(StopPowerUp(anim));
+    //}
+
+
+
+    //public IEnumerator StopPowerUp(Animator anim)
+    //{
+    //    float timer = 3f;
+
+    //    yield return new WaitForSeconds(3f);
+        
+    //}
 }

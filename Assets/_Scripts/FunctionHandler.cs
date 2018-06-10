@@ -91,6 +91,7 @@ public class FunctionHandler : MonoBehaviour {
     //Watch tutorial again
     public void TutorialAgain()
     {
+       
         PlayerPrefs.SetInt("TutorialStep", 0);
         Restart();
     }

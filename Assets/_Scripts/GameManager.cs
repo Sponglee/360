@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject hammerPref;
     public GameObject swoopPref;
     public GameObject pizzazPref;
-    
+
     public Color32 leRed;
     public Color32 leGreen;
     public Color32 leYellow;
@@ -57,6 +57,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     public GameObject uiSquarePrefab;
 
+    //Tutorial NextScore and lock spawn
+    int tutNum = 0;
+
+  
 
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
@@ -101,8 +105,8 @@ public class GameManager : Singleton<GameManager>
                 }
 
             }
-           
-           
+
+
         }
     }
 
@@ -116,7 +120,7 @@ public class GameManager : Singleton<GameManager>
 
     //[SerializeField]
     //private bool IsRunning = false;
-   
+
     [SerializeField]
     private int moves = 0;
     public int Moves
@@ -161,7 +165,7 @@ public class GameManager : Singleton<GameManager>
     private float coolDown;
 
     //for turn
-    public float turnDelay=0.5f;
+    public float turnDelay = 0.5f;
     public float turnCoolDown;
 
 
@@ -227,7 +231,7 @@ public class GameManager : Singleton<GameManager>
     public bool MergeInProgress = false;
     public bool RotationProgress = false;
     public float rotationDuration = 0.1f;
-    private bool noMoves=false;
+    private bool noMoves = false;
 
     //for ui check
     private bool mouseDown = false;
@@ -240,10 +244,10 @@ public class GameManager : Singleton<GameManager>
     int checkClickSpot;
 
     int rotSpot;
-    
-  
+
+
     bool firstClick = true;
- 
+
     //For clickspawn
     bool cantSpawn = true;
     bool NoClickSpawn = false;
@@ -258,7 +262,7 @@ public class GameManager : Singleton<GameManager>
     public float differ__Angle;
     //for finish followup
     float differ = 0;
-    public bool gameOverInProgress=false;
+    public bool gameOverInProgress = false;
 
 
 
@@ -289,7 +293,7 @@ public class GameManager : Singleton<GameManager>
         leRed = ThemeStyleHolder.Instance.ThemeStyles[index].redPref;
         fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
 
-       
+
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         //right menu
         menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
@@ -338,13 +342,16 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-   
+
 
 
     private void Awake()
     {
-        themeIndex = PlayerPrefs.GetInt("Theme",0);
-
+        themeIndex = PlayerPrefs.GetInt("Theme", 0);
+        if (PlayerPrefs.GetInt("TutorialStep", 0) == 0)
+        {
+            NewGame();
+        }
     }
 
 
@@ -369,7 +376,7 @@ public class GameManager : Singleton<GameManager>
 
         Instantiate(styleHolderPrefab);
 
-   
+
     }
 
     // Helps ApplyStyle to grab numbers/color
@@ -425,7 +432,7 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-       
+
 
         //===========================================Initialize theme==============================================================
         InitializeTheme();
@@ -463,10 +470,10 @@ public class GameManager : Singleton<GameManager>
         highScoreText.gameObject.SetActive(true);
         highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
-                                                            
+
         //upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
-        sliderFill = (expandMoves  - Moves) / expandMoves;
+        sliderFill = (expandMoves - Moves) / expandMoves;
 
         ////Gradually change slider fillAmount
         //StartCoroutine(SliderStop());
@@ -478,7 +485,7 @@ public class GameManager : Singleton<GameManager>
         endGameCheck = false;
 
         //Random next score to appear (2^3 max <-----)
-        next_score = (int)Mathf.Pow(2, Random.Range(1, 4));
+        next_score = 2;
         nextScore.text = next_score.ToString();
         ApplyStyle(next_score);
         //Initialize level (spots)
@@ -493,13 +500,9 @@ public class GameManager : Singleton<GameManager>
         menu.SetActive(false);
 
 
-        if (tutorialManager.tutorialStep == 0)
-        {
-            LoadGame("turoialgame.dat");
-        }
-        else
-         LoadGame("threesixty.dat");
-       
+
+        LoadGame("threesixty.dat");
+
     }
 
 
@@ -525,16 +528,18 @@ public class GameManager : Singleton<GameManager>
     //Time EXPAND
     private void FixedUpdate()
     {
-        if (!MenuUp)
-        {
-            fMoves += 0.01f;
+       
             turnCoolDown -= Time.deltaTime;
-            //while (currentTime <= timeOfTravel)
-            //{
-            sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+        //while (currentTime <= timeOfTravel)
+        //{
+            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5)
+            {
+                fMoves += 0.01f;
+                sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+                slider.fillAmount = sliderFill;
+            }
             currentTime += Time.deltaTime;
             normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-            slider.fillAmount = sliderFill;
             //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
             //}
@@ -544,12 +549,52 @@ public class GameManager : Singleton<GameManager>
                 fMoves = 0;
                 ResetExpand();
             }
-        }
-
-
        
+
+
+
     }
 
+    public IEnumerator StopTutBomb(List<int> tutSpawns, List<int> tutScores)
+    {
+
+        int scoreCount = 0;
+
+        foreach (int tmp in tutSpawns)
+        {
+
+
+
+            while (spots[tmp].transform.childCount < 3)
+            {
+
+                randSpawn = Instantiate(squarePrefab, spawns[tmp].transform.position, Quaternion.identity);
+
+                randSpawn.GetComponent<Square>().ExpandSpawn = true;
+                randSpawn.GetComponent<Square>().Score = tutScores[scoreCount];
+                scoreCount++;
+
+                if (scoreCount == tutScores.Count)
+                    scoreCount = 0;
+
+
+
+                randSpawn.transform.SetParent(spots[tmp].transform);
+                randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
+
+                //Rotate spawns towards center
+                Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
+                diff.Normalize();
+
+                float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+                randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
+                yield return new WaitForSeconds(0.2f);
+                tutScores.Reverse();
+            }
+
+        }
+
+    }
     void Update()
     {
         //=============================================================================================================
@@ -563,18 +608,18 @@ public class GameManager : Singleton<GameManager>
         ////Debuging lines above
         //===============================================================================================================
 
-
+       
         #region Input
 
         // Track hammer click powerup
-        if(IsPointerOverUIObject("square") && SelectPowerUp && Input.GetMouseButtonUp(0))
+        if (IsPointerOverUIObject("square") && SelectPowerUp && Input.GetMouseButtonUp(0))
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
             if (results.Count > 0)
-            { 
+            {
                 //Get rid of selected square
                 SelectPowerUp = false;
                 Instantiate(hammerPref, results[0].gameObject.transform.position, Quaternion.identity);
@@ -588,15 +633,62 @@ public class GameManager : Singleton<GameManager>
                 }
             }
 
-            //********************TUTORIAL*********
+
+
+            //********************TUTORIAL*********HAMMER(SELECT)
             if (GameManager.Instance.tutorialManager.tutorialStep == 3)
             {
-          
+
+                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
+               
+
+
                 GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                 CoinManager.Instance.Coins += 2;
             }
+            //PREPARE FOR BOMB TUTORIAL
+            #region passing0
+
+
+
+            //*****************************************************
+
+
+
+            //if there's no start yet
+            List<int> tutSpawns = new List<int>();
+            List<int> tutScores = new List<int> (new int[] { 8,4,2,4,8,2,8,4,8});
+                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+                int firstIndex;
+                int nextIndex;
+
+                //check next left one after getting index-1
+                if (dropIndex - 1 < 0)
+                {
+                    firstIndex = GameManager.Instance.nBottom - 1;
+                }
+                else
+                    firstIndex = dropIndex - 1;
+
+                //check next one after setting index+1
+                if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+                {
+                    nextIndex = 0;
+                }
+                else
+                    nextIndex = dropIndex + 1;
+
+                tutSpawns.Add(firstIndex);
+                tutSpawns.Add(dropIndex);
+                tutSpawns.Add(nextIndex);
+
+
+                #endregion
+                StartCoroutine(StopTutBomb(tutSpawns,tutScores));
             //*****************************
+            
         }
+        
 
         //track 256 coin touches
         if (IsPointerOverUIObject("256") && Input.GetMouseButtonUp(0))
@@ -652,6 +744,11 @@ public class GameManager : Singleton<GameManager>
                 }
                 SomethingIsMoving = false;
             }
+
+            
+
+
+
         }
 
         //FOR CLICKS
@@ -711,6 +808,16 @@ public class GameManager : Singleton<GameManager>
                         rotSpot = nextClickSpot;
 
                         StartCoroutine(FollowRotate(rotationDuration));
+
+
+                        //********************TUTORIAL*********ROTATE
+                        if (tutorialManager.tutorialStep == 1)
+                        {
+                            Debug.Log("NO ROTATION");
+                            tutorialManager.tutorialTrigger.Invoke();
+                        }
+                        //*****************************
+
                     }
                     //Turn right
                     else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress))
@@ -726,6 +833,17 @@ public class GameManager : Singleton<GameManager>
                         rotSpot = firstClickSpot;
 
                         StartCoroutine(FollowRotate(rotationDuration));
+
+
+
+                        //********************TUTORIAL*********ROTATE
+                        if (tutorialManager.tutorialStep == 1)
+                        {
+                            Debug.Log("NO ROTATION");
+                            tutorialManager.tutorialTrigger.Invoke();
+                        }
+                        //*****************************
+
                     }
                     else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
                     {
@@ -736,14 +854,8 @@ public class GameManager : Singleton<GameManager>
 
 
 
-                    //********************TUTORIAL*********
-                    if (tutorialManager.tutorialStep == 1)
-                    {
-                        Debug.Log("NO ROTATION");
-                        tutorialManager.tutorialTrigger.Invoke();
+                    
 
-                    }
-                    //*****************************
 
 
                 }
@@ -759,6 +871,7 @@ public class GameManager : Singleton<GameManager>
 
                 }
 
+                
 
                 //disble angle buffer 
                 firstClick = true;
@@ -777,8 +890,14 @@ public class GameManager : Singleton<GameManager>
                 else
                 {
                     coolDown = Time.time + 0.5f;
-                    ClickSpawn();
-                    cantSpawn = true;
+
+                   
+
+
+                        ClickSpawn();
+                        cantSpawn = true;
+
+                    
                    
                 }
             }
@@ -841,36 +960,44 @@ public class GameManager : Singleton<GameManager>
     //Turn wheel to mouse position
     private void FollowMouse(float startAngle, Vector3 startDirection)
     {
+            //********************TUTORIAL*********ROTATE
+            if (tutorialManager.tutorialStep == 1)
+            {
+                Debug.Log("NO ROTATION");
+                tutorialManager.tutorialTrigger.Invoke();
+            }
+            //*****************************
+
         //Angle to rotate to
         float angle = GetFirstClickAngle();
 
-        wheel.transform.Rotate(Vector3.forward, startAngle - angle);
-        int firstSpot;
-        int nextSpot;
-        int spot = int.Parse(currentSpot.name);
+            wheel.transform.Rotate(Vector3.forward, startAngle - angle);
+            int firstSpot;
+            int nextSpot;
+            int spot = int.Parse(currentSpot.name);
 
-        //passing through 0
-        if (spot - 1 < 0)
-        {
-            firstSpot = nBottom - 1;
-        }
-        else
-            firstSpot = spot - 1;
+            //passing through 0
+            if (spot - 1 < 0)
+            {
+                firstSpot = nBottom - 1;
+            }
+            else
+                firstSpot = spot - 1;
 
-        //check next left one after getting index-1
-        if (spot + 1 == nBottom)
-        {
-            nextSpot = 0;
-        }
-        else
-            nextSpot = spot + 1;
+            //check next left one after getting index-1
+            if (spot + 1 == nBottom)
+            {
+                nextSpot = 0;
+            }
+            else
+                nextSpot = spot + 1;
 
 
-        int[] spotDist = { spot, firstSpot, nextSpot };
+            int[] spotDist = { spot, firstSpot, nextSpot };
 
-        //check which spot is closer:
-        rotSpot = ClosestSpot(spotDist);
-
+            //check which spot is closer:
+            rotSpot = ClosestSpot(spotDist);
+        
        
 
     }
@@ -879,51 +1006,54 @@ public class GameManager : Singleton<GameManager>
     ////Smooth rotation coroutine
     IEnumerator FollowRotate(float duration = 0.2f, float angle = 0)
     {
-        //To avoid interruptions
-        RotationProgress = true;
+       
+            //To avoid interruptions
+            RotationProgress = true;
 
-        //if there was followmouse
-        if (rotSpot != -1)
-        {
-            Vector3 lineDir = line.position - wheel.transform.position;
-            Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
-            //angle to next spot to rotate to
-            angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-        }
+            //if there was followmouse
+            if (rotSpot != -1)
+            {
+                Vector3 lineDir = line.position - wheel.transform.position;
+                Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
+                //angle to next spot to rotate to
+                angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
+            }
 
-        Quaternion from = wheel.transform.rotation;
-        Quaternion to = from * Quaternion.Euler(0, 0, angle);
+            Quaternion from = wheel.transform.rotation;
+            Quaternion to = from * Quaternion.Euler(0, 0, angle);
 
-        //smooth lerp rotation loop
-        float elapsed = 0.0f;
-        while (elapsed < duration)
-        {
-            wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
-            elapsed += Time.fixedDeltaTime;
+            //smooth lerp rotation loop
+            float elapsed = 0.0f;
+            while (elapsed < duration)
+            {
+                wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
+                elapsed += Time.fixedDeltaTime;
 
-            yield return null;
-        }
+                yield return null;
+            }
 
-        //Finish ROtation differ angle setup
-        Quaternion difRot = wheel.transform.rotation;
-        if (int.Parse(currentSpot.name) != checkClickSpot)
-        {
-            // angle that should be the rotation
-            differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
-        }
+            //Finish ROtation differ angle setup
+            Quaternion difRot = wheel.transform.rotation;
+            if (int.Parse(currentSpot.name) != checkClickSpot)
+            {
+                // angle that should be the rotation
+                differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
+            }
 
-        //Finish move actual movement (differ in rotate) Get rid of difference flaw to the left
-        if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0)
-        {
-            // Debug.Log(differ + " : " + int.Parse(currentSpot.name) + " < " + checkClickSpot);
-            difRot = wheel.transform.rotation;
-            Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
-            wheel.transform.rotation = finalRot;
-            differ = 0;
-        }
-        RotationProgress = false;
+            //Finish move actual movement (differ in rotate) Get rid of difference flaw to the left
+            if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0)
+            {
+                // Debug.Log(differ + " : " + int.Parse(currentSpot.name) + " < " + checkClickSpot);
+                difRot = wheel.transform.rotation;
+                Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
+                wheel.transform.rotation = finalRot;
+                differ = 0;
+            }
+            RotationProgress = false;
 
         
+
+
     }
 
 
@@ -966,27 +1096,105 @@ public class GameManager : Singleton<GameManager>
 
 
     //Spawn new square
-    private void ClickSpawn()
+    public void ClickSpawn(Transform spawnPosition = null)
     {
-        //********************TUTORIAL*********
 
+        //********************TUTORIAL*********CLICKSPAWN
         if (tutorialManager.tutorialStep == 0)
         {
             tutorialManager.tutorialTrigger.Invoke();
-            
         }
-
         //*****************************
 
 
+            
+
         //squareSpawn.GetComponent<Rigidbody2D>().
         //spawn a square
-        squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
+        if (spawnPosition != null)
+            squareSpawn = Instantiate(squarePrefab, spawnPosition.position, Quaternion.identity);
+        else
+            squareSpawn = Instantiate(squarePrefab, currentSpawn.transform.position, Quaternion.identity);
+
+
         squareSpawn.GetComponent<Square>().IsSpawn = true;
         //Debug.Log(squareSpawn.GetComponent<Square>().IsSpawn);
         squareSpawn.GetComponent<Square>().Score = next_score;
-        //get score for next turn (non-inclusive)
-        next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
+
+
+        //****************************TUTORIAL**************************************************
+        if (PlayerPrefs.GetInt("TutorialStep", 0) < 5)
+        {
+            int tutStep = PlayerPrefs.GetInt("TutorialStep", 0);
+
+            switch (tutStep)
+            {
+                //For Tap
+                case 0:
+                    {
+                        tutNum = 2;
+
+                        break;
+                    }
+                //for Rotate
+
+                case 1:
+                    {
+
+                        tutNum = 2;
+                        break;
+                    }
+                //for Merge
+
+                case 2:
+                    {
+                        tutNum = 4;
+
+                        break;
+                    }
+                //for Hammer
+
+                case 3:
+                    {
+                        tutNum = 4;
+
+                        break;
+                    }
+                //for Bomb
+
+                case 4:
+                    {
+
+                        tutNum = 2;
+                        break;
+                    }
+                //For Drill
+
+                case 5:
+                    {
+
+                        tutNum = 2;
+                        break;
+                    }
+
+
+
+                default:
+                    tutNum = 2;
+                    break;
+            }
+
+            next_score = tutNum;
+            nextScore.text = next_score.ToString();
+
+        }
+        //**************************************************************************
+        else
+            //get score for next turn (non-inclusive)
+            next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
+
+
+
         nextScore.text = next_score.ToString();
         ApplyStyle(next_score);
 
@@ -1101,14 +1309,15 @@ public class GameManager : Singleton<GameManager>
 
         StartCoroutine(StopMerge(first, fltScore, second,IsPowerUp));
 
-        //********************TUTORIAL*********
+        //********************TUTORIAL*********MERGE
         if (tutorialManager.tutorialStep == 2)
         {
             Debug.Log("NO ROTATION");
             tutorialManager.tutorialTrigger.Invoke();
-
+            GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
         }
         //*****************************
+
     }
 
 
