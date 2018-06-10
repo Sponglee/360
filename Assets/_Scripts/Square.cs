@@ -130,37 +130,23 @@ public class Square : MonoBehaviour
 
         }
     }
-    //Bool for bug fixing (check later)
-    //[SerializeField]
-    //private bool checkCoolDown=false;
-    //public bool CheckCoolDown
-    //{
-    //    get
-    //    {
-    //        return checkCoolDown;
-    //    }
-
-    //    set
-    //    {
-    //        checkCoolDown = value;
-    //    }
-    //}
+ 
 
     private float checkTimer;
 
     // toggle for further pop first
     [SerializeField]
-    private bool checkPriority = false;
-    public bool CheckPriority
+    private bool isFurther = false;
+    public bool IsFurther
     {
         get
         {
-            return checkPriority;
+            return isFurther;
         }
 
         set
         {
-            checkPriority = value;
+            isFurther = value;
         }
     }
 
@@ -336,8 +322,8 @@ public class Square : MonoBehaviour
     void FixedUpdate()
     {
         
-        //0 score bug fix
 
+        //0 score bug fix
         if (int.Parse(SquareText.text) == 0)
         {
             SquareText.text = this.score.ToString();
@@ -364,31 +350,30 @@ public class Square : MonoBehaviour
             lastPos = curPos;
 
             //for expandMoves
-            if (this.checkPriority)
+            if (this.isFurther)
             {
                 this.IsSpawn = false;
             } 
         }
 
+
         //Move through grid
         if (!this.IsTop && this.gameObject.transform.parent != null && !this.gameObject.transform.parent.CompareTag("outer"))
         {
-
-            //Move to needed grid spot
+            //Move to needed grid spot from spawn location if fifth
             if (gameObject.transform.GetSiblingIndex() == 5
                 && gameObject.transform.position != GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position)
             {
-                //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(5).position, Speed * Time.deltaTime);
             }
+            //Move to needed grid spot from spawn location
             else
             {
-                //GameManager.Instance.SomethingIsMoving = true;
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.spawns[int.Parse(gameObject.transform.parent.name)].transform.GetChild(gameObject.transform.GetSiblingIndex()).position, Speed * Time.deltaTime);
-
             }
-
         }
+
+
         //256 square to center
         else if (this.IsTop == true)
         {
@@ -399,22 +384,16 @@ public class Square : MonoBehaviour
                 gameObject.transform.position = Vector2.MoveTowards(transform.position, GameManager.Instance.wheel.transform.position, Speed * Time.deltaTime);
             }
             else
-            {
-
-                
+            {                
                     //SPAWN COIN HERE
                     //Debug.Log("NO HERE");
                     Instantiate(GameManager.Instance.coinPrefab, gameObject.transform.position, Quaternion.identity);
                     //IsTop = false;
                     AudioManager.Instance.PlaySound("256");
                     Destroy(gameObject);
-               
-
-
-
             }
-           
         }
+        //If not IsTop - move to tmpSquare or center
         else
         {
             //Debug.Log("NOT YOSH");
@@ -432,23 +411,22 @@ public class Square : MonoBehaviour
 
 
 
+
+
         // Boundary
         if (Mathf.Abs(transform.position.y) > 100 || Mathf.Abs(transform.position.x) > 100)
         {
             Destroy(gameObject);
         }
+        
         //reached tmpSquare
-        else if (squareTmpSquare != null && transform.position == squareTmpSquare.position)
+        if (squareTmpSquare != null && transform.position == squareTmpSquare.position)
         {
-            if (GameManager.Instance.checkObjs.Contains(gameObject))
-            {
-                //Debug.Log("reached TMPSQR " + squareTmpSquare.transform.parent.name);
-            }
             Destroy(gameObject);
         }
-
-
     }
+
+
 
 
     private IEnumerator StopLeft()
@@ -463,56 +441,62 @@ public class Square : MonoBehaviour
         //    CheckCoolDown = false;
     }
 
+    //checkaround
     private bool CheckLeftRight()
     {
-        //checkaround
        
-            //if there's no start yet
-            int index = int.Parse(gameObject.transform.parent.name);
-            int firstIndex;
-            int nextIndex;
+        //if there's no start yet
+        int index = int.Parse(gameObject.transform.parent.name);
+        int firstIndex;
+        int nextIndex;
 
-            //check next left one after getting index-1
-            if (index - 1 < 0)
+        //check next left one after getting index-1
+        if (index - 1 < 0)
+        {
+            firstIndex = GameManager.Instance.nBottom - 1;
+        }
+        else
+            firstIndex = index - 1;
+
+        //check next one after setting index+1
+        if (index + 1 > GameManager.Instance.nBottom - 1)
+        {
+            nextIndex = 0;
+        }
+        else
+            nextIndex = index + 1;
+
+
+
+        //if right square not moving and not null
+        if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() 
+        && !gameObject.transform.parent.CompareTag("outer"))
+        {
+            //Check if left square is not mergint, not further and same score
+            if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score
+            && !GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().IsFurther
+            && !GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().isMerging)
             {
-                firstIndex = GameManager.Instance.nBottom - 1;
+            //Debug.Log("RIGHT");
+            //Check again
+            return true;
             }
-            else
-                firstIndex = index - 1;
+        }
 
-            //check next one after setting index+1
-            if (index + 1 > GameManager.Instance.nBottom - 1)
+        //if right square not moving and not null
+        if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
+        {
+        //Check if left square is not mergint, not further and same score
+            if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score
+            && !GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().IsFurther
+            && !GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().isMerging)
             {
-                nextIndex = 0;
-            }
-            else
-                nextIndex = index + 1;
-
-
-
-            //Check if left or right is available and == score
-            if (GameManager.Instance.spots[nextIndex].transform.childCount > gameObject.transform.GetSiblingIndex() 
-            && !gameObject.transform.parent.CompareTag("outer"))
-            {
-            //Debug.Log("ENUF " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
-            if (GameManager.Instance.spots[nextIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
-                {
-                //Debug.Log("RIGHT");
-                //Check again
-                return true;
-                }
-            }
-             if (!gameObject.transform.parent.CompareTag("outer") && GameManager.Instance.spots[firstIndex].transform.childCount > gameObject.transform.GetSiblingIndex())
-            {
-            //Debug.Log("ENUF " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()) + " " + nextIndex + " : " + index + " : " + firstIndex + " | " + GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score + " || " + this.score);
-            if (GameManager.Instance.spots[firstIndex].transform.GetChild(gameObject.transform.GetSiblingIndex()).GetComponent<Square>().Score == this.score)
-                {
                 //Debug.Log("LEFT");
                 //Check again
                 return true;
-                }
             }
-
+        }
+        //Nothing around is available
         return false;
     }
 
@@ -639,16 +623,22 @@ public class Square : MonoBehaviour
             //for column checkrow
             if (gameObject.transform.parent != null /*&& CheckLeftRight()*/)
             {
+                //If SameScore around
                 if (CheckLeftRight())
                 {
-                 
+                    //Add to checkObjs
                     GameManager.Instance.checkObjs.Enqueue(gameObject);
                     //Debug.Log("DA " + this.score);
                 }
                 else
                 {
-                    GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
-                    //Debug.Log("above spot " + this.Score);
+                    //check what's above
+                    //GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
+
+
+
+
+                    
                     if (this.IsSpawn)
                     {
                         //GameManager.Instance.ExpandMoves();
@@ -660,8 +650,6 @@ public class Square : MonoBehaviour
                
                 AudioManager.Instance.PlaySound("bump");
             }
-
-
 
         }
 
@@ -704,7 +692,14 @@ public class Square : MonoBehaviour
                     }
                     else
                     {
-                        GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
+                        //Check what's above
+                        //GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
+
+
+
+
+
+
                         //Debug.Log("above square " + this.score);
                         if (this.IsSpawn)
                         {
