@@ -1334,6 +1334,7 @@ public class GameManager : Singleton<GameManager>
         
 
         int tmp;
+            tmp = first.GetComponent<Square>().Score *= 2;
         int tmpScore;
         //Stop checks while Merging
         if (first == null)
@@ -1351,7 +1352,6 @@ public class GameManager : Singleton<GameManager>
         //double the score
         if (first !=null && !first.GetComponent<Square>().DoublingPriority)
         {
-            tmp = first.GetComponent<Square>().Score *= 2;
             first.GetComponent<Square>().DoublingPriority = true;
             //avoid 512 and higher
             if (tmp > 256)
@@ -1549,7 +1549,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         //If it's close enough and same score and nextobj is further and same index
                         if (tmpDist <= 3 && tmpObj.GetComponent<Square>().Score == chObject.GetComponent<Square>().Score
-                      && chObject.GetComponent<Square>().Further /*&& tmpObj.GetComponent<Square>().RowObjIndex == chObject.GetComponent<Square>().RowObjIndex*/)
+                        && chObject.GetComponent<Square>().Further /*&& tmpObj.GetComponent<Square>().RowObjIndex == chObject.GetComponent<Square>().RowObjIndex*/)
                         {
                            tmpObj = chObject;
                            continue;
@@ -2069,14 +2069,12 @@ public class GameManager : Singleton<GameManager>
         {
             if (popObjs[i].Count == 0)
             {
-
+                Debug.Log(">>>>>>>>>>>>>>>>>>>>" + popObjs[i].Count);
                 popObjs.RemoveAt(i);
+                tmpSquares.RemoveAt(i);
             }
         }
-        for (int i = 0; i < tmpSquares.Count; i++)
-        {
-            tmpSquares.RemoveAt(i);
-        }
+      
 
     }
 
