@@ -207,8 +207,8 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> tmpSquares;
 
     //Checkrow Stack
-    public Queue<GameObject> turnCheckObjs;
-    public Queue<GameObject> checkObjs;
+    public Stack<GameObject> turnCheckObjs;
+    public Stack<GameObject> checkObjs;
     //Toggle while rand are dropping
     private bool randSpawning = false;
     int tmpRands;
@@ -455,8 +455,8 @@ public class GameManager : Singleton<GameManager>
         serializer = new GameSerializer();
 
 
-        turnCheckObjs = new Queue<GameObject>();
-        checkObjs = new Queue<GameObject>();
+        turnCheckObjs = new Stack<GameObject>();
+        checkObjs = new Stack<GameObject>();
         //objects that were stopped
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
@@ -918,7 +918,7 @@ public class GameManager : Singleton<GameManager>
             turnCoolDown = turnDelay;
             turnCheckObjs = checkObjs;
 
-            checkObjs = new Queue<GameObject>();
+            checkObjs = new Stack<GameObject>();
            
             //To make it check once
             TurnInProgress = true;
@@ -1339,8 +1339,13 @@ public class GameManager : Singleton<GameManager>
         //Stop checks while Merging
         if (first == null)
             yield break;
-        first.GetComponent<Square>().IsMerging = true;
 
+        //if vertical
+        if (second != null)
+            first.GetComponent<Square>().IsMerging = true;
+        //if horizontal
+        else
+            first.GetComponent<Square>().IsSwooping = true;
 
         //for float text positioning and s core
         if (second == null)
@@ -1473,6 +1478,7 @@ public class GameManager : Singleton<GameManager>
             //first.GetComponent<Square>().Touched = false;
             first.GetComponent<Square>().MergeCheck = false;
             first.GetComponent<Square>().IsMerging = false;
+            first.GetComponent<Square>().IsSwooping = false;
             MergeInProgress = false;
 
             //add score of tmpsSquare
@@ -1519,12 +1525,12 @@ public class GameManager : Singleton<GameManager>
     {
         checkRowIndex = 0;
         // List<List<GameObject>> tmppopObjs = popObjs;
-        Debug.Log(" TURN " + checkRowIndex);
+        Debug.Log(" TURN " + checkObjs.Count);
         //if there's something in the queue
         while (turnCheckObjs.Count >0)
         {
            //Grab first element
-            GameObject tmpObj = turnCheckObjs.Dequeue();
+            GameObject tmpObj = turnCheckObjs.Pop();
 
             int tmpDist = 99;
 
@@ -1551,8 +1557,8 @@ public class GameManager : Singleton<GameManager>
                         if (tmpDist <= 3 && tmpObj.GetComponent<Square>().Score == chObject.GetComponent<Square>().Score
                         && chObject.GetComponent<Square>().Further /*&& tmpObj.GetComponent<Square>().RowObjIndex == chObject.GetComponent<Square>().RowObjIndex*/)
                         {
-                           tmpObj = chObject;
-                           continue;
+                            tmpObj = chObject;
+                            continue;
                         }
                     }
                 }
@@ -1570,7 +1576,7 @@ public class GameManager : Singleton<GameManager>
             //If doesnt pop with further and same score - check this one
             if (tmpObj != null)
             {
-                if (!tmpObj.transform.parent.CompareTag("outer"))
+                if (!tmpObj.transform.parent.CompareTag("outer") && !tmpObj.GetComponent<Square>().IsMerging)
                     CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
                
             }
@@ -1997,7 +2003,7 @@ public class GameManager : Singleton<GameManager>
 
                         //checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
                         //spots[index].transform.GetChild(i).localPosition += new Vector3(0f, 0.3f, 0f);
-                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
+                        StartCoroutine(StopEnqueue(spots[index].transform.GetChild(i).gameObject));
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
                         break;
                     }
@@ -2012,7 +2018,7 @@ public class GameManager : Singleton<GameManager>
                     {
                         //Debug.Log("right " + spots[index].transform.GetChild(i).GetComponent<Square>().Score);
 
-                        checkObjs.Enqueue(spots[index].transform.GetChild(i).gameObject);
+                        StartCoroutine(StopEnqueue(spots[index].transform.GetChild(i).gameObject));
                         //spots[index].transform.GetChild(i).localPosition += new Vector3( 0f, 0.3f, 0f);
 
                         spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew = true;
@@ -2027,13 +2033,22 @@ public class GameManager : Singleton<GameManager>
 
     }
     
+    //Check Objs delay
+    public IEnumerator StopEnqueue(GameObject checkObj)
+    {
+        yield return new WaitForSeconds(0.2f);
+        checkObjs.Push(checkObj);
+    }
+
+
+
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
  
         int count = 0;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.01f);
 
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
@@ -2122,8 +2137,8 @@ public class GameManager : Singleton<GameManager>
                         FurtherProgress = true;
                         //furtherScore = tmprowObj.GetComponent<Square>().Score;
                         //for avoiding double collapses
-
-                        StartCoroutine(FurtherPops(tmprowObj));
+                        if(!tmprowObj.GetComponent<Square>().IsMerging)
+                            StartCoroutine(FurtherPops(tmprowObj));
 
                         //Detach this square from parent
                         tmprowObj.transform.parent = tmprowObj.transform.parent.parent.parent.GetChild(3);
@@ -2152,23 +2167,32 @@ public class GameManager : Singleton<GameManager>
             {
                 if (tmpSquare.GetComponent<Square>().IsMerging)
                 {
-                   // Debug.Log("SOMETHING BELOW " + tmpSquare.transform.parent.name);
+                    Debug.Log("SOMETHING BELOW " + tmpSquare.transform.parent.name);
+                    yield break;
                 }
 
                 else
-                    checkObjs.Enqueue(tmpSquare);
+                {
+                    yield return new WaitForSeconds(0.2f);
+                    checkObjs.Push(tmpSquare);
+                }
             }
             else
-                checkObjs.Enqueue(tmpSquare);
+            {
+                yield return new WaitForSeconds(0.2f);
+                checkObjs.Push(tmpSquare);
+            }
         }
         else
-            checkObjs.Enqueue(tmpSquare);
-
+        {
+            yield return new WaitForSeconds(0.2f);
+            checkObjs.Push(tmpSquare);
+        }
         //else if (tmpSquare.GetComponent<Square>().Further)
         //    checkObjs.Enqueue(tmpSquare);
 
-       
-            if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
+
+        if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
             {
                 tmpSquare.GetComponent<Square>().Further = true;
                 //Debug.Log("FURTHER");

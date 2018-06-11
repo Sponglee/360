@@ -203,17 +203,17 @@ public class Square : MonoBehaviour
             isMerging = value;
         }
     }
-    private bool isChecking = false;
-    public bool IsChecking
+    private bool isSwooping = false;
+    public bool IsSwooping
     {
         get
         {
-            return isChecking;
+            return isSwooping;
         }
 
         set
         {
-            isChecking = value;
+            isSwooping = value;
         }
     }
 
@@ -456,7 +456,7 @@ public class Square : MonoBehaviour
         yield return new WaitForSeconds(3f);
         if (gameObject.transform.parent != null && CheckLeftRight())
         {
-            GameManager.Instance.checkObjs.Enqueue(gameObject);
+            StartCoroutine(GameManager.Instance.StopEnqueue(gameObject));
             //checkCoolDown = true;
         }
         //else
@@ -641,8 +641,8 @@ public class Square : MonoBehaviour
             {
                 if (CheckLeftRight())
                 {
-                 
-                    GameManager.Instance.checkObjs.Enqueue(gameObject);
+
+                    StartCoroutine(GameManager.Instance.StopEnqueue(gameObject));
                     //Debug.Log("DA " + this.score);
                 }
                 else
@@ -698,7 +698,7 @@ public class Square : MonoBehaviour
                 {
                     if (CheckLeftRight())
                     {
-                        GameManager.Instance.checkObjs.Enqueue(gameObject);
+                        StartCoroutine(GameManager.Instance.StopEnqueue(gameObject));
                         //Debug.Log("DA " + this.score);
 
                     }
