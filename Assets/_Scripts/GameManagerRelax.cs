@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : Singleton<GameManager>
+public class GameManagerRelax : Singleton<GameManager>
 
 {
     public TutorialManager tutorialManager;
@@ -268,7 +268,7 @@ public class GameManager : Singleton<GameManager>
     float differ = 0;
     public bool gameOverInProgress = false;
 
-    Vector3 initClick;
+
 
 
     //TIME EXPAND
@@ -538,7 +538,7 @@ public class GameManager : Singleton<GameManager>
             turnCoolDown -= Time.deltaTime;
         //while (currentTime <= timeOfTravel)
         //{
-            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool)
+            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5)
             {
                 fMoves += 0.01f;
                 sliderFill = (float)(expandMoves - fMoves) / expandMoves;
@@ -569,26 +569,10 @@ public class GameManager : Singleton<GameManager>
         foreach (int tmp in tutSpawns)
         {
 
-            if(spots[tmp].transform.childCount!= 0)
-            {
-                //clear the field
-                for (int i = 0; i < spots[tmp].transform.childCount; i++)
-                {
-                    spots[tmp].transform.GetChild(i).gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-                    spots[tmp].transform.GetChild(i).SetParent(null);
-                }
-                
-                
-            }
 
-            while (spots[tmp].transform.childCount < 1)
+
+            while (spots[tmp].transform.childCount < 3)
             {
-                ////center lower than sides
-                //if (spots[tmp] == currentSpot && spots[tmp].transform.childCount == 2)
-                //{
-                //    scoreCount++;
-                //    break;
-                //}
 
                 randSpawn = Instantiate(squarePrefab, spawns[tmp].transform.position, Quaternion.identity);
 
@@ -623,14 +607,14 @@ public class GameManager : Singleton<GameManager>
         //GLDebug.DrawLine(wheel.transform.up - new Vector3(0, 7f), wheel.transform.position, Color.red, 0, true);
         //if (rotSpot != -1)
         //{
-        //    //spot sticky line
-        //    GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
+        //    // spot sticky line
+        //    //GLDebug.DrawLine(spots[rotSpot].transform.position, wheel.transform.position, Color.cyan, 0, true);
 
         //}
         ////Debuging lines above
         //===============================================================================================================
 
-
+       
         #region Input
 
         // Track hammer click powerup
@@ -645,106 +629,102 @@ public class GameManager : Singleton<GameManager>
                 //Get rid of selected square
                 SelectPowerUp = false;
                 Instantiate(hammerPref, results[0].gameObject.transform.position, Quaternion.identity);
-
-
-                //********************TUTORIAL*********HAMMER(SELECT)
-                if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+                foreach (RaycastResult result in results)
                 {
-
-                    GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
-
-
-
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                    CoinManager.Instance.Coins += 2;
-
-                    //PREPARE FOR BOMB TUTORIAL
-                    #region passing0
-
-                    //if there's no start yet
-                    List<int> tutSpawns = new List<int>();
-                    List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
-                    int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
-                    int firstIndex;
-                    int nextIndex;
-
-                    //check next left one after getting index-1
-                    if (dropIndex - 1 < 0)
-                    {
-                        firstIndex = GameManager.Instance.nBottom - 1;
-                    }
-                    else
-                        firstIndex = dropIndex - 1;
-
-                    //check next one after setting index+1
-                    if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
-                    {
-                        nextIndex = 0;
-                    }
-                    else
-                        nextIndex = dropIndex + 1;
-
-                    tutSpawns.Add(firstIndex);
-                    tutSpawns.Add(dropIndex);
-                    tutSpawns.Add(nextIndex);
-
-
-                    #endregion
-                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
-
-                }
-                //*****************************
-
-
-                //foreach (RaycastResult result in results)
-                //{
                     //Check if parent is square too
-                    if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
-                    {
-                        Destroy(results[0].gameObject.transform.parent.gameObject);
-                        SquareDestroyed = true;
-                        return;
-                    }
-                    if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
-                    {
-                        Destroy(results[0].gameObject.transform.parent.parent.gameObject);
-                        SquareDestroyed = true;
-                        return;
-                    }
-                    Destroy(results[0].gameObject);
+                    if (result.gameObject.transform.parent.CompareTag("square"))
+                        Destroy(result.gameObject.transform.parent.gameObject);
+                    Destroy(result.gameObject);
                     SquareDestroyed = true;
-                //}
+                }
             }
 
 
 
-            
+            //********************TUTORIAL*********HAMMER(SELECT)
+            if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+            {
+
+                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
+               
+
+
+                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                CoinManager.Instance.Coins += 2;
+           
+            //PREPARE FOR BOMB TUTORIAL
+            #region passing0
+
+            //if there's no start yet
+            List<int> tutSpawns = new List<int>();
+            List<int> tutScores = new List<int> (new int[] { 8,4,2,4,8,2,8,4,8});
+                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+                int firstIndex;
+                int nextIndex;
+
+                //check next left one after getting index-1
+                if (dropIndex - 1 < 0)
+                {
+                    firstIndex = GameManager.Instance.nBottom - 1;
+                }
+                else
+                    firstIndex = dropIndex - 1;
+
+                //check next one after setting index+1
+                if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+                {
+                    nextIndex = 0;
+                }
+                else
+                    nextIndex = dropIndex + 1;
+
+                tutSpawns.Add(firstIndex);
+                tutSpawns.Add(dropIndex);
+                tutSpawns.Add(nextIndex);
+
+
+                #endregion
+                StartCoroutine(StopTutBomb(tutSpawns,tutScores));
+
+            }
+            //*****************************
 
         }
         
 
-        ////track 256 coin touches
-        //if (IsPointerOverUIObject("256") && Input.GetMouseButtonUp(0))
-        //{
-        //    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        //    eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        //    List<RaycastResult> results = new List<RaycastResult>();
-        //    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        //    if (results.Count > 0)
-        //    {
-        //        //Get rid of selected square
-        //        SelectPowerUp = false;
+        //track 256 coin touches
+        if (IsPointerOverUIObject("256") && Input.GetMouseButtonUp(0))
+        {
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            if (results.Count > 0)
+            {
+                //Get rid of selected square
+                SelectPowerUp = false;
 
 
-        //        //Grab ZE COIN
-        //        
-                
-                
+                //Grab ZE COIN
+                Instantiate(coinPrefab, results[0].gameObject.transform.position, Quaternion.identity);
 
+                GameObject txtObj = Instantiate(coinFltText, results[0].gameObject.transform.position, Quaternion.identity);
                
+                txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
+                
+                foreach (RaycastResult result in results)
+                {
+                    ////Check if parent is square too
+                    //if (result.gameObject.transform.parent.CompareTag("256"))
+                    //    Destroy(result.gameObject.transform.parent.gameObject);
 
-        //    }
-        //}
+                    Destroy(result.gameObject);
+
+                }
+
+                CoinManager.Instance.Coins += 1;
+            }
+        }
 
         //Track clickSpawn clicks
         if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonDown(0) && !MenuUp)
@@ -754,7 +734,7 @@ public class GameManager : Singleton<GameManager>
             checkClickSpot = int.Parse(currentSpot.name);
             clickAngle = GetFirstClickAngle();
             clickDirection = wheel.transform.up / Mathf.Sin(clickAngle);
-            //initClick = Camera.main.ScreenToWorldPoint(Input.mousePosition) + new Vector3(0, 0, 10f);
+
 
             //Continue check
             if (endGameCheck)
@@ -776,19 +756,18 @@ public class GameManager : Singleton<GameManager>
         //FOR CLICKS
         if (!IsPointerOverUIObject("ui") && !IsPointerOverUIObject("256") && !SelectPowerUp && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
-           // //=================================================================================================================================
-           //     //initialClick /clickAngle
-           //     GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 2, true);
+            ////=================================================================================================================================
+            ////initialClick /clickAngle
+            //GLDebug.DrawLine(Input.mousePosition, wheel.transform.position, Color.magenta, 2, true);
 
-           // //dirangle
-           // GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 2, true);
-           //// =================================================================================================================================
+            ////dirangle
+            //GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 2, true);
+            ////=================================================================================================================================
 
             dirAngle = GetFirstClickAngle();
 
             // touch resistance (firstClick for smooth rotation after first displacement
-            //if mouse angle < follow_angle - do nothing
-            if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick )
+            if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick)
             { 
                 return;
             }
@@ -1418,10 +1397,7 @@ public class GameManager : Singleton<GameManager>
 
                         AudioManager.Instance.PlaySound("lightning");
 
-                        if(first.GetComponent<Square>().Score == 256)
-                        {
-                            first.GetComponent<Square>().DoubleCoins = true;
-                        }
+
                         //move to pizzaz location
                         textObj.transform.position = first.transform.TransformPoint(first.transform.localPosition - fltOffset);
 

@@ -20,6 +20,20 @@ public class Square : MonoBehaviour
         }
     }
 
+    //For x3 256
+    private bool doubleCoins = false;
+    public bool DoubleCoins
+    {
+        get
+        {
+            return doubleCoins;
+        }
+
+        set
+        {
+            doubleCoins = value;
+        }
+    }
 
     [SerializeField]
     private float speed = 10f;
@@ -403,11 +417,30 @@ public class Square : MonoBehaviour
 
                 
                     //SPAWN COIN HERE
-                    //Debug.Log("NO HERE");
+                   
                     Instantiate(GameManager.Instance.coinPrefab, gameObject.transform.position, Quaternion.identity);
                     //IsTop = false;
                     AudioManager.Instance.PlaySound("256");
-                    Destroy(gameObject);
+
+                    GameObject txtObj = Instantiate(GameManager.Instance.coinFltText, gameObject.transform.position, Quaternion.identity);
+
+
+                if (doubleCoins)
+                {
+                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 20";
+                    CoinManager.Instance.Coins += 20;
+                }
+                else
+                {
+                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 10";
+                    CoinManager.Instance.Coins += 10;
+                }
+
+                CoinManager.Instance.coinText.text = CoinManager.Instance.Coins.ToString();
+
+
+
+                Destroy(gameObject);
                
 
 
