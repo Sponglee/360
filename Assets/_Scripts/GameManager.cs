@@ -581,6 +581,7 @@ public class GameManager : Singleton<GameManager>
                 
             }
 
+            yield return new WaitForSeconds(1f);
             while (spots[tmp].transform.childCount < 1)
             {
                 ////center lower than sides
