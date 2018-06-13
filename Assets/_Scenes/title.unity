@@ -3912,7 +3912,7 @@ MonoBehaviour:
     uiPref: {fileID: 0}
     menuPref:
       serializedVersion: 2
-      rgba: 3182089174
+      rgba: 3171304301
     linePref:
       serializedVersion: 2
       rgba: 1006632960
@@ -3935,7 +3935,7 @@ MonoBehaviour:
     uiPref: {fileID: 0}
     menuPref:
       serializedVersion: 2
-      rgba: 3176242192
+      rgba: 3174064644
     linePref:
       serializedVersion: 2
       rgba: 503316480
@@ -12324,7 +12324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.38431376, g: 0.38431376, b: 0.37647063, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

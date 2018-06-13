@@ -355,8 +355,8 @@ public class Square : MonoBehaviour
         if (int.Parse(SquareText.text) == 0)
         {
             SquareText.text = this.score.ToString();
-
         }
+
        
        
         
@@ -427,13 +427,13 @@ public class Square : MonoBehaviour
 
                 if (doubleCoins)
                 {
-                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 20";
-                    CoinManager.Instance.Coins += 20;
+                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 2";
+                    CoinManager.Instance.Coins += 2;
                 }
                 else
                 {
-                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 10";
-                    CoinManager.Instance.Coins += 10;
+                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
+                    CoinManager.Instance.Coins += 1;
                 }
 
                 CoinManager.Instance.coinText.text = CoinManager.Instance.Coins.ToString();

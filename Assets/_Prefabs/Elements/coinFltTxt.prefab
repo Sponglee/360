@@ -55,6 +55,8 @@ GameObject:
   - component: {fileID: 224646194592587276}
   - component: {fileID: 222892021990310494}
   - component: {fileID: 114467626503242230}
+  - component: {fileID: 114328209656486592}
+  - component: {fileID: 114247262225753580}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -102,6 +104,34 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114247262225753580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1266900632421518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: -0.005, y: 0.005}
+  m_UseGraphicAlpha: 1
+--- !u!114 &114328209656486592
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1266900632421518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.08088237, g: 0.08088237, b: 0.08088237, a: 0.703}
+  m_EffectDistance: {x: 0.05, y: -0.02}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114429876249898552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -114,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9545639, b: 0.58823526, a: 1}
+  m_Color: {r: 1, g: 0.9545639, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -154,7 +184,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 9b3cdd0c5fc28ba4d954b879d3ea2869, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5684f3343fcd46468f39d1b13cfa09d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
