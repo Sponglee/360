@@ -418,7 +418,7 @@ public class Square : MonoBehaviour
                 
                     //SPAWN COIN HERE
                    
-                    Instantiate(GameManager.Instance.coinPrefab, gameObject.transform.position, Quaternion.identity);
+                    //Instantiate(GameManager.Instance.coinPrefab, gameObject.transform.position, Quaternion.identity);
                     //IsTop = false;
                     AudioManager.Instance.PlaySound("256");
 
@@ -427,12 +427,12 @@ public class Square : MonoBehaviour
 
                 if (doubleCoins)
                 {
-                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 2";
+                    txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "2";
                     CoinManager.Instance.Coins += 2;
                 }
                 else
                 {
-                    txtObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+ 1";
+                    txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "1";
                     CoinManager.Instance.Coins += 1;
                 }
 
