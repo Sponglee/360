@@ -313,6 +313,8 @@ public class GameManager : Singleton<GameManager>
 
         // Set a ui
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
+
+        
         line.transform.GetChild(0).GetComponent<SpriteRenderer>().color = ThemeStyleHolder.Instance.ThemeStyles[index].linePref;
     }
 

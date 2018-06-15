@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4580094634623272}
   - component: {fileID: 114182478987824678}
   m_Layer: 0
-  m_Name: SquareStyleHolder 1
+  m_Name: SquareStyleHolder 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,14 +69,14 @@ MonoBehaviour:
   - Number: 8
     SquareColor:
       serializedVersion: 2
-      rgba: 4281750757
+      rgba: 4283652351
     TextColor:
       serializedVersion: 2
       rgba: 4288082943
   - Number: 16
     SquareColor:
       serializedVersion: 2
-      rgba: 4282225406
+      rgba: 4278211839
     TextColor:
       serializedVersion: 2
       rgba: 4278192160

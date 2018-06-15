@@ -471,12 +471,8 @@ public class Square : MonoBehaviour
             Destroy(gameObject);
         }
         //reached tmpSquare
-        else if (squareTmpSquare != null && transform.position == squareTmpSquare.position)
+        else if (squareTmpSquare != null && Mathf.Abs(transform.position.x - squareTmpSquare.position.x)<=0.01 && Mathf.Abs(transform.position.y - squareTmpSquare.position.y) <= 0.01)
         {
-            if (GameManager.Instance.checkObjs.Contains(gameObject))
-            {
-                //Debug.Log("reached TMPSQR " + squareTmpSquare.transform.parent.name);
-            }
             Destroy(gameObject);
         }
 
