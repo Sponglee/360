@@ -69,21 +69,21 @@ MonoBehaviour:
   - Number: 8
     SquareColor:
       serializedVersion: 2
-      rgba: 4283652351
+      rgba: 4278650761
     TextColor:
       serializedVersion: 2
       rgba: 4288082943
   - Number: 16
     SquareColor:
       serializedVersion: 2
-      rgba: 4278211839
+      rgba: 4283652351
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
   - Number: 32
     SquareColor:
       serializedVersion: 2
-      rgba: 4131398400
+      rgba: 4279178020
     TextColor:
       serializedVersion: 2
       rgba: 4288082943

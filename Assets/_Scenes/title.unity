@@ -3733,7 +3733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9545639, b: 0.58823526, a: 1}
+  m_Color: {r: 0.2784314, g: 0.7254902, b: 0.9294118, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4003,7 +4003,7 @@ MonoBehaviour:
     linePref:
       serializedVersion: 2
       rgba: 1006632960
-  - wheelPref: {fileID: 1268915157295096, guid: 7899e2f5324cfce469bd772327de8465,
+  - wheelPref: {fileID: 1213567203585192, guid: 2c509cc3111cf7841a58e85c5b716169,
       type: 2}
     squarePref: {fileID: 0}
     spotPref: {fileID: 0}
@@ -4045,7 +4045,7 @@ MonoBehaviour:
     uiPref: {fileID: 0}
     menuPref:
       serializedVersion: 2
-      rgba: 4280166220
+      rgba: 2065573708
     linePref:
       serializedVersion: 2
       rgba: 4288082943

@@ -7737,7 +7737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9545639, b: 0.58823526, a: 1}
+  m_Color: {r: 0.2784314, g: 0.7254902, b: 0.9294118, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7798,7 +7798,7 @@ MonoBehaviour:
     backPref: {fileID: 1197368308167822, guid: 92cd19290242a8c48857441feb5196c4, type: 2}
     fltTextPref: {fileID: 1001251165192770, guid: 95b23eec89192724e8d83d052331a0bd,
       type: 2}
-    styleHolderPref: {fileID: 1192564838605412, guid: 22a1ec2d45bc3794bb82c39e8aeaa6df,
+    styleHolderPref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
       type: 2}
     yellowPref:
       serializedVersion: 2
@@ -7825,7 +7825,7 @@ MonoBehaviour:
     backPref: {fileID: 1946421127701032, guid: 71368abb78691c045b4dbe9f9a9f30e2, type: 2}
     fltTextPref: {fileID: 1001251165192770, guid: a45335c98c69dcf45ac304fa3416ac4e,
       type: 2}
-    styleHolderPref: {fileID: 1192564838605412, guid: 114ecb6b67ec8724b8387ba584486732,
+    styleHolderPref: {fileID: 1192564838605412, guid: 1326d41b98d6174408da59c1246fc897,
       type: 2}
     yellowPref:
       serializedVersion: 2
@@ -7834,7 +7834,7 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4278650761
     fontPref: {fileID: 12800000, guid: 48c207787e1c3a143814e27fe8c7ffa5, type: 3}
-    uiPref: {fileID: 1757548442489750, guid: 9e16b151b0df754438f02b484df5cedf, type: 2}
+    uiPref: {fileID: 1757548442489750, guid: edacce213e0f0cc4c9498844742e2242, type: 2}
     menuPref:
       serializedVersion: 2
       rgba: 3140561153
@@ -7870,7 +7870,7 @@ MonoBehaviour:
       rgba: 1284961279
   - wheelPref: {fileID: 1222991058251880, guid: 3bc2d579e39c4404bab881e6db42836c,
       type: 2}
-    squarePref: {fileID: 1523403489220356, guid: 0b2722090c7335a48af927c8247c9fdf,
+    squarePref: {fileID: 1379266986706278, guid: a76a2b55b52b57640b9749e69f7bbf6b,
       type: 2}
     spotPref: {fileID: 1679439421920422, guid: 581c7a6df84336548993d9af092085dd, type: 2}
     gridPref: {fileID: 1679439421920422, guid: 7c47bd787aa4c694fab5d50412cdd6be, type: 2}
