@@ -7798,7 +7798,7 @@ MonoBehaviour:
     backPref: {fileID: 1197368308167822, guid: 92cd19290242a8c48857441feb5196c4, type: 2}
     fltTextPref: {fileID: 1001251165192770, guid: 95b23eec89192724e8d83d052331a0bd,
       type: 2}
-    styleHolderPref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
+    styleHolderPref: {fileID: 1192564838605412, guid: 5a251d8d7c4a2ea43b86e1ee43d4692f,
       type: 2}
     yellowPref:
       serializedVersion: 2
