@@ -93,14 +93,17 @@ public class FunctionHandler : MonoBehaviour {
     {
        
         PlayerPrefs.SetInt("TutorialStep", 0);
-        Restart();
+        MenuStartTimed();
     }
 
     //Restarts game
     public void MenuRestart()
     {
-        Restart();
+        MenuStartTimed();
     }
+
+
+ 
 
     //Quit
     public void MenuQuit()
@@ -181,7 +184,9 @@ public class FunctionHandler : MonoBehaviour {
 
     }
 
-    public void Restart()
+
+    //Time game
+    public void MenuStartTimed()
     {
         if (GameManager.Instance != null)
         {
@@ -190,6 +195,18 @@ public class FunctionHandler : MonoBehaviour {
         FadeOut();
         SceneManager.LoadScene("main");
        // SceneManager.UnloadScene("title");
+    }
+
+
+    //Relax game
+    public void MenuStartRelax()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.NewGame();
+        }
+        FadeOut();
+        SceneManager.LoadScene("relax");
     }
 
     public void MainMenu()

@@ -9,7 +9,7 @@ public class TitleManager : MonoBehaviour {
 
     public Text shopCurrencyText;
 
-   
+    public GameSerializer serializer;
 
     public Transform RotatorPref;
     public GameObject styleHolderPrefab;
@@ -75,6 +75,18 @@ public class TitleManager : MonoBehaviour {
             case 5:
                 ApplyThemeFromHolder(5);
                 break;
+            case 6:
+                ApplyThemeFromHolder(6);
+                break;
+            case 7:
+                ApplyThemeFromHolder(7);
+                break;
+            case 8:
+                ApplyThemeFromHolder(8);
+                break;
+            case 9:
+                ApplyThemeFromHolder(9);
+                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -114,6 +126,7 @@ public class TitleManager : MonoBehaviour {
       
         //highScoreText = menu.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Text>();
 
+        
         highScoreText.text = PlayerPrefs.GetInt("Highscore", 0).ToString();
 
         highScoreText.text += "\nHIGHSCORE";
@@ -128,6 +141,6 @@ public class TitleManager : MonoBehaviour {
     }
 
    
- 
+    
 
 }

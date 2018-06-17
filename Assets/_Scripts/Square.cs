@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Square : MonoBehaviour
@@ -661,7 +662,7 @@ public class Square : MonoBehaviour
 
         if (other.gameObject.CompareTag("spot") && this.gameObject.CompareTag("square"))
         {
-            Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
+            //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
             //reset speed back
             this.speed = 10f;
 
@@ -678,10 +679,11 @@ public class Square : MonoBehaviour
                 {
                     GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
                     //Debug.Log("above spot " + this.Score);
-                    if (this.IsSpawn)
+                    if (this.IsSpawn && SceneManager.GetActiveScene().name == "Relax")
                     {
+                        Debug.Log("YAY");
                         //GameManager.Instance.ExpandMoves();
-                        //GameManager.Instance.ResetExpand(gameObject);
+                        GameManager.Instance.ResetExpand(gameObject);
                     }
 
                 }
@@ -718,7 +720,7 @@ public class Square : MonoBehaviour
             }
             else if (this.score != other.gameObject.GetComponent<Square>().Score)
             {
-                Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
+                //Debug.Log(gameObject.transform.parent.name + "( " + score + ")");
                 //reset speed back
                 this.speed = 10f;
 
@@ -735,14 +737,15 @@ public class Square : MonoBehaviour
                     {
                         GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
                         //Debug.Log("above square " + this.score);
-                        if (this.IsSpawn)
+                        if (this.IsSpawn && SceneManager.GetActiveScene().name == "Relax")
                         {
+                            Debug.Log("YAY");
                             //GameManager.Instance.ExpandMoves();
-                            //GameManager.Instance.ResetExpand(gameObject);
+                            GameManager.Instance.ResetExpand(gameObject);
                         }
                     }
 
-                    Debug.Log("spot " + this.Score);
+                    //Debug.Log("spot " + this.Score);
                     AudioManager.Instance.PlaySound("bump");
                     //checkCoolDown = true;
                 }

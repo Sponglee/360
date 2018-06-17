@@ -341,6 +341,18 @@ public class GameManager : Singleton<GameManager>
             case 5:
                 ApplyThemeFromHolder(5);
                 break;
+            case 6:
+                ApplyThemeFromHolder(6);
+                break;
+            case 7:
+                ApplyThemeFromHolder(7);
+                break;
+            case 8:
+                ApplyThemeFromHolder(8);
+                break;
+            case 9:
+                ApplyThemeFromHolder(9);
+                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -463,7 +475,16 @@ public class GameManager : Singleton<GameManager>
         pewObjs = new Stack<GameObject>();
         //Apply all the numbers 
         maxScore = 3;
-        expandMoves = 10;
+
+        //different expandMoves for each mode
+
+        if (SceneManager.GetActiveScene().name == "Relax")
+            expandMoves = 3;
+        else
+            expandMoves = 10;
+
+
+
         Tops = 0;
         // count of randomSpawns 
         randSpawnCount = 3;
@@ -474,7 +495,13 @@ public class GameManager : Singleton<GameManager>
         grids = new GameObject[nBottom, 5];
 
         scores = 0;
-        highscores = PlayerPrefs.GetInt("Highscore", 0);
+
+        if(SceneManager.GetActiveScene().name == "Relax")
+            highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
+        else
+            highscores = PlayerPrefs.GetInt("HighscoreTimed", 0);
+
+
         highScoreText.gameObject.SetActive(true);
         highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
@@ -514,21 +541,21 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    //////private IEnumerator SliderStop()
-    //////{
-    ////////float timeOfTravel = 1; //time after object reach a target place 
-    ////////float currentTime = 0; // actual floting time 
-    ////////float normalizedValue;
+    private IEnumerator SliderStop()
+    {
+        float timeOfTravel = 1; //time after object reach a target place 
+        float currentTime = 0; // actual floting time 
+        float normalizedValue;
 
-    ////////while (currentTime <= timeOfTravel)
-    ////////{
-    ////////    currentTime += Time.deltaTime;
-    ////////    normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+        while (currentTime <= timeOfTravel)
+        {
+            currentTime += Time.deltaTime;
+            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
 
-    ////////    slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
-    ////////    yield return null;
-    ////////}
-    //////}
+            slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
+            yield return null;
+        }
+    }
 
 
 
@@ -536,28 +563,36 @@ public class GameManager : Singleton<GameManager>
     //Time EXPAND
     private void FixedUpdate()
     {
-       
+        //Turn timer
             turnCoolDown -= Time.deltaTime;
-        //while (currentTime <= timeOfTravel)
-        //{
-            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool)
-            {
-                fMoves += 0.01f;
-                sliderFill = (float)(expandMoves - fMoves) / expandMoves;
-                slider.fillAmount = sliderFill;
-            }
-            currentTime += Time.deltaTime;
-            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-            //slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
+
+        //Expand Moves for Timed
+       if(SceneManager.GetActiveScene().name == "Main")
+        {
+            Debug.Log(slider.fillAmount);
+            //while (currentTime <= timeOfTravel)
+            //{
+                if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
+                {
+                    fMoves += 0.01f;
+                    sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+                    slider.fillAmount = sliderFill;
+                }
+                currentTime += Time.deltaTime;
+                normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+                slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
             //}
             if (fMoves > expandMoves)
             {
 
                 fMoves = 0;
-                ResetExpand();
+                ResetExpandTime();
             }
+
+        }
        
+         
 
 
 
@@ -583,7 +618,6 @@ public class GameManager : Singleton<GameManager>
                 
             }
 
-            yield return new WaitForSeconds(1f);
             while (spots[tmp].transform.childCount < 1)
             {
                 ////center lower than sides
@@ -620,6 +654,8 @@ public class GameManager : Singleton<GameManager>
         }
 
     }
+
+
     void Update()
     {
         //=============================================================================================================
@@ -726,29 +762,7 @@ public class GameManager : Singleton<GameManager>
         }
         
 
-        ////track 256 coin touches
-        //if (IsPointerOverUIObject("256") && Input.GetMouseButtonUp(0))
-        //{
-        //    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        //    eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        //    List<RaycastResult> results = new List<RaycastResult>();
-        //    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        //    if (results.Count > 0)
-        //    {
-        //        //Get rid of selected square
-        //        SelectPowerUp = false;
-
-
-        //        //Grab ZE COIN
-        //        
-                
-                
-
-               
-
-        //    }
-        //}
-
+      
         //Track clickSpawn clicks
         if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonDown(0) && !MenuUp)
         {
@@ -936,9 +950,10 @@ public class GameManager : Singleton<GameManager>
 
 
         //TURN Launch checkrows
-        if (checkObjs.Count > 0  && turnCoolDown < 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
+        if (checkObjs.Count > 0  && turnCoolDown <= 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
         {
-           
+
+            Debug.Log("TURN");
             turnCoolDown = turnDelay;
             turnCheckObjs = checkObjs;
 
@@ -1517,7 +1532,13 @@ public class GameManager : Singleton<GameManager>
                 
                 highscores = scores;
                 highScoreText.gameObject.SetActive(false);
-                PlayerPrefs.SetInt("Highscore", scores);
+
+                if (SceneManager.GetActiveScene().name == "Relax")
+                    PlayerPrefs.SetInt("HighscoreRelax", scores);
+                else
+                    PlayerPrefs.SetInt("HighscoreTimed", scores);
+
+
                 if (!highscoreSoundBool)
                 {
                     highscoreSoundBool = true;
@@ -1627,50 +1648,47 @@ public class GameManager : Singleton<GameManager>
     }
 
     //Reset Expand Moves  (TIME EXPAND)
-    public void ResetExpand()
+    public void ResetExpandTime()
     {
-
-
-
         Expand();
-
-
+        //if(SceneManager.GetActiveScene().name == "Relax")
+        //{
+        sliderFill = (float)(expandMoves - fMoves) / expandMoves;
         StartCoroutine(FillStop());
+        //}
 
-                //expandMoves += expandMoves/2;
-                //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-                sliderFill = (float)(expandMoves - Moves) / expandMoves;
-          
 
 
     }
-    //////////Reset Expand Moves
-    ////////public void ResetExpand(GameObject tmpSquare)
-    ////////{
-    ////////    // expand moves++ if this happened by player
-    ////////    if (tmpSquare.GetComponent<Square>().IsSpawn)
-    ////////    {
-
-    ////////        //ExpandMoves();
-
-    ////////        tmpSquare.GetComponent<Square>().IsSpawn = false;
-
-    ////////        if (Moves > expandMoves - 1)
-    ////////        {
-
-    ////////            Expand();
 
 
-    ////////            StartCoroutine(FillStop());
+    //////////Reset Expand Moves Relax Mode
+    public void ResetExpand(GameObject tmpSquare)
+    {
+        // expand moves++ if this happened by player
+        if (tmpSquare.GetComponent<Square>().IsSpawn)
+        {
 
-    ////////            //expandMoves += expandMoves/2;
-    ////////            //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-    ////////            sliderFill = (float)(expandMoves - Moves) / expandMoves;
-    ////////        }
+            ExpandMoves();
+
+            tmpSquare.GetComponent<Square>().IsSpawn = false;
+
+            if (Moves > expandMoves - 1)
+            {
+
+                Expand();
+
+              
+                StartCoroutine(FillStop());
+                sliderFill = (float)(expandMoves - Moves) / expandMoves;
+              
+                //expandMoves += expandMoves/2;
+                //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+            }
 
 
-    ////////    }
-    ////////}
+        }
+    }
 
 
     //Checks for 3 in a row
@@ -1957,9 +1975,9 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator FillStop()
     {
         yield return new WaitForSeconds(1f);
-        //Moves = 1;
-        //fMoves = 0;
-        //slider.fillAmount = 1;
+            Moves = 0;
+            
+            slider.fillAmount = 1;
     }
 
 
@@ -2063,8 +2081,10 @@ public class GameManager : Singleton<GameManager>
     //Check Objs delay
     public IEnumerator StopEnqueue(GameObject checkObj)
     {
+       
         yield return new WaitForSeconds(0.1f);
         checkObjs.Push(checkObj);
+        Debug.Log(checkObjs.Count);
     }
 
 
@@ -2260,15 +2280,19 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    ////Update moves
-    //public void ExpandMoves()
-    //{
-    //    //Moves++;
-    //    //sliderFill = (float)(expandMoves - Moves) / expandMoves;
+    //Update moves
+    public void ExpandMoves()
+    {
+        if (SceneManager.GetActiveScene().name == "Relax")
+        {
+            Moves++;
+            sliderFill = (float)(expandMoves - Moves) / expandMoves;
 
-    //    //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
-    //    StartCoroutine(SliderStop());
-    //}
+            //NextShrink.text = string.Format("256: {0}", expandMoves - Moves);
+        }
+
+        StartCoroutine(SliderStop());
+    }
 
 
 
@@ -2668,7 +2692,7 @@ public class GameManager : Singleton<GameManager>
         currentBoard = new Board();
         currentBoard.pieces = new List<Piece>();
         currentBoard.highscore = new int();
-
+        currentBoard.gameType = true;
         currentBoard.highscore = scores;
        
 
@@ -2702,7 +2726,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadGame(string fileName)
     {
-       
+        
         currentBoard = serializer.LoadGameBinary(fileName);
 
         
