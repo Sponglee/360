@@ -1,11 +1,12 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 
-public class TitleManager : MonoBehaviour {
+public class TitleManager : Singleton<TitleManager> {
 
 
     public int themeIndex;
-    public Text highScoreText;
+    public Text highScoreTimedText;
+    public Text highScoreRelaxText;
 
     public Text shopCurrencyText;
 
@@ -127,10 +128,10 @@ public class TitleManager : MonoBehaviour {
         //highScoreText = menu.transform.GetChild(0).GetChild(4).gameObject.GetComponent<Text>();
 
         
-        highScoreText.text = PlayerPrefs.GetInt("Highscore", 0).ToString();
+        highScoreTimedText.text = PlayerPrefs.GetInt("HighscoreTimed", 0).ToString();
 
-        highScoreText.text += "\nHIGHSCORE";
-    
+        highScoreRelaxText.text = PlayerPrefs.GetInt("HighscoreRelax", 0).ToString();
+
 
 
     }
@@ -140,7 +141,10 @@ public class TitleManager : MonoBehaviour {
         InitializeTheme();
     }
 
-   
-    
+    public void TitleNewGame()
+    {
+        serializer.CreateNewGame();
+    }
+
 
 }

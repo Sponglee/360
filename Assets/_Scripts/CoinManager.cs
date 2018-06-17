@@ -92,6 +92,15 @@ public class CoinManager : Singleton<CoinManager> {
 
     }
 
+    public void MenuAd()
+    {
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResult });
+            Time.timeScale = 0;
+        }
+    }
+
     //Recieve result from watching
     private void HandleAdResult(ShowResult result)
     {

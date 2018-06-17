@@ -188,9 +188,16 @@ public class FunctionHandler : MonoBehaviour {
     //Time game
     public void MenuStartTimed()
     {
+    
         if (GameManager.Instance != null)
         {
+           
             GameManager.Instance.NewGame();
+            
+        }
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) == 0)
+        {
+            TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
         SceneManager.LoadScene("main");
@@ -201,9 +208,16 @@ public class FunctionHandler : MonoBehaviour {
     //Relax game
     public void MenuStartRelax()
     {
+
+   
         if (GameManager.Instance != null)
         {
             GameManager.Instance.NewGame();
+           
+        }
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) == 1)
+        {
+            TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
         SceneManager.LoadScene("relax");

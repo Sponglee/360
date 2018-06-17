@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 {
     public TutorialManager tutorialManager;
 
+    public GameObject shareButton;
     public GameObject drillPref;
     public GameObject bombPref;
     public GameObject hammerPref;
@@ -239,7 +240,7 @@ public class GameManager : Singleton<GameManager>
 
     //for ui check
     private bool mouseDown = false;
-    private bool MenuUp = false;
+    public bool MenuUp = false;
 
     //spot rotation positions
     private Vector3 clickDirection;
@@ -296,6 +297,10 @@ public class GameManager : Singleton<GameManager>
         leYellow = ThemeStyleHolder.Instance.ThemeStyles[index].yellowPref;
         leRed = ThemeStyleHolder.Instance.ThemeStyles[index].redPref;
         fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
+
+        shareButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
+        shareButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
+
 
 
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
@@ -496,10 +501,16 @@ public class GameManager : Singleton<GameManager>
 
         scores = 0;
 
-        if(SceneManager.GetActiveScene().name == "Relax")
+        if (SceneManager.GetActiveScene().name == "Relax")
+        {
+            PlayerPrefs.SetInt("GameMode", 0);
             highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
+        }
         else
+        {
+            PlayerPrefs.SetInt("GameMode", 1);
             highscores = PlayerPrefs.GetInt("HighscoreTimed", 0);
+        }
 
 
         highScoreText.gameObject.SetActive(true);
@@ -569,7 +580,7 @@ public class GameManager : Singleton<GameManager>
         //Expand Moves for Timed
        if(SceneManager.GetActiveScene().name == "Main")
         {
-            Debug.Log(slider.fillAmount);
+            //Debug.Log(slider.fillAmount);
             //while (currentTime <= timeOfTravel)
             //{
                 if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
@@ -2595,6 +2606,10 @@ public class GameManager : Singleton<GameManager>
         //If just Open menu mid game
         else 
         {
+            if(MenuUp)
+            {
+                CoinManager.Instance.MenuAd();
+            }
             menu.SetActive(!menu.activeSelf);
             ui.SetActive(!menu.activeSelf);
             
@@ -2692,7 +2707,7 @@ public class GameManager : Singleton<GameManager>
         currentBoard = new Board();
         currentBoard.pieces = new List<Piece>();
         currentBoard.highscore = new int();
-        currentBoard.gameType = true;
+
         currentBoard.highscore = scores;
        
 
