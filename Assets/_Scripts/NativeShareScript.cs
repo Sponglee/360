@@ -7,7 +7,11 @@ public class NativeShareScript : MonoBehaviour
 {
     public GameObject CanvasShareObj;
 
+    //For sharing
     public GameObject snap;
+    public GameObject pause;
+    public GameObject powerUpPanel;
+
 
     private bool isProcessing = false;
     private bool isFocus = false;
@@ -28,6 +32,11 @@ public class NativeShareScript : MonoBehaviour
     IEnumerator ShareScreenshot()
     {
         isProcessing = true;
+        GameManager.Instance.shareButton.SetActive(false);
+        GameManager.Instance.powerUpPanel.SetActive(false);
+        GameManager.Instance.pause.SetActive(false);
+
+
 
         yield return new WaitForEndOfFrame();
         Time.timeScale = 0;
@@ -38,7 +47,7 @@ public class NativeShareScript : MonoBehaviour
 
         string destination = Path.Combine(Application.persistentDataPath, "screenshot.png");
 
-        yield return new WaitForSecondsRealtime(0.3f);
+        yield return new WaitForSecondsRealtime(0.2f);
 
         if (!Application.isEditor)
         {
@@ -66,6 +75,11 @@ public class NativeShareScript : MonoBehaviour
 
         yield return new WaitUntil(() => isFocus);
         CanvasShareObj.SetActive(false);
+
+        GameManager.Instance.shareButton.SetActive(true);
+        GameManager.Instance.powerUpPanel.SetActive(true);
+        GameManager.Instance.pause.SetActive(true);
+
         isProcessing = false;
     }
 

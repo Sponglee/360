@@ -16,6 +16,13 @@ public class GameManager : Singleton<GameManager>
     public TutorialManager tutorialManager;
 
     public GameObject shareButton;
+    public GameObject pause;
+    public GameObject powerUpPanel;
+
+
+
+
+
     public GameObject drillPref;
     public GameObject bombPref;
     public GameObject hammerPref;
@@ -301,6 +308,8 @@ public class GameManager : Singleton<GameManager>
         shareButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
         shareButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
 
+        //Grab pause button pref
+        pause = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref.transform.GetChild(0).GetChild(0).gameObject;
 
 
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
