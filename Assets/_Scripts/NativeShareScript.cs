@@ -34,7 +34,7 @@ public class NativeShareScript : MonoBehaviour
         isProcessing = true;
         GameManager.Instance.shareButton.SetActive(false);
         GameManager.Instance.powerUpPanel.SetActive(false);
-        GameManager.Instance.pause.SetActive(false);
+        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(false);
 
 
 
@@ -78,7 +78,8 @@ public class NativeShareScript : MonoBehaviour
 
         GameManager.Instance.shareButton.SetActive(true);
         GameManager.Instance.powerUpPanel.SetActive(true);
-        GameManager.Instance.pause.SetActive(true);
+        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(false);
+
 
         isProcessing = false;
     }
@@ -87,5 +88,6 @@ public class NativeShareScript : MonoBehaviour
     {
         Time.timeScale = 1;
         isFocus = focus;
+        
     }
 }
