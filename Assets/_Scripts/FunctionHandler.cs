@@ -266,9 +266,27 @@ public class FunctionHandler : MonoBehaviour {
         }
     }
 
+
+
+    public Sprite volumeIcon;
+    public Sprite volumeMute;
+
+    public GameObject volumeUI;
+
+    
     public void VolumeHandler(float value)
     {
         AudioManager.Instance.VolumeChange(value);
+
+        volumeUI = GameObject.FindGameObjectWithTag("volume");
+
+        if (value == 0)
+        {
+            volumeUI.GetComponent<Image>().sprite = volumeMute;
+        }
+        else
+            volumeUI.GetComponent<Image>().sprite = volumeIcon;
+
     }
 
 
@@ -281,6 +299,16 @@ public class FunctionHandler : MonoBehaviour {
         
     }
     
+    public void ResetHighscores()
+    {
+        PlayerPrefs.SetInt("HighscoreTimed", 0);
+        PlayerPrefs.SetInt("HighscoreRelax", 0);
+        TitleManager.Instance.TitleNewGame();
+        SceneManager.LoadScene("title");
+
+    }
+
+
     public void MoreCoins()
     {
         CoinManager.Instance.Coins += 10;

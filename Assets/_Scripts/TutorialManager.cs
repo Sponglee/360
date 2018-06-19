@@ -54,18 +54,33 @@ public class TutorialManager : Singleton<TutorialManager> {
         tutorialCanvas.gameObject.SetActive(false);
     }
 
-    //public void PowerUpHighlight(Animator anim)
-    //{
-    //    StartCoroutine(StopPowerUp(anim));
-    //}
+    //Coroutine to fill squares for the Drill tutorial
+    public IEnumerator StopTutDrill()
+    {
+        yield return new WaitForSeconds(1f);
+        //PREPEARE FOR DRILL TUTORIAL
+        int tutScore = 2;
 
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject tutSpawn;
 
+            if (GameManager.Instance.currentSpot.transform.childCount < 4)
+            {
+                tutSpawn = Instantiate(GameManager.Instance.squarePrefab, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity, GameManager.Instance.currentSpawn.transform);
+                tutSpawn.GetComponent<Square>().Score = tutScore;
+                yield return new WaitForSeconds(0.2f);
 
-    //public IEnumerator StopPowerUp(Animator anim)
-    //{
-    //    float timer = 3f;
+            }
+            tutScore *= 2;
+        }
+    }
 
-    //    yield return new WaitForSeconds(3f);
-        
-    //}
+    //Close tutorial cooldown
+    public IEnumerator StopCloseTut()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.tutorialManager.tutorialCanvas.gameObject.SetActive(false);
+
+    }
 }

@@ -83,7 +83,9 @@ public class GameManager : Singleton<GameManager>
 
 
     // PowerUP cs
-    public bool SelectPowerUp = false;
+    public bool SelectHammer = false;
+    public bool SelectBomb = false;
+    public bool SelectDrill = false;
     //Keep track of select powerup usage
     public bool SquareDestroyed = false;
 
@@ -690,8 +692,8 @@ public class GameManager : Singleton<GameManager>
 
         #region Input
 
-        // Track hammer click powerup
-        if (IsPointerOverUIObject("square") && SelectPowerUp && Input.GetMouseButtonUp(0))
+        // USE **HAMMER
+        if (IsPointerOverUIObject("square") && SelectHammer && Input.GetMouseButtonUp(0))
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -700,7 +702,7 @@ public class GameManager : Singleton<GameManager>
             if (results.Count > 0)
             {
                 //Get rid of selected square
-                SelectPowerUp = false;
+                SelectHammer = false;
                 Instantiate(hammerPref, results[0].gameObject.transform.position, Quaternion.identity);
 
 
@@ -755,34 +757,237 @@ public class GameManager : Singleton<GameManager>
 
                 //foreach (RaycastResult result in results)
                 //{
-                    //Check if parent is square too
-                    if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
-                    {
-                        Destroy(results[0].gameObject.transform.parent.gameObject);
-                        SquareDestroyed = true;
-                        return;
-                    }
-                    if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
-                    {
-                        Destroy(results[0].gameObject.transform.parent.parent.gameObject);
-                        SquareDestroyed = true;
-                        return;
-                    }
+                //Check if parent is square too
+                if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
+                {
+                    Destroy(results[0].gameObject.transform.parent.gameObject);
+                    SquareDestroyed = true;
+                  
+                }
+                else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
+                {
+                    Destroy(results[0].gameObject.transform.parent.parent.gameObject);
+                    SquareDestroyed = true;
+                   
+                }
+                else if (results[0].gameObject.CompareTag("square"))
+                {
                     Destroy(results[0].gameObject);
                     SquareDestroyed = true;
-                //}
+                }
+                else
+                {
+                    AudioManager.Instance.PlaySound("stop");
+                }
+
+            }
+            else
+            {
+                AudioManager.Instance.PlaySound("stop");
             }
 
-
-
-            
-
         }
-        
+        //Use **BOMB
+        else if (IsPointerOverUIObject("square") && SelectBomb && Input.GetMouseButtonUp(0))
+        {
+           
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            if (results.Count > 0)
+            {
+                //Get rid of selected square
+                SelectBomb = false;
+                //Instantiate(bombPref, results[0].gameObject.transform.position, Quaternion.identity);
 
-      
+
+                //********************TUTORIAL*********BOMB
+                if (GameManager.Instance.tutorialManager.tutorialStep == 4)
+                {
+
+
+                    GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
+
+
+                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                    CoinManager.Instance.Coins += 3;
+                    StartCoroutine(TutorialManager.Instance.StopTutDrill());
+                }
+                //*****************************
+
+                Debug.Log("BOMB SELECTED  " + results[0].gameObject.name);
+
+                int dropIndex = -1;
+                int dropIndexSquare = -1;
+
+                if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.name);
+
+                    Debug.Log("1 " + results[0].gameObject.transform.parent.parent.name);
+
+                    dropIndexSquare = results[0].gameObject.transform.parent.GetSiblingIndex();
+                    SquareDestroyed = true;
+                   
+                }
+                else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.parent.name);
+
+                    Debug.Log("2 " + results[0].gameObject.transform.parent.parent.parent.name);
+
+                    dropIndexSquare = results[0].gameObject.transform.parent.parent.GetSiblingIndex();
+                    SquareDestroyed = true;
+                   
+                }
+                else if (results[0].gameObject.CompareTag("square"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.name);
+
+                    Debug.Log("3 " + results[0].gameObject.transform.parent.name);
+
+                    dropIndexSquare = results[0].gameObject.transform.GetSiblingIndex();
+                    SquareDestroyed = true;
+                }
+                else
+                {
+                    AudioManager.Instance.PlaySound("stop");
+                }
+
+
+
+                int firstIndex;
+                int nextIndex;
+
+                //check next left one after getting index-1
+                if (dropIndex - 1 < 0)
+                {
+                    firstIndex = GameManager.Instance.nBottom - 1;
+                }
+                else
+                    firstIndex = dropIndex - 1;
+
+                //check next one after setting index+1
+                if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+                {
+                    nextIndex = 0;
+                }
+                else
+                    nextIndex = dropIndex + 1;
+
+                if (spots[firstIndex].transform.parent.childCount > dropIndexSquare)
+                {
+                    Instantiate(bombPref, spots[firstIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
+                    Destroy(spots[firstIndex].transform.GetChild(dropIndexSquare).gameObject);
+
+                }
+
+
+                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare)
+                {
+                    Instantiate(bombPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
+                }
+
+                if (spots[nextIndex].transform.parent.childCount > dropIndexSquare)
+                {
+                    Instantiate(bombPref, spots[nextIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
+                    Destroy(spots[nextIndex].transform.GetChild(dropIndexSquare).gameObject);
+                }
+                SquareDestroyed = true;
+            }
+        }
+        //USE **DRILL
+        else if (IsPointerOverUIObject("square") && SelectDrill && Input.GetMouseButtonUp(0))
+        {
+
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+            eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            if (results.Count > 0)
+            {
+                //Get rid of selected square
+                SelectDrill = false;
+                //Instantiate(bombPref, results[0].gameObject.transform.position, Quaternion.identity);
+
+                //********************TUTORIAL*********DRILL
+                if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+                {
+
+
+                    GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", false);
+
+
+                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                    CoinManager.Instance.Coins += 5;
+                    GameManager.Instance.tutorialManager.button.SetActive(true);
+                    StartCoroutine(TutorialManager.Instance.StopCloseTut());
+                }
+                //*****************************
+
+
+                Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
+
+                int dropIndex = -1;
+                int dropIndexSquare = -1;
+
+                if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.name);
+                    dropIndexSquare = results[0].gameObject.transform.parent.GetSiblingIndex();
+                    SquareDestroyed = true;
+
+                }
+                else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.parent.name);
+                    dropIndexSquare = results[0].gameObject.transform.parent.parent.GetSiblingIndex();
+                    SquareDestroyed = true;
+
+                }
+                else if (results[0].gameObject.CompareTag("square"))
+                {
+                    dropIndex = int.Parse(results[0].gameObject.transform.parent.name);
+                    dropIndexSquare = results[0].gameObject.transform.GetSiblingIndex();
+                    SquareDestroyed = true;
+                }
+                else
+                {
+                    AudioManager.Instance.PlaySound("stop");
+                }
+
+
+                if(spots[dropIndex].transform.parent.childCount>dropIndexSquare && dropIndexSquare>0)
+                {
+                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare-1).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare-1).gameObject);
+                }
+
+
+                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare)
+                {
+                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
+                }
+
+                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare && dropIndexSquare < 3)
+                {
+                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare+1).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare+1).gameObject);
+                }
+
+
+                SquareDestroyed = true;
+
+             
+
+            }
+        }
+
         //Track clickSpawn clicks
-        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonDown(0) && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButtonDown(0) && !MenuUp)
         {
             mouseDown = true;
             cantSpawn = false;
@@ -809,7 +1014,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         //FOR CLICKS
-        if (!IsPointerOverUIObject("ui") && !IsPointerOverUIObject("256") && !SelectPowerUp && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !IsPointerOverUIObject("256") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
            // //=================================================================================================================================
            //     //initialClick /clickAngle
@@ -840,7 +1045,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-        if (!IsPointerOverUIObject("ui") && !SelectPowerUp && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
+        if (!IsPointerOverUIObject("ui") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
         {
             // if clicked 
             if (mouseDown)
@@ -2606,6 +2811,7 @@ public class GameManager : Singleton<GameManager>
 
             //GameOver
             menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
           
@@ -2645,6 +2851,15 @@ public class GameManager : Singleton<GameManager>
     }
 
 
+    //On minimize - save, time = 0
+
+    private void OnApplicationPause(bool value)
+    {
+        SaveGame();
+    }
+
+   
+
     private IEnumerator ContinueTime(GameObject button)
     {
         if (noMoves == true)
@@ -2681,6 +2896,8 @@ public class GameManager : Singleton<GameManager>
         MenuUp = false;
         //hide button
         menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+        menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(true);
+
         menu.transform.GetChild(0).GetChild(0).gameObject.GetComponentInChildren<Slider>().value = 1;
         //Hide Continue for 2nd run
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);

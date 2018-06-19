@@ -42,26 +42,67 @@ public class PowerUp : MonoBehaviour
     private void Update()
     {
         //Deselect when gamemanager bool is false
-        if(selectionUI==true)
+        if (selectionUI == true)
         {
-            SelectionUI = GameManager.Instance.SelectPowerUp;
+            switch (gameObject.transform.GetSiblingIndex())
+            {
+                case 0:
+                    SelectionUI = GameManager.Instance.SelectHammer;
+                    break;
+                case 1:
+                    SelectionUI = GameManager.Instance.SelectBomb;
+                    break;
+                case 2:
+                    SelectionUI = GameManager.Instance.SelectDrill;
+                    break;
+            }
+
         }
     }
 
 
     //Square power up
-    public void SelectSquare()
+    public void SelectSquare(int powerUp)
     {
-        GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", false);
-        SelectionUI = true;
-        GameManager.Instance.SelectPowerUp = true;  
+        GameManager.Instance.tutorialManager.powerUpAnim[powerUp].SetBool("Highlight", false);
 
+        SelectionUI = true;
+        switch (powerUp)
+        {
+            case 0:
+                GameManager.Instance.SelectHammer = true;
+                GameManager.Instance.SelectBomb = false;
+                GameManager.Instance.SelectDrill = false;
+                break;
+            case 1:
+                GameManager.Instance.SelectBomb = true;
+                GameManager.Instance.SelectDrill = false;
+                GameManager.Instance.SelectHammer = false;
+                break;
+            case 2:
+                GameManager.Instance.SelectDrill = true;
+                GameManager.Instance.SelectHammer = false;
+                GameManager.Instance.SelectBomb = false;
+                break;
+        }
     }
 
-    public void DeselectSquare()
+    public void DeselectSquare(int powerUp)
     {
         SelectionUI = false;
-        GameManager.Instance.SelectPowerUp = false;
+        switch (powerUp)
+        {
+            case 0:
+                GameManager.Instance.SelectHammer = false;
+                break;
+            case 1:
+                GameManager.Instance.SelectBomb = false;
+                break;
+            case 2:
+                GameManager.Instance.SelectDrill = false;
+                break;
+        }
+
 
     }
 
@@ -73,139 +114,75 @@ public class PowerUp : MonoBehaviour
     public void PowerUpPressed()
     {
         int index = gameObject.transform.GetSiblingIndex();
-
-        if (CoinManager.Instance.Coins >= pCost)
+        if(!GameManager.Instance.gameOverInProgress)
         {
-           
-
-            switch (index)
+            if (CoinManager.Instance.Coins >= pCost)
             {
-                //DRILL
-                case 2:
-                    {
-                        if (GameManager.Instance.currentSpot.transform.childCount>0 && GameManager.Instance.currentSpot.transform.childCount < 5)
+
+
+                switch (index)
+                {
+                    //DRILL
+                    case 2:
                         {
-
-                            Debug.Log("NO ROTATION");
-
-
-                        
-                            //********************TUTORIAL*********DRILL
-                            if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+                            if (!SelectionUI)
+                                SelectSquare(2);
+                            else
                             {
-                              
-                                
-                                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", false);
-
-
-                                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                                CoinManager.Instance.Coins += 5;
-                                GameManager.Instance.tutorialManager.button.SetActive(true);
-                                StartCoroutine(StopCloseTut());
-                            }
-                            //*****************************
-
-
-                            CoinManager.Instance.Coins -= pCost;
-                            GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
-                            tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
-
-                        }
-                        else
-                        {
-                            AudioManager.Instance.PlaySound("stop");
-                        }
-
-                    }
-                    
-                    break;
-                //BOMB
-                case 1:
-                    {
-                        if (GameManager.Instance.currentSpot.transform.childCount > 0 && GameManager.Instance.currentSpot.transform.childCount < 5)
-                        {
-                           
-
-                            CoinManager.Instance.Coins -= pCost;
-                            GameObject tmp = Instantiate(powerUpPref, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity);
-                            tmp.transform.SetParent(GameManager.Instance.currentSpot.transform);
-
-                                Debug.Log("DRILL NO ROTATION");
-
-
-                           
-                            //********************TUTORIAL*********BOMB
-                            if (GameManager.Instance.tutorialManager.tutorialStep == 4)
-                            {
-                                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", false);
-                                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
-
-
-
-                                GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                                CoinManager.Instance.Coins += 3;
-                                StartCoroutine(StopTutDrill());
+                                DeselectSquare(0);
+                                DeselectSquare(1);
+                                DeselectSquare(2);
                             }
 
-                            //*****************************
-
                         }
-                        else
+
+                        break;
+                    //BOMB
+                    case 1:
                         {
-                            AudioManager.Instance.PlaySound("stop");
+
+                            if (!SelectionUI)
+                                SelectSquare(1);
+                            else
+                            {
+                                DeselectSquare(0);
+                                DeselectSquare(1);
+                                DeselectSquare(2);
+                            }
+
+
                         }
-                    }
 
-                    break;
-                //HAMMER
-                case 0:
-                    {
-                        if (!SelectionUI)
-                            SelectSquare();
-                        else
-                            DeselectSquare();
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    //HAMMER
+                    case 0:
+                        {
+                            if (!SelectionUI)
+                                SelectSquare(0);
+                            else
+                            {
+                                DeselectSquare(0);
+                                DeselectSquare(1);
+                                DeselectSquare(2);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
-        else
-        {
-            Debug.Log("REEEE");
-            CoinManager.Instance.ShowAd();
-        }
-    }
-
-    //Coroutine to fill squares for the Drill tutorial
-    public IEnumerator StopTutDrill()
-    {
-        yield return new WaitForSeconds(1f);
-        //PREPEARE FOR DRILL TUTORIAL
-        int tutScore = 2;
-
-        for (int i = 0; i < 5; i++)
-        {
-            GameObject tutSpawn;
-
-            if (GameManager.Instance.currentSpot.transform.childCount < 4)
+            else
             {
-                tutSpawn = Instantiate(GameManager.Instance.squarePrefab, GameManager.Instance.currentSpawn.transform.position, Quaternion.identity, GameManager.Instance.currentSpawn.transform);
-                tutSpawn.GetComponent<Square>().Score = tutScore;
-                yield return new WaitForSeconds(0.2f);
-                
+                Debug.Log("REEEE");
+                CoinManager.Instance.ShowAd();
             }
-            tutScore *= 2;
         }
     }
+      
 
-    //Close tutorial cooldown
-    public IEnumerator StopCloseTut()
-    {
-        yield return new WaitForSeconds(5f);
-        GameManager.Instance.tutorialManager.tutorialCanvas.gameObject.SetActive(false);
+   
 
-    }
+    
 }
 
 

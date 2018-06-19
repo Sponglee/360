@@ -17,6 +17,8 @@ TagManager:
   - drill
   - bomb
   - 256
+  - FxTemporaire
+  - volume
   layers:
   - Default
   - TransparentFX

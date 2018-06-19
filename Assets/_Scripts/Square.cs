@@ -565,7 +565,7 @@ public class Square : MonoBehaviour
         if (gameObject != null && gameObject.CompareTag("drill"))
         {
             Instantiate(GameManager.Instance.drillPref, other.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
 
         }
         if (gameObject != null && other.CompareTag("bomb"))

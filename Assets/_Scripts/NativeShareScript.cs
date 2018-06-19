@@ -59,7 +59,7 @@ public class NativeShareScript : MonoBehaviour
             intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_STREAM"),
                 uriObject);
             intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TEXT"),
-                "Can you beat my score? #360!");
+                "Can you beat my score? #360!  /***LINK_HERE***/");
             intentObject.Call<AndroidJavaObject>("setType", "image/jpeg");
             AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
@@ -88,6 +88,6 @@ public class NativeShareScript : MonoBehaviour
     {
         Time.timeScale = 1;
         isFocus = focus;
-        
+        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
     }
 }
