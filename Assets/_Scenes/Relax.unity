@@ -1657,7 +1657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &329520196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8478,7 +8478,7 @@ MonoBehaviour:
     uiPref: {fileID: 1757548442489750, guid: bb08d4a9ed5326b40a4ab884ae5832c3, type: 2}
     menuPref:
       serializedVersion: 2
-      rgba: 3182089174
+      rgba: 2556529362
     linePref:
       serializedVersion: 2
       rgba: 1006632960
@@ -10235,7 +10235,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0ff05ae370de7634cac6d0cf99ca506b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5c09f43bc588c61418c439fecbc93e72, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

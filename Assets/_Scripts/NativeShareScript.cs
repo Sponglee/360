@@ -40,7 +40,7 @@ public class NativeShareScript : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
         Time.timeScale = 0;
-        ScreenCapture.CaptureScreenshot("screenshot.png", 2);
+        ScreenCapture.CaptureScreenshot("screenshot.png");
         Texture2D texture = ScreenCapture.CaptureScreenshotAsTexture();
 
 
@@ -78,7 +78,7 @@ public class NativeShareScript : MonoBehaviour
 
         GameManager.Instance.shareButton.SetActive(true);
         GameManager.Instance.powerUpPanel.SetActive(true);
-        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(false);
+        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
 
 
         isProcessing = false;
@@ -88,6 +88,8 @@ public class NativeShareScript : MonoBehaviour
     {
         Time.timeScale = 1;
         isFocus = focus;
+        GameManager.Instance.shareButton.SetActive(true);
         GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
+        GameManager.Instance.powerUpPanel.SetActive(true);
     }
 }

@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 0.9545639, b: 0.776, a: 1}
-    m_HighlightedColor: {r: 0.6691177, g: 0.23823074, b: 0.19679931, a: 1}
+    m_HighlightedColor: {r: 0.0627451, g: 0.8705883, b: 0.28627452, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
@@ -1178,6 +1178,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  volumeIcon: {fileID: 0}
+  volumeMute: {fileID: 0}
+  volumeUI: {fileID: 0}
 --- !u!212 &212904279042515072
 SpriteRenderer:
   m_ObjectHideFlags: 1
