@@ -408,6 +408,12 @@ public class GameManager : Singleton<GameManager>
         nextRound = ui.transform.GetChild(3).gameObject.GetComponent<Image>();
 
 
+        //Enable TIMED ICON 
+        if ( SceneManager.GetActiveScene().name == "Main")
+        {
+            ui.transform.GetChild(6).gameObject.SetActive(true);
+        }
+        
         Instantiate(styleHolderPrefab);
 
 
@@ -922,7 +928,7 @@ public class GameManager : Singleton<GameManager>
 
                     GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     CoinManager.Instance.Coins += 5;
-                    GameManager.Instance.tutorialManager.button.SetActive(true);
+                    //GameManager.Instance.tutorialManager.button.SetActive(true);
                     StartCoroutine(TutorialManager.Instance.StopCloseTut());
                 }
                 //*****************************

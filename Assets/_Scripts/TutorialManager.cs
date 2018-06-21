@@ -15,18 +15,37 @@ public class TutorialManager : Singleton<TutorialManager> {
 
     public UnityEvent tutorialTrigger;
 
+
+
+    public string[] tutorialTextRU;
+    public string[] tutorialTextEN;
+   
+
     public string[] tutorialText;
 
     public Animator[] powerUpAnim;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
+
+        
+
+
+
 
         tutorialStep = PlayerPrefs.GetInt("TutorialStep", 0);
      
         if (tutorialStep <= 5)
         {
-            
+            if (PlayerPrefs.GetInt("Language", 0) == 0)
+            {
+                tutorialText = tutorialTextEN;
+
+            }
+            else
+                tutorialText = tutorialTextRU;
+
             tutorialCanvas.gameObject.SetActive(true);
             tutorialCanvas.transform.GetComponentInChildren<Text>().text = tutorialText[PlayerPrefs.GetInt("TutorialStep", 0)];
         }
@@ -82,5 +101,37 @@ public class TutorialManager : Singleton<TutorialManager> {
         yield return new WaitForSeconds(5f);
         GameManager.Instance.tutorialManager.tutorialCanvas.gameObject.SetActive(false);
 
+    }
+
+
+
+    public void ChangeLanguage()
+    {
+        int language = PlayerPrefs.GetInt("Language", 0);
+
+
+        language++;
+
+        if (language == 2)
+            language = 0;
+
+        PlayerPrefs.SetInt("Language", language);
+
+
+        if (language == 0)
+        {
+            tutorialCanvas.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = "RU";
+            tutorialText = tutorialTextEN;
+
+        }
+        else
+        {
+            tutorialCanvas.transform.GetChild(0).GetChild(1).GetChild(0).GetComponent<Text>().text = "EN";
+            tutorialText = tutorialTextRU;
+        }
+
+          
+    
+        tutorialCanvas.transform.GetComponentInChildren<Text>().text = tutorialText[PlayerPrefs.GetInt("TutorialStep", 0)];
     }
 }
