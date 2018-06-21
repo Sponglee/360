@@ -115,7 +115,7 @@ public class CoinManager : Singleton<CoinManager> {
                 }
             case ShowResult.Skipped:
                 {
-                    CoinManager.Instance.Coins += partAdWatch;
+                    //CoinManager.Instance.Coins += partAdWatch;
                     Time.timeScale = 1;
                     break;
                 }

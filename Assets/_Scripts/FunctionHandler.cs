@@ -41,14 +41,34 @@ public class FunctionHandler : MonoBehaviour {
         CoinManager.Instance.ShowAd();
     }
 
+    public void EmailUs()
+    {
+        //email Id to send the mail to
+        string email = "solidHinken@gmail.com";
+        //subject of the mail
+        string subject = MyEscapeURL("360!BLOCKS FEEDBACK");
+        //body of the mail which consists of Device Model and its Operating System
+        string body = MyEscapeURL("Please Enter your message here\n\n\n\n" +
+         "________" +
+         "\n\nPlease Do Not Modify This\n\n" +
+         "Model: " + SystemInfo.deviceModel + "\n\n" +
+            "OS: " + SystemInfo.operatingSystem + "\n\n" +
+         "________");
+        //Open the Default Mail App
+        Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
+    }
+
+    string MyEscapeURL(string url)
+    {
+        return WWW.EscapeURL(url).Replace("+", "%20");
+    }
 
 
 
 
+//THEME CHANGER
 
-    //THEME CHANGER
-
-    public void ChangeThemeHandler(GameObject index)
+public void ChangeThemeHandler(GameObject index)
     {
         int themeIndex = index.transform.GetSiblingIndex();
         //Check if skin is in availability (bit flag)
