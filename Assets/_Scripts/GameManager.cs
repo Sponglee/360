@@ -822,7 +822,7 @@ public class GameManager : Singleton<GameManager>
                 }
                 //*****************************
 
-                Debug.Log("BOMB SELECTED  " + results[0].gameObject.name);
+                //Debug.Log("BOMB SELECTED  " + results[0].gameObject.name);
 
                 int dropIndex = -1;
                 int dropIndexSquare = -1;
@@ -831,7 +831,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.name);
 
-                    Debug.Log("1 " + results[0].gameObject.transform.parent.parent.name);
+                    //Debug.Log("1 " + results[0].gameObject.transform.parent.parent.name);
 
                     dropIndexSquare = results[0].gameObject.transform.parent.GetSiblingIndex();
                     SquareDestroyed = true;
@@ -841,7 +841,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     dropIndex = int.Parse(results[0].gameObject.transform.parent.parent.parent.name);
 
-                    Debug.Log("2 " + results[0].gameObject.transform.parent.parent.parent.name);
+                    //Debug.Log("2 " + results[0].gameObject.transform.parent.parent.parent.name);
 
                     dropIndexSquare = results[0].gameObject.transform.parent.parent.GetSiblingIndex();
                     SquareDestroyed = true;
@@ -851,7 +851,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     dropIndex = int.Parse(results[0].gameObject.transform.parent.name);
 
-                    Debug.Log("3 " + results[0].gameObject.transform.parent.name);
+                    //Debug.Log("3 " + results[0].gameObject.transform.parent.name);
 
                     dropIndexSquare = results[0].gameObject.transform.GetSiblingIndex();
                     SquareDestroyed = true;
@@ -934,7 +934,7 @@ public class GameManager : Singleton<GameManager>
                 //*****************************
 
 
-                Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
+                //Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
 
                 int dropIndex = -1;
                 int dropIndexSquare = -1;
@@ -1082,7 +1082,7 @@ public class GameManager : Singleton<GameManager>
                         //********************TUTORIAL*********ROTATE
                         if (tutorialManager.tutorialStep == 1)
                         {
-                            Debug.Log("NO ROTATION");
+                            //Debug.Log("NO ROTATION");
                             tutorialManager.tutorialTrigger.Invoke();
                         }
                         //*****************************
@@ -1108,7 +1108,7 @@ public class GameManager : Singleton<GameManager>
                         //********************TUTORIAL*********ROTATE
                         if (tutorialManager.tutorialStep == 1)
                         {
-                            Debug.Log("NO ROTATION");
+                            //Debug.Log("NO ROTATION");
                             tutorialManager.tutorialTrigger.Invoke();
                         }
                         //*****************************
@@ -1182,7 +1182,7 @@ public class GameManager : Singleton<GameManager>
         if (checkObjs.Count > 0  && turnCoolDown <= 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
         {
 
-            Debug.Log("TURN");
+            //Debug.Log("TURN");
             turnCoolDown = turnDelay;
             turnCheckObjs = checkObjs;
 
@@ -1233,7 +1233,7 @@ public class GameManager : Singleton<GameManager>
             //********************TUTORIAL*********ROTATE
             if (tutorialManager.tutorialStep == 1)
             {
-                Debug.Log("NO ROTATION");
+                //Debug.Log("NO ROTATION");
                 tutorialManager.tutorialTrigger.Invoke();
             }
             //*****************************
@@ -1582,7 +1582,7 @@ public class GameManager : Singleton<GameManager>
         //********************TUTORIAL*********MERGE
         if (tutorialManager.tutorialStep == 2)
         {
-            Debug.Log("NO ROTATION");
+            //Debug.Log("NO ROTATION");
             tutorialManager.tutorialTrigger.Invoke();
             GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
         }
@@ -1802,7 +1802,7 @@ public class GameManager : Singleton<GameManager>
     {
         checkRowIndex = 0;
         // List<List<GameObject>> tmppopObjs = popObjs;
-        Debug.Log(" TURN " + checkObjs.Count);
+        //Debug.Log(" TURN " + checkObjs.Count);
         //if there's something in the queue
         while (turnCheckObjs.Count >0)
         {
@@ -2313,7 +2313,7 @@ public class GameManager : Singleton<GameManager>
        
         yield return new WaitForSeconds(0.1f);
         checkObjs.Push(checkObj);
-        Debug.Log(checkObjs.Count);
+        //Debug.Log(checkObjs.Count);
     }
 
 
@@ -2360,7 +2360,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (popObjs[i].Count == 0)
             {
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>" + popObjs[i].Count);
+                //Debug.Log(">>>>>>>>>>>>>>>>>>>>" + popObjs[i].Count);
                 popObjs.RemoveAt(i);
                 tmpSquares.RemoveAt(i);
             }
@@ -2443,7 +2443,7 @@ public class GameManager : Singleton<GameManager>
             {
                 if (tmpSquare.GetComponent<Square>().IsMerging)
                 {
-                    Debug.Log("SOMETHING BELOW " + tmpSquare.transform.parent.name);
+                    //Debug.Log("SOMETHING BELOW " + tmpSquare.transform.parent.name);
                     yield break;
                 }
 
