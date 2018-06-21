@@ -264,8 +264,10 @@ public class GameManager : Singleton<GameManager>
 
     //For clickspawn
     bool cantSpawn = true;
+    public bool tutorialSpawnLock;
     bool NoClickSpawn = false;
-
+    public bool NoRotation = false;
+    public int tutCurrentSpot = -1;
 
     //FollowMouse resistance
     public float follow__Delay;
@@ -417,6 +419,7 @@ public class GameManager : Singleton<GameManager>
         Instantiate(styleHolderPrefab);
 
 
+     
     }
 
     // Helps ApplyStyle to grab numbers/color
@@ -564,6 +567,153 @@ public class GameManager : Singleton<GameManager>
 
         LoadGame("threesixty.dat");
 
+
+
+        //********************TUTORIAL RESTRICTIONS*****************************If tutorial for POwer ups - no clicking
+
+
+        if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
+        {
+            NoRotation = false;
+        }
+        else if (PlayerPrefs.GetInt("TutorialStep", 0) >1 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+            NoRotation = true;
+
+
+        
+        if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+        {
+            //Hammer
+            if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+            {
+
+                GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
+
+
+
+                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                CoinManager.Instance.Coins += 2;
+
+                //PREPARE FOR HAMMER TUTORIAL
+                #region passing0
+
+                //if there's no start yet
+                List<int> tutSpawns = new List<int>();
+                List<int> tutScores = new List<int>(new int[] { 2 });
+                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+                
+
+               
+                
+                tutSpawns.Add(dropIndex);
+
+
+
+                #endregion
+                bool countBool = false;
+
+                for (int i = 0; i < nBottom; i++)
+                {
+                    if (spots[i].transform.childCount != 0)
+                        countBool = true;
+                    Debug.Log(spots[i].transform.childCount);
+                }
+
+                if (!countBool)
+                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
+
+            }
+            else if (GameManager.Instance.tutorialManager.tutorialStep == 4)
+            {
+
+                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
+
+
+
+                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                CoinManager.Instance.Coins += 2;
+
+                //PREPARE FOR BOMB TUTORIAL
+                #region passing0
+
+                //if there's no start yet
+                List<int> tutSpawns = new List<int>();
+                List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
+                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+                int firstIndex;
+                int nextIndex;
+
+                //check next left one after getting index-1
+                if (dropIndex - 1 < 0)
+                {
+                    firstIndex = GameManager.Instance.nBottom - 1;
+                }
+                else
+                    firstIndex = dropIndex - 1;
+
+                //check next one after setting index+1
+                if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+                {
+                    nextIndex = 0;
+                }
+                else
+                    nextIndex = dropIndex + 1;
+
+                tutSpawns.Add(firstIndex);
+                tutSpawns.Add(dropIndex);
+                tutSpawns.Add(nextIndex);
+
+                #endregion
+                int countInt = 0;
+
+                for (int i = 0; i < nBottom; i++)
+                {
+                    if (spots[i].transform.childCount != 0)
+                        countInt++;
+                    Debug.Log(spots[i].transform.childCount);
+                }
+
+                if (countInt<3)
+                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
+
+
+            }
+            else if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+            {
+
+                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
+
+
+
+                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                CoinManager.Instance.Coins += 2;
+
+                //PREPARE FOR DRILL TUTORIAL
+                int countInt = 0;
+                for (int i = 0; i < nBottom; i++)
+                {
+                    if (spots[i].transform.childCount >= 3)
+                        countInt++;
+                    Debug.Log(spots[i].transform.childCount);
+                }
+
+                if (countInt < 3)
+                    StartCoroutine(TutorialManager.Instance.StopTutDrill());
+                  
+
+
+
+            }
+            NoClickSpawn = true;
+        }
+        else
+        {
+            NoClickSpawn = false;
+         
+        }
+        //*************************END OF TUTORIAL RESTICTIONS******************************
+
+
     }
 
 
@@ -694,6 +844,21 @@ public class GameManager : Singleton<GameManager>
         //}
         ////Debuging lines above
         //===============================================================================================================
+        if (PlayerPrefs.GetInt("TutorialStep", 0) == 2)
+        {
+            
+           if (tutCurrentSpot != int.Parse(currentSpot.name))
+           {
+                NoRotation = true;
+           }
+        }
+        if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
+        {
+            NoRotation = false;
+            tutCurrentSpot = int.Parse(currentSpot.name);
+        }
+        else if (PlayerPrefs.GetInt("TutorialStep", 0) >2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+            NoRotation = true;
 
 
         #region Input
@@ -716,11 +881,13 @@ public class GameManager : Singleton<GameManager>
                 if (GameManager.Instance.tutorialManager.tutorialStep == 3)
                 {
 
+                  
+
+                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
 
 
 
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     CoinManager.Instance.Coins += 2;
 
                     //PREPARE FOR BOMB TUTORIAL
@@ -812,11 +979,11 @@ public class GameManager : Singleton<GameManager>
                 if (GameManager.Instance.tutorialManager.tutorialStep == 4)
                 {
 
+                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+
 
                     GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
 
-
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     CoinManager.Instance.Coins += 3;
                     StartCoroutine(TutorialManager.Instance.StopTutDrill());
                 }
@@ -923,17 +1090,17 @@ public class GameManager : Singleton<GameManager>
                 {
 
 
-                    GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", false);
+                    
 
 
                     GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     CoinManager.Instance.Coins += 5;
                     //GameManager.Instance.tutorialManager.button.SetActive(true);
+                    NoClickSpawn = false;
+                  
                     StartCoroutine(TutorialManager.Instance.StopCloseTut());
                 }
-                //*****************************
-
-
+               
                 //Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
 
                 int dropIndex = -1;
@@ -987,7 +1154,9 @@ public class GameManager : Singleton<GameManager>
 
                 SquareDestroyed = true;
 
-             
+                //*****************************
+
+
 
             }
         }
@@ -1046,7 +1215,8 @@ public class GameManager : Singleton<GameManager>
                 firstClick = false;
                 if (!randSpawning)
                 {
-                    FollowMouse(clickAngle, clickDirection);
+                    if(!NoRotation)
+                        FollowMouse(clickAngle, clickDirection);
                 }
             }
         }
@@ -1054,16 +1224,16 @@ public class GameManager : Singleton<GameManager>
         if (!IsPointerOverUIObject("ui") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
         {
             // if clicked 
-            if (mouseDown)
+            if (mouseDown )
             {
                
                   
 
-                if (int.Parse(currentSpot.name) == checkClickSpot)
+                if (int.Parse(currentSpot.name) == checkClickSpot && !NoRotation)
                 {
                        
                     //Turn left
-                    if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress))
+                    if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress) && !NoRotation)
                     {
 
                         int nextClickSpot;
@@ -1076,7 +1246,8 @@ public class GameManager : Singleton<GameManager>
                         //spot to rotate towards
                         rotSpot = nextClickSpot;
 
-                        StartCoroutine(FollowRotate(rotationDuration));
+                        
+                            StartCoroutine(FollowRotate(rotationDuration));
 
 
                         //********************TUTORIAL*********ROTATE
@@ -1089,7 +1260,7 @@ public class GameManager : Singleton<GameManager>
 
                     }
                     //Turn right
-                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress))
+                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Right) && !RotationProgress) && !NoRotation)
                     {
                         int firstClickSpot;
                         if (checkClickSpot - 1 < 0)
@@ -1101,7 +1272,8 @@ public class GameManager : Singleton<GameManager>
                         //spot to rotate towards
                         rotSpot = firstClickSpot;
 
-                        StartCoroutine(FollowRotate(rotationDuration));
+                       
+                            StartCoroutine(FollowRotate(rotationDuration));
 
 
 
@@ -1114,10 +1286,11 @@ public class GameManager : Singleton<GameManager>
                         //*****************************
 
                     }
-                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress)
+                    else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress && !NoRotation)
                     {
                         rotSpot = checkClickSpot;
-                        StartCoroutine(FollowRotate(rotationDuration));
+                        
+                            StartCoroutine(FollowRotate(rotationDuration));
                     }
                     //centerAnim.SetTrigger("tilt");
 
@@ -1133,8 +1306,8 @@ public class GameManager : Singleton<GameManager>
                 {
                     if (cantSpawn)
                         {
-                       
-                            StartCoroutine(FollowRotate(rotationDuration));
+                          
+                                StartCoroutine(FollowRotate(rotationDuration));
                         }
 
 
@@ -1144,7 +1317,7 @@ public class GameManager : Singleton<GameManager>
 
                 //disble angle buffer 
                 firstClick = true;
-            mouseDown = false;
+                mouseDown = false;
             }
 
             if (Mathf.Abs(clickAngle - dirAngle) < spawn__Angle && SwipeManager.Instance.IsSwiping(SwipeDirection.None) && !randSpawning && !cantSpawn && currentSpot.transform.childCount <= 4 && currentSpot.GetComponent<SpriteRenderer>().color != leRed)
@@ -1585,6 +1758,7 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log("NO ROTATION");
             tutorialManager.tutorialTrigger.Invoke();
             GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
+            NoClickSpawn = true;
         }
         //*****************************
 
