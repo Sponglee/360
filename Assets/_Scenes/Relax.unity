@@ -5602,7 +5602,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.9994202, y: -1399}
+  m_AnchoredPosition: {x: 2.9994202, y: -2201}
   m_SizeDelta: {x: 5.9988403, y: -10.001709}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &802455549
@@ -6699,7 +6699,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1474, y: 0}
+  m_AnchoredPosition: {x: 2040, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &934658800
@@ -10362,7 +10362,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 1280}
-  m_ScreenMatchMode: 2
+  m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -12115,6 +12115,9 @@ MonoBehaviour:
   RotationProgress: 0
   rotationDuration: 0.1
   MenuUp: 0
+  tutorialSpawnLock: 0
+  NoRotation: 0
+  tutCurrentSpot: -1
   follow__Delay: 0.2
   follow__Angle: 2
   spawn__Angle: 0.3

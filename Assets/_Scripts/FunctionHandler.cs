@@ -187,7 +187,7 @@ public void ChangeThemeHandler(GameObject index)
 
     public void BackFromLocal(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(1900, localMenu, true));
+        StartCoroutine(StopMenu(2500, localMenu, true));
 
     }
 
@@ -200,7 +200,7 @@ public void ChangeThemeHandler(GameObject index)
 
     public void BackFromShop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(-2050, localMenu, false));
+        StartCoroutine(StopMenu(-2500, localMenu, false));
 
     }
 
