@@ -314,6 +314,10 @@ public class Square : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        if (SceneManager.GetActiveScene().name == "Dzen")
+        {
+            SquareText.gameObject.SetActive(false);
+        }
         //Default index for turn
         rowObjIndex = 99;
         //Apply theme

@@ -208,14 +208,15 @@ public void ChangeThemeHandler(GameObject index)
     //Time game
     public void MenuStartTimed()
     {
-    
+        //Ingame restart
         if (GameManager.Instance != null)
         {
            
             GameManager.Instance.NewGame();
             
         }
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) == 0)
+        //New game if mode is not 1 (timed) in title menu
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) != 1)
         {
             TitleManager.Instance.TitleNewGame();
         }
@@ -235,12 +236,32 @@ public void ChangeThemeHandler(GameObject index)
             GameManager.Instance.NewGame();
            
         }
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) == 1)
+        //New game if mode is not 0 (relax) in title menu
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != 0)
         {
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
         SceneManager.LoadScene("relax");
+    }
+
+    //Relax game
+    public void MenuStartDzen()
+    {
+
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.NewGame();
+
+        }
+        //New game if mode is not 2 (dzen) in title menu
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 2) != 2)
+        {
+            TitleManager.Instance.TitleNewGame();
+        }
+        FadeOut();
+        SceneManager.LoadScene("dzen");
     }
 
     public void MainMenu()
