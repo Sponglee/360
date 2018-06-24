@@ -344,6 +344,7 @@ public void ChangeThemeHandler(GameObject index)
     {
         PlayerPrefs.SetInt("HighscoreTimed", 0);
         PlayerPrefs.SetInt("HighscoreRelax", 0);
+        PlayerPrefs.SetInt("HighscoreDzen", 0);
         TitleManager.Instance.TitleNewGame();
         SceneManager.LoadScene("title");
 

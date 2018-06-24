@@ -20,7 +20,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject powerUpPanel;
 
 
-
+    public Sprite timeSprite;
+    public Sprite relaxSprite;
+    public Sprite dzenSprite;
 
 
     public GameObject drillPref;
@@ -410,11 +412,7 @@ public class GameManager : Singleton<GameManager>
         nextRound = ui.transform.GetChild(3).gameObject.GetComponent<Image>();
 
 
-        //Enable TIMED ICON 
-        if ( SceneManager.GetActiveScene().name == "Main")
-        {
-            ui.transform.GetChild(6).gameObject.SetActive(true);
-        }
+      
         
         Instantiate(styleHolderPrefab);
 
@@ -519,27 +517,34 @@ public class GameManager : Singleton<GameManager>
 
         scores = 0;
 
-        if (SceneManager.GetActiveScene().name == "Relax")
-        {
-            PlayerPrefs.SetInt("GameMode", 0);
-            highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
-        }
-        else if (SceneManager.GetActiveScene().name == "Main")
-        {
-            PlayerPrefs.SetInt("GameMode", 1);
-            highscores = PlayerPrefs.GetInt("HighscoreTimed", 0);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("GameMode", 2);
-            highscores = PlayerPrefs.GetInt("HighscoreDzen", 0);
-        }
-
-
-
         highScoreText.gameObject.SetActive(true);
         highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
+
+        
+
+        //Enable GAME MODE ICON 
+        if (SceneManager.GetActiveScene().name == "Main")
+        {
+            ui.transform.GetChild(6).gameObject.SetActive(true);
+            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+            tmpImg.sprite = timeSprite;
+        }
+        else if (SceneManager.GetActiveScene().name == "Relax")
+        {
+            ui.transform.GetChild(6).gameObject.SetActive(true);
+            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+            tmpImg.sprite = relaxSprite;
+        }
+        else if (SceneManager.GetActiveScene().name == "Dzen")
+        {
+            ui.transform.GetChild(6).gameObject.SetActive(true);
+            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+            tmpImg.sprite = dzenSprite;
+        }
+
+
+
 
         //upper.text = string.Format("{0}", scoreUpper);
         //NextShrink.text = string.Format("{0}", expandMoves - Moves);
@@ -718,6 +723,14 @@ public class GameManager : Singleton<GameManager>
          
         }
         //*************************END OF TUTORIAL RESTICTIONS******************************
+
+
+
+       
+
+
+
+
 
 
     }
@@ -1941,11 +1954,23 @@ public class GameManager : Singleton<GameManager>
                 
                 highscores = scores;
                 highScoreText.gameObject.SetActive(false);
+                //highScoreText.gameObject.GetComponent<Image>().sprite = relaxIcon;
 
                 if (SceneManager.GetActiveScene().name == "Relax")
+                {
+                   
                     PlayerPrefs.SetInt("HighscoreRelax", scores);
-                else
+                }
+                else if (SceneManager.GetActiveScene().name == "Main")
+                {
+                  
                     PlayerPrefs.SetInt("HighscoreTimed", scores);
+                }
+                else if (SceneManager.GetActiveScene().name == "Dzen")
+                {
+                    PlayerPrefs.SetInt("HighscoreDzen", scores);
+                }
+
 
 
                 if (!highscoreSoundBool)

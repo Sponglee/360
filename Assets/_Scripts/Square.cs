@@ -316,7 +316,7 @@ public class Square : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Dzen")
         {
-            SquareText.gameObject.SetActive(false);
+            //SquareText.gameObject.SetActive(false);
         }
         //Default index for turn
         rowObjIndex = 99;

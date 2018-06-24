@@ -7,7 +7,7 @@ public class TitleManager : Singleton<TitleManager> {
     public int themeIndex;
     public Text highScoreTimedText;
     public Text highScoreRelaxText;
-
+    public Text highScoreDzenText;
     public Text shopCurrencyText;
 
     public GameSerializer serializer;
@@ -132,7 +132,7 @@ public class TitleManager : Singleton<TitleManager> {
 
         highScoreRelaxText.text = PlayerPrefs.GetInt("HighscoreRelax", 0).ToString();
 
-
+        highScoreDzenText.text = PlayerPrefs.GetInt("HighscoreDzen", 0).ToString();
 
     }
 

@@ -12108,6 +12108,9 @@ MonoBehaviour:
   shareButton: {fileID: 1525565253}
   pause: {fileID: 0}
   powerUpPanel: {fileID: 859915296}
+  timeSprite: {fileID: 21300000, guid: 34fa93f50ae334480afec22f89b650ae, type: 3}
+  relaxSprite: {fileID: 21300000, guid: 36363d95dfa7745d7884deacae15d0a9, type: 3}
+  dzenSprite: {fileID: 21300000, guid: 8f8ed097a605241b4935118a866cafb8, type: 3}
   drillPref: {fileID: 1891680571949018, guid: 8176d02f2bca7f7489bce4f7638f2dd7, type: 2}
   bombPref: {fileID: 1713321670649478, guid: 36f08b2ff4cb995439287dd76fb4dfd4, type: 2}
   hammerPref: {fileID: 1062401853458444, guid: 59237d89e4e180a4584fdc96fadff387, type: 2}

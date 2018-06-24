@@ -8955,7 +8955,7 @@ MonoBehaviour:
     shareButtonText: {r: 1, g: 1, b: 1, a: 1}
     wheelPref: {fileID: 1222991058251880, guid: 350cf70835279b54cb75924a3987584b,
       type: 2}
-    squarePref: {fileID: 1523403489220356, guid: 28a482695d4b2564b86596223e60e8a7,
+    squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
       type: 2}
     spotPref: {fileID: 1679439421920422, guid: 055f7c54f7ecbe148b7a8b0d4b93abd8, type: 2}
     gridPref: {fileID: 1679439421920422, guid: 784c28be4a463e74cb0a5b33be5b04c1, type: 2}
@@ -12108,6 +12108,9 @@ MonoBehaviour:
   shareButton: {fileID: 1525565253}
   pause: {fileID: 0}
   powerUpPanel: {fileID: 859915296}
+  timeSprite: {fileID: 21300000, guid: 34fa93f50ae334480afec22f89b650ae, type: 3}
+  relaxSprite: {fileID: 21300000, guid: 36363d95dfa7745d7884deacae15d0a9, type: 3}
+  dzenSprite: {fileID: 21300000, guid: 8f8ed097a605241b4935118a866cafb8, type: 3}
   drillPref: {fileID: 1891680571949018, guid: 8176d02f2bca7f7489bce4f7638f2dd7, type: 2}
   bombPref: {fileID: 1713321670649478, guid: 36f08b2ff4cb995439287dd76fb4dfd4, type: 2}
   hammerPref: {fileID: 1062401853458444, guid: 59237d89e4e180a4584fdc96fadff387, type: 2}
