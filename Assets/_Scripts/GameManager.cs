@@ -528,19 +528,22 @@ public class GameManager : Singleton<GameManager>
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            tmpImg.sprite = timeSprite;
+            if (tmpImg != null)
+                tmpImg.sprite = timeSprite;
         }
         else if (SceneManager.GetActiveScene().name == "Relax")
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            tmpImg.sprite = relaxSprite;
+            if (tmpImg != null)
+                tmpImg.sprite = relaxSprite;
         }
         else if (SceneManager.GetActiveScene().name == "Dzen")
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            tmpImg.sprite = dzenSprite;
+            if(tmpImg != null)
+                tmpImg.sprite = dzenSprite;
         }
 
 

@@ -53,7 +53,7 @@ public class FunctionHandler : MonoBehaviour {
          "\n\nPlease Do Not Modify This\n\n" +
          "Model: " + SystemInfo.deviceModel + "\n\n" +
             "OS: " + SystemInfo.operatingSystem + "\n\n" +
-         "________");
+         "________\n\n");
         //Open the Default Mail App
         Application.OpenURL("mailto:" + email + "?subject=" + subject + "&body=" + body);
     }
@@ -358,5 +358,6 @@ public void ChangeThemeHandler(GameObject index)
     }
 
 
+ 
 
 }
