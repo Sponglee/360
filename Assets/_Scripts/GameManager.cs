@@ -517,11 +517,30 @@ public class GameManager : Singleton<GameManager>
 
         scores = 0;
 
+
+        //Set a gameMode and highscore
+        if (SceneManager.GetActiveScene().name == "Relax")
+        {
+            PlayerPrefs.SetInt("GameMode", 0);
+            highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
+        }
+        else if (SceneManager.GetActiveScene().name == "Main")
+        {
+            PlayerPrefs.SetInt("GameMode", 1);
+            highscores = PlayerPrefs.GetInt("HighscoreTimed", 1);
+        }
+        else if (SceneManager.GetActiveScene().name == "Dzen")
+        {
+            PlayerPrefs.SetInt("GameMode", 2);
+            highscores = PlayerPrefs.GetInt("HighscoreDzen", 2);
+        }
+
+       
         highScoreText.gameObject.SetActive(true);
         highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
 
-        
+      
 
         //Enable GAME MODE ICON 
         if (SceneManager.GetActiveScene().name == "Main")

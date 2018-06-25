@@ -218,6 +218,7 @@ public void ChangeThemeHandler(GameObject index)
         //New game if mode is not 1 (timed) in title menu
         else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) != 1)
         {
+            //Debug.Log(PlayerPrefs.GetInt("GameMode",99)); 
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
@@ -239,6 +240,8 @@ public void ChangeThemeHandler(GameObject index)
         //New game if mode is not 0 (relax) in title menu
         else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != 0)
         {
+            //Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
+
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
@@ -258,6 +261,7 @@ public void ChangeThemeHandler(GameObject index)
         //New game if mode is not 2 (dzen) in title menu
         else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 2) != 2)
         {
+            //Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
