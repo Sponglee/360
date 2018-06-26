@@ -15,6 +15,8 @@ public class GameManager : Singleton<GameManager>
 {
     public TutorialManager tutorialManager;
 
+    public bool AdInProgress = false;
+
     public GameObject shareButton;
     public GameObject pause;
     public GameObject powerUpPanel;
@@ -535,12 +537,12 @@ public class GameManager : Singleton<GameManager>
             highscores = PlayerPrefs.GetInt("HighscoreDzen", 2);
         }
 
-       
+
         highScoreText.gameObject.SetActive(true);
         highScoreText.text = highscores.ToString();
         scoreText.text = scores.ToString();
 
-      
+
 
         //Enable GAME MODE ICON 
         if (SceneManager.GetActiveScene().name == "Main")
@@ -561,7 +563,7 @@ public class GameManager : Singleton<GameManager>
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            if(tmpImg != null)
+            if (tmpImg != null)
                 tmpImg.sprite = dzenSprite;
         }
 
@@ -609,11 +611,11 @@ public class GameManager : Singleton<GameManager>
         {
             NoRotation = false;
         }
-        else if (PlayerPrefs.GetInt("TutorialStep", 0) >1 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+        else if (PlayerPrefs.GetInt("TutorialStep", 0) > 1 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
             NoRotation = true;
 
 
-        
+
         if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
         {
             //Hammer
@@ -634,10 +636,10 @@ public class GameManager : Singleton<GameManager>
                 List<int> tutSpawns = new List<int>();
                 List<int> tutScores = new List<int>(new int[] { 2 });
                 int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
-                
 
-               
-                
+
+
+
                 tutSpawns.Add(dropIndex);
 
 
@@ -706,7 +708,7 @@ public class GameManager : Singleton<GameManager>
                     Debug.Log(spots[i].transform.childCount);
                 }
 
-                if (countInt<3)
+                if (countInt < 3)
                     StartCoroutine(StopTutBomb(tutSpawns, tutScores));
 
 
@@ -732,7 +734,7 @@ public class GameManager : Singleton<GameManager>
 
                 if (countInt < 3)
                     StartCoroutine(TutorialManager.Instance.StopTutDrill());
-                  
+
 
 
 
@@ -742,13 +744,15 @@ public class GameManager : Singleton<GameManager>
         else
         {
             NoClickSpawn = false;
-         
+
         }
+
+       
         //*************************END OF TUTORIAL RESTICTIONS******************************
 
 
 
-       
+
 
 
 
@@ -900,7 +904,12 @@ public class GameManager : Singleton<GameManager>
         }
         else if (PlayerPrefs.GetInt("TutorialStep", 0) >2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
             NoRotation = true;
+        else
+        {
 
+            NoRotation = false;
+            NoClickSpawn = false;
+        }
 
         #region Input
 
@@ -1125,6 +1134,8 @@ public class GameManager : Singleton<GameManager>
                 //Get rid of selected square
                 SelectDrill = false;
                 //Instantiate(bombPref, results[0].gameObject.transform.position, Quaternion.identity);
+
+
 
                 //********************TUTORIAL*********DRILL
                 if (GameManager.Instance.tutorialManager.tutorialStep == 5)
@@ -3052,10 +3063,17 @@ public class GameManager : Singleton<GameManager>
         //If just Open menu mid game
         else 
         {
-            if(MenuUp)
+            if (MenuUp && !AdInProgress && !GameOverBool)
             {
+                
                 CoinManager.Instance.MenuAd();
+                AdInProgress = true;
             }
+            else if (MenuUp && AdInProgress)
+            {
+                AdInProgress = false;
+            }
+           
             menu.SetActive(!menu.activeSelf);
             ui.SetActive(!menu.activeSelf);
             
@@ -3070,6 +3088,7 @@ public class GameManager : Singleton<GameManager>
         serializer.CreateNewGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
+        
         OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before
@@ -3088,10 +3107,39 @@ public class GameManager : Singleton<GameManager>
 
     private void OnApplicationPause(bool value)
     {
-        SaveGame();
+        if (value)
+        {
+            if (!gameOverInProgress && !GameOverBool)
+            {
+                if (!MenuUp && !AdInProgress)
+                {
+                    OpenMenu();
+
+                }
+                else if (AdInProgress)
+                {
+                   
+                    OpenMenu();
+                }
+                SaveGame();
+            }
+        }
+           
+            
     }
 
-   
+    //private void OnApplicationFocus(bool focus)
+    //{
+    //    Debug.Log("EHEHEHEHEHEHE");
+    //    if (gameOverInProgress && GameOverBool)
+    //    {
+    //        if (MenuUp && AdInProgress)
+    //        {
+    //            OpenMenu();
+    //            AdInProgress = false;
+    //        }
+    //    }
+    //}
 
     private IEnumerator ContinueTime(GameObject button)
     {
@@ -3185,10 +3233,14 @@ public class GameManager : Singleton<GameManager>
 
         }
 
-        if(!gameOverInProgress || !GameOverBool)
+        if(!gameOverInProgress)
         {
             serializer.SaveGameBinary(currentBoard);
 
+        }
+        else
+        {
+            serializer.CreateNewGame();
         }
       
 

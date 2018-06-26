@@ -79,6 +79,7 @@ public class NativeShareScript : MonoBehaviour
         GameManager.Instance.shareButton.SetActive(true);
         GameManager.Instance.powerUpPanel.SetActive(true);
         GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
+        
 
 
         isProcessing = false;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -15,7 +16,8 @@ public class TutorialManager : Singleton<TutorialManager> {
 
     public UnityEvent tutorialTrigger;
 
-
+    //Asking window
+    public GameObject surePanel;
 
     public string[] tutorialTextRU;
     public string[] tutorialTextEN;
@@ -98,6 +100,7 @@ public class TutorialManager : Singleton<TutorialManager> {
     //Close tutorial cooldown
     public IEnumerator StopCloseTut()
     {
+        tutorialCanvas.transform.GetChild(0).GetChild(2).gameObject.SetActive(false);
         yield return new WaitForSeconds(5f);
         GameManager.Instance.tutorialManager.tutorialCanvas.gameObject.SetActive(false);
 
@@ -133,5 +136,30 @@ public class TutorialManager : Singleton<TutorialManager> {
           
     
         tutorialCanvas.transform.GetComponentInChildren<Text>().text = tutorialText[PlayerPrefs.GetInt("TutorialStep", 0)];
+    }
+
+
+    public void SkipTutorial()
+    {
+        PlayerPrefs.SetInt("TutorialStep", 7);
+        tutorialStep = 7;
+        tutorialCanvas.gameObject.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void SkipTutorialClick()
+    {
+        surePanel.SetActive(true);
+    }
+
+
+    public void Sure(int value)
+    {
+        if (value == 0)
+        {
+            surePanel.SetActive(false);
+        }
+        else
+            SkipTutorial();
     }
 }

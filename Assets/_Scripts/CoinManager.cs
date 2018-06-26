@@ -96,6 +96,7 @@ public class CoinManager : Singleton<CoinManager> {
     {
         if (Advertisement.IsReady())
         {
+            GameManager.Instance.AdInProgress = true;
             Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResult });
             Time.timeScale = 0;
         }
@@ -111,18 +112,21 @@ public class CoinManager : Singleton<CoinManager> {
                 {
                     CoinManager.Instance.Coins += fullAdWatch;
                     Time.timeScale = 1;
+                   
                     break;
                 }
             case ShowResult.Skipped:
                 {
                     //CoinManager.Instance.Coins += partAdWatch;
                     Time.timeScale = 1;
+                    
                     break;
                 }
             case ShowResult.Failed:
                 {
                     Time.timeScale = 1;
                     Debug.Log("Failed");
+                    
                     break;
 
                 }
