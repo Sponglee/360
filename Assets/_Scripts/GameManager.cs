@@ -3088,7 +3088,7 @@ public class GameManager : Singleton<GameManager>
         serializer.CreateNewGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
-        
+        AdInProgress = true;
         OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before

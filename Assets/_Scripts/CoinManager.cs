@@ -96,6 +96,7 @@ public class CoinManager : Singleton<CoinManager> {
     {
         if (Advertisement.IsReady())
         {
+
             GameManager.Instance.AdInProgress = true;
             Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResult });
             Time.timeScale = 0;
