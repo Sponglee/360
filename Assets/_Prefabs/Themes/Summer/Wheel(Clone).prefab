@@ -2561,6 +2561,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4033246552314630}
+  - component: {fileID: 111403311239354536}
   m_Layer: 0
   m_Name: Wheel(Clone)
   m_TagString: Untagged
@@ -3649,6 +3650,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.42
+--- !u!111 &111403311239354536
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1992755174877708}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 74168f740675b3e4e8bdf8a3dbd79ea5, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &114008783214690598
 MonoBehaviour:
   m_ObjectHideFlags: 1

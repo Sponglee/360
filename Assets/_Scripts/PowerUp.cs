@@ -114,7 +114,7 @@ public class PowerUp : MonoBehaviour
     public void PowerUpPressed()
     {
         int index = gameObject.transform.GetSiblingIndex();
-        if(!GameManager.Instance.gameOverInProgress)
+        if(!GameManager.Instance.gameOverInProgress && !GameManager.Instance.GameOverBool)
         {
             if (CoinManager.Instance.Coins >= pCost)
             {

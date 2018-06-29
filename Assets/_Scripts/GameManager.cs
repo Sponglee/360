@@ -75,7 +75,7 @@ public class GameManager : Singleton<GameManager>
     //Tutorial NextScore and lock spawn
     int tutNum = 0;
 
-  
+
 
     //prefab for controlling movement while falling
     GameObject squareSpawn = null;
@@ -205,7 +205,7 @@ public class GameManager : Singleton<GameManager>
 
     //scores
     public int scores;
-    public bool highscoreSoundBool= false;
+    public bool highscoreSoundBool = false;
     public int highscores;
     public Text scoreText;
     public Text highScoreText;
@@ -316,7 +316,7 @@ public class GameManager : Singleton<GameManager>
         shareButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
         shareButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
 
-        
+
 
 
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
@@ -334,7 +334,7 @@ public class GameManager : Singleton<GameManager>
 
         // Set a ui
         uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
-        
+
         line.transform.GetChild(0).GetComponent<SpriteRenderer>().color = ThemeStyleHolder.Instance.ThemeStyles[index].linePref;
     }
 
@@ -414,12 +414,12 @@ public class GameManager : Singleton<GameManager>
         nextRound = ui.transform.GetChild(3).gameObject.GetComponent<Image>();
 
 
-      
-        
+
+
         Instantiate(styleHolderPrefab);
 
 
-     
+
     }
 
     // Helps ApplyStyle to grab numbers/color
@@ -747,7 +747,7 @@ public class GameManager : Singleton<GameManager>
 
         }
 
-       
+
         //*************************END OF TUTORIAL RESTICTIONS******************************
 
 
@@ -785,23 +785,23 @@ public class GameManager : Singleton<GameManager>
     private void FixedUpdate()
     {
         //Turn timer
-            turnCoolDown -= Time.deltaTime;
+        turnCoolDown -= Time.deltaTime;
 
         //Expand Moves for Timed
-       if(SceneManager.GetActiveScene().name == "Main")
+        if (SceneManager.GetActiveScene().name == "Main")
         {
             //Debug.Log(slider.fillAmount);
             //while (currentTime <= timeOfTravel)
             //{
-                if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
-                {
-                    fMoves += 0.01f;
-                    sliderFill = (float)(expandMoves - fMoves) / expandMoves;
-                    slider.fillAmount = sliderFill;
-                }
-                currentTime += Time.deltaTime;
-                normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-                slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
+            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
+            {
+                fMoves += 0.01f;
+                sliderFill = (float)(expandMoves - fMoves) / expandMoves;
+                slider.fillAmount = sliderFill;
+            }
+            currentTime += Time.deltaTime;
+            normalizedValue = currentTime / timeOfTravel; // we normalize our time 
+            slider.fillAmount = Mathf.Lerp(slider.fillAmount, sliderFill, normalizedValue);
 
             //}
             if (fMoves > expandMoves)
@@ -812,8 +812,8 @@ public class GameManager : Singleton<GameManager>
             }
 
         }
-       
-         
+
+
 
 
 
@@ -827,7 +827,7 @@ public class GameManager : Singleton<GameManager>
         foreach (int tmp in tutSpawns)
         {
 
-            if(spots[tmp].transform.childCount!= 0)
+            if (spots[tmp].transform.childCount != 0)
             {
                 //clear the field
                 for (int i = 0; i < spots[tmp].transform.childCount; i++)
@@ -835,8 +835,8 @@ public class GameManager : Singleton<GameManager>
                     spots[tmp].transform.GetChild(i).gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
                     spots[tmp].transform.GetChild(i).SetParent(null);
                 }
-                
-                
+
+
             }
 
             while (spots[tmp].transform.childCount < 1)
@@ -891,18 +891,18 @@ public class GameManager : Singleton<GameManager>
         //===============================================================================================================
         if (PlayerPrefs.GetInt("TutorialStep", 0) == 2)
         {
-            
-           if (tutCurrentSpot != int.Parse(currentSpot.name))
-           {
+
+            if (tutCurrentSpot != int.Parse(currentSpot.name))
+            {
                 NoRotation = true;
-           }
+            }
         }
         if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
         {
             NoRotation = false;
             tutCurrentSpot = int.Parse(currentSpot.name);
         }
-        else if (PlayerPrefs.GetInt("TutorialStep", 0) >2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+        else if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
             NoRotation = true;
         else
         {
@@ -931,7 +931,7 @@ public class GameManager : Singleton<GameManager>
                 if (GameManager.Instance.tutorialManager.tutorialStep == 3)
                 {
 
-                  
+
 
                     GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
@@ -985,13 +985,13 @@ public class GameManager : Singleton<GameManager>
                 {
                     Destroy(results[0].gameObject.transform.parent.gameObject);
                     SquareDestroyed = true;
-                  
+
                 }
                 else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
                 {
                     Destroy(results[0].gameObject.transform.parent.parent.gameObject);
                     SquareDestroyed = true;
-                   
+
                 }
                 else if (results[0].gameObject.CompareTag("square"))
                 {
@@ -1013,7 +1013,7 @@ public class GameManager : Singleton<GameManager>
         //Use **BOMB
         else if (IsPointerOverUIObject("square") && SelectBomb && Input.GetMouseButtonUp(0))
         {
-           
+
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             List<RaycastResult> results = new List<RaycastResult>();
@@ -1052,7 +1052,7 @@ public class GameManager : Singleton<GameManager>
 
                     dropIndexSquare = results[0].gameObject.transform.parent.GetSiblingIndex();
                     SquareDestroyed = true;
-                   
+
                 }
                 else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
                 {
@@ -1062,7 +1062,7 @@ public class GameManager : Singleton<GameManager>
 
                     dropIndexSquare = results[0].gameObject.transform.parent.parent.GetSiblingIndex();
                     SquareDestroyed = true;
-                   
+
                 }
                 else if (results[0].gameObject.CompareTag("square"))
                 {
@@ -1142,17 +1142,17 @@ public class GameManager : Singleton<GameManager>
                 {
 
 
-                    
+
 
 
                     GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
                     CoinManager.Instance.Coins += 5;
                     //GameManager.Instance.tutorialManager.button.SetActive(true);
                     NoClickSpawn = false;
-                  
+
                     StartCoroutine(TutorialManager.Instance.StopCloseTut());
                 }
-               
+
                 //Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
 
                 int dropIndex = -1;
@@ -1184,10 +1184,10 @@ public class GameManager : Singleton<GameManager>
                 }
 
 
-                if(spots[dropIndex].transform.parent.childCount>dropIndexSquare && dropIndexSquare>0)
+                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare && dropIndexSquare > 0)
                 {
-                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare-1).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare-1).gameObject);
+                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare - 1).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare - 1).gameObject);
                 }
 
 
@@ -1199,8 +1199,8 @@ public class GameManager : Singleton<GameManager>
 
                 if (spots[dropIndex].transform.parent.childCount > dropIndexSquare && dropIndexSquare < 3)
                 {
-                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare+1).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare+1).gameObject);
+                    Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare + 1).position, Quaternion.identity);
+                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare + 1).gameObject);
                 }
 
 
@@ -1234,7 +1234,7 @@ public class GameManager : Singleton<GameManager>
                 SomethingIsMoving = false;
             }
 
-            
+
 
 
 
@@ -1243,20 +1243,20 @@ public class GameManager : Singleton<GameManager>
         //FOR CLICKS
         if (!IsPointerOverUIObject("ui") && !IsPointerOverUIObject("256") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButton(0) && !RotationProgress && !noMoves && !MenuUp)
         {
-           // //=================================================================================================================================
-           //     //initialClick /clickAngle
-           //     GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 2, true);
+            // //=================================================================================================================================
+            //     //initialClick /clickAngle
+            //     GLDebug.DrawLine(initClick, wheel.transform.position, Color.magenta, 2, true);
 
-           // //dirangle
-           // GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 2, true);
-           //// =================================================================================================================================
+            // //dirangle
+            // GLDebug.DrawLine(Camera.main.ScreenToWorldPoint(Input.mousePosition), wheel.transform.position, Color.white, 2, true);
+            //// =================================================================================================================================
 
             dirAngle = GetFirstClickAngle();
 
             // touch resistance (firstClick for smooth rotation after first displacement
             //if mouse angle < follow_angle - do nothing
-            if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick )
-            { 
+            if (Mathf.Abs(clickAngle - dirAngle) < follow__Angle && !RotationProgress && firstClick)
+            {
                 return;
             }
             else
@@ -1267,7 +1267,7 @@ public class GameManager : Singleton<GameManager>
                 firstClick = false;
                 if (!randSpawning)
                 {
-                    if(!NoRotation)
+                    if (!NoRotation)
                         FollowMouse(clickAngle, clickDirection);
                 }
             }
@@ -1276,14 +1276,14 @@ public class GameManager : Singleton<GameManager>
         if (!IsPointerOverUIObject("ui") && !SelectHammer && !SelectBomb && !SelectDrill && Input.GetMouseButtonUp(0) && Time.time > coolDown && !RotationProgress && !noMoves && !MenuUp)
         {
             // if clicked 
-            if (mouseDown )
+            if (mouseDown)
             {
-               
-                  
+
+
 
                 if (int.Parse(currentSpot.name) == checkClickSpot && !NoRotation)
                 {
-                       
+
                     //Turn left
                     if ((SwipeManager.Instance.IsSwiping(SwipeDirection.Left) && !RotationProgress) && !NoRotation)
                     {
@@ -1298,8 +1298,8 @@ public class GameManager : Singleton<GameManager>
                         //spot to rotate towards
                         rotSpot = nextClickSpot;
 
-                        
-                            StartCoroutine(FollowRotate(rotationDuration));
+
+                        StartCoroutine(FollowRotate(rotationDuration));
 
 
                         //********************TUTORIAL*********ROTATE
@@ -1318,14 +1318,14 @@ public class GameManager : Singleton<GameManager>
                         if (checkClickSpot - 1 < 0)
                         {
                             firstClickSpot = nBottom - 1;
-                            }
+                        }
                         else
-                            firstClickSpot = checkClickSpot- 1;
+                            firstClickSpot = checkClickSpot - 1;
                         //spot to rotate towards
                         rotSpot = firstClickSpot;
 
-                       
-                            StartCoroutine(FollowRotate(rotationDuration));
+
+                        StartCoroutine(FollowRotate(rotationDuration));
 
 
 
@@ -1341,14 +1341,14 @@ public class GameManager : Singleton<GameManager>
                     else if ((SwipeManager.Instance.IsSwiping(SwipeDirection.None) || Input.GetKeyDown(KeyCode.RightArrow)) && !RotationProgress && !NoRotation)
                     {
                         rotSpot = checkClickSpot;
-                        
-                            StartCoroutine(FollowRotate(rotationDuration));
+
+                        StartCoroutine(FollowRotate(rotationDuration));
                     }
                     //centerAnim.SetTrigger("tilt");
 
 
 
-                    
+
 
 
 
@@ -1357,15 +1357,15 @@ public class GameManager : Singleton<GameManager>
                 else
                 {
                     if (cantSpawn)
-                        {
-                          
-                                StartCoroutine(FollowRotate(rotationDuration));
-                        }
+                    {
+
+                        StartCoroutine(FollowRotate(rotationDuration));
+                    }
 
 
                 }
 
-                
+
 
                 //disble angle buffer 
                 firstClick = true;
@@ -1385,26 +1385,26 @@ public class GameManager : Singleton<GameManager>
                 {
                     coolDown = Time.time + 0.5f;
 
-                   
 
 
-                        ClickSpawn();
-                        cantSpawn = true;
 
-                    
-                   
+                    ClickSpawn();
+                    cantSpawn = true;
+
+
+
                 }
             }
 
 
-           
+
 
         }
 
 
 
         //TURN Launch checkrows
-        if (checkObjs.Count > 0  && turnCoolDown <= 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
+        if (checkObjs.Count > 0 && turnCoolDown <= 0 /*&& !SomethingIsMoving && !MergeInProgress && !CheckInProgress && !TurnInProgress && !FurtherProgress*/)
         {
 
             //Debug.Log("TURN");
@@ -1412,7 +1412,7 @@ public class GameManager : Singleton<GameManager>
             turnCheckObjs = checkObjs;
 
             checkObjs = new Stack<GameObject>();
-           
+
             //To make it check once
             TurnInProgress = true;
             //turnDelay = Time.deltaTime + 3f;
@@ -1455,45 +1455,45 @@ public class GameManager : Singleton<GameManager>
     //Turn wheel to mouse position
     private void FollowMouse(float startAngle, Vector3 startDirection)
     {
-            //********************TUTORIAL*********ROTATE
-            if (tutorialManager.tutorialStep == 1)
-            {
-                //Debug.Log("NO ROTATION");
-                tutorialManager.tutorialTrigger.Invoke();
-            }
-            //*****************************
+        //********************TUTORIAL*********ROTATE
+        if (tutorialManager.tutorialStep == 1)
+        {
+            //Debug.Log("NO ROTATION");
+            tutorialManager.tutorialTrigger.Invoke();
+        }
+        //*****************************
 
         //Angle to rotate to
         float angle = GetFirstClickAngle();
 
-            wheel.transform.Rotate(Vector3.forward, startAngle - angle);
-            int firstSpot;
-            int nextSpot;
-            int spot = int.Parse(currentSpot.name);
+        wheel.transform.Rotate(Vector3.forward, startAngle - angle);
+        int firstSpot;
+        int nextSpot;
+        int spot = int.Parse(currentSpot.name);
 
-            //passing through 0
-            if (spot - 1 < 0)
-            {
-                firstSpot = nBottom - 1;
-            }
-            else
-                firstSpot = spot - 1;
+        //passing through 0
+        if (spot - 1 < 0)
+        {
+            firstSpot = nBottom - 1;
+        }
+        else
+            firstSpot = spot - 1;
 
-            //check next left one after getting index-1
-            if (spot + 1 == nBottom)
-            {
-                nextSpot = 0;
-            }
-            else
-                nextSpot = spot + 1;
+        //check next left one after getting index-1
+        if (spot + 1 == nBottom)
+        {
+            nextSpot = 0;
+        }
+        else
+            nextSpot = spot + 1;
 
 
-            int[] spotDist = { spot, firstSpot, nextSpot };
+        int[] spotDist = { spot, firstSpot, nextSpot };
 
-            //check which spot is closer:
-            rotSpot = ClosestSpot(spotDist);
-        
-       
+        //check which spot is closer:
+        rotSpot = ClosestSpot(spotDist);
+
+
 
     }
 
@@ -1501,52 +1501,52 @@ public class GameManager : Singleton<GameManager>
     ////Smooth rotation coroutine
     IEnumerator FollowRotate(float duration = 0.2f, float angle = 0)
     {
-       
-            //To avoid interruptions
-            RotationProgress = true;
 
-            //if there was followmouse
-            if (rotSpot != -1)
-            {
-                Vector3 lineDir = line.position - wheel.transform.position;
-                Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
-                //angle to next spot to rotate to
-                angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
-            }
+        //To avoid interruptions
+        RotationProgress = true;
 
-            Quaternion from = wheel.transform.rotation;
-            Quaternion to = from * Quaternion.Euler(0, 0, angle);
+        //if there was followmouse
+        if (rotSpot != -1)
+        {
+            Vector3 lineDir = line.position - wheel.transform.position;
+            Vector3 spotDir = spots[rotSpot].transform.position - wheel.transform.position;
+            //angle to next spot to rotate to
+            angle = Mathf.Atan2(Vector3.Dot(Vector3.back, Vector3.Cross(lineDir, spotDir)), Vector3.Dot(lineDir, spotDir)) * Mathf.Rad2Deg;
+        }
 
-            //smooth lerp rotation loop
-            float elapsed = 0.0f;
-            while (elapsed < duration)
-            {
-                wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
-                elapsed += Time.fixedDeltaTime;
+        Quaternion from = wheel.transform.rotation;
+        Quaternion to = from * Quaternion.Euler(0, 0, angle);
 
-                yield return null;
-            }
+        //smooth lerp rotation loop
+        float elapsed = 0.0f;
+        while (elapsed < duration)
+        {
+            wheel.transform.rotation = Quaternion.Lerp(from, to, elapsed / duration);
+            elapsed += Time.fixedDeltaTime;
 
-            //Finish ROtation differ angle setup
-            Quaternion difRot = wheel.transform.rotation;
-            if (int.Parse(currentSpot.name) != checkClickSpot)
-            {
-                // angle that should be the rotation
-                differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
-            }
+            yield return null;
+        }
 
-            //Finish move actual movement (differ in rotate) Get rid of difference flaw to the left
-            if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0)
-            {
-                // Debug.Log(differ + " : " + int.Parse(currentSpot.name) + " < " + checkClickSpot);
-                difRot = wheel.transform.rotation;
-                Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
-                wheel.transform.rotation = finalRot;
-                differ = 0;
-            }
-            RotationProgress = false;
+        //Finish ROtation differ angle setup
+        Quaternion difRot = wheel.transform.rotation;
+        if (int.Parse(currentSpot.name) != checkClickSpot)
+        {
+            // angle that should be the rotation
+            differ = (int.Parse(currentSpot.name)) * (360 / nBottom) - difRot.eulerAngles.z;
+        }
 
-        
+        //Finish move actual movement (differ in rotate) Get rid of difference flaw to the left
+        if (((Mathf.Abs(differ) <= differ__Angle) || Mathf.Abs(differ) >= 360 - differ__Angle) && differ != 0)
+        {
+            // Debug.Log(differ + " : " + int.Parse(currentSpot.name) + " < " + checkClickSpot);
+            difRot = wheel.transform.rotation;
+            Quaternion finalRot = difRot * Quaternion.Euler(0, 0, differ);
+            wheel.transform.rotation = finalRot;
+            differ = 0;
+        }
+        RotationProgress = false;
+
+
 
 
     }
@@ -1602,7 +1602,7 @@ public class GameManager : Singleton<GameManager>
         //*****************************
 
 
-            
+
 
         //squareSpawn.GetComponent<Rigidbody2D>().
         //spawn a square
@@ -1693,8 +1693,8 @@ public class GameManager : Singleton<GameManager>
         nextScore.text = next_score.ToString();
         ApplyStyle(next_score);
 
-        
-        
+
+
     }
 
 
@@ -1711,7 +1711,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-  
+
 
 
     //=======================================INPUT END ==============================================
@@ -1786,7 +1786,7 @@ public class GameManager : Singleton<GameManager>
     #endregion /Input
 
     //Vertical merge
-    public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second=null, bool IsPowerUp = false)
+    public void Merge(GameObject first, List<GameObject> rowObjs, GameObject second = null, bool IsPowerUp = false)
     {
         int fltScore;
 
@@ -1794,7 +1794,7 @@ public class GameManager : Singleton<GameManager>
         if (rowObjs != null)
         {
             //Debug.Log(rowObjs.Count);
-             fltScore = rowObjs.Count;
+            fltScore = rowObjs.Count;
         }
         else
         {
@@ -1802,7 +1802,7 @@ public class GameManager : Singleton<GameManager>
         }
 
 
-        StartCoroutine(StopMerge(first, fltScore, second,IsPowerUp));
+        StartCoroutine(StopMerge(first, fltScore, second, IsPowerUp));
 
         //********************TUTORIAL*********MERGE
         if (tutorialManager.tutorialStep == 2)
@@ -1818,17 +1818,17 @@ public class GameManager : Singleton<GameManager>
 
 
     //Delay for merge
-    private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second=null, bool IsPowerUp=false)
+    private IEnumerator StopMerge(GameObject first, int fltScore, GameObject second = null, bool IsPowerUp = false)
     {
         //Play sound if powerup
         if (IsPowerUp && first.transform.parent != null)
         {
             AudioManager.Instance.PlaySound("powerup");
         }
-        
+
 
         int tmp;
-            tmp = first.GetComponent<Square>().Score *= 2;
+        tmp = first.GetComponent<Square>().Score *= 2;
         int tmpScore;
         //Stop checks while Merging
         if (first == null)
@@ -1843,13 +1843,13 @@ public class GameManager : Singleton<GameManager>
 
         //for float text positioning and s core
         if (second == null)
-            tmpScore = (fltScore +1)* first.GetComponent<Square>().Score;
+            tmpScore = (fltScore + 1) * first.GetComponent<Square>().Score;
         else
             tmpScore = (fltScore) * first.GetComponent<Square>().Score;
 
 
         //double the score
-        if (first !=null && !first.GetComponent<Square>().DoublingPriority)
+        if (first != null && !first.GetComponent<Square>().DoublingPriority)
         {
             first.GetComponent<Square>().DoublingPriority = true;
             //avoid 512 and higher
@@ -1860,9 +1860,9 @@ public class GameManager : Singleton<GameManager>
             tmp = 0;
 
 
-       
+
         yield return new WaitForSeconds(0.2f);
-     
+
 
         if (!IsPowerUp)
         {
@@ -1883,7 +1883,7 @@ public class GameManager : Singleton<GameManager>
                 //if horisontal - instantiate it at 1st square pos
                 else
                 {
-                    
+
                     // if horizontal AND more than 2
                     if (fltScore > 1)
                     {
@@ -1891,7 +1891,7 @@ public class GameManager : Singleton<GameManager>
 
                         AudioManager.Instance.PlaySound("lightning");
 
-                        if(first.GetComponent<Square>().Score == 256)
+                        if (first.GetComponent<Square>().Score == 256)
                         {
                             first.GetComponent<Square>().DoubleCoins = true;
                         }
@@ -1919,7 +1919,7 @@ public class GameManager : Singleton<GameManager>
             else
             {
                 GameObject textObj = Instantiate(FltText, first.transform.position, first.transform.rotation);
-                   
+
                 if (second != null)
                 {
                     textObj.transform.position = second.transform.TransformPoint(second.transform.localPosition + fltOffset);
@@ -1930,7 +1930,7 @@ public class GameManager : Singleton<GameManager>
             //=======================
 
         }
-       
+
 
         if (first != null && first.CompareTag("square"))
         {
@@ -1962,15 +1962,15 @@ public class GameManager : Singleton<GameManager>
             first.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>().text = tmp.ToString();
             first.GetComponent<Square>().ApplyStyle(tmp);
 
-            if (tmp > scoreUpper && tmp<= 256)
+            if (tmp > scoreUpper && tmp <= 256)
             {
-                if (tmp !=256)
+                if (tmp != 256)
                     AudioManager.Instance.PlaySound("pickup");
                 scoreUpper *= 2;
-                                                                                            //Instance.upper.text = string.Format("{0}", scoreUpper);
+                //Instance.upper.text = string.Format("{0}", scoreUpper);
                 //uiSquarePrefab.SetActive(true);
                 //UISquare.Instance.ApplyUiStyle(scoreUpper);
-              
+
             }
             //first.GetComponent<Square>().Touched = false;
             first.GetComponent<Square>().MergeCheck = false;
@@ -1979,24 +1979,24 @@ public class GameManager : Singleton<GameManager>
             MergeInProgress = false;
 
             //add score of tmpsSquare
-           
+
             scores += tmpScore;
 
-            if (scores>= highscores)
+            if (scores >= highscores)
             {
-                
+
                 highscores = scores;
                 highScoreText.gameObject.SetActive(false);
                 //highScoreText.gameObject.GetComponent<Image>().sprite = relaxIcon;
 
                 if (SceneManager.GetActiveScene().name == "Relax")
                 {
-                   
+
                     PlayerPrefs.SetInt("HighscoreRelax", scores);
                 }
                 else if (SceneManager.GetActiveScene().name == "Main")
                 {
-                  
+
                     PlayerPrefs.SetInt("HighscoreTimed", scores);
                 }
                 else if (SceneManager.GetActiveScene().name == "Dzen")
@@ -2033,8 +2033,8 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-   
-  
+
+
     //Checkrow and pop coroutine
     public IEnumerator Turn()
     {
@@ -2042,17 +2042,17 @@ public class GameManager : Singleton<GameManager>
         // List<List<GameObject>> tmppopObjs = popObjs;
         //Debug.Log(" TURN " + checkObjs.Count);
         //if there's something in the queue
-        while (turnCheckObjs.Count >0)
+        while (turnCheckObjs.Count > 0)
         {
-           //Grab first element
+            //Grab first element
             GameObject tmpObj = turnCheckObjs.Pop();
 
             int tmpDist = 99;
 
             //if there's still something in there
-            if (turnCheckObjs.Count>1)
+            if (turnCheckObjs.Count > 1)
             {
-                foreach( GameObject chObject in turnCheckObjs)
+                foreach (GameObject chObject in turnCheckObjs)
                 {
                     //Check if object is still there
                     if (chObject == null)
@@ -2093,7 +2093,7 @@ public class GameManager : Singleton<GameManager>
             {
                 if (!tmpObj.transform.parent.CompareTag("outer") && !tmpObj.GetComponent<Square>().IsMerging)
                     CheckRow(int.Parse(tmpObj.transform.parent.name), tmpObj.transform.GetSiblingIndex(), tmpObj.GetComponent<Square>().Score, tmpObj);
-               
+
             }
             else
             {
@@ -2111,7 +2111,7 @@ public class GameManager : Singleton<GameManager>
             //Reset checkRowIndex for next Turn;
             checkRowIndex++;
         }
-       
+
     }
 
     //Reset Expand Moves  (TIME EXPAND)
@@ -2145,10 +2145,10 @@ public class GameManager : Singleton<GameManager>
 
                 Expand();
 
-              
+
                 StartCoroutine(FillStop());
                 sliderFill = (float)(expandMoves - Moves) / expandMoves;
-              
+
                 //expandMoves += expandMoves/2;
                 //nextShrink.text = string.Format("256: {0}", expandMoves - Moves);
             }
@@ -2164,7 +2164,7 @@ public class GameManager : Singleton<GameManager>
         if (tmpSquare != null)
 
         {
-           
+
             tmpSquare.GetComponent<Square>().CheckPriority = true;
             CheckInProgress = true;
             //Debug.Log("(INIT) " + tmpSquare.transform.parent.name + " : " + tmpSquare.transform.GetSiblingIndex() + " >> " + tmpSquare.GetComponent<Square>().Score);
@@ -2379,12 +2379,12 @@ public class GameManager : Singleton<GameManager>
             if (rowObjs.Count < 2)
             {
 
-               
+
                 //Check what's above
                 // if (!tmpSquare.GetComponent<Square>().checkPriority)
 
 
-               
+
             }
             else
             {
@@ -2435,16 +2435,16 @@ public class GameManager : Singleton<GameManager>
 
 
 
-       
+
         CheckInProgress = false;
     }
 
     private IEnumerator FillStop()
     {
         yield return new WaitForSeconds(1f);
-            Moves = 0;
-            
-            slider.fillAmount = 1;
+        Moves = 0;
+
+        slider.fillAmount = 1;
     }
 
 
@@ -2452,7 +2452,7 @@ public class GameManager : Singleton<GameManager>
     //////////////////////////////////////////////////////////////////////////////////////CHECK FOR EACH IN COLUMN
     public void CheckAbove(int spotIndex, int squareIndex)
     {
-       
+
         //if there's no start yet
         int index = spotIndex;
         int firstIndex;
@@ -2476,32 +2476,32 @@ public class GameManager : Singleton<GameManager>
 
         //Debug.Log(" I : " + index + " n " + nextIndex + " F " + firstIndex);
 
-        if (spots[index].transform.childCount > squareIndex + 1 )
+        if (spots[index].transform.childCount > squareIndex + 1)
         {
             //Debug.Log("CHECK ABOVE );
             //If same score above
 
             if (spots[index].transform.GetChild(squareIndex + 1).GetComponent<Square>().Score == spots[index].transform.GetChild(squareIndex).GetComponent<Square>().Score)
+            {
+                //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
+                if (!spots[index].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
                 {
-                    //Debug.Log("up " + spots[spotIndex].transform.GetChild(squareIndex).GetComponent<Square>().Score);
-                    if (!spots[index].transform.GetChild(squareIndex + 1).gameObject.GetComponent<Square>().IsMerging)
-                    {
-                        //Debug.Log("MRG");
-                        Merge(spots[index].transform.GetChild(squareIndex + 1).gameObject, null, spots[index].transform.GetChild(squareIndex).gameObject);
-                    }
-
-                    //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
-                    // Destroy(spots[index].transform.GetChild(i).gameObject);
-                    return;
+                    //Debug.Log("MRG");
+                    Merge(spots[index].transform.GetChild(squareIndex + 1).gameObject, null, spots[index].transform.GetChild(squareIndex).gameObject);
                 }
-           
-            
-            for (int i = squareIndex+1; i < spots[index].transform.childCount; i++)
+
+                //spots[spotIndex].transform.GetChild(squareIndex + 1).localPosition += new Vector3(0f, +0.3f, 0f);
+                // Destroy(spots[index].transform.GetChild(i).gameObject);
+                return;
+            }
+
+
+            for (int i = squareIndex + 1; i < spots[index].transform.childCount; i++)
             {
                 if (spots[index].transform.GetChild(i).GetComponent<Square>().ColumnPew)
                     return;
 
-               
+
                 ////CHECK SCORE to THE LEFT starting with row above
                 if (spots[firstIndex].transform.childCount > i)
                 {
@@ -2544,11 +2544,11 @@ public class GameManager : Singleton<GameManager>
 
 
     }
-    
+
     //Check Objs delay
     public IEnumerator StopEnqueue(GameObject checkObj)
     {
-       
+
         yield return new WaitForSeconds(0.1f);
         checkObjs.Push(checkObj);
         //Debug.Log(checkObjs.Count);
@@ -2559,36 +2559,36 @@ public class GameManager : Singleton<GameManager>
     //Pop coroutine
     IEnumerator StopPop(List<List<GameObject>> thisPopObjs, List<GameObject> tmpSquares, GameObject wheel)
     {
- 
+
         int count = 0;
 
         yield return new WaitForSeconds(0.01f);
 
         foreach (List<GameObject> rowObjs in thisPopObjs)
         {
-           
-            //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
-           
-            if (tmpSquares.Count>count && tmpSquares[count] !=null)
-                {
-                    if (tmpSquares[count].transform.parent.CompareTag("outer"))
-                    {
-                        tmpSquares[count].GetComponent<Square>().CheckPriority = false;
-                        //count++;
-                        thisPopObjs.Remove(rowObjs);
-                        continue;
-                    }
-                    
-                    Pop(rowObjs, tmpSquares[count]);
-                    tmpSquares[count].GetComponent<Square>().CheckPriority = false;
 
-                    //yield return new WaitForSeconds(0.2f);
-                    //tmpSquares.Clear();
-                    StartCoroutine(FurtherPops(tmpSquares[count]));
-                    count++;
+            //Debug.Log("STARTING COURUTINE   " + thisPopObjs.Count + " === " + rowObjs[0].GetComponent<Square>().Score);
+
+            if (tmpSquares.Count > count && tmpSquares[count] != null)
+            {
+                if (tmpSquares[count].transform.parent.CompareTag("outer"))
+                {
+                    tmpSquares[count].GetComponent<Square>().CheckPriority = false;
+                    //count++;
+                    thisPopObjs.Remove(rowObjs);
+                    continue;
                 }
+
+                Pop(rowObjs, tmpSquares[count]);
+                tmpSquares[count].GetComponent<Square>().CheckPriority = false;
+
+                //yield return new WaitForSeconds(0.2f);
+                //tmpSquares.Clear();
+                StartCoroutine(FurtherPops(tmpSquares[count]));
+                count++;
+            }
             //yield return new WaitForSeconds(0.2f);
-            
+
         }
 
 
@@ -2603,15 +2603,15 @@ public class GameManager : Singleton<GameManager>
                 tmpSquares.RemoveAt(i);
             }
         }
-      
+
 
     }
 
 
     //Kill all adjacent squares
-    public void Pop(List<GameObject> rowObjs, GameObject tmpSquare= null)
+    public void Pop(List<GameObject> rowObjs, GameObject tmpSquare = null)
     {
-       
+
         //get a private tmpSquare ref
         GameObject tmpTmpSquare = tmpSquare;
         //Keep one that has fallen
@@ -2629,42 +2629,42 @@ public class GameManager : Singleton<GameManager>
                 //Update the score
                 if (tmprowObj != null)
                 {
-                    
+
 
 
 
                     if (!tmprowObj.transform.parent.CompareTag("outer"))
                     {
                         //rowObj.transform.position += new Vector3(0, 0, 10);
-                     
-                            tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = leGreen;
-                        
+
+                        tmprowObj.transform.parent.GetComponent<SpriteRenderer>().color = leGreen;
+
 
                     }
-                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare 
-                        && !tmprowObj.transform.parent.CompareTag("outer") )
+                    if (tmprowObj.transform != null && tmpTmpSquare != null && tmpTmpSquare.GetComponent<Square>().Desto != tmpTmpSquare
+                        && !tmprowObj.transform.parent.CompareTag("outer"))
                     {
 
                         tmprowObj.GetComponent<Square>().SquareTmpSquare = tmpTmpSquare.transform;
                         tmprowObj.GetComponent<Collider2D>().isTrigger = true;
-                        
+
                         FurtherProgress = true;
                         //furtherScore = tmprowObj.GetComponent<Square>().Score;
                         //for avoiding double collapses
-                        if(!tmprowObj.GetComponent<Square>().IsMerging)
+                        if (!tmprowObj.GetComponent<Square>().IsMerging)
                             StartCoroutine(FurtherPops(tmprowObj));
 
                         //Detach this square from parent
                         tmprowObj.transform.parent = tmprowObj.transform.parent.parent.parent.GetChild(3);
                     }
                 }
-                
 
-               
+
+
             }
             rowObjs.Clear();
         }
-        
+
     }
 
 
@@ -2707,39 +2707,39 @@ public class GameManager : Singleton<GameManager>
 
 
         if (tmpSquare != null && tmpSquare.GetComponent<Square>().Score != 256)
+        {
+            tmpSquare.GetComponent<Square>().Further = true;
+            //Debug.Log("FURTHER");
+            if (tmpSquare.transform.GetSiblingIndex() > 0)
             {
-                tmpSquare.GetComponent<Square>().Further = true;
-                //Debug.Log("FURTHER");
-                if (tmpSquare.transform.GetSiblingIndex()>0)
+                //if one below is same score - merge
+                if (!tmpSquare.transform.parent.CompareTag("outer") && tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
                 {
-                    //if one below is same score - merge
-                    if (!tmpSquare.transform.parent.CompareTag("outer") && tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).GetComponent<Square>().Score == tmpSquare.GetComponent<Square>().Score)
-                    {
-                       
-                        Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
-                        //Debug.Log("MRG BLW");    
-                        //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
-                        //Debug.Log("PEW " + tmpSquare.transform.parent.name);
-                    }
+
+                    Merge(tmpSquare, null, tmpSquare.transform.parent.GetChild(tmpSquare.transform.GetSiblingIndex() - 1).gameObject);
+                    //Debug.Log("MRG BLW");    
+                    //furthertmpSquare.transform.localPosition += new Vector3(0f, +0.3f, 0f);
+                    //Debug.Log("PEW " + tmpSquare.transform.parent.name);
                 }
-               
+            }
+
 
 
             if (tmpSquare != null && !tmpSquare.transform.parent.CompareTag("outer"))
                 CheckAbove(int.Parse(furthertmpSquare.transform.parent.name), furthertmpSquare.transform.GetSiblingIndex());
-            
+
             //if (tmpSquare.GetComponent<Collider2D>().isTrigger != true)
             //{
-                furthertmpSquare.GetComponent<Square>().CheckPriority = false;
+            furthertmpSquare.GetComponent<Square>().CheckPriority = false;
 
-                //    tmpSquare.GetComponent<Square>().CheckAround = true;
-                //   
-                //}
-             
+            //    tmpSquare.GetComponent<Square>().CheckAround = true;
+            //   
+            //}
 
-            }
 
-       
+        }
+
+
 
         FurtherProgress = false;
 
@@ -2768,7 +2768,7 @@ public class GameManager : Singleton<GameManager>
     {
         //spawn only 2 when upper is 8
         if (scoreUpper == 8)
-            randSpawnCount = tmpRands - 1; 
+            randSpawnCount = tmpRands - 1;
         else
             randSpawnCount = tmpRands;
 
@@ -2779,12 +2779,12 @@ public class GameManager : Singleton<GameManager>
         List<int> randCheckTmp = new List<int>();
 
         //randSpawn is upper Power -1 always
-        int upperPow = (int)Mathf.Log(scoreUpper, 2)-1;
+        int upperPow = (int)Mathf.Log(scoreUpper, 2) - 1;
         List<int> randList = new List<int>();
         //get free spots
 
         //Add available spots for rand spawns to the list
-        foreach(GameObject spot in spots)
+        foreach (GameObject spot in spots)
         {
             if (spot.transform.childCount < 5 && spot.name != currentSpot.name)
             {
@@ -2796,7 +2796,7 @@ public class GameManager : Singleton<GameManager>
         if (randList.Count >= randSpawnCount)
         {
             rands.Clear();
-            
+
             for (int i = 0; i < randSpawnCount; i++)
             {
                 tmp.Rng = randList[Random.Range(0, randList.Count)];
@@ -2818,10 +2818,10 @@ public class GameManager : Singleton<GameManager>
                 }
                 while (randCheckTmp.Contains(tmp.RandScore) || tmp.RandScore >= 128);
                 randCheckTmp.Add(tmp.RandScore);
-                    
+
                 rands.Add(tmp);
             }
-            
+
             StartCoroutine(StopRandom(rands));
         }
         else
@@ -2831,7 +2831,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     //Spread random spawns
-    private IEnumerator StopRandom(List<RandValues>rands)
+    private IEnumerator StopRandom(List<RandValues> rands)
     {
         randSpawning = true;
         //spawn all
@@ -2851,10 +2851,10 @@ public class GameManager : Singleton<GameManager>
         {
             if (n.Rng == check.Rng)
             {
-               
+
                 return true;
             }
-             
+
         }
         return false;
     }
@@ -2889,36 +2889,36 @@ public class GameManager : Singleton<GameManager>
         randSpawn.GetComponent<Square>().Score = randScore;
         randSpawn.transform.SetParent(spots[rng].transform);
         randSpawn.name = randSpawn.transform.GetSiblingIndex().ToString();
-        
+
         //Rotate spawns towards center
         Vector3 diff = randSpawn.transform.parent.position - randSpawn.transform.position;
         diff.Normalize();
 
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         randSpawn.transform.rotation = Quaternion.Euler(0f, 0f, rot_z + 90);
-        
+
         //make spot red if 6th child
         if (randSpawn.transform.parent.childCount == 5)
         {
             randSpawn.transform.parent.GetComponent<SpriteRenderer>().color = leRed;
         }
-    
 
-        
+
+
 
         randSpawns.Add(randSpawn);
     }
-  
+
 
 
 
 
 
     //Check if gameOver
-    public void GameOver(GameObject chk=null)
+    public void GameOver(GameObject chk = null)
     {
         //Debug.Log(" game Over ");
-        if (chk!=null)
+        if (chk != null)
         {
             if (chk.transform.childCount == 5 && !gameOverInProgress)
             {
@@ -2935,7 +2935,7 @@ public class GameManager : Singleton<GameManager>
                 chk.GetComponent<SpriteRenderer>().color = leYellow;
             }
 
-           
+
         }
 
 
@@ -2947,36 +2947,36 @@ public class GameManager : Singleton<GameManager>
 
 
     //Game over short game
-    private IEnumerator StopGameOverShort(GameObject chk=null)
+    private IEnumerator StopGameOverShort(GameObject chk = null)
     {
 
         yield return new WaitForSeconds(0.4f);
-        
-            if (chk.GetComponent<SpriteRenderer>().color == leRed)
+
+        if (chk.GetComponent<SpriteRenderer>().color == leRed)
+        {
+            if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
             {
-                if (chk.transform.GetChild(chk.transform.childCount - 1) != null)
+                noMoves = true;
+                yield return new WaitForSeconds(2f);
+                if (chk.GetComponent<SpriteRenderer>().color == leRed)
                 {
-                    noMoves = true;
-                    yield return new WaitForSeconds(2f);
-                    if (chk.GetComponent<SpriteRenderer>().color == leRed)
-                    {
-                        AudioManager.Instance.PlaySound("end");
-                        GameOverBool = true;
-                        gameOverInProgress = false; 
-                        OpenMenu(true);
-                        nextScore.text = "GAMEOVER";
-                        //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{0}\n Top", scores, scoreUpper);
-                    }
-                    else
-                    {
-                        gameOverInProgress = false;
-                        noMoves = false;
-                    }
+                    AudioManager.Instance.PlaySound("end");
+                    GameOverBool = true;
+                    gameOverInProgress = false;
+                    OpenMenu(true);
+                    nextScore.text = "GAMEOVER";
+                    //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{0}\n Top", scores, scoreUpper);
+                }
+                else
+                {
+                    gameOverInProgress = false;
+                    noMoves = false;
                 }
             }
-           
-        
-       
+        }
+
+
+
     }
 
 
@@ -2999,7 +2999,7 @@ public class GameManager : Singleton<GameManager>
 
                 }
             }
-          
+
         }
         //Debug.Log("reds " + reds);
         if (reds == spots.Count)
@@ -3009,7 +3009,7 @@ public class GameManager : Singleton<GameManager>
             if (reds == spots.Count)
             {
                 AudioManager.Instance.PlaySound("end");
-                
+
                 OpenMenu(true);
                 nextScore.text = "GameOver";
                 //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{1}\n Top", scores, scoreUpper);
@@ -3029,15 +3029,15 @@ public class GameManager : Singleton<GameManager>
 
 
     //Toggle menu
-    public void OpenMenu(bool gameOver=false)
+    public void OpenMenu(bool gameOver = false)
     {
-       
-       
+
+
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
         menu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = string.Format("{0}\nHIGHSCORE", highscores);
- 
+
         //upperText
         menu.transform.GetChild(0).GetChild(5).GetChild(0).GetComponent<Text>().text = string.Format("<color=white>{0}</color>", scoreUpper.ToString());
 
@@ -3058,14 +3058,14 @@ public class GameManager : Singleton<GameManager>
             menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
-          
+
         }
         //If just Open menu mid game
-        else 
+        else
         {
             if (MenuUp && !AdInProgress && !GameOverBool)
             {
-                
+
                 CoinManager.Instance.MenuAd();
                 AdInProgress = true;
             }
@@ -3073,10 +3073,10 @@ public class GameManager : Singleton<GameManager>
             {
                 AdInProgress = false;
             }
-           
+
             menu.SetActive(!menu.activeSelf);
             ui.SetActive(!menu.activeSelf);
-            
+
             MenuUp = !MenuUp;
         }
     }
@@ -3118,14 +3118,18 @@ public class GameManager : Singleton<GameManager>
                 }
                 else if (AdInProgress)
                 {
-                   
+
                     OpenMenu();
                 }
                 SaveGame();
             }
+            else
+            {
+                NewGame();
+            }
         }
-           
-            
+
+
     }
 
     //private void OnApplicationFocus(bool focus)
@@ -3150,10 +3154,10 @@ public class GameManager : Singleton<GameManager>
             button.GetComponent<Animation>().Play();
             while (contTimer > 0)
             {
-                
+
                 if (noMoves == false)
                     yield break;
-                
+
                 contTimer -= 0.01f;
                 button.GetComponentInChildren<Slider>().value -= 0.001f;
                 yield return new WaitForSeconds(0.01f);
@@ -3162,7 +3166,7 @@ public class GameManager : Singleton<GameManager>
             button.SetActive(false);
         }
         else yield break;
-        
+
     }
 
 
@@ -3205,7 +3209,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-   
+
 
     public void SaveGame()
     {
@@ -3214,7 +3218,7 @@ public class GameManager : Singleton<GameManager>
         currentBoard.highscore = new int();
 
         currentBoard.highscore = scores;
-       
+
 
         for (int i = 0; i < wheel.transform.GetChild(0).childCount; i++)
         {
@@ -3228,19 +3232,20 @@ public class GameManager : Singleton<GameManager>
                 spawnPiece.position.y = tmp.transform.GetSiblingIndex();
 
                 currentBoard.pieces.Add(spawnPiece);
-                
+
             }
 
         }
 
-        if(!gameOverInProgress)
+        if (!gameOverInProgress || !GameOverBool)
         {
             serializer.SaveGameBinary(currentBoard);
 
         }
-        else
+        else if (gameOverInProgress || GameOverBool)
         {
             serializer.CreateNewGame();
+            
         }
       
 
