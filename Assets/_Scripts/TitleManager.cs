@@ -88,6 +88,21 @@ public class TitleManager : Singleton<TitleManager> {
             case 9:
                 ApplyThemeFromHolder(9);
                 break;
+            case 10:
+                ApplyThemeFromHolder(10);
+                break;
+            case 11:
+                ApplyThemeFromHolder(11);
+                break;
+            case 12:
+                ApplyThemeFromHolder(12);
+                break;
+            case 13:
+                ApplyThemeFromHolder(13);
+                break;
+            case 14:
+                ApplyThemeFromHolder(14);
+                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -101,7 +116,7 @@ public class TitleManager : Singleton<TitleManager> {
     private void Awake()
     {
         CoinManager.Instance.shopCoinText = shopCurrencyText;
-        shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 60).ToString();
+        shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 20).ToString();
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);

@@ -276,8 +276,9 @@ public void ChangeThemeHandler(GameObject index)
                 GameManager.Instance.SaveGame();
             else
                 GameManager.Instance.NewGame();
+            CoinManager.Instance.MenuAd();
         }
-
+       
         SceneManager.LoadScene("title");
         //SceneManager.UnloadScene("main");
     }
@@ -361,7 +362,10 @@ public void ChangeThemeHandler(GameObject index)
         
     }
 
-
+    public void ShowURL(string targetUrl)
+    {
+        Application.OpenURL(targetUrl);
+    }
  
 
 }

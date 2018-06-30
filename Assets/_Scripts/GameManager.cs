@@ -373,6 +373,21 @@ public class GameManager : Singleton<GameManager>
             case 9:
                 ApplyThemeFromHolder(9);
                 break;
+            case 10:
+                ApplyThemeFromHolder(10);
+                break;
+            case 11:
+                ApplyThemeFromHolder(11);
+                break;
+            case 12:
+                ApplyThemeFromHolder(12);
+                break;
+            case 13:
+                ApplyThemeFromHolder(13);
+                break;
+            case 14:
+                ApplyThemeFromHolder(14);
+                break;
             default:
                 Debug.LogError("Check the number that u pass to ApplyStyle");
                 break;
@@ -1099,22 +1114,25 @@ public class GameManager : Singleton<GameManager>
                 else
                     nextIndex = dropIndex + 1;
 
-                if (spots[firstIndex].transform.parent.childCount > dropIndexSquare)
+                if (spots[firstIndex].transform.childCount > dropIndexSquare)
                 {
+                    Debug.Log(spots[firstIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[firstIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
                     Destroy(spots[firstIndex].transform.GetChild(dropIndexSquare).gameObject);
 
                 }
 
 
-                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare)
+                if (spots[dropIndex].transform.childCount > dropIndexSquare)
                 {
+                    Debug.Log(spots[dropIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
                     Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
 
-                if (spots[nextIndex].transform.parent.childCount > dropIndexSquare)
+                if (spots[nextIndex].transform.childCount > dropIndexSquare)
                 {
+                    Debug.Log(spots[nextIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[nextIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
                     Destroy(spots[nextIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
@@ -1184,20 +1202,20 @@ public class GameManager : Singleton<GameManager>
                 }
 
 
-                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare && dropIndexSquare > 0)
+                if (spots[dropIndex].transform.childCount > dropIndexSquare && dropIndexSquare > 0)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare - 1).position, Quaternion.identity);
                     Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare - 1).gameObject);
                 }
 
 
-                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare)
+                if (spots[dropIndex].transform.childCount > dropIndexSquare)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
                     Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
 
-                if (spots[dropIndex].transform.parent.childCount > dropIndexSquare && dropIndexSquare < 3)
+                if (spots[dropIndex].transform.childCount > dropIndexSquare && dropIndexSquare < 3)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare + 1).position, Quaternion.identity);
                     Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare + 1).gameObject);
