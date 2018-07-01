@@ -6,7 +6,7 @@ public class RateManager : MonoBehaviour {
 
     public GameObject gemsText;
     public string storeLink = "https://";
-
+    public Animator animation;
 
     private int rated = 0;
 
@@ -18,6 +18,7 @@ public class RateManager : MonoBehaviour {
         if (rated == 1)
         {
             gemsText.SetActive(false);
+            animation.enabled = false;
         }
         else
             gemsText.SetActive(true);
@@ -34,6 +35,7 @@ public class RateManager : MonoBehaviour {
             Application.OpenURL(storeLink);
             CoinManager.Instance.Coins += 10;
             gemsText.SetActive(false);
+            gameObject.SetActive(false);
         }
         else
         {
@@ -43,4 +45,5 @@ public class RateManager : MonoBehaviour {
 
     }
 
+    
 }

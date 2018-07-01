@@ -413,6 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gemsText: {fileID: 895618359}
   storeLink: https://play.google.com/store/apps/details?id=com.Ace.threesixty
+  animation: {fileID: 0}
 --- !u!114 &51660900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2900,7 +2901,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 678c0534175cd4943bed3bac5cf2a33d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: db443e2dd87b74181992a397527a483e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10756,8 +10757,8 @@ GameObject:
   - component: {fileID: 1164488904}
   - component: {fileID: 1164488903}
   - component: {fileID: 1164488902}
-  - component: {fileID: 1164488901}
   - component: {fileID: 1164488905}
+  - component: {fileID: 1164488901}
   m_Layer: 5
   m_Name: Rate
   m_TagString: ui
@@ -10787,21 +10788,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -790}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1164488901
-MonoBehaviour:
+--- !u!95 &1164488901
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114492486990556062, guid: 58a8b17a66d73c5448db091019db4b61,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1164488899}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: 2}
-  m_UseGraphicAlpha: 1
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b19606d6ecf1efc458eeb9e6387634bc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1164488902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10903,6 +10907,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gemsText: {fileID: 1273134189}
   storeLink: https://play.google.com/store/apps/details?id=com.Ace.threesixty
+  animation: {fileID: 1164488901}
 --- !u!1 &1164913332
 GameObject:
   m_ObjectHideFlags: 0

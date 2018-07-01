@@ -13909,7 +13909,7 @@ GameObject:
   - component: {fileID: 1652820458}
   - component: {fileID: 1652820462}
   m_Layer: 5
-  m_Name: 3Continue
+  m_Name: 3Resume
   m_TagString: ui
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

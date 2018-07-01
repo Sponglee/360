@@ -2938,13 +2938,13 @@ public class GameManager : Singleton<GameManager>
         //Debug.Log(" game Over ");
         if (chk != null)
         {
-            if (chk.transform.childCount == 5 && !gameOverInProgress)
+            if (chk.transform.childCount >= 5 && !gameOverInProgress)
             {
                 gameOverInProgress = true;
                 //full spot colors red and opens another one
                 chk.GetComponent<SpriteRenderer>().color = leRed;
                 // 1 column gameover
-                StartCoroutine(StopGameOverShort(chk));
+
             }
             else if (chk.transform.childCount == 4)
             {
@@ -2965,10 +2965,11 @@ public class GameManager : Singleton<GameManager>
 
 
     //Game over short game
-    private IEnumerator StopGameOverShort(GameObject chk = null)
+    public IEnumerator StopGameOverShort(GameObject chk = null)
     {
 
         yield return new WaitForSeconds(0.4f);
+       
 
         if (chk.GetComponent<SpriteRenderer>().color == leRed)
         {
@@ -2993,7 +2994,10 @@ public class GameManager : Singleton<GameManager>
             }
         }
 
-
+        
+        Debug.Log("BACK");
+        if (chk != null)
+            chk.GetComponent<Spot>().GameOverCheckSpot = true;
 
     }
 
@@ -3001,41 +3005,41 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    //Game over long game
-    private IEnumerator StopGameOver()
-    {
+    ////Game over long game
+    //private IEnumerator StopGameOver()
+    //{
 
-        int reds = 0;
-        yield return new WaitForSeconds(0.4f);
-        foreach (GameObject spot in spots)
-        {
-            if (spot.GetComponent<SpriteRenderer>().color == leRed)
-            {
-                if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
-                {
-                    reds++;
+    //    int reds = 0;
+    //    yield return new WaitForSeconds(0.4f);
+    //    foreach (GameObject spot in spots)
+    //    {
+    //        if (spot.GetComponent<SpriteRenderer>().color == leRed)
+    //        {
+    //            if (spot.transform.GetChild(spot.transform.childCount - 1) != null)
+    //            {
+    //                reds++;
 
-                }
-            }
+    //            }
+    //        }
 
-        }
-        //Debug.Log("reds " + reds);
-        if (reds == spots.Count)
-        {
-            noMoves = true;
-            yield return new WaitForSeconds(1f);
-            if (reds == spots.Count)
-            {
-                AudioManager.Instance.PlaySound("end");
+    //    }
+    //    //Debug.Log("reds " + reds);
+    //    if (reds == spots.Count)
+    //    {
+    //        noMoves = true;
+    //        yield return new WaitForSeconds(1f);
+    //        if (reds == spots.Count)
+    //        {
+    //            AudioManager.Instance.PlaySound("end");
 
-                OpenMenu(true);
-                nextScore.text = "GameOver";
-                //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{1}\n Top", scores, scoreUpper);
-            }
-            else
-                noMoves = false;
-        }
-    }
+    //            OpenMenu(true);
+    //            nextScore.text = "GameOver";
+    //            //menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}\n Highscore\n{1}\n Top", scores, scoreUpper);
+    //        }
+    //        else
+    //            noMoves = false;
+    //    }
+    //}
 
 
 
@@ -3076,6 +3080,16 @@ public class GameManager : Singleton<GameManager>
             menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
+
+        }
+        else if (gameOver && endGameCheck)
+        { 
+            //GameOver
+            menu.SetActive(true);
+            ui.SetActive(!menu.gameObject.activeSelf);
+
+            menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
 
         }
         //If just Open menu mid game

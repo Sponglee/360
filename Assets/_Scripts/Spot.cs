@@ -4,13 +4,35 @@ using UnityEngine;
 
 public class Spot : MonoBehaviour {
 
- 
+    private bool gameOverCheckSpot = true;
+    private float cooldown = 0.3f;
 
-    // Use this for initialization
-    void Start () {
-       
-	}
-	
+    public bool GameOverCheckSpot
+    {
+        get
+        {
+            return gameOverCheckSpot;
+        }
+
+        set
+        {
+            gameOverCheckSpot = value;
+        }
+    }
+
+    public void Update()
+    {
+        cooldown -= Time.deltaTime;
+
+
+        if(gameObject.GetComponent<SpriteRenderer>().color == GameManager.Instance.leRed
+            && GameOverCheckSpot && !GameManager.Instance.GameOverBool && cooldown<0)
+        {
+            GameOverCheckSpot = false;
+            cooldown = 0.3f;
+            StartCoroutine(GameManager.Instance.StopGameOverShort(gameObject));
+        }
+    }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
