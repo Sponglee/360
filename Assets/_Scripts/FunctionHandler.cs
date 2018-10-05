@@ -132,12 +132,8 @@ public void ChangeThemeHandler(GameObject index)
     }
 
 
-    public void LocalMenu(GameObject localMenu)
-    {
-        StartCoroutine(StopMenu(0, localMenu, true));
-    }
-
-    private IEnumerator StopMenu(float dir, GameObject tmpMenu, bool horizontal)
+    //direction ****** 0 - down  1 - right 2 - up ***********
+    private IEnumerator StopMenu(float dir, GameObject tmpMenu, int direction)
     {
         Vector3 offset;
 
@@ -147,17 +143,22 @@ public void ChangeThemeHandler(GameObject index)
 
         
 
-        if (horizontal)
+        if (direction == 0)
         {
             offset = new Vector3(dir + 10f, 0, 0);
            // difference = Mathf.Abs(tmpMenu.transform.position.x - gameObject.transform.position.x);
         }
-        else
+        else if (direction == 1)
         {
             offset = new Vector3(0, dir + 10f, 0);
            // difference = Mathf.Abs(tmpMenu.transform.position.y - gameObject.transform.position.y);
         }
-
+        //For leaderboard (down)
+        else
+        {
+            offset = new Vector3(0, dir - 10f, 0);
+            // difference = Mathf.Abs(tmpMenu.transform.position.y - gameObject.transform.position.y);
+        }
 
         if (dir==0)
         {
@@ -185,25 +186,42 @@ public void ChangeThemeHandler(GameObject index)
         }
     }
 
-    public void BackFromLocal(GameObject localMenu)
+
+    //MENU MOVE FUNCTIONS
+    public void LocalMenu(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(2500, localMenu, true));
-
+        StartCoroutine(StopMenu(0, localMenu, 1));
     }
-
 
 
     public void Shop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(0, localMenu, false));
+        StartCoroutine(StopMenu(0, localMenu, 1));
     }
 
+    public void LeaderBoards(GameObject localMenu)
+    {
+        StartCoroutine(StopMenu(0, localMenu, 2));
+    }
+
+    //RETURN TO MAIN MOVE FUNCTIONS
     public void BackFromShop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(-2500, localMenu, false));
+        StartCoroutine(StopMenu(-2500, localMenu, 1));
 
     }
 
+    public void BackFromLocal(GameObject localMenu)
+    {
+        StartCoroutine(StopMenu(2500, localMenu, 0));
+
+    }
+
+    public void BackFromBoard(GameObject localMenu)
+    {
+        StartCoroutine(StopMenu(2500, localMenu, 2));
+
+    }
 
     //Time game
     public void MenuStartTimed()

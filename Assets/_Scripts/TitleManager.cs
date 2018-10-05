@@ -46,11 +46,14 @@ public class TitleManager : Singleton<TitleManager> {
         //shop menu
         menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
+        
+        //board menu
+        menu.transform.GetChild(0).GetChild(5).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
+        menu.transform.GetChild(0).GetChild(5).GetComponent<Image>().color += new Color32(0, 0, 0, 255);
 
-   
         // Set a ui
-       // uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
-       
+        // uiPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].uiPref;
+
     }
 
     //Gets Values from style script for each square
