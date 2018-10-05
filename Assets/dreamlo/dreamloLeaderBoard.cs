@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class dreamloLeaderBoard : MonoBehaviour {
+public class dreamloLeaderBoard : Singleton<dreamloLeaderBoard> {
 	
-	string dreamloWebserviceURL = "http://dreamlo.com/lb/";
+	public string dreamloWebserviceURL = "http://dreamlo.com/lb/";
 	
 	public string privateCode = "";
 	public string publicCode = "";
 	
-	string highScores = "";
+	public string highScores = "";
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -32,8 +32,12 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		public string shortText;
 		public string dateString;
 	}
-	
-	void Start()
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+    void Start()
 	{
 		this.highScores = "";
 	}
@@ -123,6 +127,7 @@ public class dreamloLeaderBoard : MonoBehaviour {
 		WWW www = new WWW(dreamloWebserviceURL + privateCode + "/add-pipe/" + WWW.EscapeURL(playerName) + "/" + totalScore.ToString()+ "/" + totalSeconds.ToString());
 		yield return www;
 		highScores = www.text;
+
 	}
 	
 	IEnumerator AddScoreWithPipe(string playerName, int totalScore, int totalSeconds, string shortText)

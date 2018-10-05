@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class FunctionHandler : MonoBehaviour {
 
-    
-	
+   
     public void OpenMenuHandler()
     {
         GameManager.Instance.OpenMenu();
@@ -354,6 +353,7 @@ public void ChangeThemeHandler(GameObject index)
     }
 
 
+  
 
 
     //********************DEBUG FUNCTIONS ------******************************
@@ -386,4 +386,8 @@ public void ChangeThemeHandler(GameObject index)
     }
  
 
+
+
+
+    
 }
