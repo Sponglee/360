@@ -198,8 +198,10 @@ public void ChangeThemeHandler(GameObject index)
         StartCoroutine(StopMenu(0, localMenu, 1));
     }
 
+    //LEADERBOARD FUNCTION
     public void LeaderBoards(GameObject localMenu)
     {
+        Highscores.Instance.DownloadHighscores();
         StartCoroutine(StopMenu(0, localMenu, 2));
     }
 
@@ -384,10 +386,15 @@ public void ChangeThemeHandler(GameObject index)
     {
         Application.OpenURL(targetUrl);
     }
- 
 
+    public int i = 0;
 
-
+    public void DebugScoreAdd()
+    {
+        
+            i++;
+            Highscores.Instance.AddNewHighscore(string.Format("user{0}", i), 10000+i);
+    }
 
     
 }

@@ -1,24 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
-public class Highscores : MonoBehaviour
+public class Highscores : Singleton<Highscores>
 {
 
-    string privateCode = dreamloLeaderBoard.Instance.privateCode;
-    string publicCode = dreamloLeaderBoard.Instance.publicCode;
+    public string privateCode;
+    public string publicCode;
     const string webURL = "http://dreamlo.com/lb/";
 
     public Highscore[] highscoresList;
 
-    void Awake()
-    {
-
-        AddNewHighscore("Sebastian", 50);
-        AddNewHighscore("Mary", 85);
-        AddNewHighscore("Bob", 92);
-
-        DownloadHighscores();
-    }
+   
 
     public void AddNewHighscore(string username, int score)
     {
@@ -27,7 +20,11 @@ public class Highscores : MonoBehaviour
 
     IEnumerator UploadNewHighscore(string username, int score)
     {
-        WWW www = new WWW(webURL + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score);
+
+        username = Clean(username);
+
+        WWW www = new WWW(webURL + privateCode + "/add-pipe/" + WWW.EscapeURL(username) + "/" + score.ToString());
+        Debug.Log(www.url);
         yield return www;
 
         if (string.IsNullOrEmpty(www.error))
@@ -36,6 +33,8 @@ public class Highscores : MonoBehaviour
         {
             print("Error uploading: " + www.error);
         }
+
+        Debug.Log(username + " : " + score);
     }
 
     public void DownloadHighscores()
@@ -49,25 +48,57 @@ public class Highscores : MonoBehaviour
         yield return www;
 
         if (string.IsNullOrEmpty(www.error))
+        {
             FormatHighscores(www.text);
+        }
         else
         {
             print("Error Downloading: " + www.error);
         }
     }
 
+    //Clean off unwanted characters
+    string Clean(string s)
+    {
+        s = s.Replace("/", "");
+        s = s.Replace("|", "");
+        return s;
+
+    }
+
+    //Prefabs for Score Display
+
+    public GameObject scoreElementPref;
+    public Transform scoreElementContainer;
+
+    //Format and display highscores
     void FormatHighscores(string textStream)
     {
         string[] entries = textStream.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
         highscoresList = new Highscore[entries.Length];
 
+        //Reset scoreboard
+        foreach (Transform child in scoreElementContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        //Add every entry to the list
         for (int i = 0; i < entries.Length; i++)
         {
             string[] entryInfo = entries[i].Split(new char[] { '|' });
             string username = entryInfo[0];
             int score = int.Parse(entryInfo[1]);
             highscoresList[i] = new Highscore(username, score);
-            print(highscoresList[i].username + ": " + highscoresList[i].score);
+
+
+
+
+           
+            GameObject tmp = Instantiate(scoreElementPref, scoreElementContainer);
+
+            tmp.transform.GetChild(0).GetComponentInChildren<Text>().text = highscoresList[i].username;
+            tmp.transform.GetChild(1).GetComponentInChildren<Text>().text = highscoresList[i].score.ToString();           
         }
     }
 
