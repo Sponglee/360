@@ -4,6 +4,12 @@ using UnityEngine.UI;
 
 public class Highscores : Singleton<Highscores>
 {
+    public Image[] leaderButtons;
+    
+
+    public string[] privateCodes;
+    public string[] publicCodes;
+
 
     public string privateCode;
     public string publicCode;
@@ -13,8 +19,9 @@ public class Highscores : Singleton<Highscores>
 
    
 
-    public void AddNewHighscore(string username, int score)
+    public void AddNewHighscore(string username, int score,int dbIndex)
     {
+        privateCode = privateCodes[dbIndex];
         StartCoroutine(UploadNewHighscore(username, score));
     }
 
@@ -37,13 +44,24 @@ public class Highscores : Singleton<Highscores>
         Debug.Log(username + " : " + score);
     }
 
-    public void DownloadHighscores()
+    public void DownloadHighscores(int dbIndex)
     {
+        for (int i = 0; i < leaderButtons.Length; i++)
+        {
+            if (i == dbIndex)
+                leaderButtons[i].color = new Color32(171,61,50,255);
+            else
+                leaderButtons[i].color = Color.white;
+        }
+
+
+        publicCode = publicCodes[dbIndex];
         StartCoroutine("DownloadHighscoresFromDatabase");
     }
 
     IEnumerator DownloadHighscoresFromDatabase()
     {
+       
         WWW www = new WWW(webURL + publicCode + "/pipe/");
         yield return www;
 

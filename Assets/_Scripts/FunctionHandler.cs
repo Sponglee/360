@@ -186,6 +186,13 @@ public void ChangeThemeHandler(GameObject index)
     }
 
 
+    //Pick Leaderboard table
+    public void PickTable(int dbIndex)
+    {
+        Highscores.Instance.DownloadHighscores(dbIndex);
+    }
+
+
     //MENU MOVE FUNCTIONS
     public void LocalMenu(GameObject localMenu)
     {
@@ -201,14 +208,14 @@ public void ChangeThemeHandler(GameObject index)
     //LEADERBOARD FUNCTION
     public void LeaderBoards(GameObject localMenu)
     {
-        Highscores.Instance.DownloadHighscores();
+        Highscores.Instance.DownloadHighscores(0);
         StartCoroutine(StopMenu(0, localMenu, 2));
     }
 
     //RETURN TO MAIN MOVE FUNCTIONS
     public void BackFromShop(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(-2500, localMenu, 1));
+        StartCoroutine(StopMenu(2500, localMenu, 1));
 
     }
 
@@ -220,7 +227,7 @@ public void ChangeThemeHandler(GameObject index)
 
     public void BackFromBoard(GameObject localMenu)
     {
-        StartCoroutine(StopMenu(2500, localMenu, 2));
+        StartCoroutine(StopMenu(-2500, localMenu, 2));
 
     }
 
@@ -393,7 +400,7 @@ public void ChangeThemeHandler(GameObject index)
     {
         
             i++;
-            Highscores.Instance.AddNewHighscore(string.Format("user{0}", i), 10000+i);
+            Highscores.Instance.AddNewHighscore(string.Format("user{0}", i), 10000+i,0);
     }
 
     

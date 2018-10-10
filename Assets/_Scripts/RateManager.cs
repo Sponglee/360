@@ -6,7 +6,7 @@ public class RateManager : MonoBehaviour {
 
     public GameObject gemsText;
     public string storeLink = "https://";
-    public Animator animation;
+    public Animator rateAnimation;
 
     private int rated = 0;
 
@@ -17,8 +17,8 @@ public class RateManager : MonoBehaviour {
 
         if (rated == 1)
         {
+            rateAnimation.enabled = false;
             gemsText.SetActive(false);
-            animation.enabled = false;
         }
         else
             gemsText.SetActive(true);
