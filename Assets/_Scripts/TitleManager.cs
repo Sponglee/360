@@ -114,7 +114,7 @@ public class TitleManager : Singleton<TitleManager> {
     }
 
 
-    //For Leaderboardbuttons sort
+    //For Leaderboard buttons sort 
     int CompareObNames(GameObject x, GameObject y)
     {
         return x.name.CompareTo(y.name);
@@ -130,7 +130,7 @@ public class TitleManager : Singleton<TitleManager> {
 
         //Set Leaderboard buttons references
         GameObject[] tmp = GameObject.FindGameObjectsWithTag("LeaderButtons");
-        //Sort it
+        //Sort leaderboard buttons
         Array.Sort(tmp, CompareObNames);
       
 
