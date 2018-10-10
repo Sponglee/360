@@ -6081,8 +6081,8 @@ GameObject:
   - component: {fileID: 659074946}
   - component: {fileID: 659074945}
   m_Layer: 5
-  m_Name: relax
-  m_TagString: ui
+  m_Name: 2relax
+  m_TagString: LeaderButtons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10965,8 +10965,8 @@ GameObject:
   - component: {fileID: 1147887320}
   - component: {fileID: 1147887319}
   m_Layer: 5
-  m_Name: zen
-  m_TagString: ui
+  m_Name: 0zen
+  m_TagString: LeaderButtons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13993,7 +13993,7 @@ GameObject:
   - component: {fileID: 1341947916}
   m_Layer: 5
   m_Name: BoardItemContainer
-  m_TagString: ui
+  m_TagString: LeaderContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14014,7 +14014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00015649112}
+  m_AnchoredPosition: {x: 0, y: -0.00009367135}
   m_SizeDelta: {x: 690, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1341947912
@@ -18147,8 +18147,8 @@ GameObject:
   - component: {fileID: 1787443446}
   - component: {fileID: 1787443445}
   m_Layer: 5
-  m_Name: timed
-  m_TagString: ui
+  m_Name: 1timed
+  m_TagString: LeaderButtons
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21030,95 +21030,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2089796377}
   m_CullTransparentMesh: 0
---- !u!1001 &2091289699
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: privateCode
-      value: WPjeF8InbkC3J9WcwxfCrgZxIXdxg64U2HaeobCmHWpQ
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: publicCode
-      value: 5bb78544613a87132ca9aee6
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-      propertyPath: m_Name
-      value: DreamloManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 11400002, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-    - {fileID: 11400000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-  m_SourcePrefab: {fileID: 100100000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab, type: 2}
-  m_IsPrefabAsset: 0
---- !u!1 &2091289700 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 2ae922c7d8b784fc9aac6e923c5a88ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 2091289699}
---- !u!114 &2091289701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2091289700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbbb64b97d02a7a4abccb402f3362df8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leaderButtons:
-  - {fileID: 1147887320}
-  - {fileID: 1787443446}
-  - {fileID: 659074946}
-  privateCodes:
-  - WPjeF8InbkC3J9WcwxfCrgZxIXdxg64U2HaeobCmHWpQ
-  - eb92o3NsiEaefcadIq-J0ALM7j6zvUTE2Y2Z6jTI-Yeg
-  - AcuAaD1dAUyFC3E1dKLsigcvWqyW3ZQkqfG3vkuuCG3A
-  publicCodes:
-  - 5bb78544613a87132ca9aee6
-  - 5bbe6985613a87132ccbe948
-  - 5bbe6a25613a87132ccbeb05
-  privateCode: 
-  publicCode: 
-  scoreElementPref: {fileID: 1589008618519690, guid: 3524cd957f1e98048ba2dca9c42ddb42,
-    type: 2}
-  scoreElementContainer: {fileID: 1341947911}
 --- !u!1 &2096337716
 GameObject:
   m_ObjectHideFlags: 0

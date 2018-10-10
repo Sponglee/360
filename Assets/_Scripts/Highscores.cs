@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class Highscores : Singleton<Highscores>
 {
@@ -17,7 +18,10 @@ public class Highscores : Singleton<Highscores>
 
     public Highscore[] highscoresList;
 
-   
+    public void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void AddNewHighscore(string username, int score,int dbIndex)
     {
@@ -88,10 +92,15 @@ public class Highscores : Singleton<Highscores>
 
     public GameObject scoreElementPref;
     public Transform scoreElementContainer;
-
+   
     //Format and display highscores
     void FormatHighscores(string textStream)
     {
+        //grab a reference for a container
+        scoreElementContainer = GameObject.FindGameObjectWithTag("LeaderContainer").transform;
+        
+
+
         string[] entries = textStream.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
         highscoresList = new Highscore[entries.Length];
 

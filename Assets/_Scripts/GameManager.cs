@@ -204,6 +204,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject coinFltText;
 
     //scores
+    public int dbSceneIndex;
     public int scores;
     public bool highscoreSoundBool = false;
     public int highscores;
@@ -538,16 +539,22 @@ public class GameManager : Singleton<GameManager>
         //Set a gameMode and highscore
         if (SceneManager.GetActiveScene().name == "Relax")
         {
+            //for leaderboard
+            dbSceneIndex = 2;
             PlayerPrefs.SetInt("GameMode", 0);
             highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
         }
         else if (SceneManager.GetActiveScene().name == "Main")
         {
+            //for leaderboard
+            dbSceneIndex = 1;
             PlayerPrefs.SetInt("GameMode", 1);
             highscores = PlayerPrefs.GetInt("HighscoreTimed", 1);
         }
         else if (SceneManager.GetActiveScene().name == "Dzen")
         {
+            //for leaderboard
+            dbSceneIndex = 0;
             PlayerPrefs.SetInt("GameMode", 2);
             highscores = PlayerPrefs.GetInt("HighscoreDzen", 2);
         }
@@ -3054,7 +3061,8 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver = false)
     {
 
-
+        Highscores.Instance.AddNewHighscore("Spongee", scores, dbSceneIndex);
+        Debug.Log("WRITTEN ");
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
@@ -3141,6 +3149,8 @@ public class GameManager : Singleton<GameManager>
     {
         if (value)
         {
+           
+
             if (!gameOverInProgress && !GameOverBool)
             {
                 if (!MenuUp && !AdInProgress)

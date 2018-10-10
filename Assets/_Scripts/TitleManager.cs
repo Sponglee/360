@@ -1,5 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class TitleManager : Singleton<TitleManager> {
 
@@ -113,8 +114,11 @@ public class TitleManager : Singleton<TitleManager> {
     }
 
 
-
-
+    //For Leaderboardbuttons sort
+    int CompareObNames(GameObject x, GameObject y)
+    {
+        return x.name.CompareTo(y.name);
+    }
 
     private void Awake()
     {
@@ -123,7 +127,19 @@ public class TitleManager : Singleton<TitleManager> {
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
-        
+
+        //Set Leaderboard buttons references
+        GameObject[] tmp = GameObject.FindGameObjectsWithTag("LeaderButtons");
+        //Sort it
+        Array.Sort(tmp, CompareObNames);
+      
+
+        for (int i = 0; i < tmp.Length; i++)
+        {
+            Highscores.Instance.leaderButtons[i] = tmp[i].GetComponent<Image>();
+        }
+       
+       
     }
 
 

@@ -19,6 +19,8 @@ TagManager:
   - 256
   - FxTemporaire
   - volume
+  - LeaderButtons
+  - LeaderContainer
   layers:
   - Default
   - TransparentFX
