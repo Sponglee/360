@@ -172,19 +172,7 @@ public class TitleManager : Singleton<TitleManager> {
 
     public void Start()
     {
-
-        //Grab user's name
-        Social.localUser.Authenticate(success => {
-            if (success)
-            {
-                Debug.Log("Authentication successful");
-                PlayerPrefs.SetString("PlayerName", Social.localUser.userName); 
-            }
-            else
-                Debug.Log("Authentication failed");
-        });
-
-
+       
         InitializeTheme();
     }
 
