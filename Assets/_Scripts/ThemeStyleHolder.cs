@@ -13,7 +13,7 @@ public class ThemeStyle
 {
     public ColorBlock shareButton;
     public Color shareButtonText;
-    
+
     public GameObject wheelPref;
     public GameObject squarePref;
     public GameObject spotPref;

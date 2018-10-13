@@ -26,7 +26,7 @@ public class TitleManager : Singleton<TitleManager> {
 
     void ApplyThemeFromHolder(int index)
     {
-        wheelPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].wheelPref;
+        //wheelPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].wheelPref;
       
         backPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].backPref;
 
@@ -148,9 +148,9 @@ public class TitleManager : Singleton<TitleManager> {
         ApplyTheme(themeIndex);
 
 
-        GameObject wheel = Instantiate(wheelPrefab);
+        //GameObject wheel = Instantiate(wheelPrefab);
 
-        wheel.transform.SetParent(RotatorPref);
+        //wheel.transform.SetParent(RotatorPref);
 
 
        
