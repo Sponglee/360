@@ -125,7 +125,12 @@ public class Highscores : Singleton<Highscores>
             GameObject tmp = Instantiate(scoreElementPref, scoreElementContainer);
 
             tmp.transform.GetChild(0).GetComponentInChildren<Text>().text = highscoresList[i].username;
-            tmp.transform.GetChild(1).GetComponentInChildren<Text>().text = highscoresList[i].score.ToString();           
+            tmp.transform.GetChild(1).GetComponentInChildren<Text>().text = highscoresList[i].score.ToString(); 
+            
+            if(highscoresList[i].username == PlayerPrefs.GetString("PlayerName","defaultUser"))
+            {
+                tmp.transform.GetChild(0).GetComponentInChildren<Text>().color = Color.yellow;
+            }
         }
     }
 

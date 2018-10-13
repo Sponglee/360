@@ -3061,7 +3061,7 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver = false)
     {
 
-        Highscores.Instance.AddNewHighscore("Spongee", scores, dbSceneIndex);
+        Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "defaultUser"), scores, dbSceneIndex);
         Debug.Log("WRITTEN ");
 
         //scoreText

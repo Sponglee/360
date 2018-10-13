@@ -165,7 +165,7 @@ public void ChangeThemeHandler(GameObject index)
             {
                 currentTime += Time.deltaTime;
                 normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-                Debug.Log("runnin +  " + timeOfTravel + "  :  " + currentTime);
+                //Debug.Log("runnin +  " + timeOfTravel + "  :  " + currentTime);
                 tmpMenu.transform.position = Vector3.Lerp(tmpMenu.transform.position, tmpMenu.transform.parent.position, normalizedValue);
                 yield return null;  
             }
@@ -176,7 +176,7 @@ public void ChangeThemeHandler(GameObject index)
             {
                 currentTime += Time.deltaTime;
                 normalizedValue = currentTime / timeOfTravel; // we normalize our time 
-                Debug.Log("runnin BACK");
+                //Debug.Log("runnin BACK");
                 tmpMenu.transform.position = Vector3.Lerp(tmpMenu.transform.position, tmpMenu.transform.parent.position + offset, normalizedValue);
 
                 yield return null;
