@@ -24,8 +24,14 @@
 
 public static class Threesixty
 {
+        public const string achievement_test5 = "CgkI4aXirNoJEAIQCA"; // <GPGSID>
+        public const string leaderboard_relax = "CgkI4aXirNoJEAIQCw"; // <GPGSID>
+        public const string leaderboard_zen = "CgkI4aXirNoJEAIQCQ"; // <GPGSID>
+        public const string leaderboard_timed = "CgkI4aXirNoJEAIQCg"; // <GPGSID>
         public const string achievement_test1 = "CgkI4aXirNoJEAIQAQ"; // <GPGSID>
         public const string achievement_test2 = "CgkI4aXirNoJEAIQAg"; // <GPGSID>
+        public const string achievement_test3 = "CgkI4aXirNoJEAIQBg"; // <GPGSID>
+        public const string achievement_test4 = "CgkI4aXirNoJEAIQBw"; // <GPGSID>
 
 }
 

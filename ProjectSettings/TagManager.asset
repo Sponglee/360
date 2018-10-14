@@ -21,6 +21,7 @@ TagManager:
   - volume
   - LeaderButtons
   - LeaderContainer
+  - DebugName
   layers:
   - Default
   - TransparentFX
