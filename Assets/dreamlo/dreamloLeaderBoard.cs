@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+
 public class dreamloLeaderBoard : Singleton<dreamloLeaderBoard> {
 	
 	public string dreamloWebserviceURL = "http://dreamlo.com/lb/";
@@ -39,7 +41,7 @@ public class dreamloLeaderBoard : Singleton<dreamloLeaderBoard> {
     }
     void Start()
 	{
-		this.highScores = "";
+       
 	}
 	
 	public static dreamloLeaderBoard GetSceneDreamloLeaderboard()
@@ -85,8 +87,8 @@ public class dreamloLeaderBoard : Singleton<dreamloLeaderBoard> {
 			_lastRequest = now;
 			_requestTotal = 0;
 		}
-
-		return false;
+        this.highScores = "";
+        return false;
 	}
 
 	public void AddScore(string playerName, int totalScore)

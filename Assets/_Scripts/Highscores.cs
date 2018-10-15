@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 
 public class Highscores : Singleton<Highscores>
@@ -20,8 +22,29 @@ public class Highscores : Singleton<Highscores>
     public Highscore[] highscoresList;
 
     public void Start()
-    {
-       DontDestroyOnLoad(gameObject);
+    { 
+        //// FOR USERNAME ACQUISITION
+        // recommended for debugging:
+        PlayGamesPlatform.DebugLogEnabled = true;
+
+        // Activate the Google Play Games platform
+        PlayGamesPlatform.Activate();
+
+
+        // Default PlayerName
+        PlayerPrefs.SetString("PlayerName", "defaultUser");
+        //Grab user's name
+        Social.localUser.Authenticate(success => {
+            if (success)
+            {
+                Debug.Log("Authentication successful");
+                PlayerPrefs.SetString("PlayerName", Social.localUser.userName);
+            }
+            else
+                Debug.Log("Authentication failed");
+        });
+       
+        DontDestroyOnLoad(gameObject);
     }
 
     public void AddNewHighscore(string username, int score,int dbIndex)
@@ -133,7 +156,7 @@ public class Highscores : Singleton<Highscores>
             
             if(highscoresList[i].username == PlayerPrefs.GetString("PlayerName","defaultUser"))
             {
-                tmp.transform.GetChild(0).GetComponentInChildren<Text>().color = Color.yellow;
+                tmp.transform.GetChild(0).GetComponentInChildren<Text>().color = new Color32 (255,247,100,255);
             }
         }
     }
