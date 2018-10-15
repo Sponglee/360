@@ -1,7 +1,8 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 using System;
-
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 
 
@@ -181,7 +182,27 @@ public class TitleManager : Singleton<TitleManager> {
        
         InitializeTheme();
 
-       
+        //// FOR USERNAME ACQUISITION
+        // recommended for debugging:
+        PlayGamesPlatform.DebugLogEnabled = true;
+
+        // Activate the Google Play Games platform
+        PlayGamesPlatform.Activate();
+
+
+        // Default PlayerName
+        PlayerPrefs.SetString("PlayerName", "defaultUser");
+        //Grab user's name
+        Social.localUser.Authenticate(success => {
+            if (success)
+            {
+                Debug.Log("Authentication successful");
+                PlayerPrefs.SetString("PlayerName", Social.localUser.userName);
+            }
+            else
+                Debug.Log("Authentication failed");
+        });
+
 
     }
 

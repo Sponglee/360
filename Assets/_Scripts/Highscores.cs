@@ -2,8 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
-using GooglePlayGames;
-using UnityEngine.SocialPlatforms;
+
 
 
 public class Highscores : Singleton<Highscores>
@@ -23,27 +22,7 @@ public class Highscores : Singleton<Highscores>
 
     public void Start()
     { 
-        //// FOR USERNAME ACQUISITION
-        // recommended for debugging:
-        PlayGamesPlatform.DebugLogEnabled = true;
-
-        // Activate the Google Play Games platform
-        PlayGamesPlatform.Activate();
-
-
-        // Default PlayerName
-        PlayerPrefs.SetString("PlayerName", "defaultUser");
-        //Grab user's name
-        Social.localUser.Authenticate(success => {
-            if (success)
-            {
-                Debug.Log("Authentication successful");
-                PlayerPrefs.SetString("PlayerName", Social.localUser.userName);
-            }
-            else
-                Debug.Log("Authentication failed");
-        });
-       
+        
         DontDestroyOnLoad(gameObject);
     }
 
