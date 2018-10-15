@@ -7,8 +7,8 @@ using System;
 public class Highscores : Singleton<Highscores>
 {
     public Image[] leaderButtons;
-    
 
+    public Text errorText;
     public string[] privateCodes;
     public string[] publicCodes;
 
@@ -76,7 +76,8 @@ public class Highscores : Singleton<Highscores>
         }
         else
         {
-            print("Error Downloading: " + www.error);
+           errorText = GameObject.FindGameObjectWithTag("DebugName").GetComponent<Text>();
+           errorText.text = www.error + "\nPlease try again later..";
         }
     }
 
@@ -99,8 +100,10 @@ public class Highscores : Singleton<Highscores>
     {
         //grab a reference for a container
         scoreElementContainer = GameObject.FindGameObjectWithTag("LeaderContainer").transform;
-        
 
+
+        errorText = GameObject.FindGameObjectWithTag("DebugName").GetComponent<Text>();
+        errorText.enabled = false;
 
         string[] entries = textStream.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
         highscoresList = new Highscore[entries.Length];
