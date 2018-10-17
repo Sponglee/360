@@ -629,145 +629,145 @@ public class GameManager : Singleton<GameManager>
         //********************TUTORIAL RESTRICTIONS*****************************If tutorial for POwer ups - no clicking
 
 
-        if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
-        {
-            NoRotation = false;
-        }
-        else if (PlayerPrefs.GetInt("TutorialStep", 0) > 1 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
-            NoRotation = true;
+        //if (PlayerPrefs.GetInt("TutorialStep", 0) == 0 /*|| PlayerPrefs.GetInt("TutorialStep", 0) > 5*/)
+        //{
+        //    NoRotation = true;
+        //}
+        //else if (PlayerPrefs.GetInt("TutorialStep", 0) >= 1 /*&& PlayerPrefs.GetInt("TutorialStep", 0) < 6*/)
+        //    NoRotation = false;
 
 
 
-        if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
-        {
-            //Hammer
-            if (GameManager.Instance.tutorialManager.tutorialStep == 3)
-            {
+        //if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+        //{
+        //    //Hammer
+        //    if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+        //    {
 
-                GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
-
-
-
-                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                CoinManager.Instance.Coins += 2;
-
-                //PREPARE FOR HAMMER TUTORIAL
-                #region passing0
-
-                //if there's no start yet
-                List<int> tutSpawns = new List<int>();
-                List<int> tutScores = new List<int>(new int[] { 2 });
-                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+        //        GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
 
 
 
+        //        //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+        //        CoinManager.Instance.Coins += 2;
 
-                tutSpawns.Add(dropIndex);
+        //        //PREPARE FOR HAMMER TUTORIAL
+        //        #region passing0
 
-
-
-                #endregion
-                bool countBool = false;
-
-                for (int i = 0; i < nBottom; i++)
-                {
-                    if (spots[i].transform.childCount != 0)
-                        countBool = true;
-                    Debug.Log(spots[i].transform.childCount);
-                }
-
-                if (!countBool)
-                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
-
-            }
-            else if (GameManager.Instance.tutorialManager.tutorialStep == 4)
-            {
-
-                GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
-
-
-
-                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                CoinManager.Instance.Coins += 2;
-
-                //PREPARE FOR BOMB TUTORIAL
-                #region passing0
-
-                //if there's no start yet
-                List<int> tutSpawns = new List<int>();
-                List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
-                int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
-                int firstIndex;
-                int nextIndex;
-
-                //check next left one after getting index-1
-                if (dropIndex - 1 < 0)
-                {
-                    firstIndex = GameManager.Instance.nBottom - 1;
-                }
-                else
-                    firstIndex = dropIndex - 1;
-
-                //check next one after setting index+1
-                if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
-                {
-                    nextIndex = 0;
-                }
-                else
-                    nextIndex = dropIndex + 1;
-
-                tutSpawns.Add(firstIndex);
-                tutSpawns.Add(dropIndex);
-                tutSpawns.Add(nextIndex);
-
-                #endregion
-                int countInt = 0;
-
-                for (int i = 0; i < nBottom; i++)
-                {
-                    if (spots[i].transform.childCount != 0)
-                        countInt++;
-                    Debug.Log(spots[i].transform.childCount);
-                }
-
-                if (countInt < 3)
-                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
-
-
-            }
-            else if (GameManager.Instance.tutorialManager.tutorialStep == 5)
-            {
-
-                GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
-
-
-
-                //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                CoinManager.Instance.Coins += 2;
-
-                //PREPARE FOR DRILL TUTORIAL
-                int countInt = 0;
-                for (int i = 0; i < nBottom; i++)
-                {
-                    if (spots[i].transform.childCount >= 3)
-                        countInt++;
-                    Debug.Log(spots[i].transform.childCount);
-                }
-
-                if (countInt < 3)
-                    StartCoroutine(TutorialManager.Instance.StopTutDrill());
+        //        //if there's no start yet
+        //        List<int> tutSpawns = new List<int>();
+        //        List<int> tutScores = new List<int>(new int[] { 2 });
+        //        int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
 
 
 
 
-            }
-            NoClickSpawn = true;
-        }
-        else
-        {
-            NoClickSpawn = false;
+        //        tutSpawns.Add(dropIndex);
 
-        }
+
+
+        //        #endregion
+        //        bool countBool = false;
+
+        //        for (int i = 0; i < nBottom; i++)
+        //        {
+        //            if (spots[i].transform.childCount != 0)
+        //                countBool = true;
+        //            Debug.Log(spots[i].transform.childCount);
+        //        }
+
+        //        if (!countBool)
+        //            StartCoroutine(StopTutBomb(tutSpawns, tutScores));
+
+        //    }
+        //    else if (GameManager.Instance.tutorialManager.tutorialStep == 4)
+        //    {
+
+        //        GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
+
+
+
+        //        //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+        //        CoinManager.Instance.Coins += 2;
+
+        //        //PREPARE FOR BOMB TUTORIAL
+        //        #region passing0
+
+        //        //if there's no start yet
+        //        List<int> tutSpawns = new List<int>();
+        //        List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
+        //        int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+        //        int firstIndex;
+        //        int nextIndex;
+
+        //        //check next left one after getting index-1
+        //        if (dropIndex - 1 < 0)
+        //        {
+        //            firstIndex = GameManager.Instance.nBottom - 1;
+        //        }
+        //        else
+        //            firstIndex = dropIndex - 1;
+
+        //        //check next one after setting index+1
+        //        if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+        //        {
+        //            nextIndex = 0;
+        //        }
+        //        else
+        //            nextIndex = dropIndex + 1;
+
+        //        tutSpawns.Add(firstIndex);
+        //        tutSpawns.Add(dropIndex);
+        //        tutSpawns.Add(nextIndex);
+
+        //        #endregion
+        //        int countInt = 0;
+
+        //        for (int i = 0; i < nBottom; i++)
+        //        {
+        //            if (spots[i].transform.childCount != 0)
+        //                countInt++;
+        //            Debug.Log(spots[i].transform.childCount);
+        //        }
+
+        //        if (countInt < 3)
+        //            StartCoroutine(StopTutBomb(tutSpawns, tutScores));
+
+
+        //    }
+        //    else if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+        //    {
+
+        //        GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
+
+
+
+        //        //GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+        //        CoinManager.Instance.Coins += 2;
+
+        //        //PREPARE FOR DRILL TUTORIAL
+        //        int countInt = 0;
+        //        for (int i = 0; i < nBottom; i++)
+        //        {
+        //            if (spots[i].transform.childCount >= 3)
+        //                countInt++;
+        //            Debug.Log(spots[i].transform.childCount);
+        //        }
+
+        //        if (countInt < 3)
+        //            StartCoroutine(TutorialManager.Instance.StopTutDrill());
+
+
+
+
+        //    }
+        //    NoClickSpawn = true;
+        //}
+        //else
+        //{
+        //    NoClickSpawn = false;
+
+        //}
 
 
         //*************************END OF TUTORIAL RESTICTIONS******************************
@@ -815,7 +815,7 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log(slider.fillAmount);
             //while (currentTime <= timeOfTravel)
             //{
-            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 5 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
+            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 1 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
             {
                 fMoves += 0.01f;
                 sliderFill = (float)(expandMoves - fMoves) / expandMoves;
@@ -898,7 +898,22 @@ public class GameManager : Singleton<GameManager>
 
     }
 
+    //Delete pressed powerup object and add score
+    public void DestroyPowerUp(GameObject tmp)
+    {
+        Vector3 fltOffset = new Vector3(0f, 0.1f, 5f);
 
+        Destroy(tmp);
+
+        //add score for explosion
+        scores += tmp.GetComponent<Square>().Score;
+        scoreText.text = scores.ToString();
+        //Spawn float text
+        GameObject textObj = Instantiate(FltText, tmp.transform.position, tmp.transform.rotation);
+        textObj.transform.position = tmp.transform.TransformPoint(tmp.transform.localPosition + fltOffset);
+        textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.GetComponent<Square>().Score.ToString();
+
+    }
     void Update()
     {
         //=============================================================================================================
@@ -910,28 +925,28 @@ public class GameManager : Singleton<GameManager>
 
         //}
         ////Debuging lines above
-        //===============================================================================================================
-        if (PlayerPrefs.GetInt("TutorialStep", 0) == 2)
-        {
+        ////===============================================================================================================
+        //if (PlayerPrefs.GetInt("TutorialStep", 0) == 2)
+        //{
 
-            if (tutCurrentSpot != int.Parse(currentSpot.name))
-            {
-                NoRotation = true;
-            }
-        }
-        if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
-        {
-            NoRotation = false;
-            tutCurrentSpot = int.Parse(currentSpot.name);
-        }
-        else if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
-            NoRotation = true;
-        else
-        {
+        //    if (tutCurrentSpot != int.Parse(currentSpot.name))
+        //    {
+        //        NoRotation = true;
+        //    }
+        //}
+        //if (PlayerPrefs.GetInt("TutorialStep", 0) == 1 || PlayerPrefs.GetInt("TutorialStep", 0) > 5)
+        //{
+        //    NoRotation = false;
+        //    tutCurrentSpot = int.Parse(currentSpot.name);
+        //}
+        //else if (PlayerPrefs.GetInt("TutorialStep", 0) > 2 && PlayerPrefs.GetInt("TutorialStep", 0) < 6)
+        //    NoRotation = true;
+        //else
+        //{
 
-            NoRotation = false;
-            NoClickSpawn = false;
-        }
+        //    NoRotation = false;
+        //    NoClickSpawn = false;
+        //}
 
         #region Input
 
@@ -949,75 +964,75 @@ public class GameManager : Singleton<GameManager>
                 Instantiate(hammerPref, results[0].gameObject.transform.position, Quaternion.identity);
 
 
-                //********************TUTORIAL*********HAMMER(SELECT)
-                if (GameManager.Instance.tutorialManager.tutorialStep == 3)
-                {
+                ////********************TUTORIAL*********HAMMER(SELECT)
+                //if (GameManager.Instance.tutorialManager.tutorialStep == 3)
+                //{
 
 
 
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                    GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
+                //    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                //    GameManager.Instance.tutorialManager.powerUpAnim[1].SetBool("Highlight", true);
 
 
 
-                    CoinManager.Instance.Coins += 2;
+                //    CoinManager.Instance.Coins += 2;
 
-                    //PREPARE FOR BOMB TUTORIAL
-                    #region passing0
+                //    //PREPARE FOR BOMB TUTORIAL
+                //    #region passing0
 
-                    //if there's no start yet
-                    List<int> tutSpawns = new List<int>();
-                    List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
-                    int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
-                    int firstIndex;
-                    int nextIndex;
+                //    //if there's no start yet
+                //    List<int> tutSpawns = new List<int>();
+                //    List<int> tutScores = new List<int>(new int[] { 8, 4, 2, 4, 8, 2, 8, 4, 8 });
+                //    int dropIndex = int.Parse(GameManager.Instance.currentSpot.name);
+                //    int firstIndex;
+                //    int nextIndex;
 
-                    //check next left one after getting index-1
-                    if (dropIndex - 1 < 0)
-                    {
-                        firstIndex = GameManager.Instance.nBottom - 1;
-                    }
-                    else
-                        firstIndex = dropIndex - 1;
+                //    //check next left one after getting index-1
+                //    if (dropIndex - 1 < 0)
+                //    {
+                //        firstIndex = GameManager.Instance.nBottom - 1;
+                //    }
+                //    else
+                //        firstIndex = dropIndex - 1;
 
-                    //check next one after setting index+1
-                    if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
-                    {
-                        nextIndex = 0;
-                    }
-                    else
-                        nextIndex = dropIndex + 1;
+                //    //check next one after setting index+1
+                //    if (dropIndex + 1 > GameManager.Instance.nBottom - 1)
+                //    {
+                //        nextIndex = 0;
+                //    }
+                //    else
+                //        nextIndex = dropIndex + 1;
 
-                    tutSpawns.Add(firstIndex);
-                    tutSpawns.Add(dropIndex);
-                    tutSpawns.Add(nextIndex);
+                //    tutSpawns.Add(firstIndex);
+                //    tutSpawns.Add(dropIndex);
+                //    tutSpawns.Add(nextIndex);
 
 
-                    #endregion
-                    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
+                //    #endregion
+                //    StartCoroutine(StopTutBomb(tutSpawns, tutScores));
 
-                }
-                //*****************************
+                //}
+                ////*****************************
 
 
                 //foreach (RaycastResult result in results)
                 //{
-                //Check if parent is square too
+
+              
+                //Check if parent is square too (depending on what object first click was commited)
                 if (results[0].gameObject.transform.parent.CompareTag("square") && results[0].gameObject.transform.parent.parent.CompareTag("spot"))
                 {
-                    Destroy(results[0].gameObject.transform.parent.gameObject);
+                    DestroyPowerUp(results[0].gameObject.transform.parent.gameObject);
                     SquareDestroyed = true;
-
                 }
                 else if (results[0].gameObject.transform.parent.parent.CompareTag("square"))
                 {
-                    Destroy(results[0].gameObject.transform.parent.parent.gameObject);
+                    DestroyPowerUp(results[0].gameObject.transform.parent.parent.gameObject);
                     SquareDestroyed = true;
-
                 }
                 else if (results[0].gameObject.CompareTag("square"))
                 {
-                    Destroy(results[0].gameObject);
+                    DestroyPowerUp(results[0].gameObject);
                     SquareDestroyed = true;
                 }
                 else
@@ -1047,19 +1062,19 @@ public class GameManager : Singleton<GameManager>
                 //Instantiate(bombPref, results[0].gameObject.transform.position, Quaternion.identity);
 
 
-                //********************TUTORIAL*********BOMB
-                if (GameManager.Instance.tutorialManager.tutorialStep == 4)
-                {
+                ////********************TUTORIAL*********BOMB
+                //if (GameManager.Instance.tutorialManager.tutorialStep == 4)
+                //{
 
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                //    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
 
 
-                    GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
+                //    GameManager.Instance.tutorialManager.powerUpAnim[2].SetBool("Highlight", true);
 
-                    CoinManager.Instance.Coins += 3;
-                    StartCoroutine(TutorialManager.Instance.StopTutDrill());
-                }
-                //*****************************
+                //    CoinManager.Instance.Coins += 3;
+                //    StartCoroutine(TutorialManager.Instance.StopTutDrill());
+                //}
+                ////*****************************
 
                 //Debug.Log("BOMB SELECTED  " + results[0].gameObject.name);
 
@@ -1121,11 +1136,12 @@ public class GameManager : Singleton<GameManager>
                 else
                     nextIndex = dropIndex + 1;
 
+                //Check if there's square to destroy
                 if (spots[firstIndex].transform.childCount > dropIndexSquare)
                 {
                     Debug.Log(spots[firstIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[firstIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
-                    Destroy(spots[firstIndex].transform.GetChild(dropIndexSquare).gameObject);
+                    DestroyPowerUp(spots[firstIndex].transform.GetChild(dropIndexSquare).gameObject);
 
                 }
 
@@ -1134,14 +1150,14 @@ public class GameManager : Singleton<GameManager>
                 {
                     Debug.Log(spots[dropIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
+                    DestroyPowerUp(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
 
                 if (spots[nextIndex].transform.childCount > dropIndexSquare)
                 {
                     Debug.Log(spots[nextIndex].transform.parent.childCount + "   " + dropIndexSquare);
                     Instantiate(bombPref, spots[nextIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
-                    Destroy(spots[nextIndex].transform.GetChild(dropIndexSquare).gameObject);
+                    DestroyPowerUp(spots[nextIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
                 SquareDestroyed = true;
             }
@@ -1162,21 +1178,22 @@ public class GameManager : Singleton<GameManager>
 
 
 
-                //********************TUTORIAL*********DRILL
-                if (GameManager.Instance.tutorialManager.tutorialStep == 5)
-                {
+                ////********************TUTORIAL*********DRILL
+                //if (GameManager.Instance.tutorialManager.tutorialStep == 5)
+                //{
 
 
 
 
 
-                    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
-                    CoinManager.Instance.Coins += 5;
-                    //GameManager.Instance.tutorialManager.button.SetActive(true);
-                    NoClickSpawn = false;
+                //    GameManager.Instance.tutorialManager.tutorialTrigger.Invoke();
+                //    CoinManager.Instance.Coins += 5;
+                //    //GameManager.Instance.tutorialManager.button.SetActive(true);
+                //    NoClickSpawn = false;
 
-                    StartCoroutine(TutorialManager.Instance.StopCloseTut());
-                }
+                //    StartCoroutine(TutorialManager.Instance.StopCloseTut());
+                //}
+                //=========================================================
 
                 //Debug.Log("DRILL SELECTED  " + results[0].gameObject.name);
 
@@ -1212,27 +1229,24 @@ public class GameManager : Singleton<GameManager>
                 if (spots[dropIndex].transform.childCount > dropIndexSquare && dropIndexSquare > 0)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare - 1).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare - 1).gameObject);
+                    DestroyPowerUp(spots[dropIndex].transform.GetChild(dropIndexSquare - 1).gameObject);
                 }
 
 
                 if (spots[dropIndex].transform.childCount > dropIndexSquare)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
+                    DestroyPowerUp(spots[dropIndex].transform.GetChild(dropIndexSquare).gameObject);
                 }
 
                 if (spots[dropIndex].transform.childCount > dropIndexSquare && dropIndexSquare < 3)
                 {
                     Instantiate(drillPref, spots[dropIndex].transform.GetChild(dropIndexSquare + 1).position, Quaternion.identity);
-                    Destroy(spots[dropIndex].transform.GetChild(dropIndexSquare + 1).gameObject);
+                    DestroyPowerUp(spots[dropIndex].transform.GetChild(dropIndexSquare + 1).gameObject);
                 }
 
 
                 SquareDestroyed = true;
-
-                //*****************************
-
 
 
             }
@@ -1643,7 +1657,7 @@ public class GameManager : Singleton<GameManager>
 
 
         //****************************TUTORIAL**************************************************
-        if (PlayerPrefs.GetInt("TutorialStep", 0) < 5)
+        if (PlayerPrefs.GetInt("TutorialStep", 0) < 2)
         {
             int tutStep = PlayerPrefs.GetInt("TutorialStep", 0);
 
@@ -1829,15 +1843,15 @@ public class GameManager : Singleton<GameManager>
 
         StartCoroutine(StopMerge(first, fltScore, second, IsPowerUp));
 
-        //********************TUTORIAL*********MERGE
-        if (tutorialManager.tutorialStep == 2)
-        {
-            //Debug.Log("NO ROTATION");
-            tutorialManager.tutorialTrigger.Invoke();
-            GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
-            NoClickSpawn = true;
-        }
-        //*****************************
+        ////********************TUTORIAL*********MERGE
+        //if (tutorialManager.tutorialStep == 2)
+        //{
+        //    //Debug.Log("NO ROTATION");
+        //    tutorialManager.tutorialTrigger.Invoke();
+        //    GameManager.Instance.tutorialManager.powerUpAnim[0].SetBool("Highlight", true);
+        //    NoClickSpawn = true;
+        //}
+        ////*****************************
 
     }
 
@@ -3061,7 +3075,7 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver = false)
     {
 
-        Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "defaultUser"), scores, dbSceneIndex);
+        Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
         Debug.Log("WRITTEN ");
 
         //scoreText

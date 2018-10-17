@@ -75,6 +75,11 @@ public class CoinManager : Singleton<CoinManager> {
         SkinAvailability = PlayerPrefs.GetInt("SkinAvailability", 1);
         //persistant coin manager
         DontDestroyOnLoad(gameObject);
+        if (FindObjectsOfType(GetType()).Length > 1)
+        {
+            Destroy(gameObject);
+        }
+
 
         coins = PlayerPrefs.GetInt("Coin", 20);
         coinText.text = coins.ToString();

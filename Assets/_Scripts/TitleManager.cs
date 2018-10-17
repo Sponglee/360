@@ -191,7 +191,7 @@ public class TitleManager : Singleton<TitleManager> {
 
 
         // Default PlayerName
-        PlayerPrefs.SetString("PlayerName", "defaultUser");
+        PlayerPrefs.SetString("PlayerName", "offlineUser");
         //Grab user's name
         Social.localUser.Authenticate(success => {
             if (success)
@@ -203,7 +203,7 @@ public class TitleManager : Singleton<TitleManager> {
                 Debug.Log("Authentication failed");
         });
 
-
+        
     }
 
     public void TitleNewGame()

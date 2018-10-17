@@ -56,7 +56,10 @@ public class AudioManager : Singleton<AudioManager>
     void Start()
     {
         DontDestroyOnLoad(gameObject);
-
+        if (FindObjectsOfType(GetType()).Length > 1)
+        {
+            Destroy(gameObject);
+        }
 
         for (int i = 0; i < sounds.Length; i++)
         {

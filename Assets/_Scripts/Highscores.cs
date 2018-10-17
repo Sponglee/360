@@ -9,6 +9,8 @@ public class Highscores : Singleton<Highscores>
 {
     public Image[] leaderButtons;
 
+    public Text[] highscoreTexts;
+
     public Text errorText;
     public string[] privateCodes;
     public string[] publicCodes;
@@ -24,6 +26,10 @@ public class Highscores : Singleton<Highscores>
     { 
         
         DontDestroyOnLoad(gameObject);
+        if (FindObjectsOfType(GetType()).Length > 1)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void AddNewHighscore(string username, int score,int dbIndex)
@@ -133,9 +139,11 @@ public class Highscores : Singleton<Highscores>
             tmp.transform.GetChild(0).GetComponentInChildren<Text>().text = highscoresList[i].username;
             tmp.transform.GetChild(1).GetComponentInChildren<Text>().text = highscoresList[i].score.ToString(); 
             
-            if(highscoresList[i].username == PlayerPrefs.GetString("PlayerName","defaultUser"))
+            if(highscoresList[i].username == PlayerPrefs.GetString("PlayerName","offlineUser"))
             {
                 tmp.transform.GetChild(0).GetComponentInChildren<Text>().color = new Color32 (255,247,100,255);
+                //Debug.Log(textStream + " : " + highscoresList[i].score.ToString());
+                //highscoreTexts[dbIndex].text = highscoresList[i].score.ToString();
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Collections;
 
 public class PowerUp : MonoBehaviour
 {
+    public GameObject tooltip;
     //select toggle color change
     private bool selectionUI = false;
     public bool SelectionUI
@@ -18,7 +19,20 @@ public class PowerUp : MonoBehaviour
             selectionUI = value;
             //Switch color on valuechange
             if(selectionUI)
+            {
                 gameObject.GetComponent<Image>().color = new Color32(156,87,71,246);
+                tooltip.SetActive(true);
+                
+
+                //Enable crosses on each square
+                GameObject[] tmpSquarePwrUps = GameObject.FindGameObjectsWithTag("square");
+
+                foreach (var tmp in tmpSquarePwrUps)
+                {
+                    if (tmp.transform.parent.CompareTag("spot"))
+                        tmp.transform.GetChild(1).gameObject.SetActive(true);
+                }
+            }
             else
             {
                 //count cost of selectSquare
@@ -28,6 +42,16 @@ public class PowerUp : MonoBehaviour
                     GameManager.Instance.SquareDestroyed = false;
                 }
                 gameObject.GetComponent<Image>().color = new Color32(255,255,255,246);
+                tooltip.SetActive(false);
+
+                //Disable crosses on each square
+                GameObject[] tmpSquarePwrUps = GameObject.FindGameObjectsWithTag("square");
+
+                foreach (var tmp in tmpSquarePwrUps)
+                {
+                    if(tmp.transform.parent.CompareTag("spot"))
+                        tmp.transform.GetChild(1).gameObject.SetActive(false);
+                }
             }
         }
     }
@@ -64,7 +88,7 @@ public class PowerUp : MonoBehaviour
     //Square power up
     public void SelectSquare(int powerUp)
     {
-        GameManager.Instance.tutorialManager.powerUpAnim[powerUp].SetBool("Highlight", false);
+        //GameManager.Instance.tutorialManager.powerUpAnim[powerUp].SetBool("Highlight", false);
 
         SelectionUI = true;
         switch (powerUp)

@@ -35,7 +35,7 @@ public class RateManager : MonoBehaviour {
             Application.OpenURL(storeLink);
             CoinManager.Instance.Coins += 10;
             gemsText.SetActive(false);
-            gameObject.SetActive(false);
+            
         }
         else
         {

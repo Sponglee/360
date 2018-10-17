@@ -24,6 +24,7 @@ public class TutorialManager : Singleton<TutorialManager> {
    
 
     public string[] tutorialText;
+    public GameObject[] tutorialTouch;
 
     public Animator[] powerUpAnim;
 
@@ -31,25 +32,20 @@ public class TutorialManager : Singleton<TutorialManager> {
     // Use this for initialization
     void Start () {
 
-        
-
-
-
-
+       
         tutorialStep = PlayerPrefs.GetInt("TutorialStep", 0);
      
-        if (tutorialStep <= 5)
+        if (tutorialStep <= 1)
         {
             if (PlayerPrefs.GetInt("Language", 0) == 0)
             {
                 tutorialText = tutorialTextEN;
-
             }
             else
                 tutorialText = tutorialTextRU;
 
             tutorialCanvas.gameObject.SetActive(true);
-            tutorialCanvas.transform.GetComponentInChildren<Text>().text = tutorialText[PlayerPrefs.GetInt("TutorialStep", 0)];
+            tutorialTouch[PlayerPrefs.GetInt("TutorialStep", 0)].SetActive(true);
         }
         else
             tutorialCanvas.gameObject.SetActive(false);
@@ -60,12 +56,15 @@ public class TutorialManager : Singleton<TutorialManager> {
     public void Clicked()
     {
         Debug.Log("TRIGGERED !!!! " + tutorialStep);
+        tutorialTouch[PlayerPrefs.GetInt("TutorialStep", 0)].SetActive(false);
         tutorialStep++;
         PlayerPrefs.SetInt("TutorialStep", tutorialStep);
-            
-        //tutorialCanvas.gameObject.SetActive(false);
-        tutorialCanvas.transform.GetComponentInChildren<Text>().text = tutorialText[PlayerPrefs.GetInt("TutorialStep", 0)];
 
+        //tutorialCanvas.gameObject.SetActive(false);
+        if (tutorialStep <= 1)
+            tutorialTouch[PlayerPrefs.GetInt("TutorialStep", 0)].SetActive(true);
+        else
+            tutorialCanvas.enabled = false;
       
 
     }
@@ -141,8 +140,8 @@ public class TutorialManager : Singleton<TutorialManager> {
 
     public void SkipTutorial()
     {
-        PlayerPrefs.SetInt("TutorialStep", 7);
-        tutorialStep = 7;
+        PlayerPrefs.SetInt("TutorialStep", 3);
+        tutorialStep = 3;
         tutorialCanvas.gameObject.SetActive(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
