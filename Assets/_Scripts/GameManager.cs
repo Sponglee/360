@@ -15,6 +15,8 @@ public class GameManager : Singleton<GameManager>
 {
     public TutorialManager tutorialManager;
 
+    public Slider progressSlider;
+
     public bool AdInProgress = false;
 
     public GameObject shareButton;
@@ -316,9 +318,10 @@ public class GameManager : Singleton<GameManager>
 
         shareButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
         shareButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
-
-
-
+        //Slider theme
+        progressSlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
+        progressSlider.transform.GetChild(2).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
+        progressSlider.transform.GetChild(3).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
 
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         //right menu
@@ -1656,74 +1659,74 @@ public class GameManager : Singleton<GameManager>
         squareSpawn.GetComponent<Square>().Score = next_score;
 
 
-        //****************************TUTORIAL**************************************************
-        if (PlayerPrefs.GetInt("TutorialStep", 0) < 2)
-        {
-            int tutStep = PlayerPrefs.GetInt("TutorialStep", 0);
+        ////****************************TUTORIAL**************************************************
+        //if (PlayerPrefs.GetInt("TutorialStep", 0) < 2)
+        //{
+        //    int tutStep = PlayerPrefs.GetInt("TutorialStep", 0);
 
-            switch (tutStep)
-            {
-                //For Tap
-                case 0:
-                    {
-                        tutNum = 2;
+        //    switch (tutStep)
+        //    {
+        //        //For Tap
+        //        case 0:
+        //            {
+        //                tutNum = 2;
 
-                        break;
-                    }
-                //for Rotate
+        //                break;
+        //            }
+        //        //for Rotate
 
-                case 1:
-                    {
+        //        case 1:
+        //            {
 
-                        tutNum = 2;
-                        break;
-                    }
-                //for Merge
+        //                tutNum = 2;
+        //                break;
+        //            }
+        //        //for Merge
 
-                case 2:
-                    {
-                        tutNum = 4;
+        //        case 2:
+        //            {
+        //                tutNum = 4;
 
-                        break;
-                    }
-                //for Hammer
+        //                break;
+        //            }
+        //        //for Hammer
 
-                case 3:
-                    {
-                        tutNum = 4;
+        //        case 3:
+        //            {
+        //                tutNum = 4;
 
-                        break;
-                    }
-                //for Bomb
+        //                break;
+        //            }
+        //        //for Bomb
 
-                case 4:
-                    {
+        //        case 4:
+        //            {
 
-                        tutNum = 2;
-                        break;
-                    }
-                //For Drill
+        //                tutNum = 2;
+        //                break;
+        //            }
+        //        //For Drill
 
-                case 5:
-                    {
+        //        case 5:
+        //            {
 
-                        tutNum = 2;
-                        break;
-                    }
+        //                tutNum = 2;
+        //                break;
+        //            }
 
 
 
-                default:
-                    tutNum = 2;
-                    break;
-            }
+        //        default:
+        //            tutNum = 2;
+        //            break;
+        //    }
 
-            next_score = tutNum;
-            nextScore.text = next_score.ToString();
+        //    next_score = tutNum;
+        //    nextScore.text = next_score.ToString();
 
-        }
-        //**************************************************************************
-        else
+        //}
+        ////**************************************************************************
+        //else
             //get score for next turn (non-inclusive)
             next_score = (int)Mathf.Pow(2, Random.Range(1, maxScore + 1));
 
@@ -3074,8 +3077,8 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver = false)
     {
-
-        Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
+        if(PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
+            Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
         Debug.Log("WRITTEN ");
 
         //scoreText

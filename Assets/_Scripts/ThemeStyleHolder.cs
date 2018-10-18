@@ -33,7 +33,7 @@ public class ThemeStyle
 
     public Color32 menuPref;
     public Color32 linePref;
-
+    //public Color32 sliderPref;
 }
 
 
@@ -44,11 +44,6 @@ public class ThemeStyleHolder : Singleton<ThemeStyleHolder> {
     public  ThemeStyle[] ThemeStyles;
 
 
-
-    private void Awake()
-    {
-      
-    }
 
 
 }
