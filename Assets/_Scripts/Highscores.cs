@@ -62,7 +62,7 @@ public class Highscores : Singleton<Highscores>
         for (int i = 0; i < leaderButtons.Length; i++)
         {
             if (i == dbIndex)
-                leaderButtons[i].color = new Color32(171,61,50,255);
+                leaderButtons[i].color = new Color32(171, 61, 50, 255);
             else
                 leaderButtons[i].color = Color.white;
         }

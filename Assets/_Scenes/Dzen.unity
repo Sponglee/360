@@ -5657,6 +5657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -6365,6 +6366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -6670,6 +6672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -12529,6 +12532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 21300000, guid: b38084635d70f4ab79ffe4aae48b7a2c, type: 3}
   volumeMute: {fileID: 21300000, guid: 5f393014c067b4ee09b975d451aa3385, type: 3}
   volumeUI: {fileID: 0}
@@ -15048,6 +15052,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialManager: {fileID: 1610903770}
   progressSlider: {fileID: 2146886497}
+  currentLevel: 0
+  levelUp: 0
+  experience: 0
+  LevelIsUp: 0
   AdInProgress: 0
   shareButton: {fileID: 1525565253}
   pause: {fileID: 0}
@@ -15119,6 +15127,8 @@ MonoBehaviour:
   nextRound: {fileID: 0}
   FltText: {fileID: 1001251165192770, guid: 95b23eec89192724e8d83d052331a0bd, type: 2}
   coinFltText: {fileID: 1001251165192770, guid: e45a474fe0dbf784db6259e1dbabfe82,
+    type: 2}
+  pr_coinFltText: {fileID: 1776933671364610, guid: eed044dbc9629d144a5b42cee3204277,
     type: 2}
   dbSceneIndex: 0
   scores: 0
@@ -15988,6 +15998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -16149,6 +16160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -19312,7 +19324,7 @@ Prefab:
     - target: {fileID: 224348328516920144, guid: a777af7dec0b36744bcd7c6c82a1374f,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 224348328516920144, guid: a777af7dec0b36744bcd7c6c82a1374f,
         type: 2}

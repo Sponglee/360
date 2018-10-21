@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class FunctionHandler : MonoBehaviour {
+public class FunctionHandler : Singleton<FunctionHandler> {
 
+    
    
     public void OpenMenuHandler()
     {
@@ -205,9 +206,12 @@ public void ChangeThemeHandler(GameObject index)
         StartCoroutine(StopMenu(0, localMenu, 1));
     }
 
+    //For keeping track of board state
+    public bool leaderBoardOpen = false;
     //LEADERBOARD FUNCTION
     public void LeaderBoards(GameObject localMenu)
     {
+        leaderBoardOpen = true;
         Highscores.Instance.DownloadHighscores(0);
         StartCoroutine(StopMenu(0, localMenu, 2));
     }
@@ -227,6 +231,7 @@ public void ChangeThemeHandler(GameObject index)
 
     public void BackFromBoard(GameObject localMenu)
     {
+        leaderBoardOpen = false;
         StartCoroutine(StopMenu(-2500, localMenu, 2));
 
     }
@@ -377,6 +382,7 @@ public void ChangeThemeHandler(GameObject index)
         PlayerPrefs.SetInt("HighscoreTimed", 0);
         PlayerPrefs.SetInt("HighscoreRelax", 0);
         PlayerPrefs.SetInt("HighscoreDzen", 0);
+        
         TitleManager.Instance.TitleNewGame();
         SceneManager.LoadScene("title");
 

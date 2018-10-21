@@ -15,7 +15,15 @@ public class GameManager : Singleton<GameManager>
 {
     public TutorialManager tutorialManager;
 
+    //Progress variables
     public Slider progressSlider;
+    public float currentLevel;
+    public float levelUp;
+    public float experience;
+    public bool LevelIsUp = false;
+
+
+
 
     public bool AdInProgress = false;
 
@@ -204,6 +212,7 @@ public class GameManager : Singleton<GameManager>
     //scrolling text
     public GameObject FltText;
     public GameObject coinFltText;
+    public GameObject pr_coinFltText;
 
     //scores
     public int dbSceneIndex;
@@ -419,7 +428,22 @@ public class GameManager : Singleton<GameManager>
         ApplyTheme(themeIndex);
 
 
+        //Progress bar initialization
+        currentLevel = PlayerPrefs.GetFloat("CurrentLevel", 1);
+        experience = PlayerPrefs.GetFloat("Experience", 0);
+
+        levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 100f) + 1000f;
+
+        progressSlider.value = experience / levelUp;
+        progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
+        progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel+1).ToString();
+
+        //**************************
+
         ui = Instantiate(uiPrefab);
+
+
+
 
         wheel = Instantiate(wheelPrefab, new Vector3(0, -7f, 11f), Quaternion.identity);
         backGround = Instantiate(backPrefab);
@@ -910,6 +934,21 @@ public class GameManager : Singleton<GameManager>
 
         //add score for explosion
         scores += tmp.GetComponent<Square>().Score;
+
+        ProgressUpdate(tmp.GetComponent<Square>().Score);
+        ////Progress update
+        //experience += tmp.GetComponent<Square>().Score;
+        //if(experience>=levelUp)
+        //{
+        //    currentLevel++;
+        //    PlayerPrefs.SetFloat("CurrentLevel", currentLevel);
+        //    progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
+        //    progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel + 1).ToString();
+        //}
+        //progressSlider.value = experience / levelUp;
+        ////************progress****************
+
+
         scoreText.text = scores.ToString();
         //Spawn float text
         GameObject textObj = Instantiate(FltText, tmp.transform.position, tmp.transform.rotation);
@@ -917,6 +956,37 @@ public class GameManager : Singleton<GameManager>
         textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.GetComponent<Square>().Score.ToString();
 
     }
+
+    //Progress update
+    public void ProgressUpdate(int scoreUpdt)
+    {
+       
+        experience += scoreUpdt;
+        PlayerPrefs.SetFloat("Experience", experience);
+        if (experience > levelUp && !LevelIsUp)
+        {
+            LevelIsUp = true;
+            currentLevel++;
+            PlayerPrefs.SetFloat("CurrentLevel", currentLevel);
+            experience = experience - levelUp;
+            levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 100f) + 1000f;
+            progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
+            progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel + 1).ToString();
+
+
+            //GIFT SITUATION
+            AudioManager.Instance.PlaySound("256");
+            GameObject txtObj = Instantiate(GameManager.Instance.pr_coinFltText, progressSlider.transform.GetChild(3));
+            txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "2";
+            CoinManager.Instance.Coins += 2;
+        }
+        progressSlider.value = experience / levelUp;
+        LevelIsUp = false;
+    }
+    //************progress****************
+
+
+
     void Update()
     {
         //=============================================================================================================
@@ -2023,6 +2093,7 @@ public class GameManager : Singleton<GameManager>
             //add score of tmpsSquare
 
             scores += tmpScore;
+            ProgressUpdate(tmpScore);
 
             if (scores >= highscores)
             {
