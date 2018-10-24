@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 222212049580259532}
   - component: {fileID: 114760993286939080}
   - component: {fileID: 114863133230407414}
+  - component: {fileID: 114309074909933294}
   m_Layer: 0
   m_Name: Image
   m_TagString: square
@@ -235,6 +236,20 @@ MonoBehaviour:
   SquareText: {fileID: 114551330194805478}
   SquareColor: {fileID: 0}
   mergeCheck: 0
+--- !u!114 &114309074909933294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1149485346939362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114393342747085370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -377,7 +392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
+  m_EffectDistance: {x: 1, y: 1}
   m_UseGraphicAlpha: 1
 --- !u!114 &114873920241810790
 MonoBehaviour:

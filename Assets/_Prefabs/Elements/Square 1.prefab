@@ -37,7 +37,8 @@ GameObject:
   - component: {fileID: 224563687659590692}
   - component: {fileID: 222310311363559382}
   - component: {fileID: 114436208099333520}
-  - component: {fileID: 114596231292648540}
+  - component: {fileID: 114173768604953358}
+  - component: {fileID: 114886056203286982}
   m_Layer: 0
   m_Name: Image
   m_TagString: square
@@ -263,6 +264,20 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 128
+--- !u!114 &114173768604953358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1221881729383496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114255112556293756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -334,20 +349,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114596231292648540
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1221881729383496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
-  m_UseGraphicAlpha: 1
 --- !u!114 &114677103608155264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -391,6 +392,20 @@ MonoBehaviour:
   SquareText: {fileID: 114173372458682466}
   SquareColor: {fileID: 212937402952094178}
   mergeCheck: 0
+--- !u!114 &114886056203286982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1221881729383496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114904054016447726
 MonoBehaviour:
   m_ObjectHideFlags: 1

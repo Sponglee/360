@@ -499,7 +499,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -2.57}
+  m_SizeDelta: {x: 0, y: 4.18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224120377342483768
 RectTransform:
@@ -517,7 +517,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 2.5, y: 0}
-  m_SizeDelta: {x: 5, y: -3.27}
+  m_SizeDelta: {x: 5, y: 0.000011444}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224325157115293560
 RectTransform:
@@ -557,7 +557,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 164.6, y: 14.7}
+  m_SizeDelta: {x: 224.2, y: 14.7}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224442664588167100
 RectTransform:
@@ -567,7 +567,7 @@ RectTransform:
   m_GameObject: {fileID: 1873927257903518}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+  m_LocalScale: {x: 1.4413002, y: 1.4413002, z: 1.4413002}
   m_Children:
   - {fileID: 224770088376656880}
   m_Father: {fileID: 224348328516920144}
@@ -594,8 +594,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: -4.9999847, y: 0}
+  m_SizeDelta: {x: -20, y: 4.1801}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224770088376656880
 RectTransform:
@@ -623,7 +623,7 @@ RectTransform:
   m_GameObject: {fileID: 1838524433634166}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4402, y: 1.4402, z: 1.4402}
   m_Children:
   - {fileID: 224325157115293560}
   m_Father: {fileID: 224348328516920144}

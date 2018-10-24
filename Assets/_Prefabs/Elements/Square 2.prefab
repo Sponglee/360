@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 222959790407010544}
   - component: {fileID: 114113651409909834}
   - component: {fileID: 114928715226548586}
+  - component: {fileID: 114484060457926412}
   m_Layer: 0
   m_Name: Image
   m_TagString: square
@@ -297,6 +298,20 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 8, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &114484060457926412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1839327373039990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114673008700849356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -410,7 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 5, y: -5}
+  m_EffectDistance: {x: 1, y: 1}
   m_UseGraphicAlpha: 1
 --- !u!212 &212137666853799384
 SpriteRenderer:
