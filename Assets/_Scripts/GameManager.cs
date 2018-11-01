@@ -331,7 +331,9 @@ public class GameManager : Singleton<GameManager>
         progressSlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
         progressSlider.transform.GetChild(2).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
         progressSlider.transform.GetChild(3).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
-
+        progressSlider.transform.GetChild(2).GetChild(0).GetComponent<Text>().color = ThemeStyleHolder.Instance.ThemeStyles[index].sliderTextPref;
+        progressSlider.transform.GetChild(3).GetChild(0).GetComponent<Text>().color = ThemeStyleHolder.Instance.ThemeStyles[index].sliderTextPref;
+        progressSlider.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].sliderBackPref;
         menu.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;
         //right menu
         menu.transform.GetChild(0).GetChild(7).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].menuPref;

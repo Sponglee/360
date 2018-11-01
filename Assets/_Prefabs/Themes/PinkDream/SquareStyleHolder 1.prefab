@@ -55,24 +55,24 @@ MonoBehaviour:
   - Number: 2
     SquareColor:
       serializedVersion: 2
-      rgba: 4288525126
+      rgba: 4294966272
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
   - Number: 4
     SquareColor:
       serializedVersion: 2
-      rgba: 4283288304
+      rgba: 4285592319
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
   - Number: 8
     SquareColor:
       serializedVersion: 2
-      rgba: 4282997726
+      rgba: 4278198271
     TextColor:
       serializedVersion: 2
-      rgba: 4288082943
+      rgba: 4294967295
   - Number: 16
     SquareColor:
       serializedVersion: 2
@@ -83,17 +83,17 @@ MonoBehaviour:
   - Number: 32
     SquareColor:
       serializedVersion: 2
-      rgba: 4133244210
+      rgba: 4133962240
     TextColor:
       serializedVersion: 2
-      rgba: 4288082943
+      rgba: 4294967295
   - Number: 64
     SquareColor:
       serializedVersion: 2
       rgba: 4280690214
     TextColor:
       serializedVersion: 2
-      rgba: 4288082943
+      rgba: 4294967295
   - Number: 128
     SquareColor:
       serializedVersion: 2
@@ -107,7 +107,7 @@ MonoBehaviour:
       rgba: 4278321728
     TextColor:
       serializedVersion: 2
-      rgba: 4288082943
+      rgba: 4294967295
   - Number: 512
     SquareColor:
       serializedVersion: 2

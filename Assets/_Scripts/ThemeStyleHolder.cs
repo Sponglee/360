@@ -33,7 +33,8 @@ public class ThemeStyle
 
     public Color32 menuPref;
     public Color32 linePref;
-    //public Color32 sliderPref;
+    public Color32 sliderTextPref;
+    public Color32 sliderBackPref;
 }
 
 
