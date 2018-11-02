@@ -1,7 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 using System;
-using GooglePlayGames;
 using UnityEngine.SocialPlatforms;
 
 
