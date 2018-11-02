@@ -184,10 +184,10 @@ public class TitleManager : Singleton<TitleManager> {
 
         //// FOR USERNAME ACQUISITION
         // recommended for debugging:
-        PlayGamesPlatform.DebugLogEnabled = true;
+//        PlayGamesPlatform.DebugLogEnabled = true;
 
         // Activate the Google Play Games platform
-        PlayGamesPlatform.Activate();
+//        PlayGamesPlatform.Activate();
 
 
         // Default PlayerName
