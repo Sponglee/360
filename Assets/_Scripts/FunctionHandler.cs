@@ -113,13 +113,13 @@ public void ChangeThemeHandler(GameObject index)
     {
        
         PlayerPrefs.SetInt("TutorialStep", 0);
-        MenuStartTimed();
+        MenuStart(1);
     }
 
     //Restarts game
     public void MenuRestart()
     {
-        MenuStartTimed();
+        MenuStart(1);
     }
 
 
@@ -236,68 +236,72 @@ public void ChangeThemeHandler(GameObject index)
 
     }
 
-    //Time game
-    public void MenuStartTimed()
-    {
-        //Ingame restart
-        if (GameManager.Instance != null)
-        {
+    ////Time game
+    //public void MenuStartTimed()
+    //{
+    //    //Ingame restart
+    //    if (GameManager.Instance != null)
+    //    {
            
-            GameManager.Instance.NewGame();
+    //        GameManager.Instance.NewGame();
             
-        }
-        //New game if mode is not 1 (timed) in title menu
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) != 1)
-        {
-            //Debug.Log(PlayerPrefs.GetInt("GameMode",99)); 
-            TitleManager.Instance.TitleNewGame();
-        }
-        FadeOut();
-        SceneManager.LoadScene("main");
-       // SceneManager.UnloadScene("title");
-    }
+    //    }
+    //    //New game if mode is not 1 (timed) in title menu
+    //    else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 1) != 1)
+    //    {
+    //        //Debug.Log(PlayerPrefs.GetInt("GameMode",99)); 
+    //        TitleManager.Instance.TitleNewGame();
+    //    }
+    //    FadeOut();
+    //    SceneManager.LoadScene("main");
+    //   // SceneManager.UnloadScene("title");
+    //}
 
 
     //Relax game
-    public void MenuStartRelax()
+    public void MenuStart(int gameMode)
     {
 
-   
+
+        PlayerPrefs.SetInt("GameMode", gameMode);
+
+
+        Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
+
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.NewGame();
            
         }
         //New game if mode is not 0 (relax) in title menu
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != 0)
+        else /*if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != 0)*/
         {
-            //Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
-
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
-        SceneManager.LoadScene("relax");
+        SceneManager.LoadScene("main");
     }
 
-    //Relax game
-    public void MenuStartDzen()
-    {
+    ////Relax game
+    //public void MenuStartDzen()
+    //{
 
 
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.NewGame();
+    //    if (GameManager.Instance != null)
+    //    {
+    //        GameManager.Instance.NewGame();
 
-        }
-        //New game if mode is not 2 (dzen) in title menu
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 2) != 2)
-        {
-            //Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
-            TitleManager.Instance.TitleNewGame();
-        }
-        FadeOut();
-        SceneManager.LoadScene("dzen");
-    }
+    //    }
+    //    //New game if mode is not 2 (dzen) in title menu
+    //    else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 2) != 2)
+    //    {
+    //        //Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
+    //        TitleManager.Instance.TitleNewGame();
+    //    }
+    //    FadeOut();
+    //    SceneManager.LoadScene("dzen");
+    //}
 
     public void MainMenu()
     {

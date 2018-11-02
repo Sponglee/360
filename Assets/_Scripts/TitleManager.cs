@@ -178,8 +178,8 @@ public class TitleManager : Singleton<TitleManager> {
 
     public void Start()
     {
-       
         InitializeTheme();
+        
 
         //// FOR USERNAME ACQUISITION
         // recommended for debugging:

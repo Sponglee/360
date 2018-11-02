@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
 {
     public TutorialManager tutorialManager;
 
+    public int gameModeInt;
     //Progress variables
     public Slider progressSlider;
     public float currentLevel;
@@ -423,6 +424,8 @@ public class GameManager : Singleton<GameManager>
         }
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
+
+        GameAnalytics.Initialize();
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
     }
 
@@ -436,7 +439,7 @@ public class GameManager : Singleton<GameManager>
         currentLevel = PlayerPrefs.GetFloat("CurrentLevel", 1);
         experience = PlayerPrefs.GetFloat("Experience", 0);
 
-        levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 100f) + 1000f;
+        levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 10f) + 1000f;
 
         progressSlider.value = experience / levelUp;
         progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
@@ -523,7 +526,7 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
 
-
+        gameModeInt = PlayerPrefs.GetInt("GameMode", 0);
         //===========================================Initialize theme==============================================================
         InitializeTheme();
         //==========================================================================================================================
@@ -548,7 +551,8 @@ public class GameManager : Singleton<GameManager>
 
         //different expandMoves for each mode
 
-        if (SceneManager.GetActiveScene().name == "Relax")
+                                                                                            //if relax ( 0 relax, 1 timed 2 zen)
+        if (PlayerPrefs.GetInt("GameMode",0) == 0)
             expandMoves = 3;
         else
             expandMoves = 10;
@@ -568,21 +572,21 @@ public class GameManager : Singleton<GameManager>
 
 
         //Set a gameMode and highscore
-        if (SceneManager.GetActiveScene().name == "Relax")
+        if (PlayerPrefs.GetInt("GameMode", 0) == 0)
         {
             //for leaderboard
             dbSceneIndex = 2;
             PlayerPrefs.SetInt("GameMode", 0);
             highscores = PlayerPrefs.GetInt("HighscoreRelax", 0);
         }
-        else if (SceneManager.GetActiveScene().name == "Main")
+        else if (PlayerPrefs.GetInt("GameMode", 1) == 1)
         {
             //for leaderboard
             dbSceneIndex = 1;
             PlayerPrefs.SetInt("GameMode", 1);
             highscores = PlayerPrefs.GetInt("HighscoreTimed", 1);
         }
-        else if (SceneManager.GetActiveScene().name == "Dzen")
+        else if (PlayerPrefs.GetInt("GameMode", 2) == 2)
         {
             //for leaderboard
             dbSceneIndex = 0;
@@ -597,22 +601,22 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        //Enable GAME MODE ICON 
-        if (SceneManager.GetActiveScene().name == "Main")
+        //Enable GAME MODE ICON    (0 relax, 1 main, 2 dzen)
+        if (PlayerPrefs.GetInt("GameMode", 1) == 1)
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
             if (tmpImg != null)
                 tmpImg.sprite = timeSprite;
         }
-        else if (SceneManager.GetActiveScene().name == "Relax")
+        else if (PlayerPrefs.GetInt("GameMode", 0) == 0)
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
             if (tmpImg != null)
                 tmpImg.sprite = relaxSprite;
         }
-        else if (SceneManager.GetActiveScene().name == "Dzen")
+        else if (PlayerPrefs.GetInt("GameMode", 2) == 2)
         {
             ui.transform.GetChild(6).gameObject.SetActive(true);
             Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
@@ -840,13 +844,15 @@ public class GameManager : Singleton<GameManager>
         //Turn timer
         turnCoolDown -= Time.deltaTime;
 
+      
+
         //Expand Moves for Timed
-        if (SceneManager.GetActiveScene().name == "Main")
+        if (gameModeInt==1)
         {
             //Debug.Log(slider.fillAmount);
             //while (currentTime <= timeOfTravel)
             //{
-            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 1 && !GameOverBool && SceneManager.GetActiveScene().name == "Main")
+            if (!MenuUp && PlayerPrefs.GetInt("TutorialStep", 0) > 1 && !GameOverBool && gameModeInt==1)
             {
                 fMoves += 0.01f;
                 sliderFill = (float)(expandMoves - fMoves) / expandMoves;
@@ -2106,17 +2112,17 @@ public class GameManager : Singleton<GameManager>
                 highScoreText.gameObject.SetActive(false);
                 //highScoreText.gameObject.GetComponent<Image>().sprite = relaxIcon;
 
-                if (SceneManager.GetActiveScene().name == "Relax")
+                if (PlayerPrefs.GetInt("GameMode", 0) == 0)
                 {
 
                     PlayerPrefs.SetInt("HighscoreRelax", scores);
                 }
-                else if (SceneManager.GetActiveScene().name == "Main")
+                else if (PlayerPrefs.GetInt("GameMode", 1) ==1)
                 {
 
                     PlayerPrefs.SetInt("HighscoreTimed", scores);
                 }
-                else if (SceneManager.GetActiveScene().name == "Dzen")
+                else if (PlayerPrefs.GetInt("GameMode", 2) == 2)
                 {
                     PlayerPrefs.SetInt("HighscoreDzen", scores);
                 }
@@ -2867,7 +2873,7 @@ public class GameManager : Singleton<GameManager>
     //Update moves
     public void ExpandMoves()
     {
-        if (SceneManager.GetActiveScene().name == "Relax")
+        if (PlayerPrefs.GetInt("GameMode", 0) == 0)
         {
             Moves++;
             sliderFill = (float)(expandMoves - Moves) / expandMoves;

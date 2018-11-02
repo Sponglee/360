@@ -314,7 +314,7 @@ public class Square : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "Dzen")
+        if (PlayerPrefs.GetInt("GameMode", 0) == 0)
         {
             //SquareText.gameObject.SetActive(false);
         }
@@ -683,7 +683,7 @@ public class Square : MonoBehaviour
                 {
                     GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
                     //Debug.Log("above spot " + this.Score);
-                    if (this.IsSpawn && SceneManager.GetActiveScene().name == "Relax")
+                    if (this.IsSpawn && PlayerPrefs.GetInt("GameMode", 0) == 0)
                     {
                         Debug.Log("YAY");
                         //GameManager.Instance.ExpandMoves();
@@ -741,7 +741,7 @@ public class Square : MonoBehaviour
                     {
                         GameManager.Instance.CheckAbove(int.Parse(gameObject.transform.parent.name), gameObject.transform.GetSiblingIndex());
                         //Debug.Log("above square " + this.score);
-                        if (this.IsSpawn && SceneManager.GetActiveScene().name == "Relax")
+                        if (this.IsSpawn && PlayerPrefs.GetInt("GameMode", 0) == 0)
                         {
                             Debug.Log("YAY");
                             //GameManager.Instance.ExpandMoves();
