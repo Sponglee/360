@@ -64,7 +64,7 @@ public class CoinManager : Singleton<CoinManager> {
 
 
         //Initialize the ad and skins
-        Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
+                                                                    //Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
         //For editor usage, pls ignore
         fadeCanvas.SetActive(true);
         
@@ -89,23 +89,23 @@ public class CoinManager : Singleton<CoinManager> {
     //Open up an ad
     public void ShowAd()
     {
-        if (Advertisement.IsReady())
-        {
-            Advertisement.Show("rewardedVideo", new ShowOptions() { resultCallback = HandleAdResult });
-            Time.timeScale = 0;
-        }
+                                                                                //if (Advertisement.IsReady())
+                                                                                //{
+                                                                                //    Advertisement.Show("rewardedVideo", new ShowOptions() { resultCallback = HandleAdResult });
+                                                                                //    Time.timeScale = 0;
+                                                                                //}
 
     }
 
     public void MenuAd()
     {
-        if (Advertisement.IsReady())
-        {
-            if (GameManager.Instance != null)
-            GameManager.Instance.AdInProgress = true;
-            Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResultMenu });
-            Time.timeScale = 0;
-        }
+                                                                                //if (Advertisement.IsReady())
+                                                                                //{
+                                                                                //    if (GameManager.Instance != null)
+                                                                                //    GameManager.Instance.AdInProgress = true;
+                                                                                //    Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResultMenu });
+                                                                                //    Time.timeScale = 0;
+                                                                                //}
     }
 
     //Recieve result from watching
