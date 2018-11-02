@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using GameAnalyticsSDK;
 
 public class GameManager : Singleton<GameManager>
 
@@ -422,6 +423,7 @@ public class GameManager : Singleton<GameManager>
         }
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
     }
 
 
@@ -3195,6 +3197,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (MenuUp && !AdInProgress && !GameOverBool)
             {
+                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
 
                 CoinManager.Instance.MenuAd();
                 AdInProgress = true;
@@ -3239,7 +3242,8 @@ public class GameManager : Singleton<GameManager>
     {
         if (value)
         {
-           
+
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
 
             if (!gameOverInProgress && !GameOverBool)
             {
