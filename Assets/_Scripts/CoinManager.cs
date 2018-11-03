@@ -89,12 +89,15 @@ public class CoinManager : Singleton<CoinManager> {
     //Open up an ad
     public void ShowAd()
     {
-                                                                                //if (Advertisement.IsReady())
-                                                                                //{
-                                                                                //    Advertisement.Show("rewardedVideo", new ShowOptions() { resultCallback = HandleAdResult });
-                                                                                //    Time.timeScale = 0;
-                                                                                //}
+                                                                                        //if (Advertisement.IsReady())
+                                                                                        //{
+                                                                                        //    Advertisement.Show("rewardedVideo", new ShowOptions() { resultCallback = HandleAdResult });
+                                                                                        //    Time.timeScale = 0;
+                                                                                        //}
 
+
+        //DEBUG WATCH AD
+        CoinManager.Instance.Coins += fullAdWatch;
     }
 
     public void MenuAd()

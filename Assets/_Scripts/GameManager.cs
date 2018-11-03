@@ -600,29 +600,31 @@ public class GameManager : Singleton<GameManager>
         scoreText.text = scores.ToString();
 
 
+        //DEBUG disable gameMode icon
+        ui.transform.GetChild(6).gameObject.SetActive(false);
 
         //Enable GAME MODE ICON    (0 relax, 1 main, 2 dzen)
-        if (PlayerPrefs.GetInt("GameMode", 1) == 1)
-        {
-            ui.transform.GetChild(6).gameObject.SetActive(true);
-            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            if (tmpImg != null)
-                tmpImg.sprite = timeSprite;
-        }
-        else if (PlayerPrefs.GetInt("GameMode", 0) == 0)
-        {
-            ui.transform.GetChild(6).gameObject.SetActive(true);
-            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            if (tmpImg != null)
-                tmpImg.sprite = relaxSprite;
-        }
-        else if (PlayerPrefs.GetInt("GameMode", 2) == 2)
-        {
-            ui.transform.GetChild(6).gameObject.SetActive(true);
-            Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
-            if (tmpImg != null)
-                tmpImg.sprite = dzenSprite;
-        }
+        //if (PlayerPrefs.GetInt("GameMode", 1) == 1)
+        //{
+        //    ui.transform.GetChild(6).gameObject.SetActive(true);
+        //    Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+        //    if (tmpImg != null)
+        //        tmpImg.sprite = timeSprite;
+        //}
+        //else if (PlayerPrefs.GetInt("GameMode", 0) == 0)
+        //{
+        //    ui.transform.GetChild(6).gameObject.SetActive(true);
+        //    Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+        //    if (tmpImg != null)
+        //        tmpImg.sprite = relaxSprite;
+        //}
+        //else if (PlayerPrefs.GetInt("GameMode", 2) == 2)
+        //{
+        //    ui.transform.GetChild(6).gameObject.SetActive(true);
+        //    Image tmpImg = ui.transform.GetChild(6).gameObject.GetComponent<Image>();
+        //    if (tmpImg != null)
+        //        tmpImg.sprite = dzenSprite;
+        //}
 
 
 
@@ -979,7 +981,7 @@ public class GameManager : Singleton<GameManager>
             currentLevel++;
             PlayerPrefs.SetFloat("CurrentLevel", currentLevel);
             experience = experience - levelUp;
-            levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 100f) + 1000f;
+            levelUp = Mathf.Round(Mathf.Exp(currentLevel/2) * 10f) + 1000f;
             progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
             progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel + 1).ToString();
 
@@ -987,8 +989,8 @@ public class GameManager : Singleton<GameManager>
             //GIFT SITUATION
             AudioManager.Instance.PlaySound("256");
             GameObject txtObj = Instantiate(GameManager.Instance.pr_coinFltText, progressSlider.transform.GetChild(3));
-            txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = "2";
-            CoinManager.Instance.Coins += 2;
+            txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = currentLevel.ToString();
+            CoinManager.Instance.Coins += (int)currentLevel;
         }
         progressSlider.value = experience / levelUp;
         LevelIsUp = false;

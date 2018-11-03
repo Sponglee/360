@@ -12753,7 +12753,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10, y: -10}
+  m_AnchoredPosition: {x: -10, y: -15}
   m_SizeDelta: {x: 29.269989, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1525565255
@@ -15152,6 +15152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorialManager: {fileID: 1610903770}
+  gameModeInt: 0
   progressSlider: {fileID: 2146886497}
   currentLevel: 0
   levelUp: 0
