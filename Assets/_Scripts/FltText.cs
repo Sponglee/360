@@ -6,6 +6,8 @@ public class FltText : MonoBehaviour {
     
     public float timer;
 
+    public bool destroyBool = true;
+
     public void Start()
     {
         
@@ -23,7 +25,13 @@ public class FltText : MonoBehaviour {
         }
         else
         {
-            Destroy(gameObject);
+            if(destroyBool)
+                Destroy(gameObject);
         }
 	}
+
+    void CloseLvlUpWindow()
+    {
+        Destroy(gameObject);
+    }
 }
