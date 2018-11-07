@@ -76,14 +76,14 @@ MonoBehaviour:
   - Number: 16
     SquareColor:
       serializedVersion: 2
-      rgba: 4282416099
+      rgba: 4283040704
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
   - Number: 32
     SquareColor:
       serializedVersion: 2
-      rgba: 4133962240
+      rgba: 4137181440
     TextColor:
       serializedVersion: 2
       rgba: 4294967295

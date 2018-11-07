@@ -8,15 +8,15 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1192564838605412}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1192564838605412
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4580094634623272}
   - component: {fileID: 114182478987824678}
@@ -30,7 +30,7 @@ GameObject:
 --- !u!4 &4580094634623272
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1192564838605412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
@@ -43,7 +43,7 @@ Transform:
 --- !u!114 &114182478987824678
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1192564838605412}
   m_Enabled: 1
@@ -90,10 +90,10 @@ MonoBehaviour:
   - Number: 64
     SquareColor:
       serializedVersion: 2
-      rgba: 4288320764
+      rgba: 4287449850
     TextColor:
       serializedVersion: 2
-      rgba: 4288320764
+      rgba: 4287449850
   - Number: 128
     SquareColor:
       serializedVersion: 2

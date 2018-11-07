@@ -963,7 +963,7 @@ public class GameManager : Singleton<GameManager>
 
 
         scoreText.text = scores.ToString();
-        //Spawn float text
+        //Spawn float text 
         GameObject textObj = Instantiate(FltText, tmp.transform.position, tmp.transform.rotation);
         textObj.transform.position = tmp.transform.TransformPoint(tmp.transform.localPosition + fltOffset);
         textObj.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "+" + tmp.GetComponent<Square>().Score.ToString();
@@ -982,7 +982,7 @@ public class GameManager : Singleton<GameManager>
             currentLevel++;
             PlayerPrefs.SetFloat("CurrentLevel", currentLevel);
             experience = experience - levelUp;
-            levelUp = Mathf.Round(Mathf.Exp(currentLevel/2) * 10f) + 1000f;
+            levelUp = Mathf.Round((currentLevel - Mathf.Exp(-currentLevel))*1500f);
             progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
             progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel + 1).ToString();
 
@@ -992,6 +992,9 @@ public class GameManager : Singleton<GameManager>
             GameObject txtObj = Instantiate(GameManager.Instance.pr_coinFltText, progressSlider.transform.GetChild(3));
             txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = currentLevel.ToString();
             CoinManager.Instance.Coins += (int)currentLevel;
+
+            //LevelUp
+            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
         }
         progressSlider.value = experience / levelUp;
         LevelIsUp = false;
@@ -1953,7 +1956,8 @@ public class GameManager : Singleton<GameManager>
 
 
         int tmp;
-        tmp = first.GetComponent<Square>().Score *= 2;
+        //Double score on merge
+        tmp = first.GetComponent<Square>().Score *=2;
         int tmpScore;
         //Stop checks while Merging
         if (first == null)
@@ -1966,11 +1970,11 @@ public class GameManager : Singleton<GameManager>
         else
             first.GetComponent<Square>().IsSwooping = true;
 
-        //for float text positioning and s core
+        //for float text positioning and score  (1/2 because it's already new block score
         if (second == null)
-            tmpScore = (fltScore + 1) * first.GetComponent<Square>().Score;
+            tmpScore = (fltScore + 1) * (first.GetComponent<Square>().Score);
         else
-            tmpScore = (fltScore) * first.GetComponent<Square>().Score;
+            tmpScore = (fltScore) * (first.GetComponent<Square>().Score);
 
 
         //double the score
@@ -3161,7 +3165,10 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver = false)
     {
-        if(PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
+
+
+        if (PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
             Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
        
 
@@ -3256,7 +3263,7 @@ public class GameManager : Singleton<GameManager>
         if (value)
         {
 
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
+         
 
             if (!gameOverInProgress && !GameOverBool)
             {
