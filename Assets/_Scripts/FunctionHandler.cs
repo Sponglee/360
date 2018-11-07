@@ -308,7 +308,10 @@ public void ChangeThemeHandler(GameObject index)
         if(GameManager.Instance != null)
         {
             if (!GameManager.Instance.GameOverBool)
+            {
+                Debug.Log("HERE");
                 GameManager.Instance.SaveGame();
+            }
             else
                 GameManager.Instance.NewGame();
             CoinManager.Instance.MenuAd();

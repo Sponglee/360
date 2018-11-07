@@ -54,6 +54,7 @@ public class GameSerializer
                     }
                     //Return highscore
                     board.highscore = highscore;
+                   
                     return board;
                 }
             }

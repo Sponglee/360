@@ -426,6 +426,7 @@ public class GameManager : Singleton<GameManager>
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
 
         GameAnalytics.Initialize();
+
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
     }
 
@@ -3162,7 +3163,7 @@ public class GameManager : Singleton<GameManager>
     {
         if(PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
             Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
-        Debug.Log("WRITTEN ");
+        //Debug.Log("WRITTEN ");
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
@@ -3376,7 +3377,7 @@ public class GameManager : Singleton<GameManager>
                 spawnPiece.position.y = tmp.transform.GetSiblingIndex();
 
                 currentBoard.pieces.Add(spawnPiece);
-
+                Debug.Log(spawnPiece.score);
             }
 
         }
@@ -3401,22 +3402,25 @@ public class GameManager : Singleton<GameManager>
     {
         
         currentBoard = serializer.LoadGameBinary(fileName);
-
+       
         
         //Update last score
         scores = currentBoard.highscore;
         scoreText.text = scores.ToString();
 
+        //Debug.Log(">>" + currentBoard.pieces.Count);
         if (currentBoard.pieces != null)
         {
+            
             foreach(Piece p in currentBoard.pieces)
             {
                 int lScore = p.score;
                 int lSpot = (int)p.position.x;
                 int lIndex = (int)p.position.y;
 
-                //Debug.Log(p.position);
+                
                 GameObject lSpawn = Instantiate(squarePrefab, spawns[lSpot].transform.GetChild(lIndex).position, Quaternion.identity);
+
 
 
 

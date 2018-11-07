@@ -55,14 +55,14 @@ MonoBehaviour:
   - Number: 2
     SquareColor:
       serializedVersion: 2
-      rgba: 4288525126
+      rgba: 4294835968
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
   - Number: 4
     SquareColor:
       serializedVersion: 2
-      rgba: 4283288304
+      rgba: 4285592319
     TextColor:
       serializedVersion: 2
       rgba: 4278192160
