@@ -3163,7 +3163,7 @@ public class GameManager : Singleton<GameManager>
     {
         if(PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
             Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
-        //Debug.Log("WRITTEN ");
+       
 
         //scoreText
         menu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = string.Format("{0}", scores);
@@ -3214,6 +3214,10 @@ public class GameManager : Singleton<GameManager>
             else if (MenuUp && AdInProgress)
             {
                 AdInProgress = false;
+            }
+            else if(!MenuUp)
+            {
+                SaveGame();
             }
 
             menu.SetActive(!menu.activeSelf);
@@ -3266,7 +3270,7 @@ public class GameManager : Singleton<GameManager>
 
                     OpenMenu();
                 }
-                SaveGame();
+                //SaveGame();
             }
             else
             {

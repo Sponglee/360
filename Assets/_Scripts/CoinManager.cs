@@ -102,13 +102,16 @@ public class CoinManager : Singleton<CoinManager> {
 
     public void MenuAd()
     {
-                                                                                //if (Advertisement.IsReady())
-                                                                                //{
-                                                                                //    if (GameManager.Instance != null)
-                                                                                //    GameManager.Instance.AdInProgress = true;
-                                                                                //    Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResultMenu });
-                                                                                //    Time.timeScale = 0;
-                                                                                //}
+                                                                                        //if (Advertisement.IsReady())
+                                                                                        //{
+                                                                                        //    if (GameManager.Instance != null)
+                                                                                        //    GameManager.Instance.AdInProgress = true;
+                                                                                        //    Advertisement.Show("video", new ShowOptions() { resultCallback = HandleAdResultMenu });
+                                                                                        //    Time.timeScale = 0;
+                                                                                        //}
+
+        //DEBUG WATCH AD
+        CoinManager.Instance.Coins += fullAdWatch;
     }
 
     //Recieve result from watching
