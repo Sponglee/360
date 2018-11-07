@@ -6484,6 +6484,7 @@ GameObject:
   m_Component:
   - component: {fileID: 857574785}
   - component: {fileID: 857574784}
+  - component: {fileID: 857574786}
   m_Layer: 0
   m_Name: ShareManager
   m_TagString: ui
@@ -6506,6 +6507,10 @@ MonoBehaviour:
   snap: {fileID: 966880450}
   pause: {fileID: 0}
   powerUpPanel: {fileID: 0}
+  subject: 
+  ShareMessage: 
+  url: 
+  ScreenshotName: screenshot.png
 --- !u!4 &857574785
 Transform:
   m_ObjectHideFlags: 0
@@ -6521,6 +6526,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &857574786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 857574783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afb858bcb8a420248a779698dbe4faed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &859915296
 GameObject:
   m_ObjectHideFlags: 0

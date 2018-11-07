@@ -3392,9 +3392,9 @@ public class GameManager : Singleton<GameManager>
             serializer.CreateNewGame();
             
         }
-      
 
-      
+        Debug.Log(">>" + currentBoard.pieces.Count);
+
 
     }
 

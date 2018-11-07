@@ -1,38 +1,21 @@
-﻿using UnityEngine;
+﻿
+
+using UnityEngine;
 using System.Collections;
 using System.IO;
-using UnityEngine.UI;
 using System.Runtime.InteropServices;
-
-public class NativeShareScript : MonoBehaviour
+public class NativeShare : MonoBehaviour
 {
-    public GameObject CanvasShareObj;
-
-    //For sharing
-    public GameObject snap;
-    public GameObject pause;
-    public GameObject powerUpPanel;
-
-
-    private bool isProcessing = false;
-    private bool isFocus = false;
-
-
     public string subject, ShareMessage, url;
+    private bool isProcessing = false;
     public string ScreenshotName = "screenshot.png";
-   
-
-
-
-public void ShareBtnPress()
+    public void ShareScreenshotWithText()
     {
-        if (!isProcessing && !GameManager.Instance.MenuUp)
-        {
-            CanvasShareObj.SetActive(true);
-            StartCoroutine(CallSocialShareRoutine());
-        }
+        // Share();
     }
 
+
+    
 
     public struct ConfigStruct
     {
@@ -72,36 +55,5 @@ public void ShareBtnPress()
         ScreenCapture.CaptureScreenshot(ScreenshotName);
         yield return new WaitForSeconds(1f);
         CallSocialShareAdvanced(ShareMessage, subject, url, screenShotPath);
-
-        //yield return new WaitUntil(() => isFocus);
-        CanvasShareObj.SetActive(false);
-
-        GameManager.Instance.shareButton.SetActive(true);
-        GameManager.Instance.powerUpPanel.SetActive(true);
-        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
-
-
-
-        isProcessing = false;
-
-    }
-
-
-
-
-    private void OnApplicationFocus(bool focus)
-    {
-        Time.timeScale = 1;
-        isFocus = focus;
-        GameManager.Instance.shareButton.SetActive(true);
-        GameManager.Instance.ui.transform.GetChild(0).gameObject.SetActive(true);
-        GameManager.Instance.powerUpPanel.SetActive(true);
     }
 }
-
-
-
-
-
-
-

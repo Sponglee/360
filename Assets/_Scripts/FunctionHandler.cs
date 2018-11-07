@@ -263,20 +263,23 @@ public void ChangeThemeHandler(GameObject index)
     {
 
 
-        PlayerPrefs.SetInt("GameMode", gameMode);
-
+       
 
         Debug.Log(PlayerPrefs.GetInt("GameMode", 99));
 
 
         if (GameManager.Instance != null)
         {
+            PlayerPrefs.SetInt("GameMode", gameMode);
+
             GameManager.Instance.NewGame();
            
         }
         //New game if mode is not 0 (relax) in title menu
-        else /*if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != 0)*/
+        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != gameMode)
         {
+            PlayerPrefs.SetInt("GameMode", gameMode);
+
             TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
