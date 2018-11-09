@@ -6,13 +6,8 @@ public class ThemeButtonUpdater : MonoBehaviour {
     public int itemCost;
 
 	// Use this for initialization
-	void Awake ()
-    {
-        UpdateThemeButton(gameObject);
-    }
+	void Awake () {
 
-    public void UpdateThemeButton(GameObject gameObject)
-    {
         if ((CoinManager.Instance.SkinAvailability & 1 << gameObject.transform.GetSiblingIndex()) == 1 << gameObject.transform.GetSiblingIndex())
         {
             gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = "CHANGE THEME";
@@ -28,7 +23,7 @@ public class ThemeButtonUpdater : MonoBehaviour {
             gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
         }
 
-        if (PlayerPrefs.GetInt("Theme", 0) == gameObject.transform.GetSiblingIndex())
+        if (PlayerPrefs.GetInt("Theme",0) == gameObject.transform.GetSiblingIndex())
         {
             gameObject.transform.GetChild(0).gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 100);
         }
@@ -38,7 +33,5 @@ public class ThemeButtonUpdater : MonoBehaviour {
 
         }
     }
+	
 }
-
-
-

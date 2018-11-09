@@ -414,18 +414,25 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    public void InitializeTheme()
+
+    private void Awake()
     {
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
         if (PlayerPrefs.GetInt("TutorialStep", 0) == 0)
         {
-            NewGame(gameModeInt);
+            NewGame();
         }
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
 
+        GameAnalytics.Initialize();
 
-       
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
+    }
+
+
+    public void InitializeTheme()
+    {
         ApplyTheme(themeIndex);
 
 
@@ -521,15 +528,12 @@ public class GameManager : Singleton<GameManager>
     {
 
         gameModeInt = PlayerPrefs.GetInt("GameMode", 0);
-
         //===========================================Initialize theme==============================================================
         InitializeTheme();
         //==========================================================================================================================
 
 
-        //game analytics
-        GameAnalytics.Initialize();
-        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
+        //for saving board of scores
 
 
 
@@ -656,7 +660,7 @@ public class GameManager : Singleton<GameManager>
 
 
 
-        LoadGame("threesixty"+gameModeInt+".dat");
+        LoadGame("threesixty.dat");
 
 
 
@@ -3234,7 +3238,7 @@ public class GameManager : Singleton<GameManager>
     //Restarts game
     public void Restart()
     {
-        serializer.CreateNewGame(gameModeInt);
+        serializer.CreateNewGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         AdInProgress = true;
@@ -3277,7 +3281,7 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                NewGame(gameModeInt);
+                NewGame();
             }
         }
 
@@ -3391,12 +3395,12 @@ public class GameManager : Singleton<GameManager>
 
         if (!gameOverInProgress || !GameOverBool)
         {
-            serializer.SaveGameBinary(currentBoard, gameModeInt);
+            serializer.SaveGameBinary(currentBoard);
 
         }
         else if (gameOverInProgress || GameOverBool)
         {
-            serializer.CreateNewGame(gameModeInt);
+            serializer.CreateNewGame();
             
         }
 
@@ -3408,7 +3412,7 @@ public class GameManager : Singleton<GameManager>
     public void LoadGame(string fileName)
     {
         
-        currentBoard = serializer.LoadGameBinary(fileName,gameModeInt);
+        currentBoard = serializer.LoadGameBinary(fileName);
        
         
         //Update last score
@@ -3451,9 +3455,9 @@ public class GameManager : Singleton<GameManager>
         
     }
 
-    public void NewGame(int gameMode)
+    public void NewGame()
     {
-        serializer.CreateNewGame(gameMode);
+        serializer.CreateNewGame();
     }
 
     //public void TUTORIALSAVER()
