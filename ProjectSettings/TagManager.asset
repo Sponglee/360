@@ -23,6 +23,7 @@ TagManager:
   - LeaderContainer
   - DebugName
   - Progress
+  - ShopElement
   layers:
   - Default
   - TransparentFX
