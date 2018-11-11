@@ -108,12 +108,50 @@ public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
         }
 
 
+        //InitializeTheme();
+    }
 
 
+
+    public void ShopChangeThemeHandler(GameObject index)
+    {
+        int themeIndex = index.transform.GetSiblingIndex();
+
+
+        //Check if skin is in availability (bit flag)
+        if ((CoinManager.Instance.SkinAvailability & 1 << themeIndex) == 1 << themeIndex)
+        {
+
+
+            PlayerPrefs.SetInt("Theme", themeIndex);
+            MainMenu();
+
+        }
+        else
+        {
+            int cost = int.Parse(index.transform.GetChild(0).GetComponentInChildren<Text>().text);
+            if (CoinManager.Instance.Coins >= cost)
+            {
+                CoinManager.Instance.Coins -= cost;
+
+                //bitshift index for memorizing unlocks
+                CoinManager.Instance.SkinAvailability += 1 << themeIndex;
+
+                PlayerPrefs.SetInt("Theme", themeIndex);
+                MainMenu();
+            }
+
+            else
+            {
+                Debug.Log("YOU DONT HAVE THE SKIN. BUY IT? " + cost);
+            }
+        }
 
 
         //InitializeTheme();
     }
+
+
 
     //Watch tutorial again
     public void TutorialAgain()

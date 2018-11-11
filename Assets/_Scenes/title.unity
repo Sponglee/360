@@ -4071,7 +4071,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 412252136}
@@ -5511,7 +5511,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 517523723}
@@ -7631,7 +7631,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 741865251}
@@ -7964,7 +7964,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 753676460}
@@ -9016,7 +9016,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 855538652}
@@ -9275,7 +9275,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 861015957}
@@ -11427,7 +11427,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1056688723}
@@ -13723,7 +13723,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1229548202}
@@ -15487,7 +15487,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00023915607}
+  m_AnchoredPosition: {x: 0, y: 0.00000008169034}
   m_SizeDelta: {x: 690, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1341947912
@@ -17440,7 +17440,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1556533464}
@@ -17605,7 +17605,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1571844002}
@@ -22357,7 +22357,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -22517,7 +22517,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 208462264}
-        m_MethodName: ChangeThemeHandler
+        m_MethodName: ShopChangeThemeHandler
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 2002201603}

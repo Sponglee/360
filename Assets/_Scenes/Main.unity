@@ -11340,10 +11340,10 @@ MonoBehaviour:
       rgba: 3095297664
     sliderTextPref:
       serializedVersion: 2
-      rgba: 0
+      rgba: 4278190080
     sliderBackPref:
       serializedVersion: 2
-      rgba: 0
+      rgba: 4278190080
   - shareButton:
       m_NormalColor: {r: 1, g: 0, b: 0, a: 0}
       m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
@@ -11375,13 +11375,13 @@ MonoBehaviour:
     uiPref: {fileID: 1757548442489750, guid: 8af26834e957f4042b077c770d33e7f3, type: 2}
     menuPref:
       serializedVersion: 2
-      rgba: 3179512707
+      rgba: 3170894016
     linePref:
       serializedVersion: 2
       rgba: 654364415
     sliderTextPref:
       serializedVersion: 2
-      rgba: 0
+      rgba: 4278190080
     sliderBackPref:
       serializedVersion: 2
       rgba: 4283914071

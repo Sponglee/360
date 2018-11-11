@@ -424,7 +424,7 @@ public class GameManager : Singleton<GameManager>
 
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
 
-
+        
        
         ApplyTheme(themeIndex);
 
@@ -433,7 +433,7 @@ public class GameManager : Singleton<GameManager>
         currentLevel = PlayerPrefs.GetFloat("CurrentLevel", 1);
         experience = PlayerPrefs.GetFloat("Experience", 0);
 
-        levelUp = Mathf.Round(Mathf.Exp(currentLevel) * 10f) + 1000f;
+        levelUp = Mathf.Round(Mathf.Abs(currentLevel - Mathf.Exp(-currentLevel))*1500f);
 
         progressSlider.value = experience / levelUp;
         progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
@@ -526,7 +526,9 @@ public class GameManager : Singleton<GameManager>
         InitializeTheme();
         //==========================================================================================================================
 
+        //update progress bar
 
+        ProgressUpdate(0);
         //game analytics
         GameAnalytics.Initialize();
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
@@ -971,7 +973,7 @@ public class GameManager : Singleton<GameManager>
     {
        
         experience += scoreUpdt;
-        PlayerPrefs.SetFloat("Experience", experience);
+        
         if (experience > levelUp && !LevelIsUp)
         {
             LevelIsUp = true;
@@ -994,6 +996,8 @@ public class GameManager : Singleton<GameManager>
         }
         progressSlider.value = experience / levelUp;
         LevelIsUp = false;
+
+        PlayerPrefs.SetFloat("Experience", experience);
     }
     //************progress****************
 
@@ -3162,7 +3166,7 @@ public class GameManager : Singleton<GameManager>
     public void OpenMenu(bool gameOver = false)
     {
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
-
+        PlayerPrefs.SetFloat("Experience", experience);
 
         if (PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")
             Highscores.Instance.AddNewHighscore(PlayerPrefs.GetString("PlayerName", "offlineUser"), scores, dbSceneIndex);
@@ -3218,7 +3222,7 @@ public class GameManager : Singleton<GameManager>
             {
                 AdInProgress = false;
             }
-            else if(!MenuUp)
+            else if(!MenuUp && !GameOverBool)
             {
                 SaveGame();
             }
@@ -3235,7 +3239,7 @@ public class GameManager : Singleton<GameManager>
     public void Restart()
     {
         serializer.CreateNewGame(gameModeInt);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("main");
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         AdInProgress = true;
         OpenMenu();
