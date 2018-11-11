@@ -68,9 +68,16 @@ public class FunctionHandler : Singleton<FunctionHandler> {
 
 //THEME CHANGER
 
-public void ChangeThemeHandler(GameObject index)
+public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
     {
-        int themeIndex = index.transform.GetSiblingIndex();
+        int themeIndex=0;       
+        //if no gameObject - grab raw index
+        if (indNumber != -1)
+            themeIndex = indNumber;
+        else if(index!=null)
+            themeIndex = index.transform.GetSiblingIndex();
+
+
         //Check if skin is in availability (bit flag)
         if ((CoinManager.Instance.SkinAvailability & 1 << themeIndex) == 1 << themeIndex)
         {
@@ -272,15 +279,13 @@ public void ChangeThemeHandler(GameObject index)
         {
             PlayerPrefs.SetInt("GameMode", gameMode);
 
-            GameManager.Instance.NewGame();
+            GameManager.Instance.NewGame(gameMode);
            
         }
         //New game if mode is not 0 (relax) in title menu
-        else if (TitleManager.Instance != null && PlayerPrefs.GetInt("GameMode", 0) != gameMode)
+        else if (TitleManager.Instance != null)
         {
             PlayerPrefs.SetInt("GameMode", gameMode);
-
-            TitleManager.Instance.TitleNewGame();
         }
         FadeOut();
         SceneManager.LoadScene("main");
@@ -316,7 +321,7 @@ public void ChangeThemeHandler(GameObject index)
                 GameManager.Instance.SaveGame();
             }
             else
-                GameManager.Instance.NewGame();
+                GameManager.Instance.NewGame(PlayerPrefs.GetInt("GameMode",0));
             CoinManager.Instance.MenuAd();
         }
        
@@ -393,7 +398,7 @@ public void ChangeThemeHandler(GameObject index)
         PlayerPrefs.SetInt("HighscoreRelax", 0);
         PlayerPrefs.SetInt("HighscoreDzen", 0);
         
-        TitleManager.Instance.TitleNewGame();
+        //TitleManager.Instance.TitleNewGame();
         SceneManager.LoadScene("title");
 
     }
@@ -419,5 +424,9 @@ public void ChangeThemeHandler(GameObject index)
             Highscores.Instance.AddNewHighscore(string.Format("user{0}", i), 10000+i,0);
     }
 
-    
+    public void ResetCurrentGame(int gameMode)
+    {
+        gameMode = PlayerPrefs.GetInt("GameMode", 0);
+        GameManager.Instance.serializer.CreateNewGame(gameMode);
+    }
 }

@@ -130,24 +130,23 @@ public class TitleManager : Singleton<TitleManager> {
         CoinManager.Instance.shopCoinText = shopCurrencyText;
         shopCurrencyText.text = PlayerPrefs.GetInt("Coin", 20).ToString();
         themeIndex = PlayerPrefs.GetInt("Theme", 0);
-
+        
         volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1);
 
         //Set Leaderboard buttons references
         GameObject[] tmp = GameObject.FindGameObjectsWithTag("LeaderButtons");
         //Sort leaderboard buttons
         Array.Sort(tmp, CompareObNames);
-      
+
 
         for (int i = 0; i < tmp.Length; i++)
         {
             Highscores.Instance.leaderButtons[i] = tmp[i].GetComponent<Image>();
         }
-       
-       
+
     }
 
-    
+
 
     public void InitializeTheme()
     {
@@ -160,7 +159,7 @@ public class TitleManager : Singleton<TitleManager> {
 
 
        
-        Instantiate(backPrefab);
+        //Instantiate(backPrefab);
 
       
        
@@ -178,15 +177,25 @@ public class TitleManager : Singleton<TitleManager> {
 
     public void Start()
     {
+        //FunctionHandler.Instance.ChangeThemeHandler(null, themeIndex);
+
         InitializeTheme();
-        
+
+
+       GameObject[] shopElems =  GameObject.FindGameObjectsWithTag("ShopElement");
+
+
+        foreach(GameObject tmpElem in shopElems)
+        {
+            tmpElem.GetComponent<ThemeButtonUpdater>().UpdateThemeButton(tmpElem);
+        }
 
         //// FOR USERNAME ACQUISITION
         // recommended for debugging:
-//        PlayGamesPlatform.DebugLogEnabled = true;
+        //        PlayGamesPlatform.DebugLogEnabled = true;
 
         // Activate the Google Play Games platform
-//        PlayGamesPlatform.Activate();
+        //        PlayGamesPlatform.Activate();
 
 
         // Default PlayerName
@@ -207,7 +216,7 @@ public class TitleManager : Singleton<TitleManager> {
 
     public void TitleNewGame()
     {
-        serializer.CreateNewGame();
+        serializer.CreateNewGame(PlayerPrefs.GetInt("GameMode", 0));
     }
 
 

@@ -15,7 +15,7 @@ public class GameSerializer
         return fullPath;
     }
 
-    public Board LoadGameBinary(string fileName)
+    public Board LoadGameBinary(string fileName, int gameMode)
     {
         string filePath = GetSaveLocationBinary(fileName);
         if (File.Exists(filePath))
@@ -66,7 +66,7 @@ public class GameSerializer
     }
 
 
-    public void SaveGameBinary(Board board)
+    public void SaveGameBinary(Board board, int gameMode)
     {
        
         //  Filetype (4*char)
@@ -75,7 +75,7 @@ public class GameSerializer
       
 
 
-        string filePath = GetSaveLocationBinary("threesixty.dat");
+        string filePath = GetSaveLocationBinary("threesixty"+gameMode+".dat");
 
 
         if (File.Exists(filePath))
@@ -113,9 +113,9 @@ public class GameSerializer
        
     }
 
-    public void CreateNewGame()
+    public void CreateNewGame(int gameMode)
     {
-        string filePath = GetSaveLocationBinary("threesixty.dat");
+        string filePath = GetSaveLocationBinary("threesixty"+gameMode+".dat");
 
 
         if (File.Exists(filePath))
