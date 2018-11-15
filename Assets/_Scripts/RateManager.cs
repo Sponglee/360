@@ -16,12 +16,12 @@ public class RateManager : MonoBehaviour {
         
         rated = PlayerPrefs.GetInt("Rated", 0);
 
-        if (rated == 1)
+        if (rated == 1 && gemsText !=null)
         {
             //rateAnimation.enabled = false;
             gemsText.SetActive(false);
         }
-        else
+        else if(gemsText != null)
             gemsText.SetActive(true);
 
     }
