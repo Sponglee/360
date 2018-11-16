@@ -2881,7 +2881,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &257518848
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3695,7 +3697,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &352112076
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4178,7 +4182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &412252139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4375,7 +4379,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &415397666
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5091,7 +5097,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &459598646
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5618,7 +5626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &517523726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6106,7 +6114,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &560011259
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6380,7 +6390,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1115.2249}
+  m_AnchoredPosition: {x: 0, y: -1115.2249}
   m_SizeDelta: {x: 626.5, y: 3111.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &586193226
@@ -8214,7 +8224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &753676463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8753,7 +8763,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &800649110
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9266,7 +9278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &855538655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9525,7 +9537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &861015960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9795,7 +9807,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &877620528
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11677,7 +11691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &1056688726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11874,7 +11888,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &1056751615
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13973,7 +13989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &1229548205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15799,7 +15815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00011686774}
+  m_AnchoredPosition: {x: 0, y: 0.000046337955}
   m_SizeDelta: {x: 690, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1341947912
@@ -17690,7 +17706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &1556533467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17855,7 +17871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &1571844005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18214,7 +18230,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &1589637825
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22591,7 +22609,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: '50
+
+'
 --- !u!222 &1964653824
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22767,7 +22787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217207eb0858ff3429165e215bd007a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCost: 100
+  itemCost: 50
 --- !u!114 &2002201606
 MonoBehaviour:
   m_ObjectHideFlags: 0

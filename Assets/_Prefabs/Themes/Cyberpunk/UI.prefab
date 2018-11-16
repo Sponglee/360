@@ -796,6 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddbf39c005b69444a840c5455e8247df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leaderBoardOpen: 0
   volumeIcon: {fileID: 0}
   volumeMute: {fileID: 0}
   volumeUI: {fileID: 0}
@@ -1453,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -31.3}
+  m_AnchoredPosition: {x: 0, y: -55.9}
   m_SizeDelta: {x: 51, y: 101.77}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224279777736965832
@@ -1621,7 +1622,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: -123}
+  m_AnchoredPosition: {x: 0.000015258789, y: -147.6}
   m_SizeDelta: {x: 142.17, y: 39.6}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224636999214301300
