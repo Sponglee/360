@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     public bool AdInProgress = false;
 
     public GameObject shareButton;
-    public GameObject pause;
+    public GameObject pauseButton;
     public GameObject powerUpPanel;
 
 
@@ -327,8 +327,11 @@ public class GameManager : Singleton<GameManager>
         leRed = ThemeStyleHolder.Instance.ThemeStyles[index].redPref;
         fontPrefab = ThemeStyleHolder.Instance.ThemeStyles[index].fontPref;
 
+        //Styles for top buttons
         shareButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
+        pauseButton.GetComponent<Button>().colors = ThemeStyleHolder.Instance.ThemeStyles[index].shareButton;
         shareButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
+        pauseButton.transform.GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
         //Slider theme
         progressSlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
         progressSlider.transform.GetChild(2).GetComponent<Image>().color = ThemeStyleHolder.Instance.ThemeStyles[index].shareButtonText;
