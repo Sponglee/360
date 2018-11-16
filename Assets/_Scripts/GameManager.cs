@@ -3186,19 +3186,25 @@ public class GameManager : Singleton<GameManager>
         }
 
         //if it is GAME OVER (endGameCheck for cooldown continue)
-        if (gameOver && !endGameCheck)
+        if (gameOver && !endGameCheck && PlayerPrefs.GetInt(string.Format("ContinuePressed{0}", gameModeInt), 0) == 0)
         {
+            //Save to avoid abuse
+            SaveGame();
             menu.SetActive(true);
             ui.SetActive(!menu.gameObject.activeSelf);
 
+            //if continue wasnt pressed - show button
+          
             //GameOver
             menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
             menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
             //Cooldown for replay
             StartCoroutine(ContinueTime(menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject));
+            
 
         }
-        else if (gameOver && endGameCheck)
+        //if it's gameOver and endgamecheck
+        else if (gameOver && PlayerPrefs.GetInt(string.Format("ContinuePressed{0}", gameModeInt), 0) == 1)
         { 
             //GameOver
             menu.SetActive(true);
@@ -3207,6 +3213,9 @@ public class GameManager : Singleton<GameManager>
             menu.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             menu.transform.GetChild(0).GetChild(3).gameObject.SetActive(false);
 
+            //if toggle of continue is up - reset it on gameover
+            if (PlayerPrefs.GetInt(string.Format("ContinuePressed{0}", gameModeInt), 0) == 1)
+                PlayerPrefs.SetInt(string.Format("ContinuePressed{0}", gameModeInt), 0);
         }
         //If just Open menu mid game
         else
@@ -3242,6 +3251,7 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene("main");
         menu.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         AdInProgress = true;
+        PlayerPrefs.SetInt(string.Format("ContinuePressed{0}", gameModeInt), 0);
         OpenMenu();
         //GameOverMenu.SetActive(false);
         //In case game was paused before
@@ -3331,7 +3341,11 @@ public class GameManager : Singleton<GameManager>
 
     public void Continue()
     {
+        //save game to avoid abuse
+        SaveGame();
+
         OpenMenu();
+
         GameOverBool = false;
         noMoves = false;
         MenuUp = false;
@@ -3352,7 +3366,11 @@ public class GameManager : Singleton<GameManager>
                 spot.GetComponent<SpriteRenderer>().color = leGreen;
             }
         }
+        SaveGame();
+        //Continue toggle(not prefs)
         endGameCheck = true;
+        //Continue toggle
+        PlayerPrefs.SetInt(string.Format("ContinuePressed{0}", gameModeInt), 1);
     }
 
     public void ChangeTheme(int index)

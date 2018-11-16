@@ -432,12 +432,12 @@ public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
     
     public void ResetHighscores()
     {
-        PlayerPrefs.SetInt("HighscoreTimed", 0);
-        PlayerPrefs.SetInt("HighscoreRelax", 0);
-        PlayerPrefs.SetInt("HighscoreDzen", 0);
-        
-        //TitleManager.Instance.TitleNewGame();
-        SceneManager.LoadScene("title");
+        if(TitleManager.Instance != null)
+        {
+            TitleManager.Instance.serializer.CreateNewGame(0);
+            TitleManager.Instance.serializer.CreateNewGame(1);
+            TitleManager.Instance.serializer.CreateNewGame(2);
+        }
 
     }
 
