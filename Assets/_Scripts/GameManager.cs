@@ -980,7 +980,7 @@ public class GameManager : Singleton<GameManager>
             currentLevel++;
             PlayerPrefs.SetFloat("CurrentLevel", currentLevel);
             experience = experience - levelUp;
-            levelUp = Mathf.Round((currentLevel - Mathf.Exp(-currentLevel))*1500f);
+            levelUp = Mathf.Round((currentLevel - Mathf.Exp(-currentLevel))*1200f);
             progressSlider.transform.GetChild(2).GetComponentInChildren<Text>().text = currentLevel.ToString();
             progressSlider.transform.GetChild(3).GetComponentInChildren<Text>().text = (currentLevel + 1).ToString();
 

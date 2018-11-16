@@ -408,7 +408,7 @@ public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
     {
         AudioManager.Instance.VolumeChange(value);
 
-        volumeUI = GameObject.FindGameObjectWithTag("volume");
+        //volumeUI = GameObject.FindGameObjectWithTag("volume");
 
         if (value == 0)
         {

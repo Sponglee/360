@@ -12806,7 +12806,7 @@ MonoBehaviour:
   leaderBoardOpen: 0
   volumeIcon: {fileID: 21300000, guid: b38084635d70f4ab79ffe4aae48b7a2c, type: 3}
   volumeMute: {fileID: 21300000, guid: 5f393014c067b4ee09b975d451aa3385, type: 3}
-  volumeUI: {fileID: 0}
+  volumeUI: {fileID: 198721168}
   i: 0
 --- !u!114 &1511568268
 MonoBehaviour:
