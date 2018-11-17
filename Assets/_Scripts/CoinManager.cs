@@ -97,7 +97,7 @@ public class CoinManager : Singleton<CoinManager> {
 
 
         //DEBUG WATCH AD
-        CoinManager.Instance.Coins += fullAdWatch;
+        //CoinManager.Instance.Coins += fullAdWatch;
     }
 
     public void MenuAd()
