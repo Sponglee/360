@@ -533,7 +533,7 @@ public class GameManager : Singleton<GameManager>
 
         ProgressUpdate(0);
         //game analytics
-        GameAnalytics.Initialize();
+        
         GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
 
 

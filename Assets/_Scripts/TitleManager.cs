@@ -2,8 +2,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SocialPlatforms;
-
-
+using GameAnalyticsSDK;
 
 public class TitleManager : Singleton<TitleManager> {
 
@@ -181,8 +180,11 @@ public class TitleManager : Singleton<TitleManager> {
 
         InitializeTheme();
 
+        //Activate GameAnalytics
+        GameAnalytics.Initialize();
 
-       GameObject[] shopElems =  GameObject.FindGameObjectsWithTag("ShopElement");
+
+        GameObject[] shopElems =  GameObject.FindGameObjectsWithTag("ShopElement");
 
 
         foreach(GameObject tmpElem in shopElems)

@@ -157,7 +157,7 @@ PlayerSettings:
     Android: com.Ace.threesixty
     iOS: com.SolidHinken.360Blocks
   buildNumber:
-    iOS: 6
+    iOS: 7
   AndroidBundleVersionCode: 64
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
