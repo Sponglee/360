@@ -6696,10 +6696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d603c3dd0b4b1f84b9acd19440006684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanvasShareObj: {fileID: 1596231650}
-  snap: {fileID: 966880450}
-  pause: {fileID: 0}
-  powerUpPanel: {fileID: 0}
   subject: 
   ShareMessage: 
   url: 
@@ -13090,7 +13086,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 857574784}
-        m_MethodName: ShareBtnPress
+        m_MethodName: Share
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
