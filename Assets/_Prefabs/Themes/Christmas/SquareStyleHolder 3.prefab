@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1192564838605412}
+  m_IsPrefabAsset: 1
+--- !u!1 &1192564838605412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4580094634623272}
+  - component: {fileID: 114182478987824678}
+  m_Layer: 0
+  m_Name: SquareStyleHolder 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &4580094634623272
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1192564838605412}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.3374753, y: -52.912613, z: 19.432415}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114182478987824678
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1192564838605412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 439964de03dfc2c4b99820c2145f2c61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SquareStyles:
+  - Number: 2
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4294966272
+    TextColor:
+      serializedVersion: 2
+      rgba: 4278192160
+  - Number: 4
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4282355198
+    TextColor:
+      serializedVersion: 2
+      rgba: 4278192160
+  - Number: 8
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4281347065
+    TextColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Number: 16
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4284326144
+    TextColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Number: 32
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4281204632
+    TextColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Number: 64
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4286513407
+    TextColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Number: 128
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4290753191
+    TextColor:
+      serializedVersion: 2
+      rgba: 4278192160
+  - Number: 256
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4278321728
+    TextColor:
+      serializedVersion: 2
+      rgba: 4288082943
+  - Number: 512
+    SquareColor:
+      serializedVersion: 2
+      rgba: 4278190080
+    TextColor:
+      serializedVersion: 2
+      rgba: 4293121113

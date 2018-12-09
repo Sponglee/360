@@ -11670,6 +11670,47 @@ MonoBehaviour:
     sliderBackPref:
       serializedVersion: 2
       rgba: 4285427421
+  - shareButton:
+      m_NormalColor: {r: 1, g: 0, b: 0, a: 0}
+      m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
+      m_PressedColor: {r: 0.8235294, g: 0.15743946, b: 0.15743946, a: 1}
+      m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
+      m_ColorMultiplier: 1
+      m_FadeDuration: 0.1
+    shareButtonText: {r: 0, g: 0.6320754, b: 0.36553586, a: 1}
+    wheelPref: {fileID: 1142840695381132, guid: 4c42d74d805e93d47853e8553cb5ab4f,
+      type: 2}
+    squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
+      type: 2}
+    spotPref: {fileID: 1679439421920422, guid: 055f7c54f7ecbe148b7a8b0d4b93abd8, type: 2}
+    gridPref: {fileID: 1679439421920422, guid: 784c28be4a463e74cb0a5b33be5b04c1, type: 2}
+    spawnPref: {fileID: 1679439421920422, guid: 6afc8b51008248347a5323e7f8f57790,
+      type: 2}
+    backPref: {fileID: 1486783806639068, guid: bd1eee7ca9b42fc41a59292e405eef23, type: 2}
+    fltTextPref: {fileID: 1001251165192770, guid: 4e6329d286222ba498b5b6abd17ac8be,
+      type: 2}
+    styleHolderPref: {fileID: 1192564838605412, guid: efe36825ca94b2b429119945ffbc23f7,
+      type: 2}
+    yellowPref:
+      serializedVersion: 2
+      rgba: 4282355198
+    redPref:
+      serializedVersion: 2
+      rgba: 4278190335
+    fontPref: {fileID: 12800000, guid: c782dc6ed1ba47840972d0d813a873e8, type: 3}
+    uiPref: {fileID: 1283229927817490, guid: 547836e493f7fd544a8cf034503a1aee, type: 2}
+    menuPref:
+      serializedVersion: 2
+      rgba: 2566914224
+    linePref:
+      serializedVersion: 2
+      rgba: 1107296255
+    sliderTextPref:
+      serializedVersion: 2
+      rgba: 4278190080
+    sliderBackPref:
+      serializedVersion: 2
+      rgba: 4282285347
 --- !u!4 &1381546255
 Transform:
   m_ObjectHideFlags: 0
