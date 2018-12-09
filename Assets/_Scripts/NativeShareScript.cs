@@ -28,7 +28,7 @@ public class NativeShareScript : MonoBehaviour
     Debug.Log("No sharing set up for this platform.");
     #endif
         }
-    #if UNITY_ANDROID
+#if UNITY_ANDROID
     public IEnumerator ShareScreenshot()
     {
     isProcessing = true;
@@ -37,6 +37,7 @@ public class NativeShareScript : MonoBehaviour
     string screenShotPath = Application.persistentDataPath + "/" + ScreenshotName;
     Application.CaptureScreenshot(ScreenshotName);
     yield return new WaitForSeconds(1f);
+    GameManager.Instance.OpenMenu();
     if(!Application.isEditor)
     {
     AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
@@ -54,9 +55,9 @@ public class NativeShareScript : MonoBehaviour
     }
     isProcessing = false;
     }
-    #endif
-    #if UNITY_IOS
-        public struct ConfigStruct
+#endif
+#if UNITY_IOS
+    public struct ConfigStruct
         {
             public string title;
             public string message;
@@ -93,7 +94,11 @@ public class NativeShareScript : MonoBehaviour
             string screenShotPath = Application.persistentDataPath + "/" + ScreenshotName;
             ScreenCapture.CaptureScreenshot(ScreenshotName);
             yield return new WaitForSeconds(1f);
+            //For saving purposes
+            GameManager.Instance.OpenMenu();
             CallSocialShareAdvanced(ShareMessage, subject, url, screenShotPath);
         }
     #endif
+
+    
 }
