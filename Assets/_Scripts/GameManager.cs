@@ -3168,7 +3168,7 @@ public class GameManager : Singleton<GameManager>
     //Toggle menu
     public void OpenMenu(bool gameOver = false)
     {
-        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
+        //GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
         PlayerPrefs.SetFloat("Experience", experience);
 
         if (PlayerPrefs.GetString("PlayerName","offlineUser") != "offlineUser")

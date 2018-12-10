@@ -178,8 +178,11 @@ public class TitleManager : Singleton<TitleManager> {
     {
         //FunctionHandler.Instance.ChangeThemeHandler(null, themeIndex);
 
+        //Apply Theme
         InitializeTheme();
 
+        //Show promo
+        FunctionHandler.Instance.ShowPromo();
         //Activate GameAnalytics
         GameAnalytics.Initialize();
 

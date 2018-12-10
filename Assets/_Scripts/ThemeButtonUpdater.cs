@@ -15,17 +15,19 @@ public class ThemeButtonUpdater : MonoBehaviour {
     {
         if ((CoinManager.Instance.SkinAvailability & 1 << gameObject.transform.GetSiblingIndex()) == 1 << gameObject.transform.GetSiblingIndex())
         {
-            gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = "CHANGE THEME";
+            gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = "SELECT";
             gameObject.transform.GetChild(0).GetComponentInChildren<Text>().color = Color.gray;
             gameObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<Text>().color = Color.gray;
             gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
         }
         else
         {
-            gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = itemCost.ToString();
-            gameObject.transform.GetChild(0).GetComponentInChildren<Text>().color = Color.white;
-            gameObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<Text>().color = Color.white;
-            gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+        
+                gameObject.transform.GetChild(0).GetComponentInChildren<Text>().text = itemCost.ToString();
+                gameObject.transform.GetChild(0).GetComponentInChildren<Text>().color = Color.white;
+                gameObject.transform.GetChild(0).GetChild(1).GetComponentInChildren<Text>().color = Color.white;
+                gameObject.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+            
         }
 
         if (PlayerPrefs.GetInt("Theme", 0) == gameObject.transform.GetSiblingIndex())

@@ -34,6 +34,23 @@ public class FunctionHandler : Singleton<FunctionHandler> {
        
     }
 
+    //Promo pannel handle
+    public GameObject promo;
+
+    public void ShowPromo()
+    {
+        if(PlayerPrefs.GetInt("PromoClosed",0) == 1)
+        {
+            promo.SetActive(false);
+        }
+    }
+
+    public void ClosePromo()
+    {
+        promo.SetActive(false);
+        PlayerPrefs.SetInt("PromoClosed", 1);
+    }
+
 
 
     public void ShowAdHandler()
