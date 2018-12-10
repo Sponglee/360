@@ -120,11 +120,8 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-<<<<<<< HEAD
   bundleVersion: 1
-=======
-  bundleVersion: 1.3
->>>>>>> parent of 0b75fba... 22.10.18
+
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -161,11 +158,9 @@ PlayerSettings:
     Android: com.Ace.threesixty
     iOS: com.SolidHinken.360Blocks
   buildNumber: {}
-<<<<<<< HEAD
+
   AndroidBundleVersionCode: 64
-=======
-  AndroidBundleVersionCode: 58
->>>>>>> parent of 0b75fba... 22.10.18
+
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
