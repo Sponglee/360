@@ -1,5 +1,5 @@
-lastUpgrade=00950
-proj.pluginVersion=0.9.50
+lastUpgrade=00955
+proj.pluginVersion=0.9.55
 proj.AppId=333490721505
 proj.classDir=Assets
 proj.ConstantsClassName=Threesixty

@@ -1,8 +1,9 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 using System;
-using UnityEngine.SocialPlatforms;
+using GooglePlayGames;
 using GameAnalyticsSDK;
+using GooglePlayGames.BasicApi;
 
 public class TitleManager : Singleton<TitleManager> {
 
@@ -197,11 +198,12 @@ public class TitleManager : Singleton<TitleManager> {
 
         //// FOR USERNAME ACQUISITION
         // recommended for debugging:
-        //        PlayGamesPlatform.DebugLogEnabled = true;
+        var config = new PlayGamesClientConfiguration.Builder().Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
 
         // Activate the Google Play Games platform
-        //        PlayGamesPlatform.Activate();
-
+        PlayGamesPlatform.Activate();
 
         // Default PlayerName
         PlayerPrefs.SetString("PlayerName", "offlineUser");
@@ -216,7 +218,6 @@ public class TitleManager : Singleton<TitleManager> {
                 Debug.Log("Authentication failed");
         });
 
-        
     }
 
     public void TitleNewGame()
