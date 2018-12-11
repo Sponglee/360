@@ -265,6 +265,7 @@ public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
 
     public void Shop(GameObject localMenu)
     {
+        ClosePromo();
         StartCoroutine(StopMenu(0, localMenu, 1));
     }
 
