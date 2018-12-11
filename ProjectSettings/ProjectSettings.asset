@@ -158,7 +158,7 @@ PlayerSettings:
     iOS: com.SolidHinken.360Blocks
   buildNumber:
     iOS: 5
-  AndroidBundleVersionCode: 80
+  AndroidBundleVersionCode: 81
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1

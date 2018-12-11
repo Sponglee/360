@@ -196,6 +196,7 @@ public class TitleManager : Singleton<TitleManager> {
             tmpElem.GetComponent<ThemeButtonUpdater>().UpdateThemeButton(tmpElem);
         }
 
+        #if UNITY_ANDROID
         //// FOR USERNAME ACQUISITION
         // recommended for debugging:
         var config = new PlayGamesClientConfiguration.Builder().Build();
@@ -207,6 +208,9 @@ public class TitleManager : Singleton<TitleManager> {
 
         // Default PlayerName
         PlayerPrefs.SetString("PlayerName", "offlineUser");
+        #endif
+
+
         //Grab user's name
         Social.localUser.Authenticate(success => {
             if (success)
