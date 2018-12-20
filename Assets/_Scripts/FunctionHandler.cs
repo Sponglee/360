@@ -438,6 +438,11 @@ public void ChangeThemeHandler(GameObject index=null,int indNumber=-1)
     }
 
 
+    public AudioSource audiosrc;
+    public void ChristmasMute()
+    {
+        audiosrc.mute = !audiosrc.mute;
+    }
   
 
 
