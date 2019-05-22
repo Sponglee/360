@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 using GooglePlayGames;
-using GameAnalyticsSDK;
+//using GameAnalyticsSDK;
 using GooglePlayGames.BasicApi;
 
 public class TitleManager : Singleton<TitleManager> {
@@ -185,7 +185,7 @@ public class TitleManager : Singleton<TitleManager> {
         //Show promo
         FunctionHandler.Instance.ShowPromo();
         //Activate GameAnalytics
-        GameAnalytics.Initialize();
+        ////////////////////////GameAnalytics.Initialize();
 
 
         GameObject[] shopElems =  GameObject.FindGameObjectsWithTag("ShopElement");

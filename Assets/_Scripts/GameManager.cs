@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using GameAnalyticsSDK;
+//using GameAnalyticsSDK;
 
 public class GameManager : Singleton<GameManager>
 
@@ -534,7 +534,7 @@ public class GameManager : Singleton<GameManager>
         ProgressUpdate(0);
         //game analytics
         
-        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
+        ////////////////////GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
 
 
 
@@ -995,7 +995,7 @@ public class GameManager : Singleton<GameManager>
             CoinManager.Instance.Coins += (int)currentLevel;
 
             //LevelUp
-            GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
+            ////////////////////GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
         }
         progressSlider.value = experience / levelUp;
         LevelIsUp = false;
@@ -3225,7 +3225,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (MenuUp && !AdInProgress && !GameOverBool)
             {
-                GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
+                //////////////////GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, "game");
 
                 CoinManager.Instance.MenuAd();
                 AdInProgress = true;
