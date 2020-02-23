@@ -59,13 +59,13 @@ public class Highscores : Singleton<Highscores>
 
     public void DownloadHighscores(int dbIndex)
     {
-        for (int i = 0; i < leaderButtons.Length; i++)
-        {
-            if (i == dbIndex)
-                leaderButtons[i].color = new Color32(171, 61, 50, 255);
-            else
-                leaderButtons[i].color = Color.white;
-        }
+        //for (int i = 0; i < leaderButtons.Length; i++)
+        //{
+        //    if (i == dbIndex)
+        //        leaderButtons[i].color = new Color32(171, 61, 50, 255);
+        //    else
+        //        leaderButtons[i].color = Color.white;
+        //}
 
 
         publicCode = publicCodes[dbIndex];

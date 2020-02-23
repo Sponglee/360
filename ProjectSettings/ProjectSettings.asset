@@ -120,7 +120,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.6
+  bundleVersion: 2.0
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -159,7 +159,7 @@ PlayerSettings:
     iOS: com.SolidHinken.360Blocks
   buildNumber:
     iOS: 5
-  AndroidBundleVersionCode: 71
+  AndroidBundleVersionCode: 75
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -265,7 +265,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 245448e376cf7934f88d050adb8150ad, type: 3}
+      m_Icon: {fileID: 2800000, guid: aeb51dc6a8d31fd438686b9103465834, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -725,7 +725,7 @@ PlayerSettings:
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform:
-    Android: 2
+    Android: 6
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: 360
@@ -806,7 +806,7 @@ PlayerSettings:
   facebookStatus: 1
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 6
   cloudProjectId: 3af5ea4b-4854-464f-b6cd-6286807539a8
   framebufferDepthMemorylessMode: 0
   projectName: 360

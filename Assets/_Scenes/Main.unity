@@ -5234,6 +5234,7 @@ GameObject:
   - component: {fileID: 652310772}
   - component: {fileID: 652310771}
   - component: {fileID: 652310770}
+  - component: {fileID: 652310773}
   m_Layer: 5
   m_Name: Pause
   m_TagString: ui
@@ -5351,6 +5352,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 652310768}
   m_CullTransparentMesh: 0
+--- !u!114 &652310773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652310768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &660440971
 GameObject:
   m_ObjectHideFlags: 0
@@ -11854,7 +11870,7 @@ MonoBehaviour:
       m_DisabledColor: {r: 1, g: 1, b: 1, a: 0}
       m_ColorMultiplier: 1
       m_FadeDuration: 0.1
-    shareButtonText: {r: 1, g: 1, b: 1, a: 1}
+    shareButtonText: {r: 1, g: 0.6783288, b: 0.2783019, a: 1}
     wheelPref: {fileID: 1222991058251880, guid: 350cf70835279b54cb75924a3987584b,
       type: 3}
     squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
@@ -12264,7 +12280,7 @@ MonoBehaviour:
       m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
       m_ColorMultiplier: 1
       m_FadeDuration: 0.1
-    shareButtonText: {r: 0, g: 0, b: 0, a: 1}
+    shareButtonText: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
     wheelPref: {fileID: 1381519888840642, guid: 636130742f38f614f9f94da4d70499d5,
       type: 3}
     squarePref: {fileID: 1379266986706278, guid: 480496e6e746acb4ba9d30447e40635c,
@@ -12998,7 +13014,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449864678}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -13767,6 +13783,7 @@ GameObject:
   - component: {fileID: 1525565257}
   - component: {fileID: 1525565256}
   - component: {fileID: 1525565255}
+  - component: {fileID: 1525565258}
   m_Layer: 5
   m_Name: Button
   m_TagString: ui
@@ -13884,6 +13901,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525565253}
   m_CullTransparentMesh: 0
+--- !u!114 &1525565258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525565253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1529098514
 GameObject:
   m_ObjectHideFlags: 0
@@ -21370,3 +21402,24 @@ MonoBehaviour:
   m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2146886498 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1892493747600420, guid: a777af7dec0b36744bcd7c6c82a1374f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2146886495}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2146886499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146886498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
