@@ -2,7 +2,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SocialPlatforms;
-using GameAnalyticsSDK;
+//using GameAnalyticsSDK;
 
 public class TitleManager : Singleton<TitleManager> {
 
@@ -184,7 +184,7 @@ public class TitleManager : Singleton<TitleManager> {
         //Show promo
         FunctionHandler.Instance.ShowPromo();
         //Activate GameAnalytics
-        GameAnalytics.Initialize();
+        //GameAnalytics.Initialize();
 
 
         GameObject[] shopElems =  GameObject.FindGameObjectsWithTag("ShopElement");
