@@ -140,9 +140,9 @@ public class PowerUp : MonoBehaviour
         int index = gameObject.transform.GetSiblingIndex();
         if(!GameManager.Instance.gameOverInProgress && !GameManager.Instance.GameOverBool)
         {
-            if (CoinManager.Instance.Coins >= pCost)
+            if (CoinManager.Instance.AdReady())
             {
-
+                CoinManager.Instance.ShowAd();
 
                 switch (index)
                 {
@@ -198,7 +198,7 @@ public class PowerUp : MonoBehaviour
             else
             {
                 Debug.Log("REEEE");
-                CoinManager.Instance.ShowAd();
+               
             }
         }
     }

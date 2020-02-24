@@ -65,7 +65,7 @@ public class CoinManager : Singleton<CoinManager> {
 
 
         //Initialize the ad and skins
-        Advertisement.Initialize("3af5ea4b-4854-464f-b6cd-6286807539a8");
+        Advertisement.Initialize("1800014");
         //For editor usage, pls ignore
         fadeCanvas.SetActive(true);
         
@@ -86,6 +86,18 @@ public class CoinManager : Singleton<CoinManager> {
         coinText.text = coins.ToString();
         
 	}
+
+
+    public bool AdReady()
+    {
+        if (Advertisement.IsReady())
+        {
+            return true;
+        }
+        else
+            return false;
+
+    }
 
     //Open up an ad
     public void ShowAd()

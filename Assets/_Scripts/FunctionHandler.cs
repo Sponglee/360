@@ -22,15 +22,13 @@ public class FunctionHandler : Singleton<FunctionHandler> {
 
     public void ContinueHandler()
     {
-        if (CoinManager.Instance.Coins >= CoinManager.Instance.contCost)
+        if (CoinManager.Instance.AdReady())
         {
-            CoinManager.Instance.Coins -= CoinManager.Instance.contCost;
             GameManager.Instance.Continue();
-        }
-        else
-        {
             CoinManager.Instance.ShowAd();
         }
+       
+           
        
     }
 

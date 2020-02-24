@@ -992,7 +992,7 @@ public class GameManager : Singleton<GameManager>
             AudioManager.Instance.PlaySound("256");
             GameObject txtObj = Instantiate(GameManager.Instance.pr_coinFltText, progressSlider.transform.GetChild(3));
             txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = currentLevel.ToString();
-            CoinManager.Instance.Coins += (int)currentLevel;
+            CoinManager.Instance.Coins += (int)Mathf.Round(currentLevel/2);
 
             //LevelUp
             //GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, "game", (int)currentLevel);
