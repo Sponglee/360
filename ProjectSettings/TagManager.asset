@@ -3,7 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - ui
+  - LeaderButtons
+  - ShopElement
+  - volume
+  - LeaderContainer
+  - DebugName
+  - line
+  - spawn
+  - spot
+  - square
+  - FxTemporaire
+  - outer
+  - center
+  - wheel
+  - Progress
+  - 256
+  - drill
+  - bomb
   layers:
   - Default
   - TransparentFX

@@ -142,7 +142,7 @@ public class PowerUp : MonoBehaviour
         {
             if (CoinManager.Instance.AdReady())
             {
-                CoinManager.Instance.ShowAd();
+                CoinManager.Instance.MenuAd();
 
                 switch (index)
                 {
