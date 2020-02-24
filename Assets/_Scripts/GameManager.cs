@@ -991,7 +991,7 @@ public class GameManager : Singleton<GameManager>
             //GIFT SITUATION
             AudioManager.Instance.PlaySound("256");
             GameObject txtObj = Instantiate(GameManager.Instance.pr_coinFltText, progressSlider.transform.GetChild(3));
-            txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = currentLevel.ToString();
+            txtObj.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = Mathf.Round(currentLevel/2).ToString();
             CoinManager.Instance.Coins += (int)Mathf.Round(currentLevel/2);
 
             //LevelUp

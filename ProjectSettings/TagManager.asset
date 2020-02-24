@@ -3,27 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - wheel
-  - base
-  - square
-  - center
-  - spot
-  - line
-  - outer
-  - spawn
-  - grid
-  - ui
-  - drill
-  - bomb
-  - 256
-  - FxTemporaire
-  - volume
-  - LeaderButtons
-  - LeaderContainer
-  - DebugName
-  - Progress
-  - ShopElement
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -33,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - Mask
-  - Outer
+  - 
+  - 
   - 
   - 
   - 
@@ -60,7 +40,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Menu
-    uniqueID: 4203565401
     locked: 0
