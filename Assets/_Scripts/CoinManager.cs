@@ -1,9 +1,10 @@
-﻿//using UnityEngine.Advertisements;
+﻿// using UnityEngine.Advertisements;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class CoinManager : Singleton<CoinManager> {
+public class CoinManager : Singleton<CoinManager>
+{
 
 
     //For editor convenience, pls ignore
@@ -11,7 +12,7 @@ public class CoinManager : Singleton<CoinManager> {
 
     //Refference for shop currency info
     public Text shopCoinText;
-        
+
     public int fullAdWatch;
     public int partAdWatch;
     //Theme unlocks
@@ -36,42 +37,44 @@ public class CoinManager : Singleton<CoinManager> {
     private int coins;
     public int contCost;
     public int Coins
-    {   get
+    {
+        get
         {
-          
+
             return coins;
         }
         set
         {
-           
+
             coins = value;
             coinText.text = coins.ToString();
             PlayerPrefs.SetInt("Coin", coins);
-            if (shopCoinText !=null)
+            if (shopCoinText != null)
             {
                 //Update coins for the shop aswell
                 shopCoinText.text = coins.ToString();
             }
-            
+
         }
     }
 
-  
+
     public Text coinText;
-    
+
 
     // Use this for initialization
-    void Awake() {
+    void Awake()
+    {
 
 
         //Initialize the ad and skins
-        Advertisement.Initialize("1800014");
+        Advertisement.Initialize("1800015");
         //For editor usage, pls ignore
         fadeCanvas.SetActive(true);
-        
-        
-        
-        
+
+
+
+
         //Check what skins are available
         SkinAvailability = PlayerPrefs.GetInt("SkinAvailability", 1);
         //persistant coin manager
@@ -84,8 +87,8 @@ public class CoinManager : Singleton<CoinManager> {
 
         coins = PlayerPrefs.GetInt("Coin", 20);
         coinText.text = coins.ToString();
-        
-	}
+
+    }
 
 
     public bool AdReady()
